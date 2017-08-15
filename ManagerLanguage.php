@@ -10,7 +10,7 @@ namespace panix\engine;
  */
 use Yii;
 use yii\base\Component;
-use app\system\modules\admin\models\Languages;
+use panix\admin\models\Languages;
 
 class ManagerLanguage extends Component {
 

@@ -62,14 +62,14 @@ class WebModel extends ActiveRecord {
         $lang = Yii::$app->languageManager->active->code;
         $model = get_class($this);
         $module_id = static::MODULE_ID;
-        //$filePath = Yii::getPathOfAlias("mod.{$module_id}.messages.{$lang}") . DS . $model . '.php';
-        /* foreach ($this->behaviors() as $key => $b) {
-          if (isset($b['translateAttributes'])) {
-          foreach ($b['translateAttributes'] as $attr) {
+        $filePath = Yii::getAlias("panix/{$module_id}/messages/{$lang}") . DS . $model . '.php';
+         foreach ($this->behaviors() as $key => $b) {
+          if (isset($b['translationAttributes'])) {
+          foreach ($b['translationAttributes'] as $attr) {
           $this->_attrLabels[$attr] = self::t(strtoupper($attr));
           }
           }
-          } */
+          } 
         foreach ($this->attributes as $attr => $val) {
             $this->_attrLabels[$attr] = self::t(strtoupper($attr));
         }
