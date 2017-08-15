@@ -1,0 +1,23 @@
+{
+    "name": "panix/engine",
+    "description": "Ядро",
+    "type": "library",
+    "keywords": ["panix", "corner", "engine"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Panix",
+            "email": "dev@corner-cms.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "yiisoft/yii2": "2.0.12",
+        "tinymce/tinymce": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "panix\\engine\\": ""
+        }
+    }
+}
