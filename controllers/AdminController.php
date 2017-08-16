@@ -17,7 +17,7 @@ class AdminController extends WebController {
     public function beforeAction($event) {
 
         // Allow only authorized users access
-        if (Yii::$app->user->isGuest && get_class($this) !== 'panix\admin\controllers\AuthController') {
+        if (Yii::$app->user->isGuest && get_class($this) !== 'panix\mod\admin\controllers\AuthController') {
           //  Yii::$app->request->redirect($this->createUrl('/admin/auth'));
              Yii::$app->response->redirect(array('/admin/auth'));
         }
