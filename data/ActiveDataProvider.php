@@ -20,15 +20,11 @@ class ActiveDataProvider extends \yii\data\ActiveDataProvider {
             $modelClass = $this->query->modelClass;
             $mid = $modelClass::MODULE_ID;
 
-            if(Yii::$app->settings->get($mid,'pagenum')){
-                $this->_pagination->pageSize = Yii::$app->settings->get($mid,'pagenum');
-            }else{
-                  $this->_pagination->pageSize = Yii::$app->settings->get('app','pagenum');
+            if (Yii::$app->settings->get($mid, 'pagenum')) {
+                $this->_pagination->pageSize = Yii::$app->settings->get($mid, 'pagenum');
+            } else {
+                $this->_pagination->pageSize = Yii::$app->settings->get('app', 'pagenum');
             }
-  
-            
-              
-
         } elseif ($value instanceof Pagination || $value === false) {
             $this->_pagination = $value;
         } else {
