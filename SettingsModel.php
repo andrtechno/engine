@@ -28,10 +28,10 @@ class SettingsModel extends Model {
     public function save() {
         if ($this->validate()) {
             Yii::$app->settings->set($this->category, Yii::$app->request->post(basename(get_class($this))));
-            Yii::$app->session->setFlash("success", Yii::t('app', 'SUCCESS_SAVE'));
+            Yii::$app->session->addFlash("success", Yii::t('app', 'SUCCESS_UPDATE'));
             return true;
         } else {
-            Yii::$app->session->setFlash("error", Yii::t('app', 'ERROR_SAVE'));
+            Yii::$app->session->addFlash("error", Yii::t('app', 'ERROR_UPDATE'));
             return false;
         }
     }
