@@ -49,17 +49,22 @@ class MaintenanceMode extends Component
      * Allowed urls
      * @var array
      */
-    public $urls;
+    public $urls = [
+                'admin/',
+                'admin/auth',
+                'user/login',
+                'user/logout',
+            ];
     /**
      * Path to layout file
      * @var string
      */
-    public $layoutPath = '@vendor/brussens/yii2-maintenance-mode/views/layouts/main';
+    public $layoutPath = '@vendor/panix/engine/maintenance/views/layouts/main';
     /**
      * Path to view file
      * @var string
      */
-    public $viewPath = '@vendor/brussens/yii2-maintenance-mode/views/maintenance/index';
+    public $viewPath = '@vendor/panix/engine/maintenance/views/maintenance/index';
     /**
      * Path to command file
      * @var string
