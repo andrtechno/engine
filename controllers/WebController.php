@@ -9,7 +9,11 @@ class WebController extends Controller {
 
     public $pageName;
     public $breadcrumbs = [];
-
+    public function beforeAction($event) {
+        $this->view->registerMetaTag(['name' => 'author', 'content' => Yii::$app->name]);
+        $this->view->registerMetaTag(['name' => 'generator', 'content' => Yii::$app->name.' '.Yii::$app->version]);
+        return parent::beforeAction($event);
+    }
     public function init() {
 
         //  Yii::$app->language =Yii::$app->languageManager->active->code;

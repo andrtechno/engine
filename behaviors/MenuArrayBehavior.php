@@ -1,4 +1,7 @@
 <?php
+namespace panix\engine\behaviors;
+
+use Yii;
 
 /**
  * Represent model as array needed to create CMenu.
@@ -10,7 +13,7 @@
  * TODO: Cache queries
  * 	)
  */
-class MenuArrayBehavior extends CActiveRecordBehavior {
+class MenuArrayBehavior extends \yii\base\Behavior {
 
     /**
      * @var string Owner attribute to be placed in `label` key
@@ -29,7 +32,7 @@ class MenuArrayBehavior extends CActiveRecordBehavior {
     }
 
     private function isActive($url = false) {
-        if($url['seo_alias']==Yii::app()->request->getParam('seo_alias')){
+        if($url['seo_alias']==Yii::$app->request->get('seo_alias')){
             return true;
         }else{
             return false;
@@ -47,7 +50,7 @@ class MenuArrayBehavior extends CActiveRecordBehavior {
         $data = array(
             'label' => $model->{$this->labelAttr},
             'url' => $url,
-            'imagePath' => $model->getImageUrl('image', 'categories', '140x140'),
+           // 'imagePath' => $model->getImageUrl('image', 'categories', '140x140'),
             'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'),
             'itemOptions' => array('class' => 'dropdown menu-item'),
             'active' => $this->isActive($url),
@@ -55,8 +58,8 @@ class MenuArrayBehavior extends CActiveRecordBehavior {
         );
         // TODO: Cache result
         $children = $model->children()
-                ->active()
-                ->findAll();
+                ->published()
+                ->all();
         if (!empty($children)) {
             foreach ($children as $c)
                 $data['items'][] = $this->walkArray($c);

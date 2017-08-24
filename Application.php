@@ -4,6 +4,8 @@ namespace panix\engine;
 
 class Application extends \yii\web\Application {
 
+    const version = '0.1a';
+
     public function getModulesInfo() {
         $modules = $this->getModules();
         if (YII_DEBUG)
@@ -22,6 +24,10 @@ class Application extends \yii\web\Application {
         return \Yii::t('app', 'COPYRIGHT', [
                     'year' => date('Y')
         ]);
+    }
+
+    public function getVersion() {
+        return self::version;
     }
 
     // public function init() {

@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace panix\engine\grid;
+namespace panix\engine\grid\columns;
 
 use Closure;
 use yii\base\InvalidConfigException;

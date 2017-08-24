@@ -73,7 +73,7 @@ class CMS {
 
     public static function tableName() {
         // return table name with DB name to get relations from different DBs to work
-        $name = preg_match("/dbname=([^;]*)/", Yii::$app->db->connectionString, $matches);
+        $name = preg_match("/dbname=([^;]*)/", Yii::$app->db->dsn, $matches);
         return $matches[1];
     }
 
