@@ -26,8 +26,7 @@ class MaintenanceController extends WebController {
             return false;
         }
         return $this->render($app->maintenanceMode->viewPath, [
-                    'title' => $app->maintenanceMode->title,
-                    'message' => $app->maintenanceMode->message
+                    'message' => $app->settings->get('app','maintenance_text')
         ]);
     }
 

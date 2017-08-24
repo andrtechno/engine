@@ -13,7 +13,8 @@
     "minimum-stability": "dev",
     "require": {
         "yiisoft/yii2": "2.0.12",
-        "tinymce/tinymce": "dev-master"
+        "panix/wgt-taginput": "*",
+        "panix/wgt-tinymce": "*"
     },
     "autoload": {
         "psr-4": {

@@ -2,223 +2,224 @@
 
 namespace panix\engine\maintenance;
 
-
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Component;
 use yii\helpers\FileHelper;
-class MaintenanceMode extends Component
-{
+
+class MaintenanceMode extends Component {
+
     const STATUS_CODE_OK = 200;
-    /**
-     * Mode status
-     * @var boolean
-     */
-    public $enabled = false;
+
     /**
      * Route to action
      * @var string
      */
     public $route = 'maintenance/index';
-    /**
-     * Show title
-     * @var string
-     */
-    public $title = 'We’ll be back soon!';
-    /**
-     * Show message
-     * @var string
-     */
-    public $message = 'Sorry, perform technical works.';
+
     /**
      * Allowed user name(s)
      * @var array|string
      */
     public $users;
+
     /**
      * Allowed roles
      * @var array
      */
     public $roles;
+
     /**
      * Allowed IP addresses
      * @var array
      */
     public $ips;
+
     /**
      * Allowed urls
      * @var array
      */
     public $urls = [
-                'admin/',
-                'admin/auth',
-                'user/login',
-                'user/logout',
-            ];
+        'admin',
+        'admin/auth',
+        'user/login',
+        'user/logout',
+        'debug/default/toolbar',
+        'debug/default/view'
+    ];
+
     /**
      * Path to layout file
      * @var string
      */
     public $layoutPath = '@vendor/panix/engine/maintenance/views/layouts/main';
+
     /**
      * Path to view file
      * @var string
      */
     public $viewPath = '@vendor/panix/engine/maintenance/views/maintenance/index';
+
     /**
      * Path to command file
      * @var string
      */
     public $commandPath = '@vendor/../maintenance';
+
     /**
      * Username attribute name
      * @var string
      */
     public $usernameAttribute = 'username';
+
     /**
      * Default status code to send on maintenance
      * 503 = Service Unavailable
      * @var integer
      */
     public $statusCode = 503;
+
     /**
      * Disable items.
      * @var boolean
      */
     protected $disable;
+
     /**
      * Retry-After header
      * @var boolean|string
      */
     public $retryAfter = false;
+
     /**
      * Init method
      */
-    public function init()
-    {
+    public function init() {
         Yii::setAlias('@maintenance', $this->commandPath);
-        if(!file_exists(Yii::getAlias('@maintenance'))) {
+        if (!file_exists(Yii::getAlias('@maintenance'))) {
             FileHelper::createDirectory(Yii::getAlias('@maintenance'));
         }
-        if(Yii::$app instanceof \yii\console\Application) {
+        if (Yii::$app instanceof \yii\console\Application) {
             Yii::$app->controllerMap['maintenance'] = 'brussens\maintenance\commands\MaintenanceController';
         } else {
-            if($this->getIsEnabled()) {
+
+            if ($this->getIsEnabled()) {
                 $this->filtering();
             }
         }
     }
+
     /**
      * Checks if mode is on.
      * @param boolean $onlyConsole
      * @return boolean
      */
-    public function getIsEnabled($onlyConsole = false)
-    {
+    public function getIsEnabled($onlyConsole = false) {
         $exists = file_exists($this->getStatusFilePath());
-        return $onlyConsole ? $exists : $this->enabled || $exists;
+        return $onlyConsole ? $exists : Yii::$app->settings->get('app', 'maintenance') || $exists;
     }
+
     /**
      * Return status file path.
      * @return boolean|string
      */
-    protected function getStatusFilePath()
-    {
+    protected function getStatusFilePath() {
         return Yii::getAlias('@maintenance/.enable');
     }
+
     /**
      * Turn off mode.
      * @return boolean
      */
-    public function disable()
-    {
+    public function disable() {
         $path = $this->getStatusFilePath();
-        if($path && file_exists($path)) {
+        if ($path && file_exists($path)) {
             return (bool) unlink($path);
         }
         return false;
     }
+
     /**
      * Turn on mode.
      * @return boolean
      */
-    public function enable()
-    {
+    public function enable() {
         $path = $this->getStatusFilePath();
         return (bool) file_put_contents($path, ' ');
     }
+
     /**
      * Check IP (mask supported).
      * @param $filter
      * @return boolean
      */
-    protected function checkIp($filter)
-    {
+    protected function checkIp($filter) {
         $ip = Yii::$app->getRequest()->getUserIP();
         return $filter === '*' || $filter === $ip || (($pos = strpos($filter, '*')) !== false && !strncmp($ip, $filter, $pos));
     }
+
     /**
      * Filtering by configuration.
      * @throws InvalidConfigException
      */
-    protected function filtering()
-    {
+    protected function filtering() {
         $app = Yii::$app;
-        if($this->statusCode) {
-            if(is_integer($this->statusCode)) {
-                if($app->getRequest()->getIsAjax()) {
+        $config = $app->settings->get('app');
+        if ($this->statusCode) {
+            if (is_integer($this->statusCode)) {
+                if ($app->getRequest()->getIsAjax()) {
                     $app->getResponse()->setStatusCode(self::STATUS_CODE_OK);
-                }
-                else {
+                } else {
                     $app->getResponse()->setStatusCode($this->statusCode);
-                    if($this->retryAfter){
+                    if ($this->retryAfter) {
                         $app->getResponse()->getHeaders()->set('Retry-After', $this->retryAfter);
                     }
                 }
-            }
-            else {
+            } else {
                 throw new InvalidConfigException('Parameter "statusCode" should be an integer.');
             }
         }
+
+        $this->users = explode(',', $config['maintenance_allow_users']);
+        $this->ips = explode(',', $config['maintenance_allow_ips']);
+
         // Check users
-        if($this->users) {
-            if(is_array($this->users)) {
+        if ($this->users) {
+            if (is_array($this->users)) {
                 $this->disable = $app->getUser()->getIdentity() ? in_array($app->getUser()->getIdentity()->{$this->usernameAttribute}, $this->users) : false;
-            }
-            elseif(is_string($this->users)) {
+            } elseif (is_string($this->users)) {
                 $this->disable = $app->getUser()->getIdentity()->{$this->usernameAttribute} === $this->users;
-            }
-            else {
+            } else {
                 throw new InvalidConfigException('Parameter "users" should be an array or string.');
             }
         }
         // Check roles
-        if($this->roles) {
-            if(is_array($this->roles)) {
+        if ($this->roles) {
+            if (is_array($this->roles)) {
                 foreach ($this->roles as $role) {
                     $this->disable = $this->disable || $app->getUser()->can($role);
                 }
-            }
-            else {
+            } else {
                 throw new InvalidConfigException('Parameter "roles" should be an array.');
             }
         }
+
+
         // Check URL's
-        if($this->urls) {
-            if(is_array($this->urls)) {
+        if ($this->urls) {
+            if (is_array($this->urls)) {
                 $this->disable = $this->disable || in_array($app->getRequest()->getPathInfo(), $this->urls);
-            }
-            else {
+            } else {
                 throw new InvalidConfigException('Parameter "urls" should be an array.');
             }
         }
         // Check IP's
-        if($this->ips) {
-            if(is_array($this->ips)) {
+        if ($this->ips) {
+            if (is_array($this->ips)) {
                 foreach ($this->ips as $filter) {
                     $this->disable = $this->disable || $this->checkIp($filter);
                 }
-            } elseif(is_string($this->ips)){
+            } elseif (is_string($this->ips)) {
                 $this->disable = $this->disable || $this->checkIp($this->ips);
             } else {
                 throw new InvalidConfigException('Parameter "ips" should be an array.');
@@ -229,9 +230,9 @@ class MaintenanceMode extends Component
                 $app->controllerMap['maintenance'] = 'panix\engine\maintenance\controllers\MaintenanceController';
             }
             $app->catchAll = [$this->route];
-        }
-        else {
+        } else {
             $app->getResponse()->setStatusCode(self::STATUS_CODE_OK);
         }
     }
+
 }
