@@ -80,10 +80,10 @@ class CMS {
     public static function textReplace($text, $array) {
         $config = Yii::$app->settings->get('app');
         $tmpArray = array();
-        $tmpArray['{site_name}'] = $config['site_name'];
+        $tmpArray['{sitename}'] = $config['sitename'];
         $tmpArray['{host}'] = Yii::$app->request->serverName;
-        $tmpArray['{admin_email}'] = $config['admin_email'];
-        $resultArray = CMap::mergeArray($tmpArray, $array);
+        $tmpArray['{admin_email}'] = $config['email'];
+        $resultArray = \yii\helpers\ArrayHelper::merge($tmpArray, $array);
         foreach ($resultArray as $from => $to) {
             $text = str_replace($from, $to, $text);
         }
@@ -473,7 +473,7 @@ class CMS {
      * @param type $mail
      * @return type
      */
-    static function emailLink($mail) {
+    static function _______emailLink($mail) {
         if (Yii::$app->hasModule('delivery')) {
             return Html::link($mail, Yii::$app->createAbsoluteUrl('/admin/delivery/send', array('mail' => $mail)), array('onClick' => 'sendEmail("' . $mail . '")'));
         } else {
@@ -507,26 +507,26 @@ class CMS {
      * @param boolean $static Статичная дата. true|false
      * @return string
      */
-    public static function date($date, $time = true, $static = false) {
+    public static function date($date, $time = true) {
 
         $formatted = strtotime($date);
         $oneDay = 86400;
         $df = Yii::$app->formatter;
+        //$df->timeZone = 'Europe/Moscow';
 
-        $df->timeZone = 'Europe/Kiev';
-        $resDate = $df->asDate($formatted, 'php:d F Y');
+        $resDate = $df->asDate($formatted);
         if ($formatted > mktime(0, 0, 0)) {
             $t = $formatted - ($oneDay * 1);
             if ($t >= time()) {
                 $result = $resDate;
             } else {
-                $result = Yii::t('app', 'TODAY_IN', array('{time}' => $df->asDate($formatted, 'php:H:i')));
+                $result = $df->timeZone.Yii::t('app', 'TODAY_IN', array('time' => $df->asTime($formatted,'php:H:s')));
             }
         } elseif ($formatted > mktime(0, 0, 0) - $oneDay) {
-            $result = Yii::t('app', 'YESTERDAY_IN', array('{time}' => $df->asDate($formatted, 'php:H:i')));
+            $result = Yii::t('app', 'YESTERDAY_IN', array('time' => $df->asTime($formatted,'php:H:s')));
         } else {
             if ($time) {
-                $result = $resDate . ' ' . Yii::t('app', 'IN') . ' ' . $df->asDate($formatted, 'php:H:i');
+                $result = $resDate . ' ' . Yii::t('app', 'IN') . ' ' . $df->asTime($formatted,'php:H:s');
             } else {
                 $result = $resDate;
             }

@@ -16,9 +16,7 @@ class Connection extends \yii\db\Connection {
     public $filesizes = 0;
 
     public function __construct() {
-        if (Yii::$app->settings) {
-            $this->limitBackup = (int) Yii::$app->settings->get('db', 'backup_limit') * 1024 * 1024;
-        }
+
         if (!file_exists(Yii::getAlias($this->backupPath))) {
             FileHelper::createDirectory(Yii::getAlias($this->backupPath));
         }
@@ -29,7 +27,12 @@ class Connection extends \yii\db\Connection {
         }
         $this->noExportTables = $result;
     }
-
+    public function close() {
+                        if (isset(Yii::$app->settings)) {
+            $this->limitBackup = (int) Yii::$app->settings->get('db', 'backup_limit') * 1024 * 1024;
+        }
+        parent::close();
+    }
     public function checkFilesSize() {
         $fdir = opendir(Yii::getAlias($this->backupPath));
         while ($file = readdir($fdir)) {

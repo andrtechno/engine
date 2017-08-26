@@ -9,14 +9,42 @@ class WebController extends Controller {
 
     public $pageName;
     public $breadcrumbs = [];
+    public $jsMessages = [];
+
     public function beforeAction($event) {
+
+        $this->view->registerJs('
+            common.langauge="' . Yii::$app->language . '";
+            common.token="' . Yii::$app->request->csrfToken . '";
+            common.isDashboard=true;
+            common.message=' . \yii\helpers\Json::encode($this->jsMessages), \yii\web\View::POS_END, 'js-common');
+
+
+
         $this->view->registerMetaTag(['name' => 'author', 'content' => Yii::$app->name]);
-        $this->view->registerMetaTag(['name' => 'generator', 'content' => Yii::$app->name.' '.Yii::$app->version]);
+        $this->view->registerMetaTag(['name' => 'generator', 'content' => Yii::$app->name . ' ' . Yii::$app->version]);
+
         return parent::beforeAction($event);
     }
+
     public function init() {
 
         //  Yii::$app->language =Yii::$app->languageManager->active->code;
+        $timeZone = Yii::$app->settings->get('app', 'timezone');
+        Yii::$app->timeZone = $timeZone;
+
+        $this->jsMessages = array(
+            'error' => array(
+                '404' => Yii::t('app/error', '404')
+            ),
+            'cancel' => Yii::t('app', 'CANCEL'),
+            'send' => Yii::t('app', 'SEND'),
+            'delete' => Yii::t('app', 'DELETE'),
+            'save' => Yii::t('app', 'SAVE'),
+            'close' => Yii::t('app', 'CLOSE'),
+            //  'ok' => Yii::t('app', 'OK'),
+            'loading' => Yii::t('app', 'LOADING'),
+        );
 
         parent::init();
     }

@@ -23,6 +23,7 @@ class WebModel extends ActiveRecord {
     const MODULE_ID = null;
 
     public function beforeSave($insert) {
+
         //if (parent::beforeSave($insert)) {
         //create
         if ($this->isNewRecord) {
@@ -37,7 +38,7 @@ class WebModel extends ActiveRecord {
                 $this->user_agent = Yii::$app->request->userAgent;
             }
             if (isset($this->tableSchema->columns['date_create'])) {
-                $this->date_create = date('Y-m-d H:i:s');
+                // $this->date_create = date('Y-m-d H:i:s');
             }
             if (isset($this->tableSchema->columns['ordern'])) {
                 if (!isset($this->ordern)) {
@@ -48,28 +49,36 @@ class WebModel extends ActiveRecord {
             //update
         } else {
             if (isset($this->tableSchema->columns['date_update'])) {
-                $this->date_update = date('Y-m-d H:i:s');
+                //  echo $this->date_update;
+                // die('s');
+                //   $this->date_update = date('Y-m-d H:i:s');
             }
         }
         return parent::beforeSave($insert);
-        //    return true;
-        // } else {
-        //     return false;
-        // }
+    }
+
+    public function afterSave222($insert, $changedAttributes) {
+        if (isset($this->tableSchema->columns['date_update'])) {
+            //echo $this->date_update;
+            //die('s');
+            //   $this->date_update = date('Y-m-d H:i:s');
+        }
+        parent::afterSave($insert, $changedAttributes);
     }
 
     public function attributeLabels() {
-        $lang = Yii::$app->languageManager->active->code;
+        $lang = Yii::$app->language;
+
         $model = get_class($this);
         $module_id = static::MODULE_ID;
-        $filePath = Yii::getAlias("panix/{$module_id}/messages/{$lang}") . DS . $model . '.php';
-         foreach ($this->behaviors() as $key => $b) {
-          if (isset($b['translationAttributes'])) {
-          foreach ($b['translationAttributes'] as $attr) {
-          $this->_attrLabels[$attr] = self::t(strtoupper($attr));
-          }
-          }
-          } 
+        $filePath = Yii::getAlias("panix/{$module_id}/messages/{$lang}") . DIRECTORY_SEPARATOR . $model . '.php';
+        foreach ($this->behaviors() as $key => $b) {
+            if (isset($b['translationAttributes'])) {
+                foreach ($b['translationAttributes'] as $attr) {
+                    $this->_attrLabels[$attr] = self::t(strtoupper($attr));
+                }
+            }
+        }
         foreach ($this->attributes as $attr => $val) {
             $this->_attrLabels[$attr] = self::t(strtoupper($attr));
         }

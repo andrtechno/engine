@@ -22,7 +22,7 @@ class AdminController extends WebController {
         }
         //Yii::$app->errorHandler->errorAction = '/admin/errors/error';
 
-        
+
         return parent::beforeAction($event);
     }
 
@@ -31,6 +31,8 @@ class AdminController extends WebController {
         //if (!empty(Yii::$app->user) && !Yii::$app->user->can("admin")) {
         //    throw new ForbiddenHttpException(Yii::t('app','ACCESS_DENIED'));
         //}
+
+
 
         parent::init();
     }
