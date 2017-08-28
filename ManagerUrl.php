@@ -10,16 +10,17 @@ class ManagerUrl extends UrlManager {
 
     public function init() {
         $this->modulesRoutes();
+
         parent::init();
     }
 
     public function createUrl($params) {
         $result = parent::createUrl($params);
-        if ($respectLang === true) {
-            $langPrefix = Yii::app()->languageManager->getUrlPrefix();
-            if ($langPrefix)
-                $result = '/' . $langPrefix . $result;
-        }
+        //if ($respectLang === true) {
+            //$langPrefix = Yii::$app->languageManager->getUrlPrefix();
+           // if ($langPrefix)
+            //    $result = '/' . $langPrefix . $result;
+      //  }
 
         return $result;
         //return Url::to(['dsa','dsa'=>1]);
@@ -37,10 +38,11 @@ class ManagerUrl extends UrlManager {
                     $rules = array_merge($run->routes, $rules);
                 }
             }
+
             Yii::$app->cache->set($cacheKey, $rules, 3600 * 24);
         }
 
-        $this->rules = array_merge($rules, $this->rules);
+        $this->rules = array_merge($rules,$this->rules);
     }
 
 }
