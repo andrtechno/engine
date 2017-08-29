@@ -103,6 +103,33 @@ class WebModel extends ActiveRecord {
         return Yii::t(strtolower(static::MODULE_ID) . '/' . basename(get_called_class()), $message, $params);
     }
 
-}
+    public function getNextOrPrev($nextOrPrev, $cid = false, $options = array()) {
+        $records = NULL;
 
-?>
+        if ($nextOrPrev == "prev")
+            $order = "id ASC";
+        if ($nextOrPrev == "next")
+            $order = "id DESC";
+
+        if (!isset($options['select']))
+            $options['select'] = [$this::tableName() . '.*'];
+
+        if ($cid) {//TODO: no work need job.
+            $options['params'] = array(':cid' => $cid);
+        }
+
+        //$modelParams
+        $records = $this::find()
+                ->select($options['select'])
+                ->where(['switch' => 1])
+                ->orderBy($order)
+                ->all();
+
+        foreach ($records as $i => $r)
+            if ($r->id == $this->id)
+                return (isset($records[$i + 1])) ? $records[$i + 1] : NULL;
+
+        return NULL;
+    }
+
+}
