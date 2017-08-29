@@ -20,8 +20,8 @@ class WebModule extends Module {
             '@' . $this->id => realpath(Yii::getAlias("@vendor/panix/mod-{$this->id}")),
         ]);
         $this->registerTranslations();
-        if(method_exists($this, 'getDefaultModelClasses')){
-        $this->modelClasses = array_merge($this->getDefaultModelClasses(), $this->modelClasses);
+        if (method_exists($this, 'getDefaultModelClasses')) {
+            $this->modelClasses = array_merge($this->getDefaultModelClasses(), $this->modelClasses);
         }
         // echo $this->localePath;
         //  self::$moduleID = $this->id;
@@ -46,13 +46,13 @@ class WebModule extends Module {
         $lang = Yii::$app->language;
         $result = array();
         //$basepath = realpath(Yii::getAlias("@app/system/modules/{$this->id}/messages/{$lang}"));
-       // $basepath = realpath(Yii::getAlias("@vendor/panix/mod-{$this->id}/messages/{$lang}"));
+        // $basepath = realpath(Yii::getAlias("@vendor/panix/mod-{$this->id}/messages/{$lang}"));
         $basepath = realpath(Yii::getAlias("@{$this->id}/messages/{$lang}"));
         if (is_dir($basepath)) {
             $fileList = FileHelper::findFiles($basepath, [
                         'only' => ['*.php'],
                         'recursive' => FALSE
-                    ]);
+            ]);
 
             foreach ($fileList as $path) {
                 $result[$this->id . '/' . basename($path, '.php')] = basename($path);
@@ -69,7 +69,7 @@ class WebModule extends Module {
         Yii::$app->i18n->translations[$this->id . '/*'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             //'basePath' => '@app/system/modules/' . $this->id . '/messages',
-           // 'basePath' => '@vendor/panix/mod-' . $this->id . '/messages',
+            // 'basePath' => '@vendor/panix/mod-' . $this->id . '/messages',
             'basePath' => '@' . $this->id . '/messages',
             'fileMap' => $this->getTranslationsFileMap()
         ];
