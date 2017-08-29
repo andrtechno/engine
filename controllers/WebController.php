@@ -28,7 +28,7 @@ class WebController extends Controller {
     }
 
     public function init() {
-        /* $user = Yii::$app->user;
+         $user = Yii::$app->user;
         $langManager = Yii::$app->languageManager;
 
         if (!$user->isGuest && $user->language) {
@@ -49,7 +49,7 @@ class WebController extends Controller {
             }
         } else {
             Yii::$app->language = $langManager->active->code;
-        }*/
+        }
         //  Yii::$app->language =Yii::$app->languageManager->active->code;
         $timeZone = Yii::$app->settings->get('app', 'timezone');
         Yii::$app->timeZone = $timeZone;
