@@ -11,7 +11,7 @@ class WebController extends Controller {
     public $breadcrumbs = [];
     public $jsMessages = [];
 
-    public function beforeAction($event) {
+    public function beforeAction($action) {
 
         $this->view->registerJs('
             common.langauge="' . Yii::$app->language . '";
@@ -24,11 +24,32 @@ class WebController extends Controller {
         $this->view->registerMetaTag(['name' => 'author', 'content' => Yii::$app->name]);
         $this->view->registerMetaTag(['name' => 'generator', 'content' => Yii::$app->name . ' ' . Yii::$app->version]);
 
-        return parent::beforeAction($event);
+        return parent::beforeAction($action);
     }
 
     public function init() {
+        /* $user = Yii::$app->user;
+        $langManager = Yii::$app->languageManager;
 
+        if (!$user->isGuest && $user->language) {
+            if ($user->getLanguage() != $langManager->default->code) {
+                $getLang = $langManager->getById($user->getLanguage())->code;
+                Yii::app()->language = $getLang;
+                $strpos = strpos(Yii::app()->request->requestUri, '/' . $getLang);
+                if ($strpos === false) {
+                    if ($langManager->default->code != $getLang) {
+                        if ($this->isAdminController)
+                            $this->redirect("/{$getLang}/admin");
+                        else
+                            $this->redirect('/' . $getLang);
+                    }
+                }
+            } else {
+                Yii::$app->language = $langManager->active->code;
+            }
+        } else {
+            Yii::$app->language = $langManager->active->code;
+        }*/
         //  Yii::$app->language =Yii::$app->languageManager->active->code;
         $timeZone = Yii::$app->settings->get('app', 'timezone');
         Yii::$app->timeZone = $timeZone;

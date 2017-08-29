@@ -13,17 +13,43 @@ class ManagerUrl extends UrlManager {
 
         parent::init();
     }
+    public $languages = [];
+    public function createUrl3($params) {
 
-    public function createUrl($params) {
+        if (isset($params['lang_id'])) {
+            //Если указан идентификатор языка, то делаем попытку найти язык в БД,
+            //иначе работаем с языком по умолчанию
+            $lang = \panix\mod\admin\models\Languages::findOne($params['lang_id']);
+            if ($lang === null) {
+                $lang = \panix\mod\admin\models\Languages::getDefaultLang();
+            }
+            unset($params['lang_id']);
+        } else {
+            //Если не указан параметр языка, то работаем с текущим языком
+            $lang = \panix\mod\admin\models\Languages::getCurrent();
+        }
+
+        //Получаем сформированный URL(без префикса идентификатора языка)
+        $url = parent::createUrl($params);
+
+        //Добавляем к URL префикс - буквенный идентификатор языка
+        if ($url == '/') {
+            return '/' . $lang->code;
+        } else {
+            return '/' . $lang->code . $url;
+        }
+    }
+
+    public function createUrl($params, $respectLang=true) {
         $result = parent::createUrl($params);
-        //if ($respectLang === true) {
-            //$langPrefix = Yii::$app->languageManager->getUrlPrefix();
-           // if ($langPrefix)
-            //    $result = '/' . $langPrefix . $result;
-      //  }
+        if ($respectLang === true) {
+            $langPrefix = Yii::$app->languageManager->getUrlPrefix();
+
+            if ($langPrefix)
+                $result = '/' . $langPrefix . $result;
+        }
 
         return $result;
-        //return Url::to(['dsa','dsa'=>1]);
     }
 
     protected function modulesRoutes() {
@@ -42,7 +68,7 @@ class ManagerUrl extends UrlManager {
             Yii::$app->cache->set($cacheKey, $rules, 3600 * 24);
         }
 
-        $this->rules = array_merge($rules,$this->rules);
+        $this->rules = array_merge($rules, $this->rules);
     }
 
 }

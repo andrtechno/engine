@@ -2,17 +2,10 @@
 
 namespace panix\engine;
 
-/**
- * Компонент CManagerLanguage
- * 
- * @author Andrew S. <andrew.panix@gmail.com>
- * @package components.managers
- */
 use Yii;
-use yii\base\Component;
 use panix\mod\admin\models\Languages;
 
-class ManagerLanguage extends Component {
+class ManagerLanguage extends \yii\base\Component {
 
     /**
      * @var array available system languages
@@ -31,8 +24,9 @@ class ManagerLanguage extends Component {
 
     public function init() {
 
-        if (empty($this->_languages))
+        if (empty($this->_languages)){
             $this->loadLanguages();
+        }
     }
 
     /**
@@ -43,7 +37,9 @@ class ManagerLanguage extends Component {
         $model = Languages::find()->all();
         foreach ($model as $lang) {
             $this->_languages[$lang->code] = $lang;
-            if ($lang->is_default === 1) {
+    
+            if ($lang->is_default === 1){
+
                 $this->_default = $lang->code;
             }
         }
@@ -65,10 +61,8 @@ class ManagerLanguage extends Component {
      * @return LanguageModel
      */
     public function getByCode($langCode) {
-        if (isset($this->_languages[$langCode])){
+        if (isset($this->_languages[$langCode]))
             return $this->_languages[$langCode];
-            
-        }
     }
 
     /**
@@ -77,7 +71,7 @@ class ManagerLanguage extends Component {
      * @return mixed LanguageModel if lang found. Null if not.
      */
     public function getById($langId) {
-        foreach ($this->languages as $lang) {
+        foreach ($this->_languages as $lang) {
             if ($lang->id == $langId)
                 return $lang;
         }
@@ -104,29 +98,23 @@ class ManagerLanguage extends Component {
      * @return SSystemLanguage
      */
     public function getActive() {
-      /*  $model = $this->getByCode($code);
-
-        if (!$model)
-            $model = $this->default;
-
-        Yii::trace('Activating language ' . $model->name);
-        Yii::$app->language=$model->locale; // locale
-        $this->_active = $model->code;*/
         return $this->getByCode($this->_active);
     }
-/*
+
     public function getLangs() {
         $langs = array();
         foreach ($this->getLanguages() as $lang) {
             if ($this->_default == $lang['code']) {
-                $langs[''] = $lang['name'];
+                  $langs[''] = $lang['name'];
             } else {
-                $langs[$lang['code']] = $lang['name'];
+                  $langs[$lang['code']] = $lang['name'];
             }
+              
         }
         return $langs;
     }
-*/
+
+
     /**
      * Activate language by code
      * @param string $code Language code.
@@ -137,8 +125,9 @@ class ManagerLanguage extends Component {
         if (!$model)
             $model = $this->default;
 
-        Yii::trace('Activating language ' . $model->name);
-        Yii::$app->language=$model->locale; // locale
+
+        //Yii::$app->setLanguage($model->locale); // locale
+        Yii::$app->language = $model->locale; // locale
         $this->_active = $model->code;
     }
 
@@ -151,11 +140,11 @@ class ManagerLanguage extends Component {
         if ($this->_active !== $this->_default)
             return $this->_active;
     }
-
+    
     public function getLangsByArray() {
         $langs = array();
         foreach ($this->getLanguages() as $lang) {
-            $langs[$lang->id] = $lang->name;
+            $langs[$lang->id]=$lang->name;
         }
         return $langs;
     }
