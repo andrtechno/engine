@@ -122,6 +122,8 @@ class WebModel extends ActiveRecord {
         $records = $this::find()
                 ->select($options['select'])
                 ->where(['switch' => 1])
+
+               // ->joinWith('category2')
                 ->orderBy($order)
                 ->all();
 
