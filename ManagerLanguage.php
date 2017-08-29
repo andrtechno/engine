@@ -127,7 +127,7 @@ class ManagerLanguage extends \yii\base\Component {
 
 
         //Yii::$app->setLanguage($model->locale); // locale
-        Yii::$app->language = $model->locale; // locale
+        Yii::$app->language = $model->code; // locale
         $this->_active = $model->code;
     }
 

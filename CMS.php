@@ -195,10 +195,10 @@ class CMS {
      */
     public static function currentUrl() {
         $request = Yii::$app->request;
-        $parts = explode('/', $request->requestUri);
+        $parts = explode('/', $request->url);
         $lang = Yii::$app->languageManager;
         if ($lang->default->code == $lang->active->code) {
-            $pathInfo = $request->requestUri;
+            $pathInfo = $request->url;
         } else {
             if (in_array($parts[1], $lang->getCodes())) {
                 unset($parts[1]);
