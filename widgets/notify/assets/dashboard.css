@@ -1,0 +1,26 @@
+.jGrowl-notification{
+    border-radius: 0;
+    margin-right: 30px;
+}
+
+.jGrowl-notification .ui-state-highlight,
+.jGrowl-notification .ui-widget-content .ui-state-highlight,
+.jGrowl-notification .ui-widget-header .ui-state-highlight {
+    border: 0;
+}
+
+.jGrowl .alert{
+    box-shadow:none;
+    text-shadow:none;
+}
+.top-right.jGrowl{
+    padding-top: 47px;
+}
+
+.jGrowl a{
+    color:#fff;
+    text-decoration: underline;
+}
+.jGrowl-closer{
+    border-radius: 0;
+}

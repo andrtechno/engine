@@ -7,8 +7,12 @@ use yii\helpers\Url;
 
 class Html extends \yii\helpers\Html {
 
-    public static $iconPrefix = '';
-
+    public static $iconPrefix = 'icon-';
+    
+    public static function icon($icon,$options=[]) {
+        return static::tag('i', '', array_merge(['class'=>self::$iconPrefix . $icon],$options));
+    }
+    
     public static function aIconL($icon, $text, $url = null, $options = []) {
         if ($url !== null) {
             $options['href'] = Url::to($url);

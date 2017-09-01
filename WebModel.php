@@ -29,7 +29,7 @@ class WebModel extends ActiveRecord {
         if ($this->isNewRecord) {
             if (isset($this->tableSchema->columns['ip_create'])) {
                 //Текущий IP адресс, автора добавление
-                $this->ip_create = Yii::$app->request->userHostAddress;
+                $this->ip_create = Yii::$app->request->getUserIP();
             }
             if (isset($this->tableSchema->columns['user_id'])) {
                 $this->user_id = (Yii::$app->user->isGuest) ? 0 : Yii::$app->user->id;

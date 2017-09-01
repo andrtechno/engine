@@ -6,6 +6,11 @@ class Application extends \yii\web\Application {
 
     const version = '0.1a';
 
+    public function run() {
+        $this->name = $this->settings->get('app', 'sitename');
+        parent::run();
+    }
+
     public function getModulesInfo() {
         $modules = $this->getModules();
         if (YII_DEBUG)

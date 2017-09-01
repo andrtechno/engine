@@ -16,6 +16,7 @@ class CommonAsset extends AssetBundle {
 
     ];
     public $depends = [
+        'yii\jui\JuiAsset',
         'yii\web\YiiAsset',
         'yii\web\JqueryAsset',
         'yii\bootstrap\BootstrapPluginAsset',
