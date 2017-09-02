@@ -6,6 +6,7 @@ common = {
     flashMessage: true,
     token: null,
     isDashboard: false,
+    notify_list:[],
     getMsg: function (code) {
         return this.lang[this.language][code];
     },
@@ -13,7 +14,7 @@ common = {
         var t = (type == 'error') ? 'danger' : type;
         if (common.isDashboard) {
 
-            $.notify({message: text}, {
+            this.notify_list[0] = $.notify({message: text}, {
                 type: t,
                 allow_dismiss: false,
                 placement: {
@@ -22,7 +23,7 @@ common = {
                 }
             });
         } else {
-            $.notify({message: text}, {
+            this.notify_list[0] = $.notify({message: text}, {
                 type: t,
                 allow_dismiss: false
             });
