@@ -23,6 +23,13 @@ class WebModule extends Module {
         if (method_exists($this, 'getDefaultModelClasses')) {
             $this->modelClasses = array_merge($this->getDefaultModelClasses(), $this->modelClasses);
         }
+        
+
+        
+        // TODO: Пересмотреть.
+        if (file_exists(Yii::getAlias('@app/web/themes/' . Yii::$app->view->theme->name . '/modules/' . $this->id))) {
+         //   $this->viewPath = '@app/web/themes/' . Yii::$app->view->theme->name . '/modules/' . $this->id;
+        }
         // echo $this->localePath;
         //  self::$moduleID = $this->id;
         parent::init();

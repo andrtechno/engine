@@ -11,7 +11,30 @@ class WebController extends Controller {
     public $breadcrumbs = [];
     public $jsMessages = [];
 
+    public function actionError() {
+        $exception = Yii::$app->errorHandler->exception;
+
+        if ($exception !== null) {
+            $statusCode = $exception->statusCode;
+            $name = $exception->getName();
+            $message = $exception->getMessage();
+
+           // $this->layout = 'error';
+
+            return $this->render('error', [
+                        'exception' => $exception,
+                        'statusCode' => $statusCode,
+                        'name' => $name,
+                        'message' => $message
+            ]);
+        }
+    }
+
     public function beforeAction($action) {
+
+
+
+
 
         $this->view->registerJs('
             common.langauge="' . Yii::$app->language . '";
@@ -28,7 +51,7 @@ class WebController extends Controller {
     }
 
     public function init() {
-         $user = Yii::$app->user;
+        $user = Yii::$app->user;
         $langManager = Yii::$app->languageManager;
 
         if (!$user->isGuest && $user->language) {
