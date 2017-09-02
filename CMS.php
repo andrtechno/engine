@@ -3,7 +3,7 @@
 namespace panix\engine;
 
 use Yii;
-
+use yii\helpers\Url;
 /**
  * Дополнительные функции системы.
  * 
@@ -32,11 +32,12 @@ class CMS {
         }
     }
 
-    public static function placeholderUrl($params = array()) {
+    public static function placeholderUrl($params = []) {
+        $url=['/placeholder'];
         if (!isset($params['text'])) {
             $params['text'] = 'f138';
         }
-        return Yii::$app->createUrl('/site/placeholder', $params);
+        return Url::to(array_merge($url,$params));
     }
 
     public static function hex2rgb($colour) {
