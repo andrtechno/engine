@@ -10,7 +10,7 @@ class WebController extends Controller {
     public $pageName;
     public $breadcrumbs = [];
     public $jsMessages = [];
-
+    public $dataModel;
     public function actionError() {
         $exception = Yii::$app->errorHandler->exception;
 

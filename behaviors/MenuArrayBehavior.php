@@ -50,6 +50,7 @@ class MenuArrayBehavior extends \yii\base\Behavior {
         $data = array(
             'label' => $model->{$this->labelAttr},
             'url' => $url,
+                    'id' => $model->id,
            // 'imagePath' => $model->getImageUrl('image', 'categories', '140x140'),
             'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'),
             'itemOptions' => array('class' => 'dropdown menu-item'),

@@ -13,8 +13,8 @@ class ManagerUrl extends UrlManager {
 
         parent::init();
     }
-    public $languages = [];
-    public function createUrl3($params) {
+   // public $languages = [];
+    /*public function createUrl3($params) {
 
         if (isset($params['lang_id'])) {
             //Если указан идентификатор языка, то делаем попытку найти язык в БД,
@@ -38,7 +38,7 @@ class ManagerUrl extends UrlManager {
         } else {
             return '/' . $lang->code . $url;
         }
-    }
+    }*/
 
     public function createUrl($params, $respectLang=true) {
         $result = parent::createUrl($params);
@@ -69,6 +69,7 @@ class ManagerUrl extends UrlManager {
         }
 
         $this->rules = array_merge($rules, $this->rules);
+
     }
 
 }
