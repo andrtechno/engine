@@ -12,7 +12,11 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "yiisoft/yii2": "2.0.12",
+        "panix/mod-shop": "*",
+        "panix/mod-pages": "*",
+        "panix/mod-user": "*",
+        "panix/mod-admin": "*",
+        "panix/mod-contacts": "*",
         "panix/wgt-taginput": "*",
         "panix/wgt-tinymce": "*"
     },
