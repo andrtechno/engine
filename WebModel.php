@@ -18,7 +18,7 @@ class WebModel extends ActiveRecord {
       }
       } */
 
-    protected $_attrLabels = array();
+ //  protected $_attrLabels = array();
 
     const MODULE_ID = null;
 
@@ -68,24 +68,24 @@ class WebModel extends ActiveRecord {
 
     public function attributeLabels() {
         $lang = Yii::$app->language;
-
+        $attrLabels = [];
         $model = get_class($this);
         $module_id = static::MODULE_ID;
         $filePath = Yii::getAlias("panix/{$module_id}/messages/{$lang}") . DIRECTORY_SEPARATOR . $model . '.php';
         foreach ($this->behaviors() as $key => $b) {
             if (isset($b['translationAttributes'])) {
                 foreach ($b['translationAttributes'] as $attr) {
-                    $this->_attrLabels[$attr] = self::t(strtoupper($attr));
+                    $attrLabels[$attr] = self::t(strtoupper($attr));
                 }
             }
         }
         foreach ($this->attributes as $attr => $val) {
-            $this->_attrLabels[$attr] = self::t(strtoupper($attr));
+            $attrLabels[$attr] = self::t(strtoupper($attr));
         }
         //if (!file_exists($filePath)) {
         //    Yii::app()->user->setFlash('warning', 'Модель "' . $model . '", не может найти файл переводов: <b>' . $filePath . '</b> ');
         //}
-        return $this->_attrLabels;
+        return $attrLabels;
     }
 
     public function behaviors() {
