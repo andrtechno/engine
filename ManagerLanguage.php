@@ -34,7 +34,7 @@ class ManagerLanguage extends \yii\base\Component {
      * @return LanguageModel collection
      */
     private function loadLanguages() {
-        $model = Languages::find()->all();
+        $model = Languages::find()->published()->all();
         foreach ($model as $lang) {
             $this->_languages[$lang->code] = $lang;
     

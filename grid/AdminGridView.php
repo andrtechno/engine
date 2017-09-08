@@ -30,6 +30,7 @@ use yii\grid\DataColumn;
  */
 class AdminGridView extends BaseListView
 {
+
     const FILTER_POS_HEADER = 'header';
     const FILTER_POS_FOOTER = 'footer';
     const FILTER_POS_BODY = 'body';

@@ -11,7 +11,11 @@ class AdminController extends WebController {
     public $buttons = [];
     public $layout = '@app/web/themes/admin/views/layouts/main';
 
-
+    protected function error404($text = null) {
+        if (!$text) 
+            $text = Yii::t('app/error', '404');
+        throw new \yii\web\NotFoundHttpException($text);
+    }
 
     public function beforeAction($event) {
 
@@ -41,8 +45,7 @@ class AdminController extends WebController {
      * action
      */
     public function actionCreate() {
-        $this->actionUpdate(true);
+       return $this->actionUpdate(true);
     }
-
 
 }

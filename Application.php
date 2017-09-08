@@ -11,6 +11,7 @@ class Application extends \yii\web\Application {
         parent::run();
     }
 
+
     public function getModulesInfo() {
         $modules = $this->getModules();
         if (YII_DEBUG)

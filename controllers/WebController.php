@@ -29,7 +29,9 @@ class WebController extends Controller {
             ]);
         }
     }
-
+public function actionIndex(){
+        return $this->render('index');
+}
     public function beforeAction($action) {
 
 
@@ -51,6 +53,9 @@ class WebController extends Controller {
     }
 
     public function init() {
+        
+               
+                
         $user = Yii::$app->user;
         $langManager = Yii::$app->languageManager;
 
