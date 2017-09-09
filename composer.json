@@ -4,10 +4,15 @@
     "type": "library",
     "keywords": ["panix", "corner", "engine","cms"],
     "license": "MIT",
+    "support": {
+        "email": "dev@corner-cms.com"
+    },
     "authors": [
         {
-            "name": "Panix",
-            "email": "dev@corner-cms.com"
+            "name": "Semenov Andrey",
+            "email": "info@andrix.com.ua",
+            "homepage": "http://andrix.com.ua/",
+            "role": "Developer"
         }
     ],
     "minimum-stability": "dev",
