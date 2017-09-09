@@ -2,9 +2,9 @@
     "name": "panix/engine",
     "description": "CORNER CMS Engine",
     "type": "library",
+    "version": "0.1a",
     "keywords": ["panix", "corner", "engine","cms"],
     "license": "MIT",
-    "homepage": "www.corner-cms.com",
     "support": {
         "email": "dev@corner-cms.com"
     },
