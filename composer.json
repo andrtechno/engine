@@ -23,7 +23,6 @@
         "panix/mod-admin": "*",
         "panix/mod-user": "*",
         "panix/mod-shop": "*",
-        "panix/mod-cart": "*",
         "panix/mod-pages": "*"
     },
     "autoload": {
