@@ -2,7 +2,7 @@
     "name": "panix/engine",
     "description": "CORNER CMS Engine",
     "type": "library",
-    "version": "1.0.0-alpaha",
+    "version": "1.0.0-a",
     "keywords": ["panix", "corner", "engine","cms"],
     "license": "MIT",
     "support": {
