@@ -23,7 +23,9 @@
         "panix/mod-admin": "*",
         "panix/mod-user": "*",
         "panix/mod-shop": "*",
-        "panix/mod-pages": "*"
+        "panix/mod-pages": "*",
+        "panix/mod-images": "*",
+        "panix/mod-contacts": "*"
     },
     "autoload": {
         "psr-4": {
