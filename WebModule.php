@@ -7,7 +7,7 @@ use yii\base\Module;
 use yii\helpers\FileHelper;
 
 class WebModule extends Module {
-
+    public $count = false;
     // protected $info;
     public $routes = [];
     //  public static $moduleID;
@@ -16,10 +16,10 @@ class WebModule extends Module {
 
     // protected $moduleNamespace;
     public function init() {
-        $this->setAliases([
-            '@' . $this->id => realpath(Yii::getAlias("@vendor/panix/mod-{$this->id}")),
-        ]);
-        $this->registerTranslations();
+        //$this->setAliases([
+        //    '@' . $this->id => realpath(Yii::getAlias("@vendor/panix/mod-{$this->id}")),
+        //]);
+        //$this->registerTranslations();
         if (method_exists($this, 'getDefaultModelClasses')) {
             $this->modelClasses = array_merge($this->getDefaultModelClasses(), $this->modelClasses);
         }
@@ -48,7 +48,7 @@ class WebModule extends Module {
 
     /**
      * Функция для translations fileMap "@app/system/modules/{$this->id}/messages"
-     */
+    
     public function getTranslationsFileMap() {
         $lang = Yii::$app->language;
         $result = array();
@@ -80,6 +80,6 @@ class WebModule extends Module {
             'basePath' => '@' . $this->id . '/messages',
             'fileMap' => $this->getTranslationsFileMap()
         ];
-    }
+    } */
 
 }

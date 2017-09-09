@@ -5,7 +5,7 @@ namespace panix\engine;
 use Yii;
 use yii\db\ActiveRecord;
 use panix\engine\grid\sortable\SortableGridBehavior;
-
+use yii\base\Exception;
 class WebModel extends ActiveRecord {
     /*     * public function behaviors() {
       if (isset($this->tableSchema->columns['ordern'])) {
@@ -18,8 +18,12 @@ class WebModel extends ActiveRecord {
       }
       } */
 
- //  protected $_attrLabels = array();
-
+    //  protected $_attrLabels = array();
+    const route_update = 'update';
+    const route_delete = 'delete';
+    const route_switch = 'switch';
+    const route_create = 'create';
+    const route = null;
     const MODULE_ID = null;
 
     public function beforeSave($insert) {
@@ -123,7 +127,7 @@ class WebModel extends ActiveRecord {
                 ->select($options['select'])
                 ->where(['switch' => 1])
 
-               // ->joinWith('category2')
+                // ->joinWith('category2')
                 ->orderBy($order)
                 ->all();
 
@@ -132,6 +136,75 @@ class WebModel extends ActiveRecord {
                 return (isset($records[$i + 1])) ? $records[$i + 1] : NULL;
 
         return NULL;
+    }
+
+    /**
+     * Special for widget ext.admin.frontControl
+     * 
+     * @return string
+     */
+    public function getCreateUrl() {
+        if (static::route) {
+            return Yii::$app->urlManager->createUrl(static::route . '/' . static::route_create);
+        } else {
+            throw new Exception(Yii::t('app', 'NOTFOUND_CONST_AR', [
+                'param' => 'route_create',
+            ]));
+        }
+    }
+
+    /**
+     * Special for widget ext.admin.frontControl
+     * @return string
+     */
+    public function getDeleteUrl() {
+        if (static::route) {
+            return Yii::$app->urlManager->createUrl([static::route . '/' . static::route_delete, 
+                        'model' => get_class($this),
+                        'id' => $this->id
+            ]);
+        } else {
+            throw new Exception(Yii::t('app', 'NOTFOUND_CONST_AR', array(
+                'param' => 'route_delete',
+                'model' => get_class($this)
+            )));
+        }
+    }
+
+    /**
+     * Special for widget ext.admin.frontControl
+     * @return string
+     */
+    public function getUpdateUrl() {
+        if (static::route) {
+            return Yii::$app->urlManager->createUrl([static::route . '/' . static::route_update,
+                        'id' => $this->id
+            ]);
+        } else {
+            throw new Exception(Yii::t('app', 'NOTFOUND_CONST_AR', array(
+                'param}' => 'route_update',
+                'model}' => get_class($this)
+            )));
+        }
+    }
+
+    /**
+     * Special for widget ext.admin.frontControl
+     * @return string
+     */
+    public function getSwitchUrl() {
+        if (static::route) {
+            return Yii::$app->urlManager->createUrl(static::route . '/' . static::route_switch, array(
+                        'model' => get_class($this),
+                        'switch' => 0,
+                        'id' => $this->id
+            ));
+        } else {
+            throw new Exception(Yii::t('app', 'NOTFOUND_CONST_AR', array(
+                'param' => 'route_switch',
+                'model' => get_class($this)
+            )));
+        }
     }
 
 }

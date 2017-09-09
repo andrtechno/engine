@@ -15,7 +15,7 @@ class CommonAsset extends AssetBundle {
         'js/common.js',
     ];
     public $css = [
-        'css/corner-icons.css',
+
     ];
     public $depends = [
         'yii\jui\JuiAsset',
@@ -23,6 +23,7 @@ class CommonAsset extends AssetBundle {
         'yii\web\JqueryAsset',
         'yii\bootstrap\BootstrapPluginAsset',
         'panix\engine\widgets\notify\NotifyAsset',
+        'panix\engine\assets\IconAsset'
     ];
 
 }
