@@ -1,8 +1,8 @@
 {
     "name": "panix/engine",
-    "description": "Ядро",
+    "description": "CORNER CMS Engine",
     "type": "library",
-    "keywords": ["panix", "corner", "engine"],
+    "keywords": ["panix", "corner", "engine","cms"],
     "license": "MIT",
     "authors": [
         {
@@ -12,13 +12,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "panix/mod-shop": "*",
-        "panix/mod-pages": "*",
-        "panix/mod-user": "*",
-        "panix/mod-admin": "*",
-        "panix/mod-contacts": "*",
-        "panix/wgt-taginput": "*",
-        "panix/wgt-tinymce": "*"
+        "panix/mod-pages": "*"
     },
     "autoload": {
         "psr-4": {
