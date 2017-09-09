@@ -4,6 +4,7 @@
     "type": "library",
     "keywords": ["panix", "corner", "engine","cms"],
     "license": "MIT",
+    "homepage": "www.corner-cms.com",
     "support": {
         "email": "dev@corner-cms.com"
     },
