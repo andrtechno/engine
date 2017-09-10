@@ -1,12 +1,12 @@
 <?php
 
-namespace panix\engine;
+namespace panix\engine\db;
 
 use Yii;
-use yii\db\ActiveRecord;
 use panix\engine\grid\sortable\SortableGridBehavior;
 use yii\base\Exception;
-class WebModel extends ActiveRecord {
+
+class ActiveRecord extends \yii\db\ActiveRecord {
     /*     * public function behaviors() {
       if (isset($this->tableSchema->columns['ordern'])) {
       return [
@@ -159,7 +159,7 @@ class WebModel extends ActiveRecord {
      */
     public function getDeleteUrl() {
         if (static::route) {
-            return Yii::$app->urlManager->createUrl([static::route . '/' . static::route_delete, 
+            return Yii::$app->urlManager->createUrl([static::route . '/' . static::route_delete,
                         'model' => get_class($this),
                         'id' => $this->id
             ]);
