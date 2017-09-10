@@ -12,7 +12,8 @@ class WebInlineAsset extends AssetBundle {
     ];
     public $js = [
         'js/jquery.cookie.js',
-        'js/webcontrol.js'
+        'js/jquery.playSound.js',
+        'js/webcontrol.js',
     ];
 
     /**
@@ -20,7 +21,8 @@ class WebInlineAsset extends AssetBundle {
      */
     public $depends = [
         'yii\web\JqueryAsset',
-        'panix\engine\assets\IconAsset'
+        'panix\engine\assets\IconAsset',
+        'panix\engine\widgets\notify\NotifyAsset',
     ];
 
 }

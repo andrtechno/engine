@@ -55,7 +55,7 @@ class WebController extends Controller {
             $name = $exception->getName();
             $message = $exception->getMessage();
 
-            // $this->layout = 'error';
+            $this->layout = 'error';
 
             return $this->render('error', [
                         'exception' => $exception,
@@ -95,28 +95,9 @@ class WebController extends Controller {
 
 
         $user = Yii::$app->user;
-        $langManager = Yii::$app->languageManager;
 
-        if (!$user->isGuest && $user->language) {
-            if ($user->getLanguage() != $langManager->default->code) {
-                $getLang = $langManager->getById($user->getLanguage())->code;
-                Yii::app()->language = $getLang;
-                $strpos = strpos(Yii::app()->request->requestUri, '/' . $getLang);
-                if ($strpos === false) {
-                    if ($langManager->default->code != $getLang) {
-                        if ($this->isAdminController)
-                            $this->redirect("/{$getLang}/admin");
-                        else
-                            $this->redirect('/' . $getLang);
-                    }
-                }
-            } else {
-                Yii::$app->language = $langManager->active->code;
-            }
-        } else {
-            Yii::$app->language = $langManager->active->code;
-        }
-        //  Yii::$app->language =Yii::$app->languageManager->active->code;
+
+
         $timeZone = Yii::$app->settings->get('app', 'timezone');
         Yii::$app->timeZone = $timeZone;
 
@@ -197,14 +178,4 @@ class WebController extends Controller {
         die;
     }
 
-    /*
-      public function renderContent($content) {
-      $copyright = '<a href="//corner-cms.com/" id="corner" target="_blank"><span>' . Yii::t('app', 'CORNER') . '</span> &mdash; <span class="cr-logo">CORNER</span></a>';
-      $layoutFile = $this->findLayoutFile($this->getView());
-
-      if ($layoutFile !== false) {
-      return $this->getView()->renderFile($layoutFile, ['content' => $content, 'copyright' => $copyright], $this);
-      }
-      return $content;
-      } */
 }

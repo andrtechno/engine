@@ -14,6 +14,8 @@ use panix\engine\widgets\webcontrol\WebInlineAsset;
 class WebInlineControl extends Object {
 
     public function init() {
+
+        
         if (Yii::$app->user->can('admin') && !Yii::$app->request->isAjax) {
             $view = Yii::$app->view;
             WebInlineAsset::register($view);

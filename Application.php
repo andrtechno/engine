@@ -8,13 +8,15 @@ class Application extends \yii\web\Application {
 
     public function run() {
         $this->name = $this->settings->get('app', 'sitename');
-
+        $langManager = $this->languageManager;
+        $user = $this->user;
+        if (!$user->isGuest) {
+            $this->language = $langManager->default->code;
+        } else {
+            $this->language = $langManager->default->code;
+        }
 
         parent::run();
-    }
-
-    public function _meta_page() {
-        
     }
 
     public function getModulesInfo() {
@@ -42,13 +44,29 @@ class Application extends \yii\web\Application {
     }
 
     public function init() {
+
+
+
+
         //     $this->setEngineModules();
-        foreach (\Yii::$app->getModules() as $id => $module) {
+        foreach ($this->getModules() as $id => $module) {
             $this->setAliases([
                 '@' . $id => realpath(\Yii::getAlias("@vendor/panix/mod-{$id}")),
             ]);
             $this->registerTranslations($id);
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
         parent::init();
     }

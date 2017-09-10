@@ -45,8 +45,9 @@ class ManagerUrl extends UrlManager {
         if ($respectLang === true) {
             $langPrefix = Yii::$app->languageManager->getUrlPrefix();
 
-            if ($langPrefix)
+            if ($langPrefix){
                 $result = '/' . $langPrefix . $result;
+            }
         }
 
         return $result;

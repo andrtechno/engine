@@ -1,6 +1,7 @@
 <?php
 
 use panix\engine\Html;
+
 $dataModel = $this->context->dataModel;
 ?>
 
@@ -20,7 +21,7 @@ $dataModel = $this->context->dataModel;
 
 
 
-            <ul class="nav webpanel-navbar-nav">
+            <ul class="webpanel-nav webpanel-navbar-nav">
 
 
                 <li class="active"><a href="#">About</a></li>
@@ -39,40 +40,31 @@ $dataModel = $this->context->dataModel;
                 </li>
             </ul>
 
-            
-                        <?php if (isset($dataModel)) { ?>
+
+            <?php if (isset($dataModel)) { ?>
                 <div class="navbar-form webpanel-navbar-nav">
-                    <div class="ap-btn-group2">
-
-
-
-
+                    <div class="webpanel-btn-group">
                         <?php
- 
-                            //Yii::t(ucfirst($dataModel::MODULE_ID).'Module.default','UPDATE')
-                            echo Html::a('<i class="icon-add"></i>', $dataModel->getCreateUrl(), array(
-                                'title' => Yii::t($dataModel::MODULE_ID . '/default', 'CREATE'),
-                                'target' => '_blank',
-                                'data-toggle' => 'admin-tooltip',
-                                'class' => 'webpanel-btn webpanel-btn-xs webpanel-btn-success'
-                            ));
-          
+                        echo Html::a('<i class="icon-add"></i>', $dataModel->getCreateUrl(), array(
+                            'title' => Yii::t($dataModel::MODULE_ID . '/default', 'CREATE'),
+                            'target' => '_blank',
+                            'data-toggle' => 'admin-tooltip',
+                            'class' => 'webpanel-btn webpanel-btn-xs webpanel-btn-success'
+                        ));
                         ?>
                         <?php
-
-                            echo Html::a('<i class="icon-edit"></i>', $dataModel->getUpdateUrl(), array(
-                                'title' => Yii::t('app', 'UPDATE', 0),
-                                'target' => '_blank',
-                                'data-toggle' => 'admin-tooltip',
-                                'class' => 'webpanel-btn webpanel-btn-xs webpanel-btn-default'
-                            ));
-    
+                        echo Html::a('<i class="icon-edit"></i>', $dataModel->getUpdateUrl(), array(
+                            'title' => Yii::t('app', 'UPDATE', 0),
+                            'target' => '_blank',
+                            'data-toggle' => 'admin-tooltip',
+                            'class' => 'webpanel-btn webpanel-btn-xs webpanel-btn-default'
+                        ));
                         ?>
                     </div>
                 </div>
             <?php } ?>
-            
-            <ul class="nav webpanel-navbar-nav navbar-right">
+
+            <ul class="webpanel-nav webpanel-navbar-nav navbar-right">
                 <li class="active"><a href="./">Default <span class="sr-only">(current)</span></a></li>
 
 
@@ -84,7 +76,7 @@ $dataModel = $this->context->dataModel;
                                     <i class="<?= $module->icon ?>"></i>
                                 <?php } ?>
                                 <span class="hidden-md hidden-lg hidden-sm"><?= $module->count['label'] ?></span>
-                                <span class="count webpanel-label webpanel-label-success"><?= $module->count['num'] ?></span>
+                                <span id="counter-<?=$module->id?>" class="count webpanel-label webpanel-label-success"><?= $module->count['num'] ?></span>
                             </a>
                         </li>
                     <?php } ?>
