@@ -1,7 +1,7 @@
 <?php
 namespace panix\engine\widgets\nav;
 use yii\base\InvalidConfigException;
-use panix\engine\Html;
+use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 
 
@@ -37,10 +37,8 @@ class Dropdown extends \yii\bootstrap\Dropdown
                 throw new InvalidConfigException("The 'label' option is required.");
             }
             $encodeLabel = isset($item['encode']) ? $item['encode'] : $this->encodeLabels;
-            $icon = isset($item['icon']) ? Html::icon($item['icon']).' ' :'';
             $label = $encodeLabel ? Html::encode($item['label']) : $item['label'];
             $itemOptions = ArrayHelper::getValue($item, 'options', []);
-
             $linkOptions = ArrayHelper::getValue($item, 'linkOptions', []);
             $linkOptions['tabindex'] = '-1';
             $url = array_key_exists('url', $item) ? $item['url'] : null;
@@ -50,7 +48,7 @@ class Dropdown extends \yii\bootstrap\Dropdown
                     $content = $label;
                     Html::addCssClass($itemOptions, 'dropdown-header');
                 } else {
-                    $content = Html::a($icon.$label, $url, $linkOptions);
+                    $content = Html::a($label, $url, $linkOptions);
                 }
             } else {
                 Html::addCssClass($linkOptions, 'dropdown-toggle');

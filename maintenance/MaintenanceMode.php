@@ -100,7 +100,7 @@ class MaintenanceMode extends Component {
             FileHelper::createDirectory(Yii::getAlias('@maintenance'));
         }
         if (Yii::$app instanceof \yii\console\Application) {
-            Yii::$app->controllerMap['maintenance'] = 'brussens\maintenance\commands\MaintenanceController';
+            Yii::$app->controllerMap['maintenance'] = 'panix\engine\maintenance\commands\MaintenanceController';
         } else {
 
             if ($this->getIsEnabled()) {

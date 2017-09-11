@@ -5,19 +5,45 @@ namespace panix\engine\db;
 use Yii;
 use panix\engine\grid\sortable\SortableGridBehavior;
 use yii\base\Exception;
-
+use yii\helpers\Json;
 class ActiveRecord extends \yii\db\ActiveRecord {
-    /*     * public function behaviors() {
-      if (isset($this->tableSchema->columns['ordern'])) {
-      return [
-      'sort' => [
-      'class' => \panix\engine\grid\sortable\SortableGridBehavior::className(),
-      'sortableAttribute' => 'ordern'
-      ],
-      ];
-      }
-      } */
+    
 
+    public function save($runValidation = true, $attributeNames = null) {
+        if (parent::save($runValidation, $attributeNames)) {
+            //if ($mSuccess) {
+                $message = Yii::t('app', ($this->isNewRecord) ? 'SUCCESS_CREATE' : 'SUCCESS_UPDATE');
+
+
+                if (Yii::$app->request->isAjax) {
+                    //    if(Yii::app()->user->getIsEditMode2()){
+
+
+                    header('Content-Type: application/json; charset="UTF-8"');
+                    echo Json::encode(array(
+                        'success' => true,
+                        'message' => $message,
+                        'valid' => true,
+                        // 'is' => Yii::app()->controller->isAdminController,
+                        // 'em' => Yii::app()->user->isEditMode,
+                        'data' => $this->attributes
+                    ));
+                    die;
+                    //}
+                } else {
+                   //  if(method_exists(Yii::app()->controller,'setNotify')){
+                    //Yii::app()->controller->setNotify($message, 'success');
+                    // }
+                }
+            //}
+            return true;
+        } else {
+           // if ($mError && method_exists(Yii::app()->controller,'setNotify')) {
+            //    Yii::app()->controller->setNotify(Yii::t('app', ($this->isNewRecord) ? 'ERROR_CREATE' : 'ERROR_UPDATE'), 'danger');
+            //}
+            return false;
+        }
+    }
     //  protected $_attrLabels = array();
     const route_update = 'update';
     const route_delete = 'delete';
@@ -152,7 +178,27 @@ class ActiveRecord extends \yii\db\ActiveRecord {
             ]));
         }
     }
+    public function isString($attribute) {
+        if (Yii::$app->user->can('admin')) {
+            $html = '<form action="' . $this->getUpdateUrl() . '" method="POST">';
+            $html .= '<span id="' . basename(get_class($this)) . '[' . $attribute . ']" class="edit_mode_title">' . $this->$attribute . '</span>';
+            $html .= '</form>';
+            return $html;
+        } else {
+            return $this->$attribute;
+        }
+    }
 
+    public function isText($attribute) {
+        if (Yii::$app->user->can('admin')) {
+            $html = '<form action="' . $this->getUpdateUrl() . '" method="POST">';
+            $html .= '<div id="' . basename(get_class($this)) . '[' . $attribute . ']" class="edit_mode_text">' . $this->$attribute . '</div>';
+            $html .= '</form>';
+            return $html;
+        } else {
+            return Html::text($this->$attribute);
+        }
+    }
     /**
      * Special for widget ext.admin.frontControl
      * @return string

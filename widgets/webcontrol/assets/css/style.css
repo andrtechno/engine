@@ -1,3 +1,16 @@
+.edit_mode_title{
+    outline: 1px dotted #333;
+}
+.edit_mode_text{
+    outline: 1px dotted #333;
+    display: block;
+}
+.edit_mode_title.mce-edit-focus,
+.edit_mode_text.mce-edit-focus{
+    border: transparent;
+}
+
+
 .webpanel{
     font-size:14px;
     border-bottom: 1px solid #cdcdcd;
