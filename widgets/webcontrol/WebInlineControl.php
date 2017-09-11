@@ -19,14 +19,14 @@ class WebInlineControl extends Object {
                     ], true);
 
 
-            $view->on(View::EVENT_BEGIN_BODY, [$this, 'runnig']);
+            $view->on(View::EVENT_BEGIN_BODY, [$this, 'renderToolbar']);
             Yii::$app->controllerMap['webcontrol'] = 'panix\engine\widgets\webcontrol\WebcontrolController';
 
 
         }
     }
 
-    public function runnig() {
+    public function renderToolbar() {
         echo Yii::$app->view->render('@vendor/panix/engine/widgets/webcontrol/views/run');
     }
 

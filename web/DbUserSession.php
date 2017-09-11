@@ -15,7 +15,12 @@ class DbUserSession extends \yii\web\DbSession {
     public static function writeFields($session) {
 
         try {
-            $uid = (\Yii::$app->user->getIdentity(false) == null) ? null : \Yii::$app->user->getIdentity(false)->id;
+            $uid = (Yii::$app->user->getIdentity(false) == null) ? null : Yii::$app->user->getIdentity(false)->id;
+
+            //$test = \panix\mod\user\models\SessionUser::findOne($uid);
+            //if($test){
+                
+            //}
             return [
                 'user_id' => $uid,
                 'ip' => $_SERVER['REMOTE_ADDR']
