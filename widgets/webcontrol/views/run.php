@@ -40,11 +40,11 @@ use panix\engine\Html;
             </ul>
 
 
-            <?php if (isset($this->context->dataModel)) { ?>
+            <?php if (isset($this->context->dataModel)) {$dataModel=$this->context->dataModel; ?>
                 <div class="navbar-form webpanel-navbar-nav">
                     <div class="webpanel-btn-group">
                         <?php
-                        echo Html::a('<i class="icon-add"></i>', $this->context->dataModel->getCreateUrl(), array(
+                        echo Html::a('<i class="icon-add"></i>', $dataModel->getCreateUrl(), array(
                             'title' => Yii::t($dataModel::MODULE_ID . '/default', 'CREATE'),
                             'target' => '_blank',
                             'data-toggle' => 'admin-tooltip',
@@ -52,7 +52,7 @@ use panix\engine\Html;
                         ));
                         ?>
                         <?php
-                        echo Html::a('<i class="icon-edit"></i>', $this->context->dataModel->getUpdateUrl(), array(
+                        echo Html::a('<i class="icon-edit"></i>', $dataModel->getUpdateUrl(), array(
                             'title' => Yii::t('app', 'UPDATE', 0),
                             'target' => '_blank',
                             'data-toggle' => 'admin-tooltip',

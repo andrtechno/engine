@@ -9,7 +9,7 @@ use yii\helpers\FileHelper;
 class WebModule extends Module {
     public $count = false;
     // protected $info;
-    public $routes = [];
+    //public $routes = [];
     //  public static $moduleID;
     public $modelClasses = [];
     protected $_models;
