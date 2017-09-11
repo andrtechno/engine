@@ -16,6 +16,10 @@ class WebModule extends Module {
 
     // protected $moduleNamespace;
     public function init() {
+        
+
+
+
         //$this->setAliases([
         //    '@' . $this->id => realpath(Yii::getAlias("@vendor/panix/mod-{$this->id}")),
         //]);

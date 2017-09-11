@@ -2,6 +2,9 @@
 
 namespace panix\engine;
 
+use Yii;
+use panix\mod\admin\models\Modules;
+
 class Application extends \yii\web\Application {
 
     const version = '0.1a';
@@ -34,9 +37,7 @@ class Application extends \yii\web\Application {
     }
 
     public static function powered() {
-        return \Yii::t('app', 'COPYRIGHT', [
-                    'year' => date('Y')
-        ]);
+        return Yii::t('app', 'COPYRIGHT', ['year' => date('Y')]);
     }
 
     public function getVersion() {
@@ -45,36 +46,40 @@ class Application extends \yii\web\Application {
 
     public function init() {
 
+//$this->setModule('shop', ['class'=>'panix\mod\shop\Module']);
 
 
 
-        //     $this->setEngineModules();
+
         foreach ($this->getModules() as $id => $module) {
             $this->setAliases([
-                '@' . $id => realpath(\Yii::getAlias("@vendor/panix/mod-{$id}")),
+                '@' . $id => realpath(Yii::getAlias("@vendor/panix/mod-{$id}")),
             ]);
             $this->registerTranslations($id);
         }
-
-
-
-
-
-
-
-
-
-
-
+       // $this->setCmsModules();
 
 
         parent::init();
     }
 
+    private function setCmsModules() {
+        $mods = Modules::getEnabled();
+        if ($mods) {
+            foreach ($mods as $module) {
+                $this->setModule($module->name, [
+                        'class' => str_replace('-', DIRECTORY_SEPARATOR, "panix-mod-{$module->name}-Module"),
+                        //'access' => $module->access
+                    ]
+                );
+            }
+        }
+    }
+
     public function getTranslationsFileMap($id) {
         $lang = $this->language;
         $result = array();
-        $basepath = realpath(\Yii::getAlias("@{$id}/messages/{$lang}"));
+        $basepath = realpath(Yii::getAlias("@{$id}/messages/{$lang}"));
         if (is_dir($basepath)) {
             $fileList = \yii\helpers\FileHelper::findFiles($basepath, [
                         'only' => ['*.php'],

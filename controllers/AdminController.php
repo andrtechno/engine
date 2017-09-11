@@ -9,7 +9,7 @@ use panix\engine\controllers\WebController;
 class AdminController extends WebController {
 
     public $buttons = [];
-    public $layout = '@app/web/themes/admin/views/layouts/main';
+    public $layout = '@vendor/panix/mod-admin/views/layouts/main';
 
     protected function error404($text = null) {
         if (!$text) 
@@ -18,25 +18,22 @@ class AdminController extends WebController {
     }
 
     public function beforeAction($event) {
-
-        // Allow only authorized users access
         if (Yii::$app->user->isGuest && get_class($this) !== 'panix\mod\admin\controllers\AuthController') {
-            //  Yii::$app->request->redirect($this->createUrl('/admin/auth'));
-            Yii::$app->response->redirect(array('/admin/auth'));
+            Yii::$app->response->redirect(['/admin/auth']);
         }
-        //Yii::$app->errorHandler->errorAction = '/admin/errors/error';
-
 
         return parent::beforeAction($event);
     }
 
     public function init() {
 
-        //if (!empty(Yii::$app->user) && !Yii::$app->user->can("admin")) {
-        //    throw new ForbiddenHttpException(Yii::t('app','ACCESS_DENIED'));
-        //}
+        if (!empty(Yii::$app->user) && !Yii::$app->user->can("admin")
+                && get_class($this) !== 'panix\mod\admin\controllers\AuthController'
+                && get_class($this) !== 'panix\mod\admin\controllers\DefaultController') {
+            throw new ForbiddenHttpException(Yii::t('app','ACCESS_DENIED'));
+        }
 
-
+        Yii::setAlias('@admin', Yii::getAlias('@vendor/panix/mod-admin'));
 
         parent::init();
     }

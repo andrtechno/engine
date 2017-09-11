@@ -9,7 +9,7 @@
 namespace panix\engine\grid\sortable;
 
 use yii\helpers\Url;
-use yii\grid\GridView;
+use panix\engine\grid\GridView;
 
 /**
  * Sortable version of Yii2 GridView widget.
@@ -24,6 +24,7 @@ class SortableGridView extends GridView {
 
     public function init() {
         parent::init();
+
         $this->sortableAction = Url::to($this->sortableAction);
     }
 
