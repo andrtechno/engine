@@ -34,7 +34,9 @@ class WebController extends Controller {
             ],
         ];
     }
-
+    public function actionMain(){
+        return $this->render('index');
+    }
     public function actions() {
         return [
             'error2' => [
@@ -64,10 +66,6 @@ class WebController extends Controller {
                         'message' => $message
             ]);
         }
-    }
-
-    public function actionIndex() {
-        return $this->render('index');
     }
 
     public function beforeAction($action) {
