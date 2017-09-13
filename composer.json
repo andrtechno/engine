@@ -1,7 +1,7 @@
 {
     "name": "panix/engine",
     "description": "CORNER CMS Engine",
-    "type": "library",
+    "type": "yii2-extension",
     "keywords": ["panix", "corner", "engine","cms"],
     "license": "MIT",
     "authors": [
