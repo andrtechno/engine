@@ -34,9 +34,11 @@ class WebController extends Controller {
             ],
         ];
     }
-    public function actionMain(){
+
+    public function actionMain() {
         return $this->render('index');
     }
+
     public function actions() {
         return [
             'error2' => [
@@ -69,19 +71,11 @@ class WebController extends Controller {
     }
 
     public function beforeAction($action) {
-
-
-
-
-
         $this->view->registerJs('
             common.langauge="' . Yii::$app->language . '";
             common.token="' . Yii::$app->request->csrfToken . '";
             common.isDashboard=true;
             common.message=' . \yii\helpers\Json::encode($this->jsMessages), \yii\web\View::POS_END, 'js-common');
-
-
-
         $this->view->registerMetaTag(['name' => 'author', 'content' => Yii::$app->name]);
         $this->view->registerMetaTag(['name' => 'generator', 'content' => Yii::$app->name . ' ' . Yii::$app->version]);
 
@@ -89,13 +83,7 @@ class WebController extends Controller {
     }
 
     public function init() {
-
-
-
         $user = Yii::$app->user;
-
-
-
         $timeZone = Yii::$app->settings->get('app', 'timezone');
         Yii::$app->timeZone = $timeZone;
 
