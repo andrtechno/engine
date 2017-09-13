@@ -25,7 +25,8 @@
         "panix/mod-shop": "*",
         "panix/mod-pages": "*",
         "panix/mod-images": "*",
-        "panix/mod-contacts": "*"
+        "panix/mod-contacts": "*",
+        "panix/wgt-tinymce": "*"
     },
     "autoload": {
         "psr-4": {
