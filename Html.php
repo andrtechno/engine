@@ -10,6 +10,9 @@ class Html extends \yii\helpers\Html {
     public static $iconPrefix = 'icon-';
     
     public static function icon($icon,$options=[]) {
+        if(isset($options['class'])){
+            $options['class'] .= ' '.self::$iconPrefix . $icon;
+        }
         return static::tag('i', '', array_merge(['class'=>self::$iconPrefix . $icon],$options));
     }
     
