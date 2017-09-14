@@ -3,7 +3,7 @@
 namespace panix\engine\base;
 
 use Yii;
-
+use yii\base\InvalidConfigException;
 class Model extends \yii\base\Model {
 
     protected $_attrLabels = [];
