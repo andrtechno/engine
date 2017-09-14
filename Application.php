@@ -83,7 +83,7 @@ class Application extends \yii\web\Application {
         if (is_dir($basepath)) {
             $fileList = \yii\helpers\FileHelper::findFiles($basepath, [
                         'only' => ['*.php'],
-                        'recursive' => FALSE
+                        'recursive' => false
             ]);
 
             foreach ($fileList as $path) {
