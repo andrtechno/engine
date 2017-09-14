@@ -4,13 +4,17 @@ namespace panix\engine\base;
 
 use Yii;
 use yii\base\InvalidConfigException;
+
 class Model extends \yii\base\Model {
 
     protected $_attrLabels = [];
 
     public function attributeLabels() {
+        $fileName = (new \ReflectionClass(get_called_class()))->getShortName();
+
+
         foreach ($this->attributes as $attr => $val) {
-            $this->_attrLabels[$attr] = Yii::t($this->module . '/' . basename(get_class($this)), strtoupper($attr));
+            $this->_attrLabels[$attr] = Yii::t($this->module . '/' . $fileName, strtoupper($attr));
         }
         return $this->_attrLabels;
     }

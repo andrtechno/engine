@@ -99,9 +99,6 @@ class ActiveRecord extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         $lang = Yii::$app->language;
         $attrLabels = [];
-        $model = get_class($this);
-        $module_id = static::MODULE_ID;
-        $filePath = Yii::getAlias("panix/{$module_id}/messages/{$lang}") . DIRECTORY_SEPARATOR . $model . '.php';
         foreach ($this->behaviors() as $key => $b) {
             if (isset($b['translationAttributes'])) {
                 foreach ($b['translationAttributes'] as $attr) {
@@ -112,9 +109,6 @@ class ActiveRecord extends \yii\db\ActiveRecord {
         foreach ($this->attributes as $attr => $val) {
             $attrLabels[$attr] = self::t(strtoupper($attr));
         }
-        //if (!file_exists($filePath)) {
-        //    Yii::app()->user->setFlash('warning', 'Модель "' . $model . '", не может найти файл переводов: <b>' . $filePath . '</b> ');
-        //}
         return $attrLabels;
     }
 
@@ -130,7 +124,8 @@ class ActiveRecord extends \yii\db\ActiveRecord {
     }
 
     public static function t($message, $params = array()) {
-        return Yii::t(strtolower(static::MODULE_ID) . '/' . basename(get_called_class()), $message, $params);
+        $fileName = (new \ReflectionClass(get_called_class()))->getShortName();
+        return Yii::t(strtolower(static::MODULE_ID) . '/' . $fileName, $message, $params);
     }
 
     public function getNextOrPrev($nextOrPrev, $cid = false, $options = array()) {
