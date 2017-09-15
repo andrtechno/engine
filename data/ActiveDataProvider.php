@@ -23,11 +23,10 @@ class ActiveDataProvider extends \yii\data\ActiveDataProvider {
             if (!isset($value['pageSize'])) {
 
                 $this->_pagination->pageSize = ($settings->get($mid, 'pagenum')) ? $settings->get($mid, 'pagenum') : $settings->get('app', 'pagenum');
-            }else{
+            } else {
 
                 $this->_pagination->pageSize = $value['pageSize'];
             }
-
         } elseif ($value instanceof Pagination || $value === false) {
             $this->_pagination = $value;
         } else {
