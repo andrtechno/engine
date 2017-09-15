@@ -563,8 +563,8 @@ class CMS {
      */
     public static function getDate($format = 'Y-m-d H:i:s') {
         try {
-            $date = new DateTime('now');
-            $date->setTimezone(new DateTimeZone(self::timezone()));
+            $date = new \DateTime('now');
+            $date->setTimezone(new \DateTimeZone(self::timezone()));
             return $date->format($format);
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -573,8 +573,8 @@ class CMS {
 
     public static function time($format = 'Y-m-d H:i:s') {
         try {
-            $date = new DateTime('now');
-            $date->setTimezone(new DateTimeZone(self::timezone()));
+            $date = new \DateTime('now');
+            $date->setTimezone(new \DateTimeZone(self::timezone()));
             return strtotime($date->format($format));
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -595,13 +595,13 @@ class CMS {
             } elseif (isset(Yii::$app->session['timezone'])) {
                 $timezone = Yii::$app->session['timezone'];
             } else {
-                $timezone = $config['default_timezone'];
+                $timezone = $config['timezone'];
             }
         } else {
             if (isset(Yii::$app->session['timezone'])) {
                 $timezone = Yii::$app->session['timezone'];
             } else {
-                $timezone = $config['default_timezone'];
+                $timezone = $config['timezone'];
             }
         }
         return $timezone; //$timezone;
