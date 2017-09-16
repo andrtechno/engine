@@ -18,15 +18,9 @@ class WebModule extends Module {
 
     // protected $moduleNamespace;
     public function init() {
-
         //$this->registerTranslations();
         if (method_exists($this, 'getDefaultModelClasses')) {
             $this->modelClasses = array_merge($this->getDefaultModelClasses(), $this->modelClasses);
-        }
-
-        // TODO: Пересмотреть.
-        if (file_exists(Yii::getAlias('@app/web/themes/' . Yii::$app->view->theme->name . '/modules/' . $this->id) . '.php')) {
-            $this->viewPath = '@app/web/themes/' . Yii::$app->view->theme->name . '/modules/' . $this->id;
         }
         parent::init();
     }

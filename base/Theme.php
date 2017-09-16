@@ -4,24 +4,25 @@ namespace panix\engine\base;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-use yii\helpers\FileHelper;
+
 class Theme extends \yii\base\Theme {
 
     public $name;
 
     public function init() {
         $this->name = \Yii::$app->settings->get('app', 'theme');
-        $this->basePath = "@webroot/themes/{$this->name}";
-        $this->pathMap = [
-            '@app/views' => "@webroot/themes/{$this->name}/views",
-            '@app/modules' => "@webroot/themes/{$this->name}/modules",
-            '@app/widgets' => "@webroot/themes/{$this->name}/widgets",
-            '@app/layouts' => "@webroot/themes/{$this->name}",
+        $this->basePath = "@app/web/themes/{$this->name}";
+        $modulesPaths = [];
+        foreach (Yii::$app->getModules() as $id => $mod) {
+            $modulesPaths['@' . $id] = "@app/web/themes/{$this->name}/modules/{$id}";
+        }
 
-        ];
+        $this->pathMap = ArrayHelper::merge([
+                    "@app/views" => "@app/web/themes/{$this->name}/views",
+                        ], $modulesPaths);
 
-        $this->baseUrl = "@webroot/themes/{$this->name}";
-        return parent::init();
+        $this->baseUrl = "@app/web/themes/{$this->name}";
+        parent::init();
     }
 
 }
