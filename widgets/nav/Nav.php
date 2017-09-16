@@ -36,7 +36,7 @@ class Nav extends \yii\bootstrap\Nav {
                 'label' => Yii::t('admin/default', 'MODULES'),
                 'icon' => 'puzzle',
             // 'visible' => count($found['modules']['items'])
-                'items'=>Yii::$app->getModulesInfo()
+              //  'items'=>$found['modules']['items']
             ),
         );
         $this->items = ArrayHelper::merge($defaultItems, $found);

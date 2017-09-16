@@ -47,10 +47,6 @@ class Application extends \yii\web\Application {
     public function init() {
 
 //$this->setModule('shop', ['class'=>'panix\mod\shop\Module']);
-
-
-
-
         foreach ($this->getModules() as $id => $module) {
             $this->setAliases([
                 '@' . $id => realpath(Yii::getAlias("@vendor/panix/mod-{$id}")),
@@ -58,8 +54,6 @@ class Application extends \yii\web\Application {
             $this->registerTranslations($id);
         }
        // $this->setCmsModules();
-
-
         parent::init();
     }
 
