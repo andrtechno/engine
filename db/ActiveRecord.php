@@ -6,44 +6,45 @@ use Yii;
 use panix\engine\grid\sortable\SortableGridBehavior;
 use yii\base\Exception;
 use yii\helpers\Json;
+
 class ActiveRecord extends \yii\db\ActiveRecord {
-    
 
     public function save($runValidation = true, $attributeNames = null) {
         if (parent::save($runValidation, $attributeNames)) {
             //if ($mSuccess) {
-                $message = Yii::t('app', ($this->isNewRecord) ? 'SUCCESS_CREATE' : 'SUCCESS_UPDATE');
+            $message = Yii::t('app', ($this->isNewRecord) ? 'SUCCESS_CREATE' : 'SUCCESS_UPDATE');
 
 
-                if (Yii::$app->request->isAjax) {
-                    //    if(Yii::app()->user->getIsEditMode2()){
+            if (Yii::$app->request->isAjax) {
+                //    if(Yii::app()->user->getIsEditMode2()){
 
 
-                    header('Content-Type: application/json; charset="UTF-8"');
-                    echo Json::encode(array(
-                        'success' => true,
-                        'message' => $message,
-                        'valid' => true,
-                        // 'is' => Yii::app()->controller->isAdminController,
-                        // 'em' => Yii::app()->user->isEditMode,
-                        'data' => $this->attributes
-                    ));
-                    die;
-                    //}
-                } else {
-                   //  if(method_exists(Yii::app()->controller,'setNotify')){
-                    //Yii::app()->controller->setNotify($message, 'success');
-                    // }
-                }
+                header('Content-Type: application/json; charset="UTF-8"');
+                echo Json::encode(array(
+                    'success' => true,
+                    'message' => $message,
+                    'valid' => true,
+                    // 'is' => Yii::app()->controller->isAdminController,
+                    // 'em' => Yii::app()->user->isEditMode,
+                    'data' => $this->attributes
+                ));
+                die;
+                //}
+            } else {
+                //  if(method_exists(Yii::app()->controller,'setNotify')){
+                //Yii::app()->controller->setNotify($message, 'success');
+                // }
+            }
             //}
             return true;
         } else {
-           // if ($mError && method_exists(Yii::app()->controller,'setNotify')) {
+            // if ($mError && method_exists(Yii::app()->controller,'setNotify')) {
             //    Yii::app()->controller->setNotify(Yii::t('app', ($this->isNewRecord) ? 'ERROR_CREATE' : 'ERROR_UPDATE'), 'danger');
             //}
             return false;
         }
     }
+
     //  protected $_attrLabels = array();
     const route_update = 'update';
     const route_delete = 'delete';
@@ -53,24 +54,21 @@ class ActiveRecord extends \yii\db\ActiveRecord {
     const MODULE_ID = null;
 
     public function beforeSave($insert) {
-
+        $columns = $this->tableSchema->columns;
         //if (parent::beforeSave($insert)) {
         //create
         if ($this->isNewRecord) {
-            if (isset($this->tableSchema->columns['ip_create'])) {
+            if (isset($columns['ip_create'])) {
                 //Текущий IP адресс, автора добавление
                 $this->ip_create = Yii::$app->request->getUserIP();
             }
-            if (isset($this->tableSchema->columns['user_id'])) {
+            if (isset($columns['user_id'])) {
                 $this->user_id = (Yii::$app->user->isGuest) ? 0 : Yii::$app->user->id;
             }
-            if (isset($this->tableSchema->columns['user_agent'])) {
+            if (isset($columns['user_agent'])) {
                 $this->user_agent = Yii::$app->request->userAgent;
             }
-            if (isset($this->tableSchema->columns['date_create'])) {
-                // $this->date_create = date('Y-m-d H:i:s');
-            }
-            if (isset($this->tableSchema->columns['ordern'])) {
+            if (isset($columns['ordern'])) {
                 if (!isset($this->ordern)) {
                     $row = static::find()->select('max(ordern) as maxOrdern')->asArray()->one();
                     $this->ordern = $row['maxOrdern'] + 1;
@@ -78,10 +76,8 @@ class ActiveRecord extends \yii\db\ActiveRecord {
             }
             //update
         } else {
-            if (isset($this->tableSchema->columns['date_update'])) {
-                //  echo $this->date_update;
-                // die('s');
-                //   $this->date_update = date('Y-m-d H:i:s');
+            if (isset($columns['date_update'])) {
+                $this->date_update = date('Y-m-d H:i:s');
             }
         }
         return parent::beforeSave($insert);
@@ -113,13 +109,29 @@ class ActiveRecord extends \yii\db\ActiveRecord {
     }
 
     public function behaviors() {
+        $columns = $this->tableSchema->columns;
         $b = [];
-        if (isset($this->tableSchema->columns['ordern'])) {
-            $b['dnd_sort'] = [
-                'class' => SortableGridBehavior::className(),
-                'sortableAttribute' => 'ordern'
+        if (isset($columns['ordern'])) {
+            $b['sortable'] = [
+                'class' => \panix\engine\grid\sortable\Behavior::className(),
             ];
         }
+        if (isset($columns['date_create']) && isset($columns['date_update'])) {
+            $b['timestamp'] = [
+                'class' => \yii\behaviors\TimestampBehavior::className(),
+                'createdAtAttribute' => 'date_create',
+                'updatedAtAttribute' => 'date_update',
+                //'value' => new \yii\db\Expression('NOW()'),
+                //'value' => new \yii\db\Expression('CURRENT_TIMESTAMP()'),
+                'value' => new \yii\db\Expression('UTC_TIMESTAMP()'),
+                    //'attributes' => [
+                    //    \yii\db\ActiveRecord::EVENT_BEFORE_INSERT => 'date_create',
+                    //     \yii\db\ActiveRecord::EVENT_BEFORE_UPDATE => 'date_update',
+                    //],
+                    // 'value' => function() { return date('U'); },// unix timestamp
+            ];
+        }
+
         return $b;
     }
 
@@ -173,6 +185,7 @@ class ActiveRecord extends \yii\db\ActiveRecord {
             ]));
         }
     }
+
     public function isString($attribute) {
         if (Yii::$app->user->can('admin')) {
             $html = '<form action="' . $this->getUpdateUrl() . '" method="POST">';
@@ -194,6 +207,7 @@ class ActiveRecord extends \yii\db\ActiveRecord {
             return Html::text($this->$attribute);
         }
     }
+
     /**
      * Special for widget ext.admin.frontControl
      * @return string

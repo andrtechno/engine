@@ -123,7 +123,7 @@ class ActionColumn extends Column {
                                 $icon = 'icon-eye-close';
                                 $class = 'btn-default';
                             }
-                            return Html::a('<i class="' . $icon . '"></i>', Url::toRoute(['switch', 'id' => $model->primaryKey, 'model' => $model::className(), 's' => ($model->switch) ? 0 : 1]), [
+                            return Html::a('<i class="' . $icon . '"></i>', Url::toRoute(['switch', 'id' => $model->primaryKey, 's' => ($model->switch) ? 0 : 1]), [
                                         'title' => Yii::t('app', 'GRID_SWITCH'),
                                         'class' => "btn ' . $this->btnSize . ' " . $class . " switch",
                                         'data-pk' => $model->primaryKey,

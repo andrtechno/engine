@@ -1,55 +1,43 @@
 <?php
 
 namespace panix\engine\widgets;
+
 use yii\helpers\Html;
 use yii\helpers\Inflector;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
-class Pjax extends \yii\widgets\Pjax
-{
-    /**
-     * @var string
-     */
-    public $loader;
-    public function init()
-    {
-        Html::addCssClass($this->options, 'dimmable');
-        if (!$this->loader) {
-            $this->loader = self::dimmer(self::loader(), ['class' => 'active inverted']);
-        }
-        parent::init();
-    }
-       public static function dimmer($content, $options = [])
-    {
-        return static::renderElement('dimmer', $content, $options);
-    }
+class Pjax extends \yii\widgets\Pjax {
+
+
     public function registerClientScript()
     {
-        parent::registerClientScript();
-        $this->getView()->registerJs('
-        var pjaxLoader_' . $this->getSanitizedId() . ' = "' . addslashes($this->loader) . '";
-        jQuery(document).on("pjax:start", "#' . $this->options['id'] . '", function() {
-            jQuery("#' . $this->options['id'] . '").append(pjaxLoader_' . $this->getSanitizedId() . ');
-        });
-        ');
+        $id = $this->options['id'];
+        $this->clientOptions['push'] = $this->enablePushState;
+        $this->clientOptions['replace'] = $this->enableReplaceState;
+        $this->clientOptions['timeout'] = $this->timeout;
+        $this->clientOptions['scrollTo'] = $this->scrollTo;
+        if (!isset($this->clientOptions['container'])) {
+            $this->clientOptions['container'] = "#$id";
+        }
+        $options = Json::htmlEncode($this->clientOptions);
+        $js = '';
+        if ($this->linkSelector !== false) {
+            $linkSelector = Json::htmlEncode($this->linkSelector !== null ? $this->linkSelector : '#' . $id . ' a');
+            $js .= "jQuery(document).pjax($linkSelector, $options);";
+        }
+        if ($this->formSelector !== false) {
+            $formSelector = Json::htmlEncode($this->formSelector !== null ? $this->formSelector : '#' . $id . ' form[data-pjax]');
+            $submitEvent = Json::htmlEncode($this->submitEvent);
+            $js .= "\njQuery(document).on($submitEvent, $formSelector, function (event) {jQuery.pjax.submit(event, $options);});";
+        }
+        $view = $this->getView();
+        PjaxAsset::register($view);
+
+        if ($js !== '') {
+            $view->registerJs($js);
+        }
     }
-       public static function loader($content = '', $options = [])
-    {
-        return static::renderElement('loader', $content, $options);
-    }
-    /**
-     * @return string
-     */
-    private function getSanitizedId()
-    {
-        return Inflector::camelize($this->options['id']);
-    }
-    
-       public static function renderElement($type, $content, $options = [])
-    {
-        $tag = ArrayHelper::remove($options, 'tag', 'div');
-        $class = ArrayHelper::remove($options, 'class');
-        Html::addCssClass($options, 'ui ' . $class . ' ' . $type);
-        return Html::tag($tag, $content, $options);
-    }
+
+
 }
