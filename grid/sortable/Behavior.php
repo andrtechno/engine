@@ -1,5 +1,6 @@
 <?php
 namespace panix\engine\grid\sortable;
+use Yii;
 use yii\db\ActiveRecord;
 class Behavior extends \yii\base\Behavior {
     

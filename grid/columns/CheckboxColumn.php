@@ -81,7 +81,12 @@ class CheckboxColumn extends Column {
         }
         $id = $this->grid->getId();
         $name = strtr($this->name, array('[' => "\\[", ']' => "\\]"));
+        
+
+         
         $this->grid->view->registerJs("
+jQuery(\"input:not(#{$id})[name='$name']\").prop('checked',false);
+
 jQuery(document).on('click','.select-on-check-all',function() {
     var checked=this.checked;
     jQuery('input[name=\"{$name}\"]:enabled').each(function() {
@@ -100,6 +105,20 @@ jQuery(document).on('click','.select-on-check-all',function() {
 });
     
 
+jQuery(document).on('click', '#grid-action-delete', function() {
+    var keys = $('#{$id}').yiiGridView('getSelectedRows');
+    $.ajax({
+        url:'/admin/pages/default/delete',
+        type:'POST',
+        dataType:'json',
+        data:{id:keys},
+        success:function(data){
+            common.notify(data.message,'success');
+            $('#{$id}').yiiGridView('applyFilter');
+        }
+    });
+});
+
 jQuery(document).on('click', 'input[name=\"$name\"]', function() {
 
     var checked=this.checked;
@@ -115,8 +134,11 @@ jQuery(document).on('click', 'input[name=\"$name\"]', function() {
        $('#grid-actions').removeClass('hidden');
     }
 });
-
+jQuery('.select-on-check-all').prop('checked', jQuery(\"input[name='$name']\").length==jQuery(\"input[name='$name']:checked\").length);
 ");
+    
+
+    
         $this->grid->footerRowOptions = ['class' => 'text-center'];
         $this->footer = \yii\bootstrap\ButtonDropdown::widget([
                     'label' => Html::icon('menu'),
@@ -128,8 +150,13 @@ jQuery(document).on('click', 'input[name=\"$name\"]', function() {
                         'items' => [
                             [
                                 'label' => Html::icon('delete') . ' ' . Yii::t('app', 'DELETE'),
-                                'url' => '/',
-                                'options' => ['class' => 'bg-danger']
+                                'url' => 'javascript:void(0)',
+                                //'url' => ['/admin/pages/default/test'],
+                                'options' => [
+                                    'id'=>'grid-action-delete',
+                                    'class' => 'bg-danger',
+                                    //'data-pjax'=>'#pjax-test'
+                                    ]
                             ],
                             ['label' => 'DropdownB', 'url' => '#'],
                         ],
