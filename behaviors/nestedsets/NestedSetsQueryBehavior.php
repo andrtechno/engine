@@ -1,17 +1,20 @@
 <?php
+
 /**
  * @link https://github.com/wbraganca/yii2-nested-set-behavior
  * @copyright Copyright (c) 2014 Wanderson Bragança
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
+
 namespace panix\engine\behaviors\nestedsets;
+
 use yii\base\Behavior;
 
 /**
  * @author Wanderson Bragança <wanderson.wbc@gmail.com>
  */
-class NestedSetsQueryBehavior extends Behavior
-{
+class NestedSetsQueryBehavior extends Behavior {
+
     /**
      * @var ActiveQuery the owner of this behavior.
      */
@@ -21,8 +24,7 @@ class NestedSetsQueryBehavior extends Behavior
      * Gets root node(s).
      * @return ActiveRecord the owner.
      */
-    public function roots()
-    {
+    public function roots() {
         /** @var $modelClass ActiveRecord */
         $modelClass = $this->owner->modelClass;
         $model = new $modelClass;
@@ -31,13 +33,12 @@ class NestedSetsQueryBehavior extends Behavior
         return $this->owner;
     }
 
-    public function options($root = 0, $level = null)
-    {
+    public function options($root = 0, $level = null) {
         $res = [];
         if (is_object($root)) {
-            $res[$root->{$root->idAttribute}] = str_repeat('—', $root->{$root->levelAttribute} - 1) 
-                . ((($root->{$root->levelAttribute}) > 1) ? '›': '')
-                . $root->{$root->titleAttribute};
+            $res[$root->{$root->idAttribute}] = str_repeat('—', $root->{$root->levelAttribute} - 1)
+                    . ((($root->{$root->levelAttribute}) > 1) ? '›' : '')
+                    . $root->{$root->titleAttribute};
 
             if ($level) {
                 foreach ($root->children()->all() as $childRoot) {
@@ -70,14 +71,12 @@ class NestedSetsQueryBehavior extends Behavior
         return $res;
     }
 
-    public function dataFancytree($root = 0, $level = null)
-    {
+    public function dataFancytree($root = 0, $level = null) {
         $data = array_values($this->prepareData2Fancytree($root, $level));
         return $this->makeData2Fancytree($data);
     }
 
-    private function prepareData2Fancytree($root = 0, $level = null)
-    {
+    private function prepareData2Fancytree($root = 0, $level = null) {
         $res = [];
         if (is_object($root)) {
             $res[$root->{$root->idAttribute}] = [
@@ -92,8 +91,7 @@ class NestedSetsQueryBehavior extends Behavior
                     if (isset($res[$root->{$root->idAttribute}]['children']) && !empty($aux)) {
                         $res[$root->{$root->idAttribute}]['folder'] = true;
                         $res[$root->{$root->idAttribute}]['children'] += $aux;
-                        
-                    } elseif(!empty($aux)) {
+                    } elseif (!empty($aux)) {
                         $res[$root->{$root->idAttribute}]['folder'] = true;
                         $res[$root->{$root->idAttribute}]['children'] = $aux;
                     }
@@ -104,8 +102,7 @@ class NestedSetsQueryBehavior extends Behavior
                     if (isset($res[$root->{$root->idAttribute}]['children']) && !empty($aux)) {
                         $res[$root->{$root->idAttribute}]['folder'] = true;
                         $res[$root->{$root->idAttribute}]['children'] += $aux;
-                        
-                    } elseif(!empty($aux)) {
+                    } elseif (!empty($aux)) {
                         $res[$root->{$root->idAttribute}]['folder'] = true;
                         $res[$root->{$root->idAttribute}]['children'] = $aux;
                     }
@@ -133,8 +130,7 @@ class NestedSetsQueryBehavior extends Behavior
         return $res;
     }
 
-    private function makeData2Fancytree(&$data)
-    {
+    private function makeData2Fancytree(&$data) {
         $tree = [];
         foreach ($data as $key => &$item) {
             if (isset($item['children'])) {
@@ -145,4 +141,5 @@ class NestedSetsQueryBehavior extends Behavior
         }
         return $tree;
     }
+
 }

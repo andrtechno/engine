@@ -4,6 +4,7 @@ namespace panix\engine;
 
 use Yii;
 use yii\helpers\Url;
+
 /**
  * Дополнительные функции системы.
  * 
@@ -33,11 +34,11 @@ class CMS {
     }
 
     public static function placeholderUrl($params = []) {
-        $url=['/placeholder'];
+        $url = ['/placeholder'];
         if (!isset($params['text'])) {
             $params['text'] = 'f138';
         }
-        return Url::to(array_merge($url,$params));
+        return Url::to(array_merge($url, $params));
     }
 
     public static function hex2rgb($colour) {
@@ -71,7 +72,6 @@ class CMS {
         }
     }
 
-
     public static function tableName() {
         // return table name with DB name to get relations from different DBs to work
         $name = preg_match("/dbname=([^;]*)/", Yii::$app->db->dsn, $matches);
@@ -90,8 +90,6 @@ class CMS {
         }
         return $text;
     }
-
-
 
     public static function getMemoryLimit() {
         $memory_limit = ini_get('memory_limit');
@@ -186,8 +184,6 @@ class CMS {
     public static function gender($gender) {
         return Yii::t('app', 'GENDER', $gender);
     }
-
-
 
     /**
      * 
@@ -437,28 +433,18 @@ class CMS {
      */
     public static function ip($ip, $type = 1, $user = null) {
         if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-            if (Yii::$app->hasComponent('geoip') && self::getMemoryLimit() > self::MEMORY_LIMIT) {
-                $geoip = Yii::$app->geoip;
-                $code = $geoip->lookupCountryCode($ip);
-                $name = $geoip->lookupCountryName($ip);
-                if (isset($code)) {
-                    if (!empty($code)) {
-                        $image = Html::image('/uploads/language/' . strtolower($code) . '.png', $ip, array('title' => Yii::t('app', 'COUNTRY') . ': ' . Yii::t('geoip_country', $name)));
-                        if ($type == 1) {
-                            $content = Html::link($image . ' ' . $ip, 'javascript:void(0)', array('onClick' => 'common.geoip("' . $ip . '")', 'title' => Yii::t('app', 'COUNTRY') . ': ' . Yii::t('geoip_country', $name)));
-                        } elseif ($type == 2 && $user) {
-                            $content = Html::link($image . ' ' . $user, 'javascript:void(0)', array('onClick' => 'common.geoip("' . $ip . '")', 'title' => Yii::t('app', 'COUNTRY') . ': ' . Yii::t('geoip_country', $name)));
-                        } elseif ($type == 3) {
-                            $content = $image . ' ' . $ip;
-                        } else {
-                            $content = $image;
-                        }
-                    } else {
-                        //return null;
-                        $content = $ip;
-                    }
+            if (self::getMemoryLimit() > self::MEMORY_LIMIT) {
+                $geoip = Yii::$app->geoip->ip($ip);
+                $title = Yii::t('app', 'COUNTRY') . ': ' . Yii::t('app/geoip_country', $geoip->country).'/'.Yii::t('app/geoip_city', $geoip->city);
+                $image = Html::img('/uploads/language/' . strtolower($geoip->isoCode) . '.png', ['alt' => $ip, 'title' => $title]);
+                if ($type == 1) {
+                    $content = Html::a($image . ' ' . $ip, 'javascript:void(0)', ['onClick' => 'common.geoip("' . $ip . '")', 'title' => $title]);
+                } elseif ($type == 2 && $user) {
+                    $content = Html::a($image . ' ' . $user, 'javascript:void(0)', ['onClick' => 'common.geoip("' . $ip . '")', 'title' => $title]);
+                } elseif ($type == 3) {
+                    $content = $image . ' ' . $ip;
                 } else {
-                    $content = $ip;
+                    $content = $image;
                 }
                 return $content;
             } else {
@@ -521,13 +507,13 @@ class CMS {
             if ($t >= time()) {
                 $result = $resDate;
             } else {
-                $result = $df->timeZone.Yii::t('app', 'TODAY_IN', array('time' => $df->asTime($formatted,'php:H:s')));
+                $result = $df->timeZone . Yii::t('app', 'TODAY_IN', array('time' => $df->asTime($formatted, 'php:H:s')));
             }
         } elseif ($formatted > mktime(0, 0, 0) - $oneDay) {
-            $result = Yii::t('app', 'YESTERDAY_IN', array('time' => $df->asTime($formatted,'php:H:s')));
+            $result = Yii::t('app', 'YESTERDAY_IN', array('time' => $df->asTime($formatted, 'php:H:s')));
         } else {
             if ($time) {
-                $result = $resDate . ' ' . Yii::t('app', 'IN') . ' ' . $df->asTime($formatted,'php:H:s');
+                $result = $resDate . ' ' . Yii::t('app', 'IN') . ' ' . $df->asTime($formatted, 'php:H:s');
             } else {
                 $result = $resDate;
             }

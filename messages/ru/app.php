@@ -33,6 +33,7 @@ return [
     'SIZE' => 'Размер',
     'STATUS' => 'Статус',
     'FILENAME'=>'Название файла',
+    'COUNTRY'=>'Страна',
         'FILE_SUCCESS_DELETE' => 'Файл успешно удален.',
     'ERR_FILE_NOT_FOUND' => 'Файл не найден.',
 ];

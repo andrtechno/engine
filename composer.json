@@ -26,7 +26,8 @@
         "panix/mod-pages": "*",
         "panix/mod-images": "*",
         "panix/mod-contacts": "*",
-        "panix/wgt-tinymce": "*"
+        "panix/wgt-tinymce": "*",
+        "maxmind-db/reader": "~1.0"
     },
     "autoload": {
         "psr-4": {
