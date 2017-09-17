@@ -1,15 +1,11 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
 
 namespace panix\engine\grid\columns;
 
+use Yii;
 use Closure;
 use yii\base\InvalidConfigException;
-use yii\helpers\Html;
+use panix\engine\Html;
 
 /**
  * CheckboxColumn displays a column of checkboxes in a grid view.
@@ -37,12 +33,15 @@ use yii\helpers\Html;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class CheckboxColumn extends Column
-{
+class CheckboxColumn extends Column {
+
+    public $headerOptions = ['style' => 'width: 80px;'];
+
     /**
      * @var string the name of the input checkbox input fields. This will be appended with `[]` to ensure it is an array.
      */
     public $name = 'selection';
+
     /**
      * @var array|\Closure the HTML attributes for checkboxes. This can either be an array of
      * attributes or an anonymous function ([[Closure]]) that returns such an array.
@@ -62,18 +61,17 @@ class CheckboxColumn extends Column
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $checkboxOptions = [];
+
     /**
      * @var boolean whether it is possible to select multiple rows. Defaults to `true`.
      */
     public $multiple = true;
 
-
     /**
      * @inheritdoc
      * @throws \yii\base\InvalidConfigException if [[name]] is not set.
      */
-    public function init()
-    {
+    public function init() {
         parent::init();
         if (empty($this->name)) {
             throw new InvalidConfigException('The "name" property must be set.');
@@ -81,6 +79,62 @@ class CheckboxColumn extends Column
         if (substr_compare($this->name, '[]', -2, 2)) {
             $this->name .= '[]';
         }
+        $id = $this->grid->getId();
+        $name = strtr($this->name, array('[' => "\\[", ']' => "\\]"));
+        $this->grid->view->registerJs("
+jQuery(document).on('click','.select-on-check-all',function() {
+    var checked=this.checked;
+    jQuery('input[name=\"{$name}\"]:enabled').each(function() {
+        this.checked=checked;
+        if (checked == this.checked) {
+            //$(this).closest('.checker').removeClass('checked');
+            $(this).closest('table tbody tr').removeClass('active');
+            $('#grid-actions').addClass('hidden');
+        }
+	if (this.checked) {
+            //$(this).closest('.checker').addClass('checked');
+            $(this).closest('table tbody tr').addClass('active');
+            $('#grid-actions').removeClass('hidden');
+        }
+    });
+});
+    
+
+jQuery(document).on('click', 'input[name=\"$name\"]', function() {
+
+    var checked=this.checked;
+    this.checked=checked;
+    if (checked == this.checked) {
+        //$(this).removeClass('checked');
+        $(this).closest('table tbody tr').removeClass('active');
+     $('#grid-actions').addClass('hidden');
+    }
+    if (this.checked) {
+       // $(this).addClass('checked'); //.closest('.checker')
+        $(this).closest('table tbody tr').addClass('active');
+       $('#grid-actions').removeClass('hidden');
+    }
+});
+
+");
+        $this->grid->footerRowOptions = ['class' => 'text-center'];
+        $this->footer = \yii\bootstrap\ButtonDropdown::widget([
+                    'label' => Html::icon('menu'),
+                    'encodeLabel' => false,
+                    'containerOptions' => ['class' => 'dropup hidden', 'id' => 'grid-actions'],
+                    'options' => ['class' => 'btn-default'],
+                    'dropdown' => [
+                        'encodeLabels' => false,
+                        'items' => [
+                            [
+                                'label' => Html::icon('delete') . ' ' . Yii::t('app', 'DELETE'),
+                                'url' => '/',
+                                'options' => ['class' => 'bg-danger']
+                            ],
+                            ['label' => 'DropdownB', 'url' => '#'],
+                        ],
+                    ],
+        ]);
     }
 
     /**
@@ -89,15 +143,14 @@ class CheckboxColumn extends Column
      * This method may be overridden to customize the rendering of the header cell.
      * @return string the rendering result
      */
-    protected function renderHeaderCellContent()
-    {
+    protected function renderHeaderCellContent() {
         $name = rtrim($this->name, '[]') . '_all';
         $id = $this->grid->options['id'];
         $options = json_encode([
             'name' => $this->name,
             'multiple' => $this->multiple,
             'checkAll' => $name,
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         $this->grid->getView()->registerJs("jQuery('#$id').yiiGridView('setSelectionColumn', $options);");
 
         if ($this->header !== null || !$this->multiple) {
@@ -110,8 +163,7 @@ class CheckboxColumn extends Column
     /**
      * @inheritdoc
      */
-    protected function renderDataCellContent($model, $key, $index)
-    {
+    protected function renderDataCellContent($model, $key, $index) {
         if ($this->checkboxOptions instanceof Closure) {
             $options = call_user_func($this->checkboxOptions, $model, $key, $index, $this);
         } else {
@@ -123,4 +175,5 @@ class CheckboxColumn extends Column
 
         return Html::checkbox($this->name, !empty($options['checked']), $options);
     }
+
 }

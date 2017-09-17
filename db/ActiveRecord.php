@@ -3,7 +3,6 @@
 namespace panix\engine\db;
 
 use Yii;
-use panix\engine\grid\sortable\SortableGridBehavior;
 use yii\base\Exception;
 use yii\helpers\Json;
 

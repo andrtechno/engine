@@ -8,7 +8,7 @@ use yii\web\View;
 use yii\helpers\Url;
 
 class Column extends \yii\grid\Column {
-
+    public $headerOptions = ['style' => 'width: 30px;'];
     public $url = null;
 
     public function init() {
