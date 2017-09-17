@@ -6,18 +6,18 @@ use panix\engine\grid\sortable\assets\SortableAsset;
 use panix\engine\Html;
 use yii\web\View;
 use yii\helpers\Url;
+
 class Column extends \yii\grid\Column {
 
-    //public $content = '';
     public $url = null;
 
     public function init() {
         // if ($this->url == null)
         //    $this->url = '/' . preg_replace('#' . Yii::app()->controller->action->id . '$#', 'sortable', Yii::app()->controller->route);
 
-        
+
         $this->url = Url::toRoute($this->url);
-        
+
         $id = $this->grid->getId();
         SortableAsset::register($this->grid->view);
 
@@ -57,5 +57,6 @@ class Column extends \yii\grid\Column {
     protected function renderHeaderCellContent() {
         return Html::tag('i', '', array('class' => 'icon-sort'));
     }
+
 
 }
