@@ -143,10 +143,19 @@ common = {
 common.init();
 
 
+$(document).on('pjax:send', function() {
+  $('.grid-loading').show();
+});
+$(document).on('pjax:complete', function() {
+  $('.grid-loading').hide();
+});
+
 
 $(document).ready(function () {
     $(document).on('click', '.editgrid', function () {
         var gridid = $(this).attr('data-grid-id');
+        var modelClass = $(this).attr('data-model');
+        var pjaxId = $(this).attr('data-pjax-id');
         console.log(gridid);
         $('body').append($('<div/>', {
             'id': gridid + '-dialog'
@@ -165,10 +174,60 @@ $(document).ready(function () {
             },
             open: function () {
                 var that = this;
+                $.ajax({
+                    url: '/admin/default/get-grid',
+                    type: 'POST',
+                    data: {
+                        modelClass: modelClass,
+                        grid: gridid
+                    },
+                    success: function (data) {
+                        $(that).html(data);
+                        $('.ui-dialog').position({
+                            my: 'center',
+                            at: 'center',
+                            of: window,
+                            collision: 'fit'
+                        });
+                    }
+                });
             },
             close: function () {
                 $(this).remove();
-            }
+            },
+            buttons: [{
+                    'text': common.message.save,
+                    "class": 'btn btn-success',
+                    'click': function (e) {
+
+                        var form = $('#edit_grid_columns_form').serialize();
+                        $.ajax({
+                            url: '/admin/default/get-grid',
+                            type: 'POST',
+                            data: form,
+                            beforeSend: function () {
+                                $(e.currentTarget).attr('disabled', true).addClass('load');
+                            },
+                            success: function () {
+                                $('#' + gridid + '-dialog').remove();
+                                //$.pjax.reload({container: '#pjax-test'});
+                                 $.pjax.reload('#'+pjaxId, {timeout : false});
+                                //$('#w0').yiiGridView('applyFilter');
+                                $('#dialog-overlay').remove();
+                            },
+                            complete: function () {
+                                $(e.currentTarget).attr('disabled', true).removeClass('load');
+                            }
+                        });
+                    }
+                },
+                {
+                    'text': common.message.cancel,
+                    "class": 'btn btn-default',
+                    'click': function () {
+                        $('#' + gridid + '-dialog').remove();
+                    }
+                }]
         });
     });
 });

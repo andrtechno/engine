@@ -7,42 +7,24 @@ use yii\base\Exception;
 use yii\helpers\Json;
 
 class ActiveRecord extends \yii\db\ActiveRecord {
-
-    public function save($runValidation = true, $attributeNames = null) {
-        if (parent::save($runValidation, $attributeNames)) {
-            //if ($mSuccess) {
-            $message = Yii::t('app', ($this->isNewRecord) ? 'SUCCESS_CREATE' : 'SUCCESS_UPDATE');
-
-
-            if (Yii::$app->request->isAjax) {
-                //    if(Yii::app()->user->getIsEditMode2()){
-
-
-                header('Content-Type: application/json; charset="UTF-8"');
-                echo Json::encode(array(
-                    'success' => true,
-                    'message' => $message,
-                    'valid' => true,
-                    // 'is' => Yii::app()->controller->isAdminController,
-                    // 'em' => Yii::app()->user->isEditMode,
-                    'data' => $this->attributes
-                ));
-                die;
-                //}
-            } else {
-                //  if(method_exists(Yii::app()->controller,'setNotify')){
-                //Yii::app()->controller->setNotify($message, 'success');
-                // }
+    public function getColumnSearch($array = array()) {
+        $col = $this->gridColumns;
+        $result = array();
+        if (isset($col['DEFAULT_COLUMNS'])) {
+            foreach ($col['DEFAULT_COLUMNS'] as $t) {
+                $result[] = $t;
             }
-            //}
-            return true;
-        } else {
-            // if ($mError && method_exists(Yii::app()->controller,'setNotify')) {
-            //    Yii::app()->controller->setNotify(Yii::t('app', ($this->isNewRecord) ? 'ERROR_CREATE' : 'ERROR_UPDATE'), 'danger');
-            //}
-            return false;
         }
+        foreach ($array as $key => $s) {
+            $result[] = $col[$key];
+        }
+
+        if (isset($col['DEFAULT_CONTROL']))
+            $result[] = $col['DEFAULT_CONTROL'];
+
+        return $result;
     }
+
 
     //  protected $_attrLabels = array();
     const route_update = 'update';
@@ -104,6 +86,7 @@ class ActiveRecord extends \yii\db\ActiveRecord {
         foreach ($this->attributes as $attr => $val) {
             $attrLabels[$attr] = self::t(strtoupper($attr));
         }
+
         return $attrLabels;
     }
 

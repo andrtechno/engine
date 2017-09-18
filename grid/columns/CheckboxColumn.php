@@ -87,7 +87,7 @@ class CheckboxColumn extends Column {
         $this->grid->view->registerJs("
 jQuery(\"input:not(#{$id})[name='$name']\").prop('checked',false);
 
-jQuery(document).on('click','.select-on-check-all',function() {
+jQuery(document).on('click','#{$id} .select-on-check-all',function() {
     var checked=this.checked;
     jQuery('input[name=\"{$name}\"]:enabled').each(function() {
         this.checked=checked;
@@ -134,11 +134,11 @@ jQuery(document).on('click', 'input[name=\"$name\"]', function() {
        $('#grid-actions').removeClass('hidden');
     }
 });
-jQuery('.select-on-check-all').prop('checked', jQuery(\"input[name='$name']\").length==jQuery(\"input[name='$name']:checked\").length);
+jQuery('#{$id} .select-on-check-all').prop('checked', jQuery(\"input[name='$name']\").length==jQuery(\"input[name='$name']:checked\").length);
 ");
     
 
-    
+        $this->contentOptions = ['class'=>'text-center'];
         $this->grid->footerRowOptions = ['class' => 'text-center'];
         $this->footer = \yii\bootstrap\ButtonDropdown::widget([
                     'label' => Html::icon('menu'),
