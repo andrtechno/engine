@@ -12,7 +12,7 @@ class AdminController extends WebController {
     public $layout = '@vendor/panix/mod-admin/views/layouts/main';
 
     protected function error404($text = null) {
-        if (!$text) 
+        if (!$text)
             $text = Yii::t('app/error', '404');
         throw new \yii\web\NotFoundHttpException($text);
     }
@@ -26,11 +26,9 @@ class AdminController extends WebController {
     }
 
     public function init() {
-
-        if (!empty(Yii::$app->user) && !Yii::$app->user->can("admin")
-                && get_class($this) !== 'panix\mod\admin\controllers\AuthController'
-                && get_class($this) !== 'panix\mod\admin\controllers\DefaultController') {
-            throw new ForbiddenHttpException(Yii::t('app','ACCESS_DENIED'));
+        Yii::$app->assetManager->bundles['yii\jui\JuiAsset']['css'] = [];
+        if (!empty(Yii::$app->user) && !Yii::$app->user->can("admin") && get_class($this) !== 'panix\mod\admin\controllers\AuthController' && get_class($this) !== 'panix\mod\admin\controllers\DefaultController') {
+            throw new ForbiddenHttpException(Yii::t('app', 'ACCESS_DENIED'));
         }
 
         Yii::setAlias('@admin', Yii::getAlias('@vendor/panix/mod-admin'));
@@ -42,7 +40,7 @@ class AdminController extends WebController {
      * action
      */
     public function actionCreate() {
-       return $this->actionUpdate(true);
+        return $this->actionUpdate(true);
     }
 
 }
