@@ -10,12 +10,10 @@ class CommonAsset extends AssetBundle {
         'position' => \yii\web\View::POS_HEAD
     );
     public $sourcePath = '@vendor/panix/engine/assets';
-
     public $js = [
         'js/common.js',
     ];
     public $css = [
-
     ];
     public $depends = [
         'yii\jui\JuiAsset',

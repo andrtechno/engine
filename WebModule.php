@@ -16,6 +16,19 @@ class WebModule extends Module {
     protected $_models;
     public $icon;
 
+    public function getMdFiles() {
+        $list = [];
+        $files = FileHelper::findFiles(Yii::getAlias('@' . $this->id), [
+                    'only' => ['*.md'],
+                    'recursive' => false,
+                    'caseSensitive' => false
+        ]);
+        foreach ($files as $file) {
+            $list[basename($file, '.md')] = $file;
+        }
+        return $list;
+    }
+
     // protected $moduleNamespace;
     public function init() {
         //$this->registerTranslations();

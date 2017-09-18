@@ -12,7 +12,8 @@ class SwitchAction extends \yii\rest\Action {
             $entry = $model->find()->where(['id' => $_REQUEST['id']])->all();
             if ($entry) {
                 foreach ($entry as $obj) {
-                    $obj->update();
+                    $obj->switch = Yii::$app->request->post('s');
+                    $obj->update(false);
                     $json = [
                         'status' => 'success',
                         'message' => Yii::t('app', 'SUCCESS_RECORD_DELETE')

@@ -6,7 +6,7 @@ common = {
     flashMessage: true,
     token: null,
     isDashboard: false,
-    notify_list:[],
+    notify_list: [],
     getMsg: function (code) {
         return this.lang[this.language][code];
     },
@@ -118,7 +118,7 @@ common = {
 
             },
             error: function (xhr, textStatus, errorThrown) {
-                t.notify(textStatus + ' ajax() ' + xhr.status + ' ' + xhr.statusText,'error');
+                t.notify(textStatus + ' ajax() ' + xhr.status + ' ' + xhr.statusText, 'error');
                 //t.report(textStatus+' ajax() '+xhr.responseText);
             },
             success: success
@@ -142,3 +142,33 @@ common = {
 };
 common.init();
 
+
+
+$(document).ready(function () {
+    $(document).on('click', '.editgrid', function () {
+        var gridid = $(this).attr('data-grid-id');
+        console.log(gridid);
+        $('body').append($('<div/>', {
+            'id': gridid + '-dialog'
+        }));
+        $('#' + gridid + '-dialog').dialog({
+            modal: true,
+            autoOpen: true,
+            width: 500,
+            height: 'auto',
+            title: 'Доспутные ячейки',
+            responsive: true,
+            resizable: false,
+            draggable: false,
+            create: function (event, ui) {
+
+            },
+            open: function () {
+                var that = this;
+            },
+            close: function () {
+                $(this).remove();
+            }
+        });
+    });
+});
