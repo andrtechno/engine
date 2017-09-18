@@ -11,18 +11,14 @@ use yii\bootstrap\ButtonDropdown;
 //\yii\grid\DataColumn
 class ActionColumn extends \yii\grid\DataColumn {
 
-
     public $controller;
-
     public $template = '{switch} {update} {delete}';
-
     public $buttons = [];
-
     public $urlCreator;
     public $btnSize = 'btn-sm';
     public $headerOptions = ['style' => 'min-width:150px;'];
     public $contentOptions = ['class' => 'text-center'];
-   public $pjax;
+    public $pjax;
 
     /**
      * @inheritdoc
@@ -31,7 +27,7 @@ class ActionColumn extends \yii\grid\DataColumn {
         $config = Yii::$app->settings->get('app');
         $this->header = Yii::t('app', 'OPTIONS');
         // $this->btnSize = $config['grid_btn_icon_size'];
-       // if (!$this->pjax) {
+        // if (!$this->pjax) {
         //    $this->pjax = '#pjax-container';
         //}
 
@@ -47,13 +43,21 @@ class ActionColumn extends \yii\grid\DataColumn {
                             [
                                 'label' => Html::icon('grid') . ' Изменить столбцы таблицы',
                                 'url' => 'javascript:void(0)',
-                                'options'=>[
-                                    'class'=>'editgrid',
-                                    'data-grid-id'=>$this->grid->id,
-                                    'data-model'=>$this->grid->dataProvider->query->modelClass,
-                                    'data-pjax-id'=>'pjax-'.strtolower(basename($this->grid->dataProvider->query->modelClass)),
-                            ]
+                                'options' => [
+                                    'class' => 'editgrid',
+                                    'data-grid-id' => $this->grid->id,
+                                    'data-model' => $this->grid->dataProvider->query->modelClass,
+                                    'data-pjax-id' => 'pjax-' . strtolower(basename($this->grid->dataProvider->query->modelClass)),
+                                ]
                             ],
+                            /*[
+                                'label' => Html::icon('refresh') . ' Сбросить',
+                                'url' => 'javascript:void(0)',
+                                'options' => [
+                                    'class' => '',
+                                    'onClick'=>'$.pjax.reload("#pjax-'. strtolower(basename($this->grid->dataProvider->query->modelClass)).'", {timeout : false});',
+                                ]
+                            ],*/
                         ],
                     ],
         ]);

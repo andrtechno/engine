@@ -85,19 +85,17 @@ class CheckboxColumn extends Column {
 
          
         $this->grid->view->registerJs("
-jQuery(\"input:not(#{$id})[name='$name']\").prop('checked',false);
+
 
 jQuery(document).on('click','#{$id} .select-on-check-all',function() {
     var checked=this.checked;
-    jQuery('input[name=\"{$name}\"]:enabled').each(function() {
+    jQuery('#{$id} input[name=\"{$name}\"]:enabled').each(function() {
         this.checked=checked;
         if (checked == this.checked) {
-            //$(this).closest('.checker').removeClass('checked');
             $(this).closest('table tbody tr').removeClass('active');
             $('#grid-actions').addClass('hidden');
         }
 	if (this.checked) {
-            //$(this).closest('.checker').addClass('checked');
             $(this).closest('table tbody tr').addClass('active');
             $('#grid-actions').removeClass('hidden');
         }
@@ -119,22 +117,20 @@ jQuery(document).on('click', '#grid-action-delete', function() {
     });
 });
 
-jQuery(document).on('click', 'input[name=\"$name\"]', function() {
-
+jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
+    jQuery('#{$id} .select-on-check-all').prop('checked', jQuery(\"input[name='$name']\").length==jQuery(\"input[name='$name']:checked\").length);
     var checked=this.checked;
     this.checked=checked;
     if (checked == this.checked) {
-        //$(this).removeClass('checked');
         $(this).closest('table tbody tr').removeClass('active');
-     $('#grid-actions').addClass('hidden');
+        $('#grid-actions').addClass('hidden');
     }
     if (this.checked) {
-       // $(this).addClass('checked'); //.closest('.checker')
         $(this).closest('table tbody tr').addClass('active');
-       $('#grid-actions').removeClass('hidden');
+        $('#grid-actions').removeClass('hidden');
     }
 });
-jQuery('#{$id} .select-on-check-all').prop('checked', jQuery(\"input[name='$name']\").length==jQuery(\"input[name='$name']:checked\").length);
+
 ");
     
 
