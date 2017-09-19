@@ -37,7 +37,7 @@ class WebModule extends Module {
         }
         parent::init();
     }
-
+/*
     public function model($name, $config = []) {
         // return object if already created
         if (!empty($this->_models[$name])) {
@@ -48,5 +48,5 @@ class WebModule extends Module {
         $this->_models[$name] = Yii::createObject(array_merge(["class" => $className], $config));
         return $this->_models[$name];
     }
-
+*/
 }

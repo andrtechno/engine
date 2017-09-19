@@ -5,6 +5,7 @@ namespace panix\engine\controllers;
 use Yii;
 use yii\web\Controller;
 use panix\engine\CMS;
+use yii\web\ForbiddenHttpException;
 
 class WebController extends Controller {
 
@@ -49,6 +50,12 @@ class WebController extends Controller {
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
+    }
+
+    protected function error404($text = null) {
+        if (!$text)
+            $text = Yii::t('app/error', '404');
+        throw new \yii\web\NotFoundHttpException($text);
     }
 
     public function actionError() {

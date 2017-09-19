@@ -7,6 +7,7 @@ use yii\base\Exception;
 use yii\helpers\Json;
 
 class ActiveRecord extends \yii\db\ActiveRecord {
+
     public function getColumnSearch($array = array()) {
         $col = $this->gridColumns;
         $result = array();
@@ -24,7 +25,6 @@ class ActiveRecord extends \yii\db\ActiveRecord {
 
         return $result;
     }
-
 
     //  protected $_attrLabels = array();
     const route_update = 'update';
@@ -226,7 +226,32 @@ class ActiveRecord extends \yii\db\ActiveRecord {
     }
 
     /**
-     * Special for widget ext.admin.frontControl
+     * Разделение текста на страницы
+     * @param string $attr
+     * @return string
+     */
+    public function pageBreak($attr = false) {
+        if ($attr) {
+            $pageVar = intval(Yii::$app->request->get('page'));
+            $pageBreak = explode("<!-- pagebreak -->", $this->$attr);
+            $pageCount = count($pageBreak);
+
+            $pageVar = ($pageVar == "" || $pageVar < 1) ? 1 : $pageVar;
+            if ($pageVar > $pageCount)
+                $pageVar = $pageCount;
+            $arrayelement = (int) $pageVar;
+            $arrayelement--;
+
+            $content = $pageBreak[$arrayelement];
+
+            $content .= \yii\widgets\LinkPager::widget([
+                        'pagination' => new \yii\data\Pagination(['totalCount' => $pageCount, 'pageSize' => 1]),
+            ]);
+            return $content;
+        }
+    }
+
+    /**
      * @return string
      */
     public function getSwitchUrl() {
