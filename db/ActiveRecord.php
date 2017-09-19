@@ -5,7 +5,7 @@ namespace panix\engine\db;
 use Yii;
 use yii\base\Exception;
 use yii\helpers\Json;
-
+use panix\engine\widgets\Pjax;
 class ActiveRecord extends \yii\db\ActiveRecord {
 
     public function getColumnSearch($array = array()) {
@@ -243,10 +243,10 @@ class ActiveRecord extends \yii\db\ActiveRecord {
             $arrayelement--;
 
             $content = $pageBreak[$arrayelement];
-
             $content .= \yii\widgets\LinkPager::widget([
                         'pagination' => new \yii\data\Pagination(['totalCount' => $pageCount, 'pageSize' => 1]),
             ]);
+
             return $content;
         }
     }

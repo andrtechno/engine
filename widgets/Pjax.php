@@ -2,16 +2,11 @@
 
 namespace panix\engine\widgets;
 
-use yii\helpers\Html;
-use yii\helpers\Inflector;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
 class Pjax extends \yii\widgets\Pjax {
 
-
-    public function registerClientScript()
-    {
+    public function registerClientScript() {
         $id = $this->options['id'];
         $this->clientOptions['push'] = $this->enablePushState;
         $this->clientOptions['replace'] = $this->enableReplaceState;
@@ -38,6 +33,5 @@ class Pjax extends \yii\widgets\Pjax {
             $view->registerJs($js);
         }
     }
-
 
 }
