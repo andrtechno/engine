@@ -11,6 +11,7 @@ class GridView extends \yii\grid\GridView {
 
     public $layoutOptions = [];
     public $emptyTextOptions = ['class' => 'alert alert-info empty'];
+    public $enableLayout = true;
 
     public function init() {
         if (isset($this->dataProvider->query)) {
@@ -34,8 +35,9 @@ class GridView extends \yii\grid\GridView {
 
 
         parent::init();
-
-        $this->layout = $this->render('@admin/views/layouts/_grid_layout', $this->layoutOptions);
+        if ($this->enableLayout) {
+            $this->layout = $this->render('@admin/views/layouts/_grid_layout', $this->layoutOptions);
+        }
     }
 
 }
