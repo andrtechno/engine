@@ -45,15 +45,24 @@ class Application extends \yii\web\Application {
     }
 
     public function init() {
+        $modulesList = array_filter(glob(Yii::getAlias('@app/modules/*')), 'is_dir');
 
-//$this->setModule('shop', ['class'=>'panix\mod\shop\Module']);
+
         foreach ($this->getModules() as $id => $module) {
             $this->setAliases([
                 '@' . $id => realpath(Yii::getAlias("@vendor/panix/mod-{$id}")),
             ]);
             $this->registerTranslations($id);
         }
-       // $this->setCmsModules();
+        
+        foreach($modulesList as $module){
+            $id = basename($module);
+            $this->setAliases([
+                '@' . $id => realpath(Yii::getAlias("@app/modules/{$id}")),
+            ]);
+            $this->registerTranslations($id);
+        }        
+        $this->setCmsModules();
         parent::init();
     }
 
@@ -61,11 +70,10 @@ class Application extends \yii\web\Application {
         $mods = Modules::getEnabled();
         if ($mods) {
             foreach ($mods as $module) {
-                $this->setModule($module->name, [
-                        'class' => str_replace('-', DIRECTORY_SEPARATOR, "panix-mod-{$module->name}-Module"),
-                        //'access' => $module->access
-                    ]
-                );
+                $name = $module->name;
+                $this->setModule($name, [
+                        'class' => str_replace('/', DIRECTORY_SEPARATOR, "app/modules/$name/Module"),
+                    ]);
             }
         }
     }

@@ -14,13 +14,16 @@ class SettingsModel extends Model {
                 'params' => 'module'
             ]));
         }
-        $this->setAttributes(Yii::$app->settings->get($this->module));
+        if (!isset($this->category)) {
+            $this->category = $this->module;
+        }
+        $this->setAttributes(Yii::$app->settings->get($this->category));
     }
 
     public function save() {
         $shortName = (new \ReflectionClass(get_called_class()))->getShortName();
         if ($this->validate()) {
-            Yii::$app->settings->set($this->module, Yii::$app->request->post($shortName));
+            Yii::$app->settings->set($this->category, Yii::$app->request->post($shortName));
             Yii::$app->session->addFlash("success", Yii::t('app', 'SUCCESS_UPDATE'));
             return true;
         } else {

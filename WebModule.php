@@ -7,7 +7,7 @@ use yii\base\Module;
 use yii\helpers\FileHelper;
 
 class WebModule extends Module {
-
+  // protected $_icon;
     public $count = false;
     // protected $info;
     public $routes = [];
@@ -37,16 +37,51 @@ class WebModule extends Module {
         }
         parent::init();
     }
-/*
-    public function model($name, $config = []) {
-        // return object if already created
-        if (!empty($this->_models[$name])) {
-            return $this->_models[$name];
-        }
-        // create model and return it
-        $className = $this->modelClasses[ucfirst($name)];
-        $this->_models[$name] = Yii::createObject(array_merge(["class" => $className], $config));
-        return $this->_models[$name];
+    
+        public function afterInstall() {
+       // if ($this->uploadAliasPath && !file_exists(Yii::getPathOfAlias($this->uploadAliasPath)))
+       //     CFileHelper::createDirectory(Yii::getPathOfAlias($this->uploadAliasPath), 0777);
+        //Yii::$app->cache->flush();
+       // Yii::app()->widgets->clear();
+        return true;
     }
-*/
+
+    /**
+     * Method will be called after module removed
+     */
+    public function afterUninstall() {
+        //if ($this->uploadAliasPath && !file_exists(Yii::getPathOfAlias($this->uploadAliasPath)))
+        //    CFileHelper::removeDirectory(Yii::getPathOfAlias($this->uploadAliasPath), array('traverseSymlinks' => true));
+
+        //if (file_exists(Yii::getPathOfAlias("webroot.uploads.attachments.{$this->id}")))
+        //    CFileHelper::removeDirectory(Yii::getPathOfAlias("webroot.uploads.attachments.{$this->id}"), array('traverseSymlinks' => true));
+
+       // Yii::$app->cache->flush();
+
+
+        //$moduleName = ucfirst($this->id) . '.';
+
+
+        return true;
+    }
+    
+   // public function getIcon() {
+    //    return $this->_icon;
+   // }
+
+   public function setIcon($icon) {
+        $this->icon = $icon;
+    }
+
+    public function getAuthor() {
+        return 'dev@corner-cms.com';
+    }
+
+    public function getName() {
+        return Yii::t($this->id."/default", 'MODULE_NAME');
+    }
+
+    public function getDescription() {
+        return Yii::t($this->id."/default", 'MODULE_DESC');
+    }
 }
