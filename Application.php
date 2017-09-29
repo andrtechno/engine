@@ -62,8 +62,9 @@ class Application extends \yii\web\Application {
             ]);
             $this->registerTranslations($id);
         }        
-        $this->setCmsModules();
+        
         parent::init();
+        $this->setCmsModules();
     }
 
     private function setCmsModules() {

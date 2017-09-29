@@ -15,7 +15,7 @@ class Connection extends \yii\db\Connection {
     public $enable_limit = true;
     public $filesizes = 0;
 
-    public function __construct() {
+    public function init() {
 
         if (!file_exists(Yii::getAlias($this->backupPath))) {
             FileHelper::createDirectory(Yii::getAlias($this->backupPath));
@@ -27,12 +27,14 @@ class Connection extends \yii\db\Connection {
         }
         $this->noExportTables = $result;
     }
+
     public function close() {
-                        if (isset(Yii::$app->settings)) {
+        if (isset(Yii::$app->settings)) {
             $this->limitBackup = (int) Yii::$app->settings->get('db', 'backup_limit') * 1024 * 1024;
         }
         parent::close();
     }
+
     public function checkFilesSize() {
         $fdir = opendir(Yii::getAlias($this->backupPath));
         while ($file = readdir($fdir)) {
@@ -100,7 +102,7 @@ class Connection extends \yii\db\Connection {
             }
 
             if (Yii::$app->controller instanceof AdminController) {
-                Yii::$app->session->addFlash('success',Yii::t('app', 'BACKUP_DB_SUCCESS', [
+                Yii::$app->session->addFlash('success', Yii::t('app', 'BACKUP_DB_SUCCESS', [
                             '{settings}' => Html::a(Yii::t('app', 'SETTINGS'), ['/admin/app/security'])
                 ]));
             }

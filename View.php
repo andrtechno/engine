@@ -12,6 +12,14 @@ class View extends \yii\web\View {
 
         $content = ob_get_clean();
 
+        $template = "/block_([0-9])/";
+        preg_match_all($template, $content, $result);
+
+        foreach ($result[0] as $block) {
+           if (!empty($block)) {
+                $content = str_replace('{'.$block.'}',  \panix\mod\admin\models\Block::render($block), $content);
+            }
+        }
         $content = str_replace(base64_decode('e2NvcHlyaWdodH0='), $copyright, $content);
         echo strtr($content, [
             self::PH_HEAD => $this->renderHeadHtml(),
