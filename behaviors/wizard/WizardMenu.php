@@ -25,9 +25,6 @@ class WizardMenu extends Widget {
      */
     public $menuLastItem;
 
-    /** @var array Step labels */
-    private $stepLabels;
-
     /** @var Behavior Wizard behavior class */
     protected $wizard;
 
@@ -48,10 +45,15 @@ class WizardMenu extends Widget {
         if (!$this->wizard instanceof WizardBehavior)
             throw new InvalidConfigException(\Yii::t('app', 'Behavior ' . __NAMESPACE__ . '\Behavior not found at Controller'));
 
+        
+
+            
         $defaultConfig = [];
         $defaultConfig['class'] = '\yii\bootstrap\Nav';
         $defaultConfig['items'] = $this->generateMenuItems();
+        
 
+            
         $this->widget = \Yii::createObject(ArrayHelper::merge($defaultConfig, $this->menuConfig));
 
         parent::init();
@@ -62,45 +64,38 @@ class WizardMenu extends Widget {
     }
 
     private function generateMenuItems() {
+
         $previous = true;
         $items = [];
         $url = [$this->controller->id . '/' . $this->controller->action->id];
         $parsedSteps = $this->wizard->getParsedSteps();
-        $this->stepLabels = array_flip($parsedSteps);
 
         foreach ($parsedSteps as $step) {
             $item = [];
-            $item['label'] = $this->getStepLabel($step);
+            $item['label'] = $this->wizard->getStepLabel($step);
             if (($previous && !$this->wizard->forwardOnly) || ($step === $this->wizard->getCurrentStep())) {
                 $item['url'] = $url + [$this->wizard->queryParam => $step];
-                if ($step === $this->wizard->getCurrentStep())
+      
+                if ($step === $this->wizard->getCurrentStep()){
                     $previous = false;
+                }
             }
             $item['active'] = $step === $this->wizard->getCurrentStep();
-            if ($previous && !empty($this->options['previousItemCssClass']))
-                $item['itemOptions'] = array('class' => $this->options['previousItemCssClass']);
+            if ($previous && !empty($this->options['previousItemsCssClass'])){
+                $item['label'] .= \panix\engine\Html::tag('i','',['class'=>'icon-check text-success']);
+                $item['options'] = ['class' => $this->options['previousItemsCssClass']];
+            }
+            $item['encode']=false;
 
             $items[] = $item;
         }
         if (!empty($this->menuLastItem))
             $items[] = array(
                 'label' => $this->menuLastItem,
-                'active' => false
+                'active' => false,
             );
+      
         return $items;
-    }
-
-    private function getStepLabel($step) {
-        if (is_null($step))
-            $step = $this->wizard->getCurrentStep();
-
-        $label = $this->stepLabels[$step];
-        if (!is_string($label)) {
-            $label = ucwords(trim(strtolower(str_replace(array('-', '_', '.'), ' ', preg_replace('/(?<![A-Z])[A-Z]/', ' \0', $step)))));
-            ;
-        }
-
-        return $label;
     }
 
 }
