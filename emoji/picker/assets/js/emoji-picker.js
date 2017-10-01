@@ -6,7 +6,7 @@
       if (options == null) {
         options = {};
       }
-      $.emojiarea.iconSize = (ref = options.iconSize) != null ? ref : 25;
+      $.emojiarea.iconSize = (ref = options.iconSize) != null ? ref : 16;
       $.emojiarea.assetsPath = (ref1 = options.assetsPath) != null ? ref1 : '';
       this.generateEmojiIconSets(options);
       if (!options.emojiable_selector) {
