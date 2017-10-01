@@ -435,7 +435,7 @@ class CMS {
         if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
             if (self::getMemoryLimit() > self::MEMORY_LIMIT) {
                 $geoip = Yii::$app->geoip->ip($ip);
-                $title = Yii::t('app', 'COUNTRY') . ': ' . Yii::t('app/geoip_country', $geoip->country).'/'.Yii::t('app/geoip_city', $geoip->city).$geoip->timezone;
+                $title = Yii::t('app', 'COUNTRY') . ': ' . Yii::t('app/geoip_country', $geoip->country) . '/' . Yii::t('app/geoip_city', $geoip->city) . $geoip->timezone;
                 $image = Html::img('/uploads/language/' . strtolower($geoip->isoCode) . '.png', ['alt' => $ip, 'title' => $title]);
                 if ($type == 1) {
                     $content = Html::a($image . ' ' . $ip, 'javascript:void(0)', ['onClick' => 'common.geoip("' . $ip . '")', 'title' => $title]);
@@ -507,7 +507,7 @@ class CMS {
             if ($t >= time()) {
                 $result = $resDate;
             } else {
-                $result = $df->timeZone . Yii::t('app', 'TODAY_IN', array('time' => $df->asTime($formatted, 'php:H:s')));
+                $result = Yii::t('app', 'TODAY_IN', array('time' => $df->asTime($formatted, 'php:H:s')));
             }
         } elseif ($formatted > mktime(0, 0, 0) - $oneDay) {
             $result = Yii::t('app', 'YESTERDAY_IN', array('time' => $df->asTime($formatted, 'php:H:s')));
@@ -591,6 +591,17 @@ class CMS {
             }
         }
         return $timezone; //$timezone;
+    }
+
+    public static function replace_urls($text = null) {
+        $regex = '/((http|ftp|https):\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/';
+        return preg_replace_callback($regex, function( $m ) {
+            $link = $name = $m[0];
+            if (empty($m[1])) {
+                $link = "http://" . $link;
+            }
+            return '<a href="' . $link . '" target="_blank" rel="nofollow">' . $name . '</a>';
+        }, $text);
     }
 
     /**

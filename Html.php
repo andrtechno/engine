@@ -4,6 +4,10 @@ namespace panix\engine;
 
 use Yii;
 use yii\helpers\Url;
+//use panix\engine\Emoji;
+
+use panix\engine\emoji\lib\emoji;
+
 
 class Html extends \yii\helpers\Html {
 
@@ -43,9 +47,11 @@ class Html extends \yii\helpers\Html {
             foreach ($censor_l as $val)
                 $message = preg_replace("#" . $val . "#iu", $config['censor_replace'], $message);
         }
-
-        return self::highlight($message, $cut);
+        return emoji::emoji_unified_to_html($message);
+      //return Emoji::toHtml($message);
+      //  return self::highlight($message, $cut);
     }
+
 
     public static function highlight($text, $cut = false) {
         $params = (Yii::$app->request->get('word')) ? Yii::$app->request->get('word') : Yii::$app->request->get('tag');
@@ -67,7 +73,7 @@ class Html extends \yii\helpers\Html {
         } else {
             $highlighted = $text;
         }
-        return $highlighted;
+        return Emoji::toHtml($highlighted);
     }
 
 }

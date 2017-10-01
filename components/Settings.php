@@ -51,7 +51,7 @@ class Settings extends Component {
 
     /**
      * @param $category string component unique id. e.g: contacts, shop, news
-     * @param array $data key-value array. e.g array('param'=>10)
+     * @param array $data key-value array. e.g array('key'=>10)
      */
     public function set($category, array $data) {
         if (!empty($data)) {

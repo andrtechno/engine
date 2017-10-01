@@ -137,9 +137,10 @@ class Connection extends \yii\db\Connection {
      * @param string $file: with the path and the file name
      * @return mixed
      */
-    public function import($mod, $fileName = 'dump.sql') {
-        $file = Yii::getPathOfAlias("mod.{$mod}.sql") . DIRECTORY_SEPARATOR . $fileName;
-        if (file_exists($file)) {
+    public function import($mod, $fileName = 'scheme.sql') {
+
+        $file = Yii::$app->getModule($mod)->basePath. DIRECTORY_SEPARATOR .'migrations'.DIRECTORY_SEPARATOR. $fileName;
+           //if (file_exists($file)) {
             //$this->pdo = Yii::app()->db->pdoInstance;
             try {
                 if (file_exists($file)) {
@@ -155,7 +156,7 @@ class Connection extends \yii\db\Connection {
                             $this->pdo->exec($sql);
                         }
                     }
-                    Yii::log('Success import db ' . $mod, 'info', 'install');
+                    //Yii::log('Success import db ' . $mod, 'info', 'install');
                     return true;
                 }
             } catch (PDOException $e) {
@@ -163,9 +164,9 @@ class Connection extends \yii\db\Connection {
                 echo $e->getMessage();
                 exit;
             }
-        } else {
-            throw new CException("no find {$fileName}");
-        }
+       // } else {
+       //     throw new CException("no find {$fileName}");
+       // }
     }
 
 }

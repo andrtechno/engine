@@ -240,7 +240,7 @@ class WizardBehavior extends \yii\base\Behavior {
 
     /**
      * Saves data into the Session.
-     * This is normally called automatically after the Event::WIZARD_PROCESS_STEP event,
+     * This is normally called automatically after the WizardEvent::WIZARD_PROCESS_STEP event,
      * but can be called directly for advanced navigation purposes.
      *
      * @param mixed $data Data to be saved
@@ -508,13 +508,13 @@ class WizardBehavior extends \yii\base\Behavior {
     }
 
     /**
-     * Raises the Event::WIZARD_START event.
+     * Raises the WizardEvent::WIZARD_START event.
      * The event handler must set the event::handled property TRUE for the wizard
      * to process steps.
      */
     protected function start() {
         $event = WizardEvent::create($this);
-        $this->owner->trigger(Event::WIZARD_START, $event);
+        $this->owner->trigger(WizardEvent::WIZARD_START, $event);
 
         if ($event->handled)
             $this->_session[$this->_stepsKey] = [];
@@ -523,7 +523,7 @@ class WizardBehavior extends \yii\base\Behavior {
     }
 
     /**
-     * Raises the Event::WIZARD_CANCEL event.
+     * Raises the WizardEvent::WIZARD_CANCEL event.
      * The event::data property contains data for processed steps.
      *
      * @param string $step
@@ -536,7 +536,7 @@ class WizardBehavior extends \yii\base\Behavior {
     }
 
     /**
-     * Raises the Event::WIZARD_EXPIRED event.
+     * Raises the WizardEvent::WIZARD_EXPIRED event.
      * @param $step
      * @return bool
      */

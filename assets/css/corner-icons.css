@@ -17,6 +17,10 @@ font-family: 'Corner';
 font-style: normal;
 line-height: 1;
 }
+.icon-x2:before{font-size:26px;}
+.icon-x3:before{font-size:42px;}
+.icon-x4:before{font-size:52px;}
+.icon-x5:before{font-size:68px;}
 .icon-logo-icon:before {content:"\f000";}
 .icon-logo:before {content:"\f001";}
 .icon-logo2:before {content:"\f002";}
@@ -176,4 +180,5 @@ line-height: 1;
 .icon-supplier:before {content:"\f156";}
 .icon-blocked:before {content:"\f157";}
 .icon-loader:before {content:"\f158";}
+.icon-emoji:before {content:"\f159";}
 
