@@ -7,7 +7,8 @@ use panix\engine\base\Model;
 use yii\base\InvalidConfigException;
 
 class SettingsModel extends Model {
-
+    protected $category;
+    const NAME = null;
     public function init() {
         if (!isset($this->module)) {
             throw new InvalidConfigException(Yii::t('yii', 'Missing required parameters: {params}', [

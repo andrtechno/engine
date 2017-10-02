@@ -83,12 +83,6 @@ class WebController extends Controller {
             common.token="' . Yii::$app->request->csrfToken . '";
             common.isDashboard=true;
             common.message=' . \yii\helpers\Json::encode($this->jsMessages) . ';', \yii\web\View::POS_END, 'js-common');
-        $this->view->registerMetaTag([
-            'charset' => Yii::$app->charset
-        ]);
-
-        $this->view->registerMetaTag(['name' => 'author', 'content' => Yii::$app->name]);
-        $this->view->registerMetaTag(['name' => 'generator', 'content' => Yii::$app->name . ' ' . Yii::$app->version]);
 
         return parent::beforeAction($action);
     }

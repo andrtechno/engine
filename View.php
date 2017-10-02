@@ -16,8 +16,8 @@ class View extends \yii\web\View {
         preg_match_all($template, $content, $result);
 
         foreach ($result[0] as $block) {
-           if (!empty($block)) {
-                $content = str_replace('{'.$block.'}',  \panix\mod\admin\models\Block::render($block), $content);
+            if (!empty($block)) {
+                $content = str_replace('{' . $block . '}', \panix\mod\admin\models\Block::render($block), $content);
             }
         }
         $content = str_replace(base64_decode('e2NvcHlyaWdodH0='), $copyright, $content);
@@ -28,6 +28,17 @@ class View extends \yii\web\View {
         ]);
 
         $this->clear();
+    }
+
+    public function head() {
+        $this->registerMetaTag([
+            'charset' => Yii::$app->charset
+        ]);
+        $this->registerMetaTag(['name' => 'author', 'content' => Yii::$app->name]);
+        $this->registerMetaTag(['name' => 'generator', 'content' => Yii::$app->name . ' ' . Yii::$app->version]);
+        Yii::$app->seo->run();
+
+        parent::head();
     }
 
 }
