@@ -4,9 +4,8 @@ namespace panix\engine;
 
 use Yii;
 use yii\helpers\Url;
-//use panix\engine\Emoji;
 
-use panix\engine\emoji\lib\emoji;
+use panix\engine\emoji\Emoji;
 
 
 class Html extends \yii\helpers\Html {
@@ -47,7 +46,7 @@ class Html extends \yii\helpers\Html {
             foreach ($censor_l as $val)
                 $message = preg_replace("#" . $val . "#iu", $config['censor_replace'], $message);
         }
-        return emoji::emoji_unified_to_html($message);
+        return Emoji::emoji_unified_to_html($message);
       //return Emoji::toHtml($message);
       //  return self::highlight($message, $cut);
     }
