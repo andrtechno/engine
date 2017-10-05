@@ -46,6 +46,7 @@ class TranslateBehavior extends Behavior {
             ActiveRecord::EVENT_AFTER_VALIDATE => 'afterValidate',
             ActiveRecord::EVENT_AFTER_INSERT => 'afterSave',
             ActiveRecord::EVENT_AFTER_UPDATE => 'afterSave',
+            ActiveRecord::EVENT_AFTER_DELETE => 'afterDelete',
         ];
     }
 
@@ -119,6 +120,13 @@ class TranslateBehavior extends Behavior {
         if (!Model::validateMultiple($this->owner->{$this->translationRelation})) {
             $this->owner->addError($this->translationRelation);
         }
+    }
+
+    public function afterDelete() {
+        foreach ($this->owner->{$this->translationRelation} as $translation) {
+            $translation::deleteAll(['object_id' => $this->owner->getPrimaryKey()]);
+        }
+        return true;
     }
 
     /**

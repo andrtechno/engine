@@ -55,7 +55,7 @@ class DeleteNodeAction extends Action
             throw new NotFoundHttpException('Node not found');
         }
 
-        $model->deleteWithChildren();
+       $model->deleteWithChildren();
 
         return null;
     }

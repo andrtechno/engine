@@ -36,7 +36,9 @@ class View extends \yii\web\View {
         ]);
         $this->registerMetaTag(['name' => 'author', 'content' => Yii::$app->name]);
         $this->registerMetaTag(['name' => 'generator', 'content' => Yii::$app->name . ' ' . Yii::$app->version]);
-        Yii::$app->seo->run();
+        if (Yii::$app->controller instanceof controllers\WebController) {
+            Yii::$app->seo->run();
+        }
 
         parent::head();
     }

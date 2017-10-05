@@ -82,7 +82,7 @@ class WebController extends Controller {
             common.langauge="' . Yii::$app->language . '";
             common.token="' . Yii::$app->request->csrfToken . '";
             common.isDashboard=true;
-            common.message=' . \yii\helpers\Json::encode($this->jsMessages) . ';', \yii\web\View::POS_END, 'js-common');
+            common.message=' . \yii\helpers\Json::encode($this->jsMessages) . ';', \yii\web\View::POS_HEAD, 'js-common');
 
         return parent::beforeAction($action);
     }
