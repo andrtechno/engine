@@ -168,7 +168,7 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
                 'icon' => 'icon-delete',
                 'options' => [
                     'class' => 'actionDelete',
-                    'data-question' => Yii::t('app', 'PERFORM_ACTION'),
+                    'data-question' => Yii::t('app', 'COMFIRM'),
                 ]
             ]
         ];
@@ -182,7 +182,7 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
     public function getDefaultActionOptions() {
         return [
             //'data-token' => Yii::app()->request->csrfToken,
-            'data-question' => Yii::t('app', 'PERFORM_ACTION'),
+            'data-question' => Yii::t('app', 'COMFIRM'),
             // 'model' => $this->dataProvider->modelClass,
             'onClick' => strtr('return $.fn.yiiGridView.runAction(":grid", this);', [
                 ':grid' => $this->grid->options['id']
