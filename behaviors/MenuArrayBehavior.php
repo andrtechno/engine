@@ -19,7 +19,7 @@ class MenuArrayBehavior extends \yii\base\Behavior {
      * @var string Owner attribute to be placed in `label` key
      */
     public $labelAttr;
-    public $countProduct = false;
+    public $countProduct = true;
 
     /**
      * @var string Expression will be evaluated to create url.
@@ -55,7 +55,7 @@ class MenuArrayBehavior extends \yii\base\Behavior {
             'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'),
             'itemOptions' => array('class' => 'dropdown menu-item'),
             'active' => $this->isActive($url),
-            'total_count' => ($this->countProduct) ? $model->countProducts : false,
+            'total_count' => ($this->countProduct) ? $model->countProducts : 0,
         );
         // TODO: Cache result
         $children = $model->children()

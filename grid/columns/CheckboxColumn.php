@@ -66,6 +66,7 @@ class CheckboxColumn extends Column {
      * @var boolean whether it is possible to select multiple rows. Defaults to `true`.
      */
     public $multiple = true;
+    protected $_customActions;
 
     /**
      * @inheritdoc
@@ -81,9 +82,9 @@ class CheckboxColumn extends Column {
         }
         $id = $this->grid->getId();
         $name = strtr($this->name, array('[' => "\\[", ']' => "\\]"));
-        
 
-         
+
+
         $this->grid->view->registerJs("
 
 
@@ -132,9 +133,9 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
 });
 
 ");
-    
 
-        $this->contentOptions = ['class'=>'text-center'];
+        //print_r($this->getCustomActions());die;
+        $this->contentOptions = ['class' => 'text-center'];
         $this->grid->footerRowOptions = ['class' => 'text-center'];
         $this->footer = \yii\bootstrap\ButtonDropdown::widget([
                     'label' => Html::icon('menu'),
@@ -143,21 +144,51 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
                     'options' => ['class' => 'btn-default'],
                     'dropdown' => [
                         'encodeLabels' => false,
-                        'items' => [
-                            [
-                                'label' => Html::icon('delete') . ' ' . Yii::t('app', 'DELETE'),
-                                'url' => 'javascript:void(0)',
-                                //'url' => ['/admin/pages/default/test'],
-                                'options' => [
-                                    'id'=>'grid-action-delete',
-                                    'class' => 'bg-danger',
-                                    //'data-pjax'=>'#pjax-test'
-                                    ]
-                            ],
-                            ['label' => 'DropdownB', 'url' => '#'],
-                        ],
+                        'items' => $this->getCustomActions(),
                     ],
         ]);
+    }
+
+    public function setCustomActions($actions) {
+        foreach ($actions as $action) {
+            if (!isset($action['options']))
+                $action['options'] = $this->getDefaultActionOptions();
+            else
+                $action['options'] = array_merge($this->getDefaultActionOptions(), $action['options']);
+
+            $this->_customActions[] = $action;
+        }
+    }
+
+    public function getCustomActions() {
+        $this->customActions = [
+            [
+                'label' => Yii::t('app', 'DELETE'),
+                'url' => Yii::$app->urlManager->createUrl('delete'),
+                'icon' => 'icon-delete',
+                'options' => [
+                    'class' => 'actionDelete',
+                    'data-question' => Yii::t('app', 'PERFORM_ACTION'),
+                ]
+            ]
+        ];
+
+        return $this->_customActions;
+    }
+
+    /**
+     * @return array Default linkOptions for footer action.
+     */
+    public function getDefaultActionOptions() {
+        return [
+            //'data-token' => Yii::app()->request->csrfToken,
+            'data-question' => Yii::t('app', 'PERFORM_ACTION'),
+            // 'model' => $this->dataProvider->modelClass,
+            'onClick' => strtr('return $.fn.yiiGridView.runAction(":grid", this);', [
+                ':grid' => $this->grid->options['id']
+                    ]
+            ),
+        ];
     }
 
     /**
