@@ -2,19 +2,22 @@
 
 namespace panix\engine\grid\sortable;
 
+use Yii;
 use panix\engine\grid\sortable\assets\SortableAsset;
 use panix\engine\Html;
 use yii\web\View;
 use yii\helpers\Url;
 
 class Column extends \yii\grid\Column {
+
     public $headerOptions = ['style' => 'width: 30px;'];
     public $url = null;
+    public $successMessage = null;
 
     public function init() {
-        // if ($this->url == null)
-        //    $this->url = '/' . preg_replace('#' . Yii::app()->controller->action->id . '$#', 'sortable', Yii::app()->controller->route);
 
+        if ($this->successMessage == null)
+            $this->successMessage = Yii::t('app/admin', 'SORT_SUCCESS_MESSAGE');
 
         $this->url = Url::toRoute($this->url);
 
@@ -42,7 +45,7 @@ class Column extends \yii\grid\Column {
                         type: 'POST',
                         data: ({'ids': ids}),
                         success: function () {
-                            common.notify('Success!', 'success');
+                            common.notify('{$this->successMessage}', 'success');
                         }
                     });
 
@@ -57,6 +60,5 @@ class Column extends \yii\grid\Column {
     protected function renderHeaderCellContent() {
         return Html::tag('i', '', array('class' => 'icon-sort'));
     }
-
 
 }

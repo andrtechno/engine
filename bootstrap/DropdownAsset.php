@@ -1,10 +1,10 @@
 <?php
 
-namespace panix\engine\widgets\nav;
+namespace panix\engine\bootstrap;
 
 class DropdownAsset extends \panix\engine\web\AssetBundle {
 
-    public $sourcePath = "@vendor/panix/engine/widgets/nav/assets";
+    public $sourcePath = "@vendor/panix/engine/bootstrap/assets";
     public $css = [
         'css/dropdown.css'
     ];

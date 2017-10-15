@@ -8,7 +8,7 @@ use yii\helpers\Html;
 
 class Nav extends \yii\bootstrap\Nav {
 
-    public $dropdownClass = '\panix\engine\widgets\nav\Dropdown';
+    public $dropdownClass = '\panix\engine\bootstrap\Dropdown';
 
     /**
      * @var array the dropdown widget options

@@ -138,6 +138,7 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
         $this->contentOptions = ['class' => 'text-center'];
         $this->grid->footerRowOptions = ['class' => 'text-center'];
         $this->footer = \yii\bootstrap\ButtonDropdown::widget([
+                    'dropdownClass' => 'panix\engine\bootstrap\Dropdown',
                     'label' => Html::icon('menu'),
                     'encodeLabel' => false,
                     'containerOptions' => ['class' => 'dropup hidden', 'id' => 'grid-actions'],
@@ -165,9 +166,9 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
             [
                 'label' => Yii::t('app', 'DELETE'),
                 'url' => Yii::$app->urlManager->createUrl('delete'),
-                'icon' => 'icon-delete',
+                'icon' => 'delete',
                 'options' => [
-                    'class' => 'actionDelete',
+                    'class' => '',
                     'data-question' => Yii::t('app', 'COMFIRM'),
                 ]
             ]

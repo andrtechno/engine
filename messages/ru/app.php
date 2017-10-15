@@ -38,9 +38,9 @@ return [
     'COUNTRY' => 'Страна',
     'FILE_SUCCESS_DELETE' => 'Файл успешно удален.',
     'ERR_FILE_NOT_FOUND' => 'Файл не найден.',
-        'VERSION' => 'Версия',
+    'VERSION' => 'Версия',
     'AUTHOR' => 'Автор',
     'DESCRIPTION' => 'Описание',
-    'NAME'=>'Название'
+    'NAME' => 'Название'
 ];
 
