@@ -1,7 +1,7 @@
 <?php
 
 return [
-
+    'PAGE_GEN' => 'Скорость загрузки страницы: <b>{time}</b> сек. Память: <b>{memory}</b>. Запросов к БД: <b>{db_query}</b> за <b>{db_time}</b> сек.',
     'IN' => 'в',
     'TODAY_IN' => 'Сегодня в {time}',
     'YESTERDAY_IN' => 'Вчера в {time}',

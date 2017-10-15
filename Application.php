@@ -35,7 +35,15 @@ class Application extends \yii\web\Application {
 
         return $result;
     }
-
+    public static function pageGen() {
+        $sql_stats = Yii::getLogger()->getDbProfiling();
+        return Yii::t('app', 'PAGE_GEN', array(
+                    'time' => number_format(Yii::getLogger()->getElapsedTime(), 3, '.', ' '),
+                    'memory' => round(memory_get_peak_usage() / (1024 * 1024), 2),
+                    'db_query' => $sql_stats[0],
+                    'db_time' => number_format($sql_stats[1], 2, '.', ' '),
+        ));
+    }
     public static function powered() {
         return Yii::t('app', 'COPYRIGHT', ['year' => date('Y')]);
     }

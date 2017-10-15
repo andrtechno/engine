@@ -4,6 +4,7 @@ namespace panix\engine\data;
 
 use Yii;
 
+//use panix\engine\data\Pagination;
 class ActiveDataProvider extends \yii\data\ActiveDataProvider {
 
     private $_pagination;
@@ -15,14 +16,15 @@ class ActiveDataProvider extends \yii\data\ActiveDataProvider {
                 $config['pageParam'] = $this->id . '-page';
                 $config['pageSizeParam'] = $this->id . '-per-page';
             }
+
             $this->_pagination = Yii::createObject(array_merge($config, $value));
 
             $modelClass = $this->query->modelClass;
             $mid = $modelClass::MODULE_ID;
             $settings = Yii::$app->settings;
             if (!isset($value['pageSize'])) {
-
-                $this->_pagination->pageSize = ($settings->get($mid, 'pagenum')) ? $settings->get($mid, 'pagenum') : $settings->get('app', 'pagenum');
+     
+                $this->_pagination->pageSize = (int)($settings->get($mid, 'pagenum')) ? $settings->get($mid, 'pagenum') : $settings->get('app', 'pagenum');
             } else {
 
                 $this->_pagination->pageSize = $value['pageSize'];
@@ -38,7 +40,6 @@ class ActiveDataProvider extends \yii\data\ActiveDataProvider {
         if ($this->_pagination === null) {
             $this->setPagination([]);
         }
-
         return $this->_pagination;
     }
 
