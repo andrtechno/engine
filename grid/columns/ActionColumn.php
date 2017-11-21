@@ -8,7 +8,8 @@ use panix\engine\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ButtonDropdown;
 
-//\yii\grid\DataColumn
+// \yii\grid\DataColumn
+// \yii\grid\ActionColumn
 class ActionColumn extends \yii\grid\DataColumn {
 
     public $controller;
@@ -115,7 +116,7 @@ class ActionColumn extends \yii\grid\DataColumn {
             $this->buttons['view'] = function ($url, $model, $key) {
                 return Html::a('<i class="icon-view"></i>', $url, [
                             'title' => Yii::t('yii', 'View'),
-                            'class' => 'btn ' . $this->btnSize . ' btn-default',
+                            'class' => 'btn ' . $this->btnSize . ' btn-default linkTarget',
                             'data-pjax' => '0',
                 ]);
             };
@@ -124,7 +125,7 @@ class ActionColumn extends \yii\grid\DataColumn {
             $this->buttons['update'] = function ($url, $model, $key) {
                 return Html::a('<i class="icon-edit"></i>', $url, [
                             'title' => Yii::t('yii', 'Update'),
-                            'class' => 'btn ' . $this->btnSize . ' btn-default',
+                            'class' => 'btn ' . $this->btnSize . ' btn-default linkTarget',
                             'data-pjax' => '0',
                 ]);
             };
