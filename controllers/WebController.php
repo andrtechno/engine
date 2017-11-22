@@ -9,10 +9,9 @@ use yii\web\ForbiddenHttpException;
 
 class WebController extends Controller {
 
-    public $pageName;
     public $breadcrumbs = [];
     public $jsMessages = [];
-    public $dataModel;
+    public $dataModel, $pageName, $title, $keywords, $description;
 
     public function behaviors() {
         return [

@@ -22,7 +22,7 @@ class AdminController extends WebController {
     }
 
     public function init() {
-        Yii::$app->assetManager->bundles['yii\jui\JuiAsset']['css'] = [];
+       // Yii::$app->assetManager->bundles['yii\jui\JuiAsset']['css'] = [];
         if (!empty(Yii::$app->user) && !Yii::$app->user->can("admin") && get_class($this) !== 'panix\mod\admin\controllers\AuthController' && get_class($this) !== 'panix\mod\admin\controllers\DefaultController') {
             throw new ForbiddenHttpException(Yii::t('app', 'ACCESS_DENIED'));
         }
@@ -33,7 +33,7 @@ class AdminController extends WebController {
     }
 
     /**
-     * action
+     * action Create
      */
     public function actionCreate() {
         return $this->actionUpdate(true);

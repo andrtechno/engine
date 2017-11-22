@@ -80,7 +80,7 @@ class CMS {
 
     public static function textReplace($text, $array) {
         $config = Yii::$app->settings->get('app');
-        $tmpArray = array();
+        $tmpArray = [];
         $tmpArray['{sitename}'] = $config['sitename'];
         $tmpArray['{host}'] = Yii::$app->request->serverName;
         $tmpArray['{admin_email}'] = $config['email'];

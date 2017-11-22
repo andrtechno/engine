@@ -21,7 +21,7 @@ class WebInlineControl extends Object {
 
 
             $view->on(View::EVENT_BEGIN_BODY, [$this, 'renderToolbar']);
-            Yii::$app->controllerMap['webcontrol'] = 'panix\engine\widgets\webcontrol\WebcontrolController';
+            Yii::$app->controllerMap['webcontrol'] = 'panix\engine\widgets\webcontrol\WebInlineController';
 
 
         }
