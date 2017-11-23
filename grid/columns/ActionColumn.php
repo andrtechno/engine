@@ -51,14 +51,14 @@ class ActionColumn extends \yii\grid\DataColumn {
                                     'data-pjax-id' => 'pjax-' . strtolower(basename($this->grid->dataProvider->query->modelClass)),
                                 ]
                             ],
-                            /*[
-                                'label' => Html::icon('refresh') . ' Сбросить',
-                                'url' => 'javascript:void(0)',
-                                'options' => [
-                                    'class' => '',
-                                    'onClick'=>'$.pjax.reload("#pjax-'. strtolower(basename($this->grid->dataProvider->query->modelClass)).'", {timeout : false});',
-                                ]
-                            ],*/
+                        /* [
+                          'label' => Html::icon('refresh') . ' Сбросить',
+                          'url' => 'javascript:void(0)',
+                          'options' => [
+                          'class' => '',
+                          'onClick'=>'$.pjax.reload("#pjax-'. strtolower(basename($this->grid->dataProvider->query->modelClass)).'", {timeout : false});',
+                          ]
+                          ], */
                         ],
                     ],
         ]);
@@ -73,30 +73,32 @@ class ActionColumn extends \yii\grid\DataColumn {
     protected function initDefaultButtons() {
         if (!isset($this->buttons['switch'])) {
             $this->buttons['switch'] = function ($url, $model, $key) {
-                if (isset($model->switch)) {
-                    if ($model->switch) {
-                        $icon = 'icon-eye';
-                        $class = 'btn-success';
-                        $switch = 0;
-                    } else {
-                        $icon = 'icon-eye-close';
-                        $class = 'btn-default';
-                        $switch = 1;
-                    }
-                    /*   return Html::a('<i class="' . $icon . '"></i>', Url::toRoute(['switch', 'id' => $model->primaryKey, 's' => ($model->switch) ? 0 : 1]), [
-                      'title' => Yii::t('app', 'GRID_SWITCH'),
-                      'class' => "btn ' . $this->btnSize . ' " . $class . " switch",
-                      'data-pk' => $model->primaryKey,
-                      'data-switch' => ($model->switch) ? 0 : 1,
-                      'data-method' => 'post',
-                      'data-pjax' => '0',
-                      ]); */
+
+                if (!in_array($model->primaryKey, $model->disallow_switch)) {
+                    if (isset($model->switch)) {
+                        if ($model->switch) {
+                            $icon = 'icon-eye';
+                            $class = 'btn-success';
+                            $switch = 0;
+                        } else {
+                            $icon = 'icon-eye-close';
+                            $class = 'btn-default';
+                            $switch = 1;
+                        }
+                        /*   return Html::a('<i class="' . $icon . '"></i>', Url::toRoute(['switch', 'id' => $model->primaryKey, 's' => ($model->switch) ? 0 : 1]), [
+                          'title' => Yii::t('app', 'GRID_SWITCH'),
+                          'class' => "btn ' . $this->btnSize . ' " . $class . " switch",
+                          'data-pk' => $model->primaryKey,
+                          'data-switch' => ($model->switch) ? 0 : 1,
+                          'data-method' => 'post',
+                          'data-pjax' => '0',
+                          ]); */
 
 
-                    return Html::a('<i class="' . $icon . '"></i>', Url::toRoute(['switch', 'id' => $model->primaryKey, 's' => ($model->switch) ? 0 : 1]), [
-                                'title' => Yii::t('app', 'GRID_SWITCH'),
-                                'class' => 'btn ' . $this->btnSize . ' ' . $class . ' switch',
-                                'onclick' => "
+                        return Html::a('<i class="' . $icon . '"></i>', Url::toRoute(['switch', 'id' => $model->primaryKey, 's' => ($model->switch) ? 0 : 1]), [
+                                    'title' => Yii::t('app', 'GRID_SWITCH'),
+                                    'class' => 'btn ' . $this->btnSize . ' ' . $class . ' switch',
+                                    'onclick' => "
                                     $.ajax('$url', {
                                         type: 'POST',
                                         dataType:'json',
@@ -108,7 +110,8 @@ class ActionColumn extends \yii\grid\DataColumn {
                                     });
                                 return false;
                             ",
-                    ]);
+                        ]);
+                    }
                 }
             };
         }
@@ -123,11 +126,13 @@ class ActionColumn extends \yii\grid\DataColumn {
         }
         if (!isset($this->buttons['update'])) {
             $this->buttons['update'] = function ($url, $model, $key) {
-                return Html::a('<i class="icon-edit"></i>', $url, [
-                            'title' => Yii::t('yii', 'Update'),
-                            'class' => 'btn ' . $this->btnSize . ' btn-default linkTarget',
-                            'data-pjax' => '0',
-                ]);
+                if (!in_array($model->primaryKey, $model->disallow_update)) {
+                    return Html::a('<i class="icon-edit"></i>', $url, [
+                                'title' => Yii::t('yii', 'Update'),
+                                'class' => 'btn ' . $this->btnSize . ' btn-default linkTarget',
+                                'data-pjax' => '0',
+                    ]);
+                }
             };
         }
 
@@ -140,11 +145,12 @@ class ActionColumn extends \yii\grid\DataColumn {
                   'data-method' => 'post',
                   'data-pjax' => '0',
                   ]); */
-                return Html::a('<i class="icon-delete"></i>', '#', [
-                            'title' => Yii::t('yii', 'Delete'),
-                            'aria-label' => Yii::t('yii', 'Delete'),
-                            'class' => 'btn ' . $this->btnSize . ' btn-danger',
-                            'onclick' => "
+                if (!in_array($model->primaryKey, $model->disallow_delete)) {
+                    return Html::a('<i class="icon-delete"></i>', '#', [
+                                'title' => Yii::t('yii', 'Delete'),
+                                'aria-label' => Yii::t('yii', 'Delete'),
+                                'class' => 'btn ' . $this->btnSize . ' btn-danger',
+                                'onclick' => "
                                 if (confirm('" . Yii::t('app', 'DELETE_COMFIRM') . "')) {
                                     $.ajax('$url', {
                                         type: 'POST',
@@ -158,7 +164,8 @@ class ActionColumn extends \yii\grid\DataColumn {
                                 }
                                 return false;
                             ",
-                ]);
+                    ]);
+                }
             };
         }
     }

@@ -6,7 +6,25 @@ use Yii;
 use yii\base\Exception;
 use yii\helpers\Json;
 use panix\engine\widgets\Pjax;
+
 class ActiveRecord extends \yii\db\ActiveRecord {
+
+    /**
+     * Disallow actions
+     * @disallow_delete array ids
+     * @disallow_switch array ids
+     * @disallow_update array ids 
+     */
+    public $disallow_delete = [];
+    public $disallow_switch = [];
+    public $disallow_update = [];
+
+    const route_update = 'update';
+    const route_delete = 'delete';
+    const route_switch = 'switch';
+    const route_create = 'create';
+    const route = null;
+    const MODULE_ID = null;
 
     public function getColumnSearch($array = array()) {
         $col = $this->gridColumns;
@@ -25,14 +43,6 @@ class ActiveRecord extends \yii\db\ActiveRecord {
 
         return $result;
     }
-
-    //  protected $_attrLabels = array();
-    const route_update = 'update';
-    const route_delete = 'delete';
-    const route_switch = 'switch';
-    const route_create = 'create';
-    const route = null;
-    const MODULE_ID = null;
 
     public function beforeSave($insert) {
         $columns = $this->tableSchema->columns;

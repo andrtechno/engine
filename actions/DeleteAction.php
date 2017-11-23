@@ -14,11 +14,18 @@ class DeleteAction extends \yii\rest\Action {
             $entry = $model->find()->where(['id' => $_REQUEST['id']])->all();
             if ($entry) {
                 foreach ($entry as $obj) {
-                    $obj->delete();
-                    $json = [
-                        'status' => 'success',
-                        'message' => Yii::t('app', 'SUCCESS_RECORD_DELETE')
-                    ];
+                    if (!in_array($obj->primaryKey, $model->disallow_delete)) {
+                        $obj->delete();
+                        $json = [
+                            'status' => 'success',
+                            'message' => Yii::t('app', 'SUCCESS_RECORD_DELETE')
+                        ];
+                    } else {
+                        $json = array(
+                            'status' => 'error',
+                            'message' => Yii::t('app', 'ERROR_RECORD_DELETE')
+                        );
+                    }
                 }
             }
         }
