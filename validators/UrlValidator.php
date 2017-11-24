@@ -9,6 +9,13 @@ class UrlValidator extends \yii\validators\Validator {
     public $attributeSlug = 'seo_alias';
     public $attributeCompare = 'title';
 
+    public function init() {
+        if ($this->message == null) {
+            $this->message = 'URL занят';
+        }
+        parent::init();
+    }
+
     /**
      * @inheritdoc
      */
@@ -25,7 +32,7 @@ class UrlValidator extends \yii\validators\Validator {
         }
 
         if (isset($check)) {
-            $this->addError($model, $attribute, 'URL занят');
+            $this->addError($model, $attribute, $this->message);
         }
 
         return null;
@@ -37,6 +44,7 @@ class UrlValidator extends \yii\validators\Validator {
             'model' => get_class($model),
             'pk' => $model->primaryKey,
             'usexhr' => true,
+            'successMessage' => $this->message,
             'AttributeSlug' => $attribute,
             'AttributeSlugId' => Html::getInputId($model, $attribute),
             'attributeCompareId' => Html::getInputId($model, $this->attributeCompare),
