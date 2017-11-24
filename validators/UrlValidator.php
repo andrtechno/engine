@@ -37,8 +37,9 @@ class UrlValidator extends \yii\validators\Validator {
             'model' => get_class($model),
             'pk' => $model->primaryKey,
             'usexhr' => true,
+            'AttributeSlug' => $attribute,
             'AttributeSlugId' => Html::getInputId($model, $attribute),
-            'attributeCompareId' => Html::getInputId($model, $this->attributeCompare)
+            'attributeCompareId' => Html::getInputId($model, $this->attributeCompare),
         ];
         $view->registerJs("init_translitter(" . json_encode($options, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ");");
         return null;

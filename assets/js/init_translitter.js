@@ -25,7 +25,8 @@ function init_translitter(options) {
                         data: {
                             model: options.model,
                             alias: alias.val(),
-                            pk: options.pk
+                            pk: options.pk,
+                            attribute_slug:options.AttributeSlug
                         },
                         success: function (data) {
                             alias.removeClass("loading");
