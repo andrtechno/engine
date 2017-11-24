@@ -6,10 +6,10 @@ function init_translitter(options) {
         $('#'+options.attributeCompareId).keyup(function (event) {
             var title = $.trim($(this).val());
             if (options.usexhr) {
-                alias.val($.trim(ru2en.translit(title.toLowerCase()))).addClass('loading');
+                alias.val(ru2en.translit(title.toLowerCase())).addClass('loading');
                 // alias.parent().append('<div id="alias_result"></div>');
             } else {
-                alias.val($.trim(ru2en.translit(title.toLowerCase())));
+                alias.val(ru2en.translit(title.toLowerCase()));
 
             }
 
