@@ -6,7 +6,7 @@ use yii\helpers\Html;
 
 class UrlValidator extends \yii\validators\Validator {
 
-    public $attributeName = 'seo_alias';
+    public $attributeSlug = 'seo_alias';
     public $attributeCompare = 'title';
 
     /**
@@ -15,12 +15,12 @@ class UrlValidator extends \yii\validators\Validator {
     public function validateAttribute($model, $attribute) {
         if (!$model->isNewRecord) {
             $check = $model::find()
-                    ->where([$this->attributeName => $model->$attribute])
+                    ->where([$this->attributeSlug => $model->$attribute])
                     ->andWhere(['!=', 'id', $model->primaryKey])
                     ->one();
         } else {
             $check = $model::find()
-                    ->where([$this->attributeName => $model->$attribute])
+                    ->where([$this->attributeSlug => $model->$attribute])
                     ->one();
         }
 
