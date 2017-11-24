@@ -4,12 +4,12 @@ function init_translitter(options) {
     alias.parent().append('<div id="alias_result"></div>');
     //if (translate_object_url == 0) {
         $('#'+options.attributeCompareId).keyup(function (event) {
-            var title = $(this).val();
+            var title = $.trim($(this).val());
             if (options.usexhr) {
-                alias.val(ru2en.translit(title.toLowerCase())).addClass('loading');
+                alias.val($.trim(ru2en.translit(title.toLowerCase()))).addClass('loading');
                 // alias.parent().append('<div id="alias_result"></div>');
             } else {
-                alias.val(ru2en.translit(title.toLowerCase()));
+                alias.val($.trim(ru2en.translit(title.toLowerCase())));
 
             }
 
