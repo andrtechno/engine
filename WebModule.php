@@ -15,7 +15,8 @@ class WebModule extends Module {
     public $modelClasses = [];
     protected $_models;
     public $icon;
-
+    public $uploadPath;
+    public $uploadAliasPath = null;
     public function getMdFiles() {
         $list = [];
         $files = FileHelper::findFiles(Yii::getAlias('@' . $this->id), [
@@ -32,6 +33,10 @@ class WebModule extends Module {
     // protected $moduleNamespace;
     public function init() {
         //$this->registerTranslations();
+        
+        $this->uploadAliasPath = "@webroot/uploads/content/{$this->id}";
+        $this->uploadPath = "/uploads/content/{$this->id}";
+        
         if (method_exists($this, 'getDefaultModelClasses')) {
             $this->modelClasses = array_merge($this->getDefaultModelClasses(), $this->modelClasses);
         }
