@@ -42,7 +42,7 @@ class ActionColumn extends \yii\grid\DataColumn {
                         'encodeLabels' => false,
                         'items' => [
                             [
-                                'label' => Html::icon('grid') . ' Изменить столбцы таблицы',
+                                'label' => Html::icon('table') . ' Изменить столбцы таблицы',
                                 'url' => 'javascript:void(0)',
                                 'options' => [
                                     'class' => 'editgrid',
