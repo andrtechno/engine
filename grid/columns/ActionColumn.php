@@ -36,7 +36,7 @@ class ActionColumn extends \yii\grid\DataColumn {
                     'label' => Html::icon('settings'),
                     'encodeLabel' => false,
                     'containerOptions' => ['class' => '', 'id' => 'grid-settings'],
-                    'options' => ['class' => 'btn-default'],
+                    'options' => ['class' => 'btn-sm btn-default'],
                     'dropdown' => [
                         'options' => ['class' => 'dropdown-menu-right'],
                         'encodeLabels' => false,
