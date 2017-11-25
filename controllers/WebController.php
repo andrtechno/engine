@@ -91,10 +91,10 @@ class WebController extends Controller {
         $timeZone = Yii::$app->settings->get('app', 'timezone');
         Yii::$app->timeZone = $timeZone;
 
-        $this->jsMessages = array(
-            'error' => array(
+        $this->jsMessages = [
+            'error' => [
                 '404' => Yii::t('app/error', '404')
-            ),
+            ],
             'cancel' => Yii::t('app', 'CANCEL'),
             'send' => Yii::t('app', 'SEND'),
             'delete' => Yii::t('app', 'DELETE'),
@@ -102,7 +102,7 @@ class WebController extends Controller {
             'close' => Yii::t('app', 'CLOSE'),
             //  'ok' => Yii::t('app', 'OK'),
             'loading' => Yii::t('app', 'LOADING'),
-        );
+        ];
 
         parent::init();
     }
@@ -165,7 +165,7 @@ class WebController extends Controller {
 
         imagepng($image);
         imagedestroy($image);
-        die;
+        Yii::$app->end();
     }
 
 }

@@ -20,6 +20,7 @@ class ActionColumn extends \yii\grid\DataColumn {
     public $headerOptions = ['style' => 'min-width:150px;'];
     public $contentOptions = ['class' => 'text-center'];
     public $pjax;
+    public $filter = true;
 
     /**
      * @inheritdoc
@@ -31,37 +32,38 @@ class ActionColumn extends \yii\grid\DataColumn {
         // if (!$this->pjax) {
         //    $this->pjax = '#pjax-container';
         //}
-
-        $this->filter = ButtonDropdown::widget([
-                    'label' => Html::icon('settings'),
-                    'encodeLabel' => false,
-                    'containerOptions' => ['class' => '', 'id' => 'grid-settings'],
-                    'options' => ['class' => 'btn-sm btn-default'],
-                    'dropdown' => [
-                        'options' => ['class' => 'dropdown-menu-right'],
-                        'encodeLabels' => false,
-                        'items' => [
-                            [
-                                'label' => Html::icon('table') . ' Изменить столбцы таблицы',
-                                'url' => 'javascript:void(0)',
-                                'options' => [
-                                    'class' => 'editgrid',
-                                    'data-grid-id' => $this->grid->id,
-                                    'data-model' => $this->grid->dataProvider->query->modelClass,
-                                    'data-pjax-id' => 'pjax-' . strtolower(basename($this->grid->dataProvider->query->modelClass)),
-                                ]
+        if ($this->filter) {
+            $this->filter = ButtonDropdown::widget([
+                        'label' => Html::icon('settings'),
+                        'encodeLabel' => false,
+                        'containerOptions' => ['class' => '', 'id' => 'grid-settings'],
+                        'options' => ['class' => 'btn-sm btn-default'],
+                        'dropdown' => [
+                            'options' => ['class' => 'dropdown-menu-right'],
+                            'encodeLabels' => false,
+                            'items' => [
+                                [
+                                    'label' => Html::icon('table') . ' Изменить столбцы таблицы',
+                                    'url' => 'javascript:void(0)',
+                                    'options' => [
+                                        'class' => 'editgrid',
+                                        'data-grid-id' => $this->grid->id,
+                                        'data-model' => $this->grid->dataProvider->query->modelClass,
+                                        'data-pjax-id' => 'pjax-' . strtolower(basename($this->grid->dataProvider->query->modelClass)),
+                                    ]
+                                ],
+                            /* [
+                              'label' => Html::icon('refresh') . ' Сбросить',
+                              'url' => 'javascript:void(0)',
+                              'options' => [
+                              'class' => '',
+                              'onClick'=>'$.pjax.reload("#pjax-'. strtolower(basename($this->grid->dataProvider->query->modelClass)).'", {timeout : false});',
+                              ]
+                              ], */
                             ],
-                        /* [
-                          'label' => Html::icon('refresh') . ' Сбросить',
-                          'url' => 'javascript:void(0)',
-                          'options' => [
-                          'class' => '',
-                          'onClick'=>'$.pjax.reload("#pjax-'. strtolower(basename($this->grid->dataProvider->query->modelClass)).'", {timeout : false});',
-                          ]
-                          ], */
                         ],
-                    ],
-        ]);
+            ]);
+        }
         $this->filterOptions = ['class' => 'text-center'];
         $this->initDefaultButtons();
         parent::init();
