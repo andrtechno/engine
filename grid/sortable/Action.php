@@ -9,6 +9,7 @@ class Action extends \yii\rest\Action {
     public $column = 'ordern';
 
     public function run() {
+        if(Yii::$app->request->isAjax){
         if (isset($_POST['ids']) && is_array($_POST['ids'])) {
             $model = new $this->modelClass;
             if ($this->modelClass === null)
@@ -21,6 +22,9 @@ class Action extends \yii\rest\Action {
 
 
             $this->savePositions($_POST['ids'], $max);
+        }
+        }else{
+            die('error http');
         }
     }
 
