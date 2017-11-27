@@ -57,25 +57,6 @@ class WebController extends Controller {
         throw new \yii\web\NotFoundHttpException($text);
     }
 
-    public function actionError() {
-        $exception = Yii::$app->errorHandler->exception;
-
-        if ($exception !== null) {
-            $statusCode = $exception->statusCode;
-            $name = $exception->getName();
-            $message = $exception->getMessage();
-
-            $this->layout = 'error';
-
-            return $this->render('error', [
-                        'exception' => $exception,
-                        'statusCode' => $statusCode,
-                        'name' => $name,
-                        'message' => $message
-            ]);
-        }
-    }
-
     public function beforeAction($action) {
         $this->view->registerJs('
             common.langauge="' . Yii::$app->language . '";
@@ -107,11 +88,39 @@ class WebController extends Controller {
         parent::init();
     }
 
+    public function actionNoJavascript() {
+        //TODO Пересмотреть данное решение для моб где нету вообще javascript
+        $this->layout = 'error';
+        return $this->render('no-javascript', [
+                    'name' => '',
+                    'message' => 'На вашем устройстве отключен javascript. Для корректной работы сайта рекомендуем включить.'
+        ]);
+    }
+
+    public function actionError() {
+        $exception = Yii::$app->errorHandler->exception;
+
+        if ($exception !== null) {
+            $statusCode = $exception->statusCode;
+            $name = $exception->getName();
+            $message = $exception->getMessage();
+
+            $this->layout = 'error';
+
+            return $this->render('error', [
+                        'exception' => $exception,
+                        'statusCode' => $statusCode,
+                        'name' => $name,
+                        'message' => $message
+            ]);
+        }
+    }
+
     public function actionPlaceholder() {
 
-
+        $request = Yii::$app->request;
         // Dimensions
-        $getsize = isset($_GET['size']) ? $_GET['size'] : '100x100';
+        $getsize = ($request->get('size')) ? $request->get('size') : '100x100';
         $dimensions = explode('x', $getsize);
 
         if (empty($dimensions[0])) {
@@ -126,20 +135,20 @@ class WebController extends Controller {
         $image = imagecreate($dimensions[0], $dimensions[1]);
 
         // Colours
-        $bg = isset($_GET['bg']) ? $_GET['bg'] : 'ccc';
+        $bg = ($request->get('bg')) ? $request->get('bg') : 'ccc';
 
         $bg = CMS::hex2rgb($bg);
-        $opacityBg = (isset($_GET['bg'])) ? 0 : 127;
+        $opacityBg = ($request->get('bg')) ? 0 : 127;
         //$setbg = imagecolorallocate($image, $bg['r'], $bg['g'], $bg['b']);
         $setbg = imagecolorallocatealpha($image, $bg['r'], $bg['g'], $bg['b'], $opacityBg);
 
-        $fg = isset($_GET['fg']) ? $_GET['fg'] : '999';
+        $fg = ($request->get('fg')) ? $request->get('fg') : '999';
         $fg = CMS::hex2rgb($fg);
         $setfg = imagecolorallocate($image, $fg['r'], $fg['g'], $fg['b']);
 
-        $text = isset($_GET['text']) ? strip_tags($_GET['text']) : $getsize;
+        $text = ($request->get('text')) ? strip_tags($request->get('text')) : $getsize;
         $text = str_replace('+', ' ', $text);
-        $padding = isset($_GET['padding']) ? (int) $_GET['padding'] : 0;
+        $padding = ($request->get('padding')) ? (int) $request->get('padding') : 0;
 
         $fontsize = $dimensions[0] / 2;
 

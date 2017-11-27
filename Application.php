@@ -35,6 +35,7 @@ class Application extends \yii\web\Application {
 
         return $result;
     }
+
     public static function pageGen() {
         $sql_stats = Yii::getLogger()->getDbProfiling();
         return Yii::t('app', 'PAGE_GEN', array(
@@ -44,8 +45,12 @@ class Application extends \yii\web\Application {
                     'db_time' => number_format($sql_stats[1], 2, '.', ' '),
         ));
     }
+
     public static function powered() {
-        return Yii::t('app', 'COPYRIGHT', ['year' => date('Y')]);
+        return Yii::t('app', 'COPYRIGHT', [
+                    'year' => date('Y'),
+                    'by' => Html::a('CORNER CMS', 'http://corner-cms.com')
+        ]);
     }
 
     public function getVersion() {
@@ -62,15 +67,15 @@ class Application extends \yii\web\Application {
             ]);
             $this->registerTranslations($id);
         }
-        
-        foreach($modulesList as $module){
+
+        foreach ($modulesList as $module) {
             $id = basename($module);
             $this->setAliases([
                 '@' . $id => realpath(Yii::getAlias("@app/modules/{$id}")),
             ]);
             $this->registerTranslations($id);
-        }        
-        
+        }
+
         parent::init();
         $this->setCmsModules();
     }
@@ -81,8 +86,8 @@ class Application extends \yii\web\Application {
             foreach ($mods as $module) {
                 $name = $module->name;
                 $this->setModule($name, [
-                        'class' => str_replace('/', DIRECTORY_SEPARATOR, "app/modules/$name/Module"),
-                    ]);
+                    'class' => str_replace('/', DIRECTORY_SEPARATOR, "app/modules/$name/Module"),
+                ]);
             }
         }
     }

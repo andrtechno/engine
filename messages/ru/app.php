@@ -7,7 +7,7 @@ return [
     'TODAY_IN' => 'Сегодня в {time}',
     'YESTERDAY_IN' => 'Вчера в {time}',
     'GRID_SWITCH' => 'Скрыть/показать',
-    'COPYRIGHT' => '&copy; 2013-{year} CORNER CMS',
+    'COPYRIGHT' => '&copy; 2013-{year} {by}',
     'HOME' => 'Главная',
     'SUCCESS_CREATE' => 'Запись успешно создана.',
     'SUCCESS_UPDATE' => 'Изменение успешно сохранены.',

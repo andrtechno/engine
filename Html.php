@@ -4,21 +4,19 @@ namespace panix\engine;
 
 use Yii;
 use yii\helpers\Url;
-
 use panix\engine\emoji\Emoji;
-
 
 class Html extends \yii\helpers\Html {
 
     public static $iconPrefix = 'icon-';
-    
-    public static function icon($icon,$options=[]) {
-        if(isset($options['class'])){
-            $options['class'] .= ' '.self::$iconPrefix . $icon;
+
+    public static function icon($icon, $options = []) {
+        if (isset($options['class'])) {
+            $options['class'] .= ' ' . self::$iconPrefix . $icon;
         }
-        return static::tag('i', '', array_merge(['class'=>self::$iconPrefix . $icon],$options));
+        return static::tag('i', '', array_merge(['class' => self::$iconPrefix . $icon], $options));
     }
-    
+
     public static function aIconL($icon, $text, $url = null, $options = []) {
         if ($url !== null) {
             $options['href'] = Url::to($url);
@@ -47,10 +45,9 @@ class Html extends \yii\helpers\Html {
                 $message = preg_replace("#" . $val . "#iu", $config['censor_replace'], $message);
         }
         return Emoji::emoji_unified_to_html($message);
-      //return Emoji::toHtml($message);
-      //  return self::highlight($message, $cut);
+        //return Emoji::toHtml($message);
+        //  return self::highlight($message, $cut);
     }
-
 
     public static function highlight($text, $cut = false) {
         $params = (Yii::$app->request->get('word')) ? Yii::$app->request->get('word') : Yii::$app->request->get('tag');
@@ -73,6 +70,20 @@ class Html extends \yii\helpers\Html {
             $highlighted = $text;
         }
         return Emoji::toHtml($highlighted);
+    }
+
+    public static function a($text, $url = null, $options = []) {
+        if (!is_array($url)) {
+            if (!isset($options['rel'])) {
+if(strpos(Yii::$app->request->hostName,'app')===false){
+                if (preg_match('%^((https?://)|(www\.))([a-z0-9-].?)+(:[0-9]+)?(/.*)?$%i', $url)) {
+                    $options['rel'] = 'nofollow';
+                }
+}
+
+            }
+        }
+        return parent::a($text, $url, $options);
     }
 
 }

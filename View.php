@@ -31,15 +31,18 @@ class View extends \yii\web\View {
     }
 
     public function head() {
-        $this->registerMetaTag([
-            'charset' => Yii::$app->charset
-        ]);
+        $this->registerMetaTag(['charset' => Yii::$app->charset]);
         $this->registerMetaTag(['name' => 'author', 'content' => Yii::$app->name]);
         $this->registerMetaTag(['name' => 'generator', 'content' => Yii::$app->name . ' ' . Yii::$app->version]);
-        
+
 
         if (Yii::$app->controller instanceof \panix\engine\controllers\WebController) {
             Yii::$app->seo->run();
+
+            // Open Graph default property
+            $this->registerMetaTag(['property' => 'og:locale', 'content' => Yii::$app->language]);
+            $this->registerMetaTag(['property' => 'og:type', 'content' => 'article']);
+
         }
 
         parent::head();

@@ -101,9 +101,9 @@ class Connection extends \yii\db\Connection {
                 return true;
             }
 
-            if (Yii::$app->controller instanceof AdminController) {
+            if (Yii::$app->controller instanceof \panix\engine\controllers\AdminController) {
                 Yii::$app->session->addFlash('success', Yii::t('app', 'BACKUP_DB_SUCCESS', [
-                            '{settings}' => Html::a(Yii::t('app', 'SETTINGS'), ['/admin/app/security'])
+                            'settings' => Html::a(Yii::t('app', 'SETTINGS'), ['/admin/app/security'])
                 ]));
             }
         }

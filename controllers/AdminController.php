@@ -3,7 +3,7 @@
 namespace panix\engine\controllers;
 
 use Yii;
-
+use yii\web\ForbiddenHttpException;
 use panix\engine\controllers\WebController;
 
 class AdminController extends WebController {
