@@ -10,6 +10,10 @@ common = {
     getMsg: function (code) {
         return this.lang[this.language][code];
     },
+    clipboard: function(selector){
+        var clipboard = new Clipboard(selector);
+        clipboard.on('success', function(e) { common.notify('Скопировано','info'); });
+    },
     notify: function (text, type) {
         var t = (type == 'error') ? 'danger' : type;
         if (common.isDashboard) {
