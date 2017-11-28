@@ -71,7 +71,12 @@ class WebController extends Controller {
         $user = Yii::$app->user;
         $timeZone = Yii::$app->settings->get('app', 'timezone');
         Yii::$app->timeZone = $timeZone;
-
+        if (Yii::$app->getModule('stats')) {
+           
+                $stats = Yii::$app->stats;
+                $stats->record();
+      
+        }
         $this->jsMessages = [
             'error' => [
                 '404' => Yii::t('app/error', '404')
