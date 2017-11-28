@@ -87,32 +87,44 @@ class ActionColumn extends \yii\grid\DataColumn {
                             $class = 'btn-default';
                             $switch = 1;
                         }
-                        /*   return Html::a('<i class="' . $icon . '"></i>', Url::toRoute(['switch', 'id' => $model->primaryKey, 's' => ($model->switch) ? 0 : 1]), [
+                         /* return Html::a('<i class="' . $icon . '"></i>', Url::toRoute(['switch', 'id' => $model->primaryKey, 's' => ($model->switch) ? 0 : 1]), [
                           'title' => Yii::t('app', 'GRID_SWITCH'),
                           'class' => "btn ' . $this->btnSize . ' " . $class . " switch",
                           'data-pk' => $model->primaryKey,
                           'data-switch' => ($model->switch) ? 0 : 1,
                           'data-method' => 'post',
-                          'data-pjax' => '0',
-                          ]); */
+                          'data-pjax' => '#pjax-languages',
+                          ]);*/ 
 
+                        
+                        
+return Html::a('<i class="' . $icon . '"></i>', Url::toRoute(['switch', 'id' => $model->primaryKey, 's' => ($model->switch) ? 0 : 1]), [
+                                    'title' => Yii::t('app', 'GRID_SWITCH'),
+                                    'class' => 'btn ' . $this->btnSize . ' ' . $class . ' switch linkTarget',
+                                    'onclick' => "setSwitch('{$url}',{$model->primaryKey}, {$model->switch}, 'pjax-" . strtolower(basename(get_class($model))) . "');",
+                        ]);
+                        
 
-                        return Html::a('<i class="' . $icon . '"></i>', Url::toRoute(['switch', 'id' => $model->primaryKey, 's' => ($model->switch) ? 0 : 1]), [
+                       /* return Html::a('<i class="' . $icon . '"></i>', Url::toRoute(['switch', 'id' => $model->primaryKey, 's' => ($model->switch) ? 0 : 1]), [
                                     'title' => Yii::t('app', 'GRID_SWITCH'),
                                     'class' => 'btn ' . $this->btnSize . ' ' . $class . ' switch',
                                     'onclick' => "
                                     $.ajax('$url', {
                                         type: 'POST',
                                         dataType:'json',
-                                        data:{s:$switch},
+                                        data:{
+                                        id:$model->primaryKey,
+                                s:$switch,
+                                    ".Yii::$app->request->csrfParam.":'".Yii::$app->request->csrfToken."'
+                                    },
                                     }).done(function(data) {
-                                            common.notify(data.message,'success');
-                                            $.pjax.reload({container: '" . $this->pjax . "'});
+                                            //common.notify(data.message,'success');
+                                            $.pjax.reload({container: 'pjax-" . strtolower(basename($this->grid->query->modelClass)) . "});
                                             //$('#{$this->grid->id}').yiiGridView('applyFilter');
                                     });
                                 return false;
                             ",
-                        ]);
+                        ]);*/
                     }
                 }
             };

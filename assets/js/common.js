@@ -10,9 +10,11 @@ common = {
     getMsg: function (code) {
         return this.lang[this.language][code];
     },
-    clipboard: function(selector){
+    clipboard: function (selector) {
         var clipboard = new Clipboard(selector);
-        clipboard.on('success', function(e) { common.notify('Скопировано','info'); });
+        clipboard.on('success', function (e) {
+            common.notify('Скопировано', 'info');
+        });
     },
     notify: function (text, type) {
         var t = (type == 'error') ? 'danger' : type;
@@ -65,9 +67,7 @@ common = {
                         $('#geo-dialog').remove();
                     }
                 });
-
                 $('#geo-dialog').html(result);
-
                 $('.ui-dialog').position({
                     my: 'center',
                     at: 'center',
@@ -98,7 +98,6 @@ common = {
             var t = common.message.loading;
         }
         $('body').append('<div class="common-ajax-loading">' + t + '</div>');
-
     },
     removeLoader: function () {
         $('.common-ajax-loading').remove();
@@ -145,16 +144,12 @@ common = {
     }
 };
 common.init();
-
-
-$(document).on('pjax:send', function() {
-  $('.grid-loading').show();
+$(document).on('pjax:send', function () {
+    $('.grid-loading').show();
 });
-$(document).on('pjax:complete', function() {
-  $('.grid-loading').hide();
+$(document).on('pjax:complete', function () {
+    $('.grid-loading').hide();
 });
-
-
 $(document).ready(function () {
     $(document).on('click', '.editgrid', function () {
         var gridid = $(this).attr('data-grid-id');
@@ -215,7 +210,7 @@ $(document).ready(function () {
                             success: function () {
                                 $('#' + gridid + '-dialog').remove();
                                 //$.pjax.reload({container: '#pjax-test'});
-                                 $.pjax.reload('#'+pjaxId, {timeout : false});
+                                $.pjax.reload('#' + pjaxId, {timeout: false});
                                 //$('#w0').yiiGridView('applyFilter');
                                 $('#dialog-overlay').remove();
                             },
@@ -235,3 +230,19 @@ $(document).ready(function () {
         });
     });
 });
+function setSwitch(url,id, s, pjax) {
+    $.ajax({
+        url:url,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            id: id,
+            s: s
+        }
+    }).done(function (data) {
+        //common.notify(data.message,'success');
+        $.pjax.reload({container: pjax});
+        //$('#w0').yiiGridView('applyFilter');
+    });
+    return false;
+}

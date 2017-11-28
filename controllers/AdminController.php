@@ -10,7 +10,7 @@ class AdminController extends WebController {
 
     public $buttons = [];
     public $layout = '@vendor/panix/mod-admin/views/layouts/main';
-
+    public $dashboard = true;
 
 
     public function beforeAction($event) {

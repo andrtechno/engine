@@ -12,7 +12,7 @@ class WebController extends Controller {
     public $breadcrumbs = [];
     public $jsMessages = [];
     public $dataModel, $pageName, $title, $keywords, $description;
-
+    public $dashboard = false;
     public function behaviors() {
         return [
             'access' => [
@@ -71,8 +71,9 @@ class WebController extends Controller {
         $user = Yii::$app->user;
         $timeZone = Yii::$app->settings->get('app', 'timezone');
         Yii::$app->timeZone = $timeZone;
-        if (Yii::$app->getModule('stats')) {
-           
+
+        if (Yii::$app->hasModule('stats') && !$this->dashboard && !Yii::$app->request->isAjax) {
+           //die('count');
                 $stats = Yii::$app->stats;
                 $stats->record();
       

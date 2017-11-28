@@ -30,7 +30,7 @@ class DeleteAction extends \yii\rest\Action {
             }
         }
         echo Json::encode($json);
-        die;
+        Yii::$app->end();
     }
 
 }
