@@ -19,7 +19,6 @@
         }
     ],
     "require": {
-
         "panix/mod-admin": "*",
         "panix/mod-user": "*",
         "panix/mod-shop": "*",

@@ -58,15 +58,16 @@ class Application extends \yii\web\Application {
     }
 
     public function init() {
-        $this->setEngineModules();
+        $modulesList = array_filter(glob(Yii::getAlias('@app/modules/*')), 'is_dir');
+
+
         foreach ($this->getModules() as $id => $module) {
-            $reflectionClass = new \ReflectionClass($module['class']);
             $this->setAliases([
-                '@' . $id => realpath(dirname($reflectionClass->getFileName())),
+                '@' . $id => realpath(Yii::getAlias("@vendor/panix/mod-{$id}")),
             ]);
             $this->registerTranslations($id);
         }
-        $modulesList = array_filter(glob(Yii::getAlias('@app/modules/*')), 'is_dir');
+
         foreach ($modulesList as $module) {
             $id = basename($module);
             $this->setAliases([
@@ -76,14 +77,18 @@ class Application extends \yii\web\Application {
         }
 
         parent::init();
+        $this->setCmsModules();
     }
 
-    private function setEngineModules() {
+    private function setCmsModules() {
         $mods = Modules::getEnabled();
         if ($mods) {
             foreach ($mods as $module) {
-                $this->setModule($module->name, [
-                    'class' => $module->className,
+              // print_r($module->className);die;
+                $name = $module->name;
+                $this->setModule($name, [
+                     'class' => $module->className,
+                    //'class' => str_replace('/', DIRECTORY_SEPARATOR, "app/modules/$name/Module"),
                 ]);
             }
         }

@@ -103,15 +103,6 @@ class CMS {
         return $matches[1];
     }
 
-    public static function truncate($text, $strip, $type = 1) {
-        if ($type == 1) {
-            $text = (mb_strlen($text, Yii::$app->charset) > $strip) ? mb_substr($text, 0, $strip, Yii::$app->charset) . "..." : $text;
-        } else {
-            $text = mb_substr($text, 0, $strip, Yii::$app->charset);
-        }
-        return $text;
-    }
-
     /**
      * 
      * @param type $birth_date
