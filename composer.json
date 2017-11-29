@@ -19,6 +19,7 @@
         }
     ],
     "require": {
+
         "panix/mod-admin": "*",
         "panix/mod-user": "*",
         "panix/mod-shop": "*",
@@ -28,7 +29,8 @@
         "panix/wgt-tinymce": "*",
         "panix/wgt-owlcarousel": "*",
         "panix/wgt-taginput": "*",
-        "maxmind-db/reader": "~1.0"
+        "maxmind-db/reader": "~1.0",
+        "profitcode/yii2-blocks": "*"
     },
     "autoload": {
         "psr-4": {
