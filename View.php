@@ -36,7 +36,8 @@ class View extends \yii\web\View {
         $this->registerMetaTag(['name' => 'generator', 'content' => Yii::$app->name . ' ' . Yii::$app->version]);
 
 
-        if (Yii::$app->controller instanceof \panix\engine\controllers\WebController) {
+       // if (!isset(Yii::$app->controller->dashboard)) {
+        if (!(Yii::$app->controller instanceof \panix\engine\controllers\AdminController)) {
             Yii::$app->seo->run();
 
             // Open Graph default property
