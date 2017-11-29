@@ -27,6 +27,8 @@
         "panix/mod-images": "*",
         "panix/mod-contacts": "*",
         "panix/wgt-tinymce": "*",
+        "panix/wgt-owlcarousel": "*",
+        "panix/wgt-taginput": "*",
         "maxmind-db/reader": "~1.0"
     },
     "autoload": {
