@@ -94,11 +94,11 @@ class Curl {
      * Default curl options
      */
     protected $_defaultOptions = [
-        CURLOPT_USERAGENT => 'Yii2-Curl-Agent',
+        CURLOPT_USERAGENT => 'CORNERCMS-Curl-Agent',
         CURLOPT_TIMEOUT => 30,
         CURLOPT_CONNECTTIMEOUT => 30,
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => true,
+        CURLOPT_HEADER => false,
     ];
 
     // ############################################### class methods // ##############################################

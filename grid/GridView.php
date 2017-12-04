@@ -26,7 +26,7 @@ class GridView extends \yii\grid\GridView {
                 $colms = array();
                 if (isset($model)) {
                     foreach ($model as $k => $col) {
-                        $colms[$col->key] = $col->key;
+                        $colms[$col->column_key] = $col->column_key;
                     }
                 }
                 $this->columns = $runModel->getColumnSearch($colms);

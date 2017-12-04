@@ -181,4 +181,8 @@ line-height: 1;
 .icon-blocked:before {content:"\f157";}
 .icon-loader:before {content:"\f158";}
 .icon-emoji:before {content:"\f159";}
+.icon-contract:before {content:"\f160";}
+.icon-partner:before {content:"\f161";}
+.icon-offer:before {content:"\f162";}
+.icon-calculator:before {content:"\f163";}
 
