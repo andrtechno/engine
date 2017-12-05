@@ -5,7 +5,10 @@ class WidgetForm {
     public $model;
     public function __construct($form, $model) {
         $this->model = $model;
-        Yii::$app->controller->render('das');
+        $ref = new \ReflectionClass($this->model);
+        Yii::setAlias('@test', dirname($ref->getFileName()).DIRECTORY_SEPARATOR);
+        
+        return Yii::$app->controller->render('@test/_form');
     }
     public function render() {
 

@@ -4,8 +4,8 @@ namespace panix\engine\blocks_settings;
 
 use Yii;
 
-class WidgetFormModel extends \panix\engine\base\Model {
-
+class WidgetFormModel extends \yii\base\Model {
+    
     public function attributeNames() {
         return array();
     }
@@ -21,12 +21,19 @@ class WidgetFormModel extends \panix\engine\base\Model {
         //if (method_exists($this, 'registerScript')) {
         //    $this->registerScript();
         //}
-        $form = new WidgetForm($this->getForm(), $this);
-        return $form;
+        //$form = new WidgetForm($this->getForm(), $this);
+        
+       $ref = new \ReflectionClass($this);
+        Yii::setAlias('@test', dirname($ref->getFileName()).DIRECTORY_SEPARATOR);
+        
+        return Yii::$app->controller->renderPartial('@test/_form',['model'=>$this]);
+        
+       // return $form;
     }
 
     public function saveSettings($obj, $postData) {
-        $this->setSettings($obj, $postData[get_class($this)]);
+     
+        $this->setSettings($obj, $postData[basename(get_class($this))]);
     }
 
     public function setSettings($obj, $data) {
