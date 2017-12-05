@@ -9,6 +9,7 @@ use panix\engine\Html;
 class Breadcrumbs extends \yii\widgets\Breadcrumbs {
 
     public $micro = true;
+    public $lastmicro = false;
     public $itemTemplate = '<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">{link}</li>';
     public $activeItemTemplate = '<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="active">{link}</li>';
 
@@ -68,7 +69,12 @@ class Breadcrumbs extends \yii\widgets\Breadcrumbs {
 
             $link = Html::a($label, $link['url'], $options);
         } else {
-            if ($this->micro) {
+
+            /**
+             * https://pixelplus.ru/samostoyatelno/stati/vnutrennie-faktory/hlebnye-kroshki.html
+             * Включение текущий страницы с отсутствием ссылки на неё в конце дублирующей навигации — является хорошим тоном.
+             */
+            if ($this->micro && $this->lastmicro) {
                 $options['itemprop'] = 'item';
                 $label = Html::a(Html::tag('span', $label, ['itemprop' => 'name']), [Yii::$app->request->pathInfo], $options);
             }
