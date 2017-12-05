@@ -8,11 +8,11 @@ use panix\engine\Html;
 
 class Breadcrumbs extends \yii\widgets\Breadcrumbs {
 
-    public $micro = true;
-    public $lastmicro = true;
+    public $scheme = true;
+    public $lastscheme = true;
 
     public function run() {
-        if ($this->micro) {
+        if ($this->scheme) {
             $this->itemTemplate = '<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">{link}</li>';
             $this->activeItemTemplate = '<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="active">{link}</li>';
         }
@@ -36,7 +36,7 @@ class Breadcrumbs extends \yii\widgets\Breadcrumbs {
             $links[] = $this->renderItems($link, isset($link['url']) ? $this->itemTemplate : $this->activeItemTemplate, $count);
             $count++;
         }
-        if ($this->micro) {
+        if ($this->scheme) {
             $this->options['itemtype'] = 'http://schema.org/BreadcrumbList';
             $this->options['itemscope'] = '';
         }
@@ -64,7 +64,7 @@ class Breadcrumbs extends \yii\widgets\Breadcrumbs {
             $options = $link;
             unset($options['template'], $options['label'], $options['url']);
 
-            if ($this->micro) {
+            if ($this->scheme) {
                 $label = Html::tag('span', $label, ['itemprop' => 'name']);
                 $options['itemprop'] = 'item';
             }
@@ -76,13 +76,13 @@ class Breadcrumbs extends \yii\widgets\Breadcrumbs {
              * https://pixelplus.ru/samostoyatelno/stati/vnutrennie-faktory/hlebnye-kroshki.html
              * Включение текущий страницы с отсутствием ссылки на неё в конце дублирующей навигации — является хорошим тоном.
              */
-            if ($this->micro && $this->lastmicro) {
+            if ($this->scheme && $this->lastscheme) {
                 $options['itemprop'] = 'item';
-                $label = Html::a(Html::tag('span', $label, ['itemprop' => 'name']), [Yii::$app->request->pathInfo,'#'=>'header'], $options);
+                $label = Html::a(Html::tag('span', $label, ['itemprop' => 'name']), [Yii::$app->request->url, '#' => 'header'], $options);
             }
             $link = $label;
         }
-        if ($this->micro) {
+        if ($this->scheme) {
             $link .= "<meta itemprop=\"position\" content=\"{$count}\">";
         }
         return strtr($template, ['{link}' => $link]);
