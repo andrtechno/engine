@@ -19,7 +19,7 @@ class WebModule extends Module {
     public $icon;
     public $uploadPath;
     public $uploadAliasPath = null;
-
+   
     public function getMdFiles() {
         $list = [];
         $files = FileHelper::findFiles(Yii::getAlias('@' . $this->id), [
