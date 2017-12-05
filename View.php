@@ -3,6 +3,7 @@
 namespace panix\engine;
 
 use Yii;
+use yii\helpers\Url;
 
 class View extends \yii\web\View {
 
@@ -36,7 +37,7 @@ class View extends \yii\web\View {
         $this->registerMetaTag(['name' => 'generator', 'content' => Yii::$app->name . ' ' . Yii::$app->version]);
 
 
-       // if (!isset(Yii::$app->controller->dashboard)) {
+        // if (!isset(Yii::$app->controller->dashboard)) {
         if (!(Yii::$app->controller instanceof \panix\engine\controllers\AdminController)) {
             Yii::$app->seo->run();
 
@@ -44,6 +45,14 @@ class View extends \yii\web\View {
             $this->registerMetaTag(['property' => 'og:locale', 'content' => Yii::$app->language]);
             $this->registerMetaTag(['property' => 'og:type', 'content' => 'article']);
 
+            foreach (Yii::$app->languageManager->languages as $lang) {
+                if (Yii::$app->language == $lang->code) {
+                    $url = Url::to("/" . Yii::$app->request->pathInfo, true);
+                } else {
+                    $url = Url::to("/{$lang->code}/" . Yii::$app->request->pathInfo, true);
+                }
+                $this->registerLinkTag(['rel' => 'alternate', 'hreflang' => $lang->code, 'href' => $url]);
+            }
         }
 
         parent::head();

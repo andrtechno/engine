@@ -69,9 +69,11 @@ class WebController extends Controller {
 
     public function init() {
         $user = Yii::$app->user;
-        $timeZone = Yii::$app->settings->get('app', 'timezone');
+        $config = Yii::$app->settings->get('app');
+        $timeZone = $config['timezone'];
         Yii::$app->timeZone = $timeZone;
-
+        Yii::setAlias('@themeroot', Yii::getAlias("@webroot/themes/{$config['theme']}"));
+        Yii::setAlias('@theme', Yii::getAlias("@web/themes/{$config['theme']}"));
         if (Yii::$app->hasModule('stats') && !$this->dashboard && !Yii::$app->request->isAjax) {
            //die('count');
                 $stats = Yii::$app->stats;

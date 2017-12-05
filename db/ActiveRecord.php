@@ -5,7 +5,6 @@ namespace panix\engine\db;
 use Yii;
 use yii\base\Exception;
 use yii\helpers\Json;
-use panix\engine\widgets\Pjax;
 
 class ActiveRecord extends \yii\db\ActiveRecord {
 
