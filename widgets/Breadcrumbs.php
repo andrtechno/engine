@@ -9,11 +9,13 @@ use panix\engine\Html;
 class Breadcrumbs extends \yii\widgets\Breadcrumbs {
 
     public $micro = true;
-    public $lastmicro = false;
-    public $itemTemplate = '<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">{link}</li>';
-    public $activeItemTemplate = '<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="active">{link}</li>';
+    public $lastmicro = true;
 
     public function run() {
+        if ($this->micro) {
+            $this->itemTemplate = '<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">{link}</li>';
+            $this->activeItemTemplate = '<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="active">{link}</li>';
+        }
         if (empty($this->links)) {
             return;
         }
@@ -76,7 +78,7 @@ class Breadcrumbs extends \yii\widgets\Breadcrumbs {
              */
             if ($this->micro && $this->lastmicro) {
                 $options['itemprop'] = 'item';
-                $label = Html::a(Html::tag('span', $label, ['itemprop' => 'name']), [Yii::$app->request->pathInfo], $options);
+                $label = Html::a(Html::tag('span', $label, ['itemprop' => 'name']), [Yii::$app->request->pathInfo,'#'=>'header'], $options);
             }
             $link = $label;
         }
