@@ -1,9 +1,9 @@
 <p align="center">
   <a href="https://pixelion.com.ua"><img src="https://pixelion.com.ua/uploads/logo_black.svg" alt="PIXELION CMS"/></a>
-  <a href="https://pixelion.com.ua"><img src="https://commerce.corner-cms.com/placeholder?size=150x50&text=CORNER&fg=333&padding=0" alt="PIXELION CMS"/></a>
+  <a href="https://pixelion.com.ua"><img src="https://pixelion.com.ua/uploads/logo2.svg" alt="PIXELION CMS"/></a>
 </p>
 
-# CORNER CMS Engine
+# PIXELION CMS Engine
 
 For Yii framework 2
 
@@ -40,5 +40,5 @@ php yii migrate --migrationPath=vendor/panix/engine/migrations
 
 
 > [![PIXELION CMS!](https://pixelion.com.ua/uploads/logo.svg "PIXELION CMS")](https://pixelion.com.ua)  
-<i>Content Management System "CORNER CMS"</i>  
+<i>Content Management System "PIXELION CMS"</i>  
 [www.pixelion.com.ua](https://pixelion.com.ua)
