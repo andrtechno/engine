@@ -1,20 +1,14 @@
 {
     "name": "panix/engine",
-    "description": "CORNER CMS Engine",
+    "description": "PIXELION CMS Engine",
     "type": "yii2-extension",
-    "keywords": ["panix", "corner", "engine","cms"],
+    "keywords": ["panix", "pixelion", "engine","cms"],
     "license": "MIT",
     "authors": [
         {
-            "name": "Semenov Andrey",
-            "email": "info@andrix.com.ua",
-            "homepage": "http://andrix.com.ua/",
-            "role": "Developer"
-        },
-        {
-            "name": "CORNER CMS team",
-            "email": "dev@corner-cms.com",
-            "homepage": "http://corner-cms.com/",
+            "name": "PIXELION CMS team",
+            "email": "dev@pixelion.com",
+            "homepage": "https://pixelion.com.ua/",
             "role": "Developer"
         }
     ],

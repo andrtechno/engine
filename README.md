@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://corner-cms.com"><img src="https://commerce.corner-cms.com/placeholder?size=70x50&text=f002&fg=333&padding=0" alt="CORNER CMS"/></a>
-  <a href="https://corner-cms.com"><img src="https://commerce.corner-cms.com/placeholder?size=150x50&text=CORNER&fg=333&padding=0" alt="CORNER CMS"/></a>
+  <a href="https://pixelion.com.ua"><img src="https://pixelion.com.ua/uploads/logo_black.svg" alt="PIXELION CMS"/></a>
+  <a href="https://pixelion.com.ua"><img src="https://commerce.corner-cms.com/placeholder?size=150x50&text=CORNER&fg=333&padding=0" alt="PIXELION CMS"/></a>
 </p>
 
 # CORNER CMS Engine
@@ -36,9 +36,9 @@ php yii migrate --migrationPath=vendor/panix/engine/migrations
 
 
 ## See also
-- [CORNER CMS](https://corner-cms.com)
+- [PIXELION CMS](https://pixelion.com.ua)
 
 
-> [![CORNER CMS!](https://commerce.corner-cms.com/placeholder?size=100x100&text=f002&fg=333&padding=0 "CORNER CMS")](https://corner-cms.com)  
+> [![PIXELION CMS!](https://pixelion.com.ua/uploads/logo.svg "PIXELION CMS")](https://pixelion.com.ua)  
 <i>Content Management System "CORNER CMS"</i>  
-[www.corner-cms.com](https://corner-cms.com)
+[www.pixelion.com.ua](https://pixelion.com.ua)
