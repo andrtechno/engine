@@ -1,5 +1,4 @@
 <p align="center">
-  <a href="https://pixelion.com.ua"><img src="https://pixelion.com.ua/uploads/logo_black.svg" alt="PIXELION CMS"/></a>
   <a href="https://pixelion.com.ua"><img src="https://pixelion.com.ua/uploads/logo2.svg" width="350" alt="PIXELION CMS"/></a>
 </p>
 
