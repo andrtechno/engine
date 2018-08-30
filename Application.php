@@ -19,8 +19,10 @@ class Application extends \yii\web\Application {
             $this->language = $langManager->default->code;
         }
 
-        parent::run();
+        return parent::run();
+
     }
+
 
     public function getModulesInfo() {
         $modules = $this->getModules();

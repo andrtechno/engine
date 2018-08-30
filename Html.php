@@ -6,18 +6,21 @@ use Yii;
 use yii\helpers\Url;
 use panix\engine\emoji\Emoji;
 
-class Html extends \yii\helpers\Html {
+class Html extends \yii\helpers\Html
+{
 
     public static $iconPrefix = 'icon-';
 
-    public static function icon($icon, $options = []) {
+    public static function icon($icon, $options = [])
+    {
         if (isset($options['class'])) {
             $options['class'] .= ' ' . self::$iconPrefix . $icon;
         }
         return static::tag('i', '', array_merge(['class' => self::$iconPrefix . $icon], $options));
     }
 
-    public static function aIconL($icon, $text, $url = null, $options = []) {
+    public static function aIconL($icon, $text, $url = null, $options = [])
+    {
         if ($url !== null) {
             $options['href'] = Url::to($url);
         }
@@ -25,7 +28,8 @@ class Html extends \yii\helpers\Html {
         return static::tag('a', $iconHtml . $text, $options);
     }
 
-    public static function aIconR($icon, $text, $url = null, $options = []) {
+    public static function aIconR($icon, $text, $url = null, $options = [])
+    {
         if ($url !== null) {
             $options['href'] = Url::to($url);
         }
@@ -33,7 +37,8 @@ class Html extends \yii\helpers\Html {
         return static::tag('a', $text . $iconHtml, $options);
     }
 
-    public static function text($message, $cut = false) {
+    public static function text($message, $cut = false)
+    {
         $config = Yii::$app->settings->get('app');
         //if (!$mode)
         //  $message = strip_tags(urldecode($message));
@@ -44,12 +49,14 @@ class Html extends \yii\helpers\Html {
             foreach ($censor_l as $val)
                 $message = preg_replace("#" . $val . "#iu", $config['censor_replace'], $message);
         }
+        //return Emoji::emoji_unified_to_html(Emoji::emoji_html_to_unified($message));
         return Emoji::emoji_unified_to_html($message);
-        //return Emoji::toHtml($message);
+        //return Emoji::emoji_html_to_unified($message);
         //  return self::highlight($message, $cut);
     }
 
-    public static function highlight($text, $cut = false) {
+    public static function highlight($text, $cut = false)
+    {
         $params = (Yii::$app->request->get('word')) ? Yii::$app->request->get('word') : Yii::$app->request->get('tag');
         if ($params) {
             if ($cut) {
@@ -72,14 +79,15 @@ class Html extends \yii\helpers\Html {
         return Emoji::toHtml($highlighted);
     }
 
-    public static function a($text, $url = null, $options = []) {
+    public static function a($text, $url = null, $options = [])
+    {
         if (!is_array($url)) {
             if (!isset($options['rel'])) {
-if(strpos(Yii::$app->request->hostName,'app')===false){
-                if (preg_match('%^((https?://)|(www\.))([a-z0-9-].?)+(:[0-9]+)?(/.*)?$%i', $url)) {
-                    $options['rel'] = 'nofollow';
+                if (strpos(Yii::$app->request->hostName, 'app') === false) {
+                    if (preg_match('%^((https?://)|(www\.))([a-z0-9-].?)+(:[0-9]+)?(/.*)?$%i', $url)) {
+                        $options['rel'] = 'nofollow';
+                    }
                 }
-}
 
             }
         }

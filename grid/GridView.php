@@ -12,12 +12,12 @@ class GridView extends \yii\grid\GridView {
     public $layoutOptions = [];
     public $emptyTextOptions = ['class' => 'alert alert-info empty'];
     public $enableLayout = true;
-
+    public $enableColumns = true;
     public function init() {
         if (isset($this->dataProvider->query)) {
             $modelClass = $this->dataProvider->query->modelClass;
 
-            if (method_exists($modelClass, 'getGridColumns')) {
+            if ($this->enableColumns && method_exists($modelClass, 'getGridColumns')) {
                 $runModel = new $modelClass;
                 $model = GridColumns::find()->where([
                             'modelClass' => $modelClass

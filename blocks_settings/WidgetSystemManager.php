@@ -8,10 +8,13 @@ use yii\helpers\FileHelper;
 class WidgetSystemManager extends \yii\base\Component {
 
     public function getSystemClass($alias) {
+
         $reflect = new \ReflectionClass($alias);
+
+
         $namespace = $reflect->getNamespaceName().'\\form';
         $fpath = dirname($reflect->getFileName()) . DIRECTORY_SEPARATOR . 'form';
-        
+
         if (file_exists($fpath)) {
     
             $test = FileHelper::findFiles($fpath, [
@@ -25,14 +28,15 @@ class WidgetSystemManager extends \yii\base\Component {
 
                 return new $classNamespace;
             }
-
         } else {
 
             if (Yii::$app->request->isAjax)
                 die('система не обнаружела настройки виджета');
             return false;
         }
+
     }
+
 
     public function getWidgetTitle($alias) {
         $arr = explode('.', $alias);

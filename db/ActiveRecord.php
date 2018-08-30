@@ -2,17 +2,19 @@
 
 namespace panix\engine\db;
 
+use panix\mod\shop\models\Category;
 use Yii;
 use yii\base\Exception;
 use yii\helpers\Json;
 
-class ActiveRecord extends \yii\db\ActiveRecord {
+class ActiveRecord extends \yii\db\ActiveRecord
+{
 
     /**
      * Disallow actions
      * @disallow_delete array ids
      * @disallow_switch array ids
-     * @disallow_update array ids 
+     * @disallow_update array ids
      */
     public $disallow_delete = [];
     public $disallow_switch = [];
@@ -25,7 +27,8 @@ class ActiveRecord extends \yii\db\ActiveRecord {
     const route = null;
     const MODULE_ID = null;
 
-    public function getColumnSearch($array = array()) {
+    public function getColumnSearch($array = array())
+    {
         $col = $this->gridColumns;
         $result = array();
         if (isset($col['DEFAULT_COLUMNS'])) {
@@ -43,7 +46,8 @@ class ActiveRecord extends \yii\db\ActiveRecord {
         return $result;
     }
 
-    public function beforeSave($insert) {
+    public function beforeSave($insert)
+    {
         $columns = $this->tableSchema->columns;
         //if (parent::beforeSave($insert)) {
         //create
@@ -73,7 +77,8 @@ class ActiveRecord extends \yii\db\ActiveRecord {
         return parent::beforeSave($insert);
     }
 
-    public function afterSave222($insert, $changedAttributes) {
+    public function afterSave222($insert, $changedAttributes)
+    {
         if (isset($this->tableSchema->columns['date_update'])) {
             //echo $this->date_update;
             //die('s');
@@ -82,7 +87,8 @@ class ActiveRecord extends \yii\db\ActiveRecord {
         parent::afterSave($insert, $changedAttributes);
     }
 
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         $lang = Yii::$app->language;
         $attrLabels = [];
         foreach ($this->behaviors() as $key => $b) {
@@ -99,7 +105,8 @@ class ActiveRecord extends \yii\db\ActiveRecord {
         return $attrLabels;
     }
 
-    public function behaviors() {
+    public function behaviors()
+    {
         $columns = $this->tableSchema->columns;
         $b = [];
         if (isset($columns['ordern'])) {
@@ -115,29 +122,51 @@ class ActiveRecord extends \yii\db\ActiveRecord {
                 //'value' => new \yii\db\Expression('NOW()'),
                 //'value' => new \yii\db\Expression('CURRENT_TIMESTAMP()'),
                 'value' => new \yii\db\Expression('UTC_TIMESTAMP()'),
-                    //'attributes' => [
-                    //    \yii\db\ActiveRecord::EVENT_BEFORE_INSERT => 'date_create',
-                    //     \yii\db\ActiveRecord::EVENT_BEFORE_UPDATE => 'date_update',
-                    //],
-                    // 'value' => function() { return date('U'); },// unix timestamp
+                //'attributes' => [
+                //    \yii\db\ActiveRecord::EVENT_BEFORE_INSERT => 'date_create',
+                //     \yii\db\ActiveRecord::EVENT_BEFORE_UPDATE => 'date_update',
+                //],
+                // 'value' => function() { return date('U'); },// unix timestamp
             ];
         }
 
         return $b;
     }
 
-    public static function t($message, $params = array()) {
+    public static function t($message, $params = array())
+    {
         $fileName = (new \ReflectionClass(get_called_class()))->getShortName();
         return Yii::t(strtolower(static::MODULE_ID) . '/' . $fileName, $message, $params);
     }
 
-    public function getNextOrPrev($nextOrPrev, $cid = false, $options = array()) {
+
+
+    public function getObjectNext() {
+        $next = $this->find()
+            ->where(['<', 'id', $this->id])
+            ->orderBy(['id'=>SORT_ASC])
+            //->addOrderBy(['id'=>SORT_ASC])
+            ->one();
+        return $next;
+    }
+
+    public function getObjectPrev() {
+        $prev = $this->find()
+            ->where(['>', 'id', $this->id])
+            ->orderBy(['id'=>SORT_DESC])
+            ->one();
+        return $prev;
+    }
+
+
+    public function getNextOrPrev($nextOrPrev, $cid = false, $options = array())
+    {
         $records = NULL;
 
         if ($nextOrPrev == "prev")
-            $order = "id ASC";
+            $order = [$this::tableName() . '.id' => SORT_ASC];
         if ($nextOrPrev == "next")
-            $order = "id DESC";
+            $order = [$this::tableName() . '.id' => SORT_DESC];
 
         if (!isset($options['select']))
             $options['select'] = [$this::tableName() . '.*'];
@@ -148,13 +177,15 @@ class ActiveRecord extends \yii\db\ActiveRecord {
 
         //$modelParams
         $records = $this::find()
-                ->select($options['select'])
-                ->where(['switch' => 1])
+            ->select($options['select'])
+            ->where([$this::tableName() . '.switch' => 1])
+            ->andWhere([Category::tableName().'.id' => 45])
+            ->joinWith('mainCategory')
+            ->orderBy($order)
+            ->all();
 
-                // ->joinWith('category2')
-                ->orderBy($order)
-                ->all();
-
+        echo count($records);
+        echo '<br>';
         foreach ($records as $i => $r)
             if ($r->id == $this->id)
                 return (isset($records[$i + 1])) ? $records[$i + 1] : NULL;
@@ -164,10 +195,11 @@ class ActiveRecord extends \yii\db\ActiveRecord {
 
     /**
      * Special for widget ext.admin.frontControl
-     * 
+     *
      * @return string
      */
-    public function getCreateUrl() {
+    public function getCreateUrl()
+    {
         if (static::route) {
             return Yii::$app->urlManager->createUrl(static::route . '/' . static::route_create);
         } else {
@@ -177,7 +209,8 @@ class ActiveRecord extends \yii\db\ActiveRecord {
         }
     }
 
-    public function isString($attribute) {
+    public function isString($attribute)
+    {
         if (Yii::$app->user->can('admin')) {
             $html = '<form action="' . $this->getUpdateUrl() . '" method="POST">';
             $html .= '<span id="' . basename(get_class($this)) . '[' . $attribute . ']" class="edit_mode_title">' . $this->$attribute . '</span>';
@@ -188,7 +221,8 @@ class ActiveRecord extends \yii\db\ActiveRecord {
         }
     }
 
-    public function isText($attribute) {
+    public function isText($attribute)
+    {
         if (Yii::$app->user->can('admin')) {
             $html = '<form action="' . $this->getUpdateUrl() . '" method="POST">';
             $html .= '<div id="' . basename(get_class($this)) . '[' . $attribute . ']" class="edit_mode_text">' . $this->$attribute . '</div>';
@@ -203,11 +237,12 @@ class ActiveRecord extends \yii\db\ActiveRecord {
      * Special for widget ext.admin.frontControl
      * @return string
      */
-    public function getDeleteUrl() {
+    public function getDeleteUrl()
+    {
         if (static::route) {
             return Yii::$app->urlManager->createUrl([static::route . '/' . static::route_delete,
-                        'model' => get_class($this),
-                        'id' => $this->id
+                'model' => get_class($this),
+                'id' => $this->id
             ]);
         } else {
             throw new Exception(Yii::t('app', 'NOTFOUND_CONST_AR', array(
@@ -221,10 +256,11 @@ class ActiveRecord extends \yii\db\ActiveRecord {
      * Special for widget ext.admin.frontControl
      * @return string
      */
-    public function getUpdateUrl() {
+    public function getUpdateUrl()
+    {
         if (static::route) {
             return Yii::$app->urlManager->createUrl([static::route . '/' . static::route_update,
-                        'id' => $this->id
+                'id' => $this->id
             ]);
         } else {
             throw new Exception(Yii::t('app', 'NOTFOUND_CONST_AR', array(
@@ -239,7 +275,8 @@ class ActiveRecord extends \yii\db\ActiveRecord {
      * @param string $attr
      * @return string
      */
-    public function pageBreak($attr = false) {
+    public function pageBreak($attr = false)
+    {
         if ($attr) {
             $pageVar = intval(Yii::$app->request->get('page'));
             $pageBreak = explode("<!-- pagebreak -->", $this->$attr);
@@ -248,12 +285,12 @@ class ActiveRecord extends \yii\db\ActiveRecord {
             $pageVar = ($pageVar == "" || $pageVar < 1) ? 1 : $pageVar;
             if ($pageVar > $pageCount)
                 $pageVar = $pageCount;
-            $arrayelement = (int) $pageVar;
+            $arrayelement = (int)$pageVar;
             $arrayelement--;
 
             $content = $pageBreak[$arrayelement];
             $content .= \yii\widgets\LinkPager::widget([
-                        'pagination' => new \yii\data\Pagination(['totalCount' => $pageCount, 'pageSize' => 1]),
+                'pagination' => new \yii\data\Pagination(['totalCount' => $pageCount, 'pageSize' => 1]),
             ]);
 
             return $content;
@@ -263,12 +300,13 @@ class ActiveRecord extends \yii\db\ActiveRecord {
     /**
      * @return string
      */
-    public function getSwitchUrl() {
+    public function getSwitchUrl()
+    {
         if (static::route) {
             return Yii::$app->urlManager->createUrl(static::route . '/' . static::route_switch, array(
-                        'model' => get_class($this),
-                        'switch' => 0,
-                        'id' => $this->id
+                'model' => get_class($this),
+                'switch' => 0,
+                'id' => $this->id
             ));
         } else {
             throw new Exception(Yii::t('app', 'NOTFOUND_CONST_AR', array(

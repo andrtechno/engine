@@ -2,18 +2,26 @@
 
 namespace panix\engine\controllers;
 
+use Viber\Client;
 use Yii;
 use yii\web\Controller;
 use panix\engine\CMS;
 use yii\web\ForbiddenHttpException;
 
-class WebController extends Controller {
+use Viber\Bot;
+use Viber\Api\Sender;
 
-    public $breadcrumbs = [];
-    public $jsMessages = [];
-    public $dataModel, $pageName, $title, $keywords, $description;
+
+class WebController extends Controller
+{
+
+    public $breadcrumbs, $jsMessages = [];
+    public $dataModel, $pageName, $keywords, $description;
     public $dashboard = false;
-    public function behaviors() {
+    private $_title;
+
+    public function behaviors()
+    {
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
@@ -35,11 +43,14 @@ class WebController extends Controller {
         ];
     }
 
-    public function actionMain() {
+
+    public function actionMain()
+    {
         return $this->render('index');
     }
 
-    public function actions() {
+    public function actions()
+    {
         return [
             'error2' => [
                 'class' => 'yii\web\ErrorAction',
@@ -51,13 +62,17 @@ class WebController extends Controller {
         ];
     }
 
-    protected function error404($text = null) {
+    protected function error404($text = null)
+    {
         if (!$text)
             $text = Yii::t('app/error', '404');
         throw new \yii\web\NotFoundHttpException($text);
     }
 
-    public function beforeAction($action) {
+    public function beforeAction($action)
+    {
+
+
         $this->view->registerJs('
             common.langauge="' . Yii::$app->language . '";
             common.token="' . Yii::$app->request->csrfToken . '";
@@ -67,7 +82,10 @@ class WebController extends Controller {
         return parent::beforeAction($action);
     }
 
-    public function init() {
+
+    public function init()
+    {
+
         $user = Yii::$app->user;
         $config = Yii::$app->settings->get('app');
         $timeZone = $config['timezone'];
@@ -75,10 +93,10 @@ class WebController extends Controller {
         Yii::setAlias('@themeroot', Yii::getAlias("@webroot/themes/{$config['theme']}"));
         Yii::setAlias('@theme', Yii::getAlias("@web/themes/{$config['theme']}"));
         if (Yii::$app->hasModule('stats') && !$this->dashboard && !Yii::$app->request->isAjax) {
-           //die('count');
-                $stats = Yii::$app->stats;
-                $stats->record();
-      
+            //die('count');
+            $stats = Yii::$app->stats;
+            $stats->record();
+
         }
         $this->jsMessages = [
             'error' => [
@@ -96,16 +114,18 @@ class WebController extends Controller {
         parent::init();
     }
 
-    public function actionNoJavascript() {
+    public function actionNoJavascript()
+    {
         //TODO Пересмотреть данное решение для моб где нету вообще javascript
         $this->layout = 'error';
         return $this->render('no-javascript', [
-                    'name' => '',
-                    'message' => 'На вашем устройстве отключен javascript. Для корректной работы сайта рекомендуем включить.'
+            'name' => '',
+            'message' => 'На вашем устройстве отключен javascript. Для корректной работы сайта рекомендуем включить.'
         ]);
     }
 
-    public function actionError() {
+    public function actionError()
+    {
         $exception = Yii::$app->errorHandler->exception;
 
         if ($exception !== null) {
@@ -115,16 +135,21 @@ class WebController extends Controller {
 
             $this->layout = 'error';
 
-            return $this->render('error', [
-                        'exception' => $exception,
-                        'statusCode' => $statusCode,
-                        'name' => $name,
-                        'message' => $message
+
+            $this->pageName = Yii::t('app/error', $statusCode);
+            $this->title = $statusCode . ' ' . $this->pageName;
+            $this->breadcrumbs = [$statusCode];
+            return $this->render('@themeroot/views/main/error', [
+                'exception' => $exception,
+                'statusCode' => $statusCode,
+                'name' => $name,
+                'message' => $message
             ]);
         }
     }
 
-    public function actionPlaceholder() {
+    public function actionPlaceholder()
+    {
 
         $request = Yii::$app->request;
         // Dimensions
@@ -156,7 +181,7 @@ class WebController extends Controller {
 
         $text = ($request->get('text')) ? strip_tags($request->get('text')) : $getsize;
         $text = str_replace('+', ' ', $text);
-        $padding = ($request->get('padding')) ? (int) $request->get('padding') : 0;
+        $padding = ($request->get('padding')) ? (int)$request->get('padding') : 0;
 
         $fontsize = $dimensions[0] / 2;
 
@@ -185,4 +210,18 @@ class WebController extends Controller {
         Yii::$app->end();
     }
 
+    public function setTitle($title)
+    {
+        $this->_title = $title;
+    }
+
+
+    public function getTitle()
+    {
+        $title = Yii::$app->settings->get('app', 'sitename');
+        if (!empty($this->_title)) {
+            $title = $this->_title .= ' / ' . $title;
+        }
+        return $title;
+    }
 }

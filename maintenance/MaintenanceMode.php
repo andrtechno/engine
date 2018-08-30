@@ -102,7 +102,6 @@ class MaintenanceMode extends Component {
         if (Yii::$app instanceof \yii\console\Application) {
             Yii::$app->controllerMap['maintenance'] = 'panix\engine\maintenance\commands\MaintenanceController';
         } else {
-
             if ($this->getIsEnabled()) {
                 $this->filtering();
             }
@@ -162,7 +161,7 @@ class MaintenanceMode extends Component {
      * Filtering by configuration.
      * @throws InvalidConfigException
      */
-    protected function filtering() {
+    public function filtering() {
         $app = Yii::$app;
         $config = $app->settings->get('app');
         if ($this->statusCode) {

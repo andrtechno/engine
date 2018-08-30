@@ -15,7 +15,7 @@ class AdminController extends WebController {
 
     public function beforeAction($event) {
         if (Yii::$app->user->isGuest && get_class($this) !== 'panix\mod\admin\controllers\AuthController') {
-            Yii::$app->response->redirect(['/admin/auth']);
+            //Yii::$app->response->redirect(['/admin/auth']);
         }
 
         return parent::beforeAction($event);
@@ -27,7 +27,7 @@ class AdminController extends WebController {
             throw new ForbiddenHttpException(Yii::t('app', 'ACCESS_DENIED'));
         }
 
-        Yii::setAlias('@admin', Yii::getAlias('@vendor/panix/mod-admin'));
+        //Yii::setAlias('@admin', Yii::getAlias('@vendor/panix/mod-admin'));
 
         parent::init();
     }

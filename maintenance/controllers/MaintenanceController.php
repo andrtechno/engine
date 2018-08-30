@@ -26,7 +26,18 @@ class MaintenanceController extends WebController {
             return false;
         }
         return $this->render($app->maintenanceMode->viewPath, [
-                    'message' => $app->settings->get('app','maintenance_text')
+            'message' => $app->settings->get('app','maintenance_text')
+        ]);
+    }
+
+
+    public function actionCopyright() {
+        $app = Yii::$app;
+        if ($app->getRequest()->getIsAjax()) {
+            return false;
+        }
+        return $this->render($app->maintenanceMode->viewPath, [
+            'message' => 'cxopy das'
         ]);
     }
 

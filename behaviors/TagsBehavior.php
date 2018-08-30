@@ -1,6 +1,11 @@
 <?php
+namespace panix\engine\behaviors;
 
-class TagsBehavior extends CActiveRecordBehavior {
+use panix\engine\Html;
+use yii\base\Behavior;
+use panix\mod\admin\models\Tag;
+use yii\db\ActiveRecord;
+class TagsBehavior extends Behavior {
 
     private $_oldTags;
 
@@ -10,40 +15,50 @@ class TagsBehavior extends CActiveRecordBehavior {
         return parent::attach($owner);
     }
 
+
+    public function events() {
+        return [
+            ActiveRecord::EVENT_AFTER_INSERT => 'afterSave',
+            ActiveRecord::EVENT_AFTER_UPDATE => 'afterSave',
+            ActiveRecord::EVENT_AFTER_FIND => 'afterFind',
+            ActiveRecord::EVENT_AFTER_DELETE => 'afterDelete',
+        ];
+    }
+
     public function normalizeTags($attribute, $params) {
-        $this->tags = Tag::array2string(array_unique(Tag::string2array($this->getOwner()->tags)));
+        $this->tags = Tag::array2string(array_unique(Tag::string2array($this->owner->tags)));
     }
 
     public function getTagLinks() {
         $links = array();
-        foreach (Tag::string2array($this->getOwner()->tags) as $tag)
-            $links[] = Html::link(Html::encode($tag), array($this->router, 'tag' => $tag));
+        foreach (Tag::string2array($this->owner->tags) as $tag)
+            $links[] = Html::a(Html::encode($tag), array($this->router, 'tag' => $tag));
         return $links;
     }
 
     /**
      * Apply object translation
      */
-    public function afterFind($event) {
-        $this->_oldTags = $this->getOwner()->tags;
-        return parent::afterFind($event);
+    public function afterFind() {
+        $this->_oldTags = $this->owner->tags;
+
     }
 
 
     /**
      * Update model translations
      */
-    public function afterSave($event) {
+    public function afterSave() {
 
-        Tag::model()->updateFrequency($this->_oldTags, $this->getOwner()->tags);
-        return parent::afterSave($event);
+        $test = Tag::find()->updateFrequency($this->_oldTags, $this->owner->tags);
+
     }
 
     /**
      * Delete model related translations
      */
-    public function afterDelete($event) {
-        Tag::model()->updateFrequency($this->getOwner()->tags, '');
+    public function afterDelete() {
+        Tag::find()->updateFrequency($this->owner->tags, '');
         return true;
     }
 

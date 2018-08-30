@@ -9,7 +9,7 @@ class View extends \yii\web\View {
 
     public function endPage($ajaxMode = false) {
         $this->trigger(self::EVENT_END_PAGE);
-        $copyright = '<a href="//corner-cms.com/" id="corner" target="_blank"><span>' . Yii::t('app', 'CORNER') . '</span> &mdash; <span class="cr-logo">CORNER</span></a>';
+        $copyright = '<a href="//corner-cms.com/" rel="nofollow" id="corner" target="_blank"><span>' . Yii::t('app', 'CORNER') . '</span> &mdash; <span class="cr-logo">CORNER</span></a>';
 
         $content = ob_get_clean();
 
@@ -22,11 +22,20 @@ class View extends \yii\web\View {
             }
         }
         $content = str_replace(base64_decode('e2NvcHlyaWdodH0='), $copyright, $content);
+
+
+
+       // if (!Yii::$app->request->isAjax && !preg_match("#" . base64_decode('e2NvcHlyaWdodH0=') . "#", $content)) { // && !preg_match("/print/", $this->layout)
+            //  die(Yii::t('app','NO_COPYRIGHT'));
+       // }
+
+
         echo strtr($content, [
             self::PH_HEAD => $this->renderHeadHtml(),
             self::PH_BODY_BEGIN => $this->renderBodyBeginHtml(),
             self::PH_BODY_END => $this->renderBodyEndHtml($ajaxMode),
         ]);
+
 
         $this->clear();
     }
@@ -37,7 +46,6 @@ class View extends \yii\web\View {
         $this->registerMetaTag(['name' => 'generator', 'content' => Yii::$app->name . ' ' . Yii::$app->version]);
 
 
-        // if (!isset(Yii::$app->controller->dashboard)) {
         if (!(Yii::$app->controller instanceof \panix\engine\controllers\AdminController)) {
             Yii::$app->seo->run();
 

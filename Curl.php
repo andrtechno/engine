@@ -3,617 +3,358 @@
 namespace panix\engine;
 
 use Yii;
-use yii\base\Exception;
-use yii\helpers\Json;
-use yii\web\HttpException;
-/**
- * https://github.com/linslin/Yii2-Curl
+
+/*
+
+ * Yii extension CURL
+
+ * This is a base class for procesing CURL REQUEST
+ *
+ * @author Igor Ivanović
+ * @version 0.2
+ * @last update:
+ * @filesource CURL.php
+ * @ignore
+ *
+  1. You have to download and upload files to /protected/extensions/curl/.
+  2. Include extension in config/main.php
+
+
+  you can setup timeout, http_login, proxy, proxylogin, cookie, and any curl option
+
+  'curl' => array(
+  'class' => 'application.extensions.curl.Curl',
+  'options'=>array(
+  'timeout'=>0,
+
+  'cookie'=>array(
+  'set'=>'cookie'
+  ),
+
+  'login'=>array(
+  'username'=>'myuser',
+  'password'=>'mypass'
+  ),
+
+  'proxy'=>array(
+  'url'=>'someproxy.com',
+  'port'=>80
+  ),
+
+  'proxylogin'=>array(
+  'username'=>'someuser',
+  'password'=>'somepasswords'
+  ),
+
+
+  'setOptions'=>array(
+  CURLOPT_UPLOAD => true,
+  CURLOPT_USERAGENT => Yii::app()->params['agent'];
+  ),
+  )
+  ),
  */
-class Curl {
+
+class Curl extends \yii\base\Component {
 
     /**
-     * @var string|boolean
-     * Holds response data right after sending a request.
-     */
-    public $response = null;
-
-    /**
-     * @var null|integer
-     * Error code holder: https://curl.haxx.se/libcurl/c/libcurl-errors.html
-     */
-    public $errorCode = null;
-
-    /**
-     * @var null|string
-     * Error text holder: http://php.net/manual/en/function.curl-strerror.php
-     */
-    public $errorText = null;
-
-    /**
-     * @var integer HTTP-Status Code
-     * This value will hold HTTP-Status Code. False if request was not successful.
-     */
-    public $responseCode = null;
-
-    /**
-     * @var string|null HTTP Response Charset
-     * (taken from Content-type header)
-     */
-    public $responseCharset = null;
-
-    /**
-     * @var int HTTP Response Length
-     * (taken from Content-length header, or strlen() of downloaded content)
-     */
-    public $responseLength = -1;
-
-    /**
-     * @var string|null HTTP Response Content Type
-     * (taken from Content-type header)
-     */
-    public $responseType = null;
-
-    /**
-     * @var array|null HTTP Response headers
-     * Lists response header in an array if CURLOPT_HEADER is set to true.
-     */
-    public $responseHeaders = null;
-
-    /**
-     * @var array HTTP-Status Code
-     * Custom options holder
-     */
-    protected $_options = [];
-
-    /**
-     * @var array
-     * Hold array of get params to send with the request
-     */
-    protected $_getParams = [];
-
-    /**
-     * @var array
-     * Hold array of post params to send with the request
-     */
-    protected $_postParams = [];
-
-    /**
-     * @var resource|null
-     * Holds cURL-Handler
-     */
-    public $curl = null;
-
-    /**
+     * Url to connect
      * @var string
-     * hold base URL
      */
-    protected $_baseUrl = '';
+    protected $url;
 
     /**
-     * @var array default curl options
-     * Default curl options
+     * Connection
+     * @var object
      */
-    protected $_defaultOptions = [
-        CURLOPT_USERAGENT => 'CORNERCMS-Curl-Agent',
-        CURLOPT_TIMEOUT => 30,
-        CURLOPT_CONNECTTIMEOUT => 30,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => false,
-    ];
-
-    // ############################################### class methods // ##############################################
-    /**
-     * Start performing GET-HTTP-Request
-     *
-     * @param string  $url
-     * @param boolean $raw if response body contains JSON and should be decoded
-     *
-     * @return mixed response
-     */
-    public function get($url, $raw = true) {
-        $this->_baseUrl = $url;
-        return $this->_httpRequest('GET', $raw);
-    }
+    protected $ch;
 
     /**
-     * Start performing HEAD-HTTP-Request
-     *
-     * @param string $url
-     *
-     * @return mixed response
+     * Options
+     * @var array
      */
-    public function head($url) {
-        $this->_baseUrl = $url;
-        return $this->_httpRequest('HEAD');
-    }
+    public $options = array();
 
     /**
-     * Start performing POST-HTTP-Request
-     *
-     * @param string  $url
-     * @param boolean $raw if response body contains JSON and should be decoded
-     *
-     * @return mixed response
+     * Info
+     * @var array
      */
-    public function post($url, $raw = true) {
-        $this->_baseUrl = $url;
-        return $this->_httpRequest('POST', $raw);
-    }
+    private $info = array();
 
     /**
-     * Start performing PUT-HTTP-Request
-     *
-     * @param string  $url
-     * @param boolean $raw if response body contains JSON and should be decoded
-     *
-     * @return mixed response
+     * Error code
+     * @var int
      */
-    public function put($url, $raw = true) {
-        $this->_baseUrl = $url;
-        return $this->_httpRequest('PUT', $raw);
-    }
+    private $error_code = 0;
 
     /**
-     * Start performing PATCH-HTTP-Request
-     *
-     * @param string  $url
-     * @param boolean $raw if response body contains JSON and should be decoded
-     *
-     * @return mixed response
+     * Error
+     * @var string
      */
-    public function patch($url, $raw = true) {
-        $this->_baseUrl = $url;
-        $this->setHeaders([
-            'X-HTTP-Method-Override' => 'PATCH'
-        ]);
-        return $this->_httpRequest('POST', $raw);
-    }
+    private $error = null;
 
     /**
-     * Start performing DELETE-HTTP-Request
-     *
-     * @param string  $url
-     * @param boolean $raw if response body contains JSON and should be decoded
-     *
-     * @return mixed response
+     * Gets data
+     * @var null
      */
-    public function delete($url, $raw = true) {
-        $this->_baseUrl = $url;
-        return $this->_httpRequest('DELETE', $raw);
-    }
+    private $data = null;
 
     /**
-     * Set curl option
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return $this
+     * Valid options
+     * @var array
      */
-    public function setOption($key, $value) {
-        //set value
-        if (array_key_exists($key, $this->_defaultOptions) && $key !== CURLOPT_WRITEFUNCTION) {
-            $this->_defaultOptions[$key] = $value;
-        } else {
-            $this->_options[$key] = $value;
+    protected $validOptions = array(
+        'timeout' => array('type' => 'integer'),
+        'login' => array('type' => 'array'),
+        'proxy' => array('type' => 'array'),
+        'proxylogin' => array('type' => 'array'),
+        'setOptions' => array('type' => 'array'),
+    );
+
+    /**
+     * Initialize the extension
+     * check to see if CURL is enabled and the format used is a valid one
+     */
+    public function init() {
+        if (!function_exists('curl_init')) {
+            throw new Exception(Yii::t('Curl', 'You must have CURL enabled in order to use this extension.'));
         }
-        //return self
-        return $this;
     }
 
     /**
-     * Set get params
-     *
-     * @param array $params
-     * @return $this
+     * Set any extra option
+     * @param $key
+     * @param $value
      */
-    public function setGetParams($params) {
-        if (is_array($params)) {
-            foreach ($params as $key => $value) {
-                $this->_getParams[$key] = $value;
+    protected function setOption($key, $value) {
+        curl_setopt($this->ch, $key, $value);
+    }
+
+    /**
+     * Format url
+     * @param $url
+     */
+    public function setUrl($url) {
+        if (!preg_match('!^\w+://! i', $url)) {
+            $url = 'http://' . $url;
+        }
+        $this->url = $url;
+    }
+
+    /**
+     * Set cookies
+     * @param $values
+     * @throws CException
+     */
+    public function setCookies($values) {
+        if (!is_array($values)) {
+            throw new Exception(Yii::t('Curl', 'options must be an array'));
+        } else {
+            $params = $this->cleanPost($values);
+        }
+        $this->setOption(CURLOPT_COOKIE, $params);
+    }
+
+    /**
+     * Setup http login
+     * @param string $username
+     * @param string $password
+     */
+    public function setHttpLogin($username = '', $password = '') {
+        $this->setOption(CURLOPT_USERPWD, $username . ':' . $password);
+    }
+
+    /**
+     * Set proxy
+     * @param $url
+     * @param int $port
+     */
+    public function setProxy($url, $port = 80) {
+        $this->setOption(CURLOPT_HTTPPROXYTUNNEL, true);
+        $this->setOption(CURLOPT_PROXY, $url . ':' . $port);
+    }
+
+    /**
+     * Set proxy login
+     * @param string $username
+     * @param string $password
+     */
+    public function setProxyLogin($username = '', $password = '') {
+        $this->setOption(CURLOPT_PROXYUSERPWD, $username . ':' . $password);
+    }
+
+    /**
+     * Check options
+     * @param $value
+     * @param $validOptions
+     * @throws CException
+     */
+    protected static function checkOptions($value, $validOptions) {
+        if (!empty($validOptions)) {
+            foreach ($value as $key => $val) {
+
+                if (!array_key_exists($key, $validOptions)) {
+                    throw new Exception(Yii::t('Curl', '{k} is not a valid option', array('{k}' => $key)));
+                }
+                $type = gettype($val);
+                if ((!is_array($validOptions[$key]['type']) && ($type != $validOptions[$key]['type'])) || (is_array(
+                                $validOptions[$key]['type']
+                        ) && !in_array($type, $validOptions[$key]['type']))
+                ) {
+                    throw new Exception(Yii::t(
+                            'Curl', '{k} must be of type {t}', array('{k}' => $key, '{t}' => $validOptions[$key]['type'])
+                    ));
+                }
+
+                if (($type == 'array') && array_key_exists('elements', $validOptions[$key])) {
+                    self::checkOptions($val, $validOptions[$key]['elements']);
+                }
             }
         }
-        //return self
-        return $this;
     }
 
     /**
-     * Set get params
-     *
-     * @param array $params
-     * @return $this
+     * Defaults for using
      */
-    public function setPostParams($params) {
-        if (is_array($params)) {
-            $this->setOption(
-                    CURLOPT_POSTFIELDS, http_build_query($params)
-            );
-        }
-        //return self
-        return $this;
-    }
-
-    /**
-     * Set raw post data allows you to post any data format.
-     *
-     * @param mixed $data
-     * @return $this
-     */
-    public function setRawPostData($data) {
-        $this->setOption(
-                CURLOPT_POSTFIELDS, $data
+    protected function defaults() {
+        !isset($this->options['timeout']) ? $this->setOption(CURLOPT_TIMEOUT, 30) : $this->setOption(
+                                CURLOPT_TIMEOUT, $this->options['timeout']
         );
-        //return self
-        return $this;
+        isset($this->options['setOptions'][CURLOPT_HEADER]) ? $this->setOption(
+                                CURLOPT_HEADER, $this->options['setOptions'][CURLOPT_HEADER]
+                        ) : $this->setOption(CURLOPT_HEADER, true);
+        isset($this->options['setOptions'][CURLOPT_RETURNTRANSFER]) ? $this->setOption(
+                                CURLOPT_RETURNTRANSFER, $this->options['setOptions'][CURLOPT_RETURNTRANSFER]
+                        ) : $this->setOption(CURLOPT_RETURNTRANSFER, true);
+        isset($this->options['setOptions'][CURLOPT_FOLLOWLOCATION]) ? $this->setOption(
+                                CURLOPT_FOLLOWLOCATION, $this->options['setOptions'][CURLOPT_FOLLOWLOCATION]
+                        ) : $this->setOption(CURLOPT_FOLLOWLOCATION, true);
+        isset($this->options['setOptions'][CURLOPT_FAILONERROR]) ? $this->setOption(
+                                CURLOPT_FAILONERROR, $this->options['setOptions'][CURLOPT_FAILONERROR]
+                        ) : $this->setOption(CURLOPT_FAILONERROR, true);
     }
 
     /**
-     * Set get params
-     *
-     * @param string $data
+     * Has error
+     * @return stdClass
+     */
+    public function hasErrors() {
+        return $this->error_code !== 0;
+    }
+
+    /**
+     * Errors
+     * @return stdClass
+     */
+    public function getErrors() {
+        $c = new \stdClass();
+        $c->code = $this->error_code;
+        $c->message = $this->error;
+        $c->hasError = $this->error_code !== 0;
+        return $c;
+    }
+
+    /**
+     * Return data
+     * @return null
+     */
+    public function getData() {
+        return $this->data;
+    }
+
+    /**
+     * Return data
+     * @return null
+     */
+    public function getInfo() {
+        return $this->info;
+    }
+
+    /**
+     * Handle curl
+     * @param $url
+     * @param array $post_data
      * @return $this
+     * @throws CException
      */
-    public function setRequestBody($data) {
-        if (is_string($data)) {
-            $this->setOption(
-                    CURLOPT_POSTFIELDS, $data
-            );
-        }
-        //return self
-        return $this;
-    }
+    private function handleCurl($url, $post_data = array()) {
 
-    /**
-     * Get URL - return URL parsed with given params
-     *
-     * @return string The full URL with parsed get params
-     */
-    public function getUrl() {
-        if (Count($this->_getParams) > 0) {
-            return $this->_baseUrl . '?' . http_build_query($this->_getParams);
+        $this->setUrl($url);
+
+        if (!$this->url) {
+            throw new Exception(Yii::t('Curl', 'You must set Url.'));
+        }
+
+        $this->ch = curl_init();
+
+        self::checkOptions($this->options, $this->validOptions);
+
+
+        if (empty($post_data)) {
+            $this->setOption(CURLOPT_URL, $this->url);
+            $this->defaults();
         } else {
-            return $this->_baseUrl;
-        }
-    }
-
-    /**
-     * Set curl options
-     *
-     * @param array $options
-     *
-     * @return $this
-     */
-    public function setOptions($options) {
-        $this->_options = $options + $this->_options;
-        return $this;
-    }
-
-    /**
-     * Set multiple headers for request.
-     *
-     * @param array $headers
-     *
-     * @return $this
-     */
-    public function setHeaders($headers) {
-        if (is_array($headers)) {
-            //init
-            $parsedHeader = [];
-            //collect currently set headers
-            foreach ($this->getRequestHeaders() as $header => $value) {
-                array_push($parsedHeader, $header . ':' . $value);
+            if (!is_array($post_data)) {
+                throw new Exception('post_data must be an array type');
             }
-            //parse header into right format key:value
-            foreach ($headers as $header => $value) {
-                array_push($parsedHeader, $header . ':' . $value);
-            }
-            //set headers
-            $this->setOption(
-                    CURLOPT_HTTPHEADER, $parsedHeader
-            );
+            $this->setOption(CURLOPT_URL, $this->url);
+            $this->defaults();
+            $this->setOption(CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+            $this->setOption(CURLOPT_POST, 1);
+            $this->setOption(CURLOPT_POSTFIELDS, $post_data);
         }
-        return $this;
-    }
 
-    /**
-     * Set a single header for request.
-     *
-     * @param string $header
-     * @param string $value
-     *
-     * @return $this
-     */
-    public function setHeader($header, $value) {
-        //init
-        $parsedHeader = [];
-        //collect currently set headers
-        foreach ($this->getRequestHeaders() as $headerToSet => $valueToSet) {
-            array_push($parsedHeader, $headerToSet . ':' . $valueToSet);
-        }
-        //add override new header
-        if (strlen($header) > 0) {
-            array_push($parsedHeader, $header . ':' . $value);
-        }
-        //set headers
-        $this->setOption(
-                CURLOPT_HTTPHEADER, $parsedHeader
-        );
-        return $this;
-    }
-
-    /**
-     * Unset a single header.
-     *
-     * @param string $header
-     *
-     * @return $this
-     */
-    public function unsetHeader($header) {
-        //init
-        $parsedHeader = [];
-        //collect currently set headers and filter "unset" header param.
-        foreach ($this->getRequestHeaders() as $headerToSet => $valueToSet) {
-            if ($header !== $headerToSet) {
-                array_push($parsedHeader, $headerToSet . ':' . $valueToSet);
+        if (isset($this->options['setOptions'])) {
+            foreach ($this->options['setOptions'] as $k => $v) {
+                $this->setOption($k, $v);
             }
         }
-        //set headers
-        $this->setOption(
-                CURLOPT_HTTPHEADER, $parsedHeader
-        );
-        return $this;
-    }
 
-    /**
-     * Get all request headers as key:value array
-     *
-     * @return array
-     */
-    public function getRequestHeaders() {
-        //Init
-        $requestHeaders = $this->getOption(CURLOPT_HTTPHEADER);
-        $parsedRequestHeaders = [];
-        if (is_array($requestHeaders)) {
-            foreach ($requestHeaders as $headerValue) {
-                list ($key, $value) = explode(':', $headerValue, 2);
-                $parsedRequestHeaders[$key] = $value;
-            }
-        }
-        return $parsedRequestHeaders;
-    }
+        isset($this->options['login']) ? $this->setHttpLogin(
+                                $this->options['login']['username'], $this->options['login']['password']
+                        ) : null;
+        isset($this->options['proxy']) ? $this->setProxy(
+                                $this->options['proxy']['url'], $this->options['proxy']['port']
+                        ) : null;
 
-    /**
-     * Get specific request header as key:value array
-     *
-     * @param string $headerKey
-     *
-     * @return string|null
-     */
-    public function getRequestHeader($headerKey) {
-        //Init
-        $parsedRequestHeaders = $this->getRequestHeaders();
-        return isset($parsedRequestHeaders[$headerKey]) ? $parsedRequestHeaders[$headerKey] : null;
-    }
-
-    /**
-     * Unset a single curl option
-     *
-     * @param string $key
-     *
-     * @return $this
-     */
-    public function unsetOption($key) {
-        //reset a single option if its set already
-        if (isset($this->_options[$key])) {
-            unset($this->_options[$key]);
-        }
-        return $this;
-    }
-
-    /**
-     * Unset all curl option, excluding default options.
-     *
-     * @return $this
-     */
-    public function unsetOptions() {
-        //reset all options
-        if (isset($this->_options)) {
-            $this->_options = [];
-        }
-        return $this;
-    }
-
-    /**
-     * Total reset of options, responses, etc.
-     *
-     * @return $this
-     */
-    public function reset() {
-        if ($this->curl !== null) {
-            curl_close($this->curl); //stop curl
-        }
-        //reset all options
-        if (isset($this->_options)) {
-            $this->_options = [];
-        }
-        //reset response & status params
-        $this->curl = null;
-        $this->errorCode = null;
-        $this->response = null;
-        $this->responseCode = null;
-        $this->responseCharset = null;
-        $this->responseLength = -1;
-        $this->responseType = null;
-        $this->errorText = null;
-        $this->_postParams = [];
-        $this->_getParams = [];
-        return $this;
-    }
-
-    /**
-     * Return a single option
-     *
-     * @param string|integer $key
-     * @return mixed|boolean
-     */
-    public function getOption($key) {
-        //get merged options depends on default and user options
-        $mergesOptions = $this->getOptions();
-        //return value or false if key is not set.
-        return isset($mergesOptions[$key]) ? $mergesOptions[$key] : false;
-    }
-
-    /**
-     * Return merged curl options and keep keys!
-     *
-     * @return array
-     */
-    public function getOptions() {
-        return $this->_options + $this->_defaultOptions;
-    }
-
-    /**
-     * Get curl info according to http://php.net/manual/de/function.curl-getinfo.php
-     *
-     * @param null $opt
-     * @return array|mixed
-     */
-    public function getInfo($opt = null) {
-        if ($this->curl !== null && $opt === null) {
-            return curl_getinfo($this->curl);
-        } elseif ($this->curl !== null && $opt !== null) {
-            return curl_getinfo($this->curl, $opt);
-        } else {
-            return [];
-        }
-    }
-
-    /**
-     * Performs HTTP request
-     *
-     * @param string  $method
-     * @param boolean $raw if response body contains JSON and should be decoded -> helper.
-     *
-     * @throws Exception if request failed
-     *
-     * @return mixed
-     */
-    protected function _httpRequest($method, $raw = false) {
-        //set request type and writer function
-        $this->setOption(CURLOPT_CUSTOMREQUEST, strtoupper($method));
-        //check if method is head and set no body
-        if ($method === 'HEAD') {
-            $this->setOption(CURLOPT_NOBODY, true);
-            $this->unsetOption(CURLOPT_WRITEFUNCTION);
-        }
-        //setup error reporting and profiling
-        if (YII_DEBUG) {
-            Yii::trace('Start sending cURL-Request: ' . $this->getUrl() . '\n', __METHOD__);
-            Yii::beginProfile($method . ' ' . $this->_baseUrl . '#' . md5(serialize($this->getOption(CURLOPT_POSTFIELDS))), __METHOD__);
-        }
-        /**
-         * proceed curl
-         */
-        $curlOptions = $this->getOptions();
-        $this->curl = curl_init($this->getUrl());
-        curl_setopt_array($this->curl, $curlOptions);
-        $response = curl_exec($this->curl);
-        //check if curl was successful
-        if ($response === false) {
-            //set error code
-            $this->errorCode = curl_errno($this->curl);
-            $this->errorText = curl_strerror($this->errorCode);
-            switch ($this->errorCode) {
-                // 7, 28 = timeout
-                case 7:
-                case 28:
-                    $this->responseCode = 'timeout';
-                    return false;
-                    break;
-                default:
-                    return false;
-                    break;
-            }
-        }
-        //extract header / body data if CURLOPT_HEADER are set to true
-        if (isset($curlOptions[CURLOPT_HEADER]) && $curlOptions[CURLOPT_HEADER]) {
-            $this->response = $this->_extractCurlBody($response);
-            $this->responseHeaders = $this->_extractCurlHeaders($response);
-        } else {
-            $this->response = $response;
-        }
-        // Extract additional curl params
-        $this->_extractAdditionalCurlParameter();
-        //end yii debug profile
-        if (YII_DEBUG) {
-            Yii::endProfile($method . ' ' . $this->getUrl() . '#' . md5(serialize($this->getOption(CURLOPT_POSTFIELDS))), __METHOD__);
-        }
-        //check responseCode and return data/status
-        if ($this->getOption(CURLOPT_CUSTOMREQUEST) === 'HEAD') {
-            return true;
-        } else {
-            $this->response = $raw ? $this->response : Json::decode($this->response);
-            return $this->response;
-        }
-    }
-
-    /**
-     * Extract additional curl params protected class helper
-     */
-    protected function _extractAdditionalCurlParameter() {
-        /**
-         * retrieve response code
-         */
-        $this->responseCode = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
-        /**
-         * try extract response type & charset.
-         */
-        $this->responseType = curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE);
-        if (!is_null($this->responseType) && count(explode(';', $this->responseType)) > 1) {
-            list($this->responseType, $possibleCharset) = explode(';', $this->responseType);
-            //extract charset
-            if (preg_match('~^charset=(.+?)$~', trim($possibleCharset), $matches) && isset($matches[1])) {
-                $this->responseCharset = strtolower($matches[1]);
-            }
-        }
-        /**
-         * try extract response length
-         */
-        $this->responseLength = curl_getinfo($this->curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
-        if ((int) $this->responseLength == -1) {
-            $this->responseLength = strlen($this->response);
-        }
-    }
-
-    /**
-     * Extract body curl data from response
-     *
-     * @param string $response
-     * @return string
-     */
-    protected function _extractCurlBody($response) {
-        return substr($response, $this->getInfo(CURLINFO_HEADER_SIZE));
-    }
-
-    /**
-     * Extract header curl data from response
-     *
-     * @param string $response
-     * @return array
-     */
-    protected function _extractCurlHeaders($response) {
-        //Init
-        $headers = [];
-        $headerText = substr($response, 0, strpos($response, "\r\n\r\n"));
-        foreach (explode("\r\n", $headerText) as $i => $line) {
-            if ($i === 0) {
-                $headers['http_code'] = $line;
+        if (isset($this->options['proxylogin'])) {
+            if (!isset($this->options['proxy'])) {
+                throw new CException(Yii::t(
+                        'Curl', 'If you use "proxylogin", you must define "proxy" with arrays.'
+                ));
             } else {
-                list ($key, $value) = explode(':', $line, 2);
-                $headers[$key] = ltrim($value);
+                $this->setProxyLogin($this->options['login']['username'], $this->options['login']['password']);
             }
         }
-        return $headers;
+
+        $this->data = curl_exec($this->ch);
+
+        // Request failed
+        if ($this->data === false || $this->data === null) {
+            $this->error_code = curl_errno($this->ch);
+            $this->error = curl_error($this->ch);
+        } else {
+            $this->info = curl_getinfo($this->ch);
+        }
+
+        curl_close($this->ch);
+
+
+        return $this;
+    }
+
+    /**
+     * Runing curl
+     * @param $url
+     * @param bool $GET
+     * @param array $POSTSTRING
+     * @return mixed
+     * @throws CException
+     */
+    public function run($url, $post_data = array()) {
+        $reflection = new \ReflectionMethod(get_class($this), 'handleCurl');
+        $reflection->setAccessible(true);
+        return $reflection->invokeArgs($this, array($url, $post_data));
     }
 
 }

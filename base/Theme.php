@@ -6,11 +6,13 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 
-class Theme extends \yii\base\Theme {
+class Theme extends \yii\base\Theme
+{
 
     public $name;
 
-    public function init() {
+    public function init()
+    {
         $this->name = \Yii::$app->settings->get('app', 'theme');
         $this->basePath = "@app/web/themes/{$this->name}";
         $modulesPaths = [];
@@ -19,14 +21,17 @@ class Theme extends \yii\base\Theme {
         }
 
         $this->pathMap = ArrayHelper::merge([
-                    "@app/views" => "@app/web/themes/{$this->name}/views",
-                        ], $modulesPaths);
+            "@app/views" => "@app/web/themes/{$this->name}/views",
+            '@app/modules' => "@app/web/themes/{$this->name}/modules",
+            '@app/widgets' => "@app/web/themes/{$this->name}/widgets",
+        ], $modulesPaths);
 
         $this->baseUrl = "@app/web/themes/{$this->name}";
         parent::init();
     }
 
-    public function alert($type, $text, $close = true) {
+    public function alert($type, $text, $close = true)
+    {
         $id = 'alert' . md5($type . Inflector::slug($text));
         if (!isset($_COOKIE[$id])) {
             $types = array('info', 'warning', 'success', 'failure', 'danger', 'error');
@@ -34,17 +39,27 @@ class Theme extends \yii\base\Theme {
             if (in_array($type, $types)) {
                 $this->render('_' . __FUNCTION__, ['type' => $type, 'message' => $text, 'close' => $close]);
             } else {
-                die('erro alert theme');
+                die('error alert theme');
                 Yii::$app->controller->flashMessage('warning', Yii::t('app', 'TPL_' . strtoupper(__FUNCTION__), array(
-                            '{tpl}' => __FUNCTION__,
-                            '{type}' => $type,
-                                //'{types}' => Html::encode($str)
-                                )
+                        '{tpl}' => __FUNCTION__,
+                        '{type}' => $type,
+                        //'{types}' => Html::encode($str)
+                    )
                 ));
             }
         }
     }
-    private function render($tpl, $array = array()) {
+
+    /*
+    public function beginBlock(){
+        $this->render('_beginBlock', []);
+    }
+    public function beginEnd(){
+        $this->render('_endBlock', []);
+    }
+*/
+    private function render($tpl, $array = array())
+    {
         $render = null;
         $module = Yii::$app->controller->module->id;
         $controller = Yii::$app->controller->id;
@@ -67,7 +82,7 @@ class Theme extends \yii\base\Theme {
             );
         }
         foreach ($layouts as $layout) {
-          
+
             if (file_exists(Yii::getAlias($layout) . '.php')) {
                 $render = $layout;
                 break;
@@ -75,4 +90,5 @@ class Theme extends \yii\base\Theme {
         }
         echo Yii::$app->view->render($render, $array, false, false);
     }
+
 }

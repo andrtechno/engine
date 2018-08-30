@@ -8,8 +8,8 @@ span.emoji-outer {
 	display: -moz-inline-box;
 	display: inline-block;
 	*display: inline;
-	height: 1em;
-	width: 1em;
+	height: 16px;
+	width: 16px;
 }
 
 span.emoji-inner {
