@@ -22,6 +22,7 @@
         "panix/wgt-tinymce": "*",
         "panix/wgt-owlcarousel": "*",
         "panix/wgt-taginput": "*",
+        "panix/wgt-hightcharts": "*",
         "maxmind-db/reader": "~1.0",
         "profitcode/yii2-blocks": "*"
     },
