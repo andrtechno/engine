@@ -6,7 +6,7 @@ use yii\helpers\Json;
 
 class Pjax extends \yii\widgets\Pjax {
 
-    public function registerClientScript() {
+    public function registerClientScript2() {
         $id = $this->options['id'];
         $this->clientOptions['push'] = $this->enablePushState;
         $this->clientOptions['replace'] = $this->enableReplaceState;

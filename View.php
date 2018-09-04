@@ -5,9 +5,11 @@ namespace panix\engine;
 use Yii;
 use yii\helpers\Url;
 
-class View extends \yii\web\View {
+class View extends \yii\web\View
+{
 
-    public function endPage($ajaxMode = false) {
+    public function endPage($ajaxMode = false)
+    {
         $this->trigger(self::EVENT_END_PAGE);
         $copyright = '<a href="//pixelion.com.ua/" id="pixelion" target="_blank"><span>' . Yii::t('app', 'PIXELION') . '</span> &mdash; <span class="cr-logo">PIXELION</span></a>';
 
@@ -24,10 +26,9 @@ class View extends \yii\web\View {
         $content = str_replace(base64_decode('e2NvcHlyaWdodH0='), $copyright, $content);
 
 
-
-       // if (!Yii::$app->request->isAjax && !preg_match("#" . base64_decode('e2NvcHlyaWdodH0=') . "#", $content)) { // && !preg_match("/print/", $this->layout)
-            //  die(Yii::t('app','NO_COPYRIGHT'));
-       // }
+        // if (!Yii::$app->request->isAjax && !preg_match("#" . base64_decode('e2NvcHlyaWdodH0=') . "#", $content)) { // && !preg_match("/print/", $this->layout)
+        //  die(Yii::t('app','NO_COPYRIGHT'));
+        // }
 
 
         echo strtr($content, [
@@ -40,11 +41,16 @@ class View extends \yii\web\View {
         $this->clear();
     }
 
-    public function head() {
-        $this->registerMetaTag(['charset' => Yii::$app->charset]);
-        $this->registerMetaTag(['name' => 'author', 'content' => Yii::$app->name]);
-        $this->registerMetaTag(['name' => 'generator', 'content' => Yii::$app->name . ' ' . Yii::$app->version]);
-
+    public function head()
+    {
+        if (!Yii::$app->request->isAjax) {
+            $this->registerMetaTag(['charset' => Yii::$app->charset]);
+            $this->registerMetaTag(['name' => 'author', 'content' => Yii::$app->name]);
+            $this->registerMetaTag(['name' => 'generator', 'content' => Yii::$app->name . ' ' . Yii::$app->version]);
+        }else{
+            Yii::$app->assetManager->bundles['yii\web\JqueryAsset'] = false;
+            Yii::$app->assetManager->bundles['yii\bootstrap4\BootstrapPluginAsset'] = false;
+        }
 
         if (!(Yii::$app->controller instanceof \panix\engine\controllers\AdminController)) {
             Yii::$app->seo->run();

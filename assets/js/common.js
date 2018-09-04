@@ -241,7 +241,7 @@ function setSwitch(url,id, s, pjax) {
         }
     }).done(function (data) {
         //common.notify(data.message,'success');
-        $.pjax.reload({container: pjax});
+        $.pjax.reload({container: '#'+pjax});
         //$('#w0').yiiGridView('applyFilter');
     });
     return false;

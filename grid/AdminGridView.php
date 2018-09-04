@@ -481,7 +481,7 @@ class AdminGridView extends BaseListView
                 $column = $this->createDataColumn($column);
             } else {
                 $column = Yii::createObject(array_merge([
-                    'class' => $this->dataColumnClass ? : DataColumn::className(),
+                    'class' => $this->dataColumnClass ? : DataColumn::class,
                     'grid' => $this,
                 ], $column));
             }
