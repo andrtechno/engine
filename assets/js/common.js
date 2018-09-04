@@ -240,7 +240,7 @@ function setSwitch(url,id, s, pjax) {
             s: s
         }
     }).done(function (data) {
-        //common.notify(data.message,'success');
+        common.notify(data.message,'success');
         $.pjax.reload({container: '#'+pjax});
         //$('#w0').yiiGridView('applyFilter');
     });

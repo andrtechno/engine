@@ -24,7 +24,7 @@ return [
     'CREATE' => 'Add',
     'YES'=>'Yes',
     'NO'=>'No',
-    'DELETE_COMFIRM'=>'Are you sure you want to delete this item?',
+    'DELETE_CONFIRM'=>'Are you sure you want to delete this item?',
     'ERROR_UPDATE'=>'Changes not saved.',
     'TABLE' => 'Table',
     'SIZE' => 'Size',

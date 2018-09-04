@@ -23,9 +23,10 @@ class SwitchAction extends Action {
                         if (isset($_REQUEST['s'])) {
                             $obj->switch = $_REQUEST['s'];
                             $obj->update(false);
+                            $message = ($obj->switch)?'SUCCESS_RECORD_ON':'SUCCESS_RECORD_OFF';
                             $json = [
                                 'status' => 'success',
-                                'message' => Yii::t('app', 'SUCCESS_RECORD_SWITCH')
+                                'message' => Yii::t('app', $message)
                             ];
                         } else {
                             $json = array(

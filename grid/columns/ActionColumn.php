@@ -173,7 +173,7 @@ class ActionColumn extends \yii\grid\DataColumn
                         'aria-label' => Yii::t('yii', 'Delete'),
                         'class' => 'btn ' . $this->btnSize . ' btn-outline-danger',
                         'onclick' => "
-                                if (confirm('" . Yii::t('app', 'DELETE_COMFIRM') . "')) {
+                                if (confirm('" . Yii::t('app', 'DELETE_CONFIRM') . "')) {
                                     $.ajax('$url', {
                                         type: 'POST',
                                         dataType:'json',
