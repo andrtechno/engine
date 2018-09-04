@@ -49,7 +49,7 @@ class WizardMenu extends Widget {
 
             
         $defaultConfig = [];
-        $defaultConfig['class'] = '\yii\bootstrap\Nav';
+        $defaultConfig['class'] = '\yii\bootstrap4\Nav';
         $defaultConfig['items'] = $this->generateMenuItems();
         
 

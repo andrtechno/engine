@@ -137,7 +137,7 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
         //print_r($this->getCustomActions());die;
         $this->contentOptions = ['class' => 'text-center'];
         $this->grid->footerRowOptions = ['class' => 'text-center'];
-        $this->footer = \yii\bootstrap\ButtonDropdown::widget([
+        $this->footer = \yii\bootstrap4\ButtonDropdown::widget([
                     'dropdownClass' => 'panix\engine\bootstrap\Dropdown',
                     'label' => Html::icon('menu'),
                     'encodeLabel' => false,

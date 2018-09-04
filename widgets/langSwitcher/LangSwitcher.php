@@ -5,7 +5,7 @@ namespace panix\engine\widgets\langSwitcher;
 use Yii;
 use yii\base\Component;
 use yii\base\Widget;
-use yii\bootstrap\ButtonDropdown;
+use yii\bootstrap4\ButtonDropdown;
 use yii\helpers\Url;
 use yii\web\Cookie;
 
