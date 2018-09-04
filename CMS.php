@@ -7,8 +7,9 @@ use yii\helpers\Url;
 
 /**
  * Дополнительные функции системы.
- * 
- * @author CORNER CMS development team <dev@corner-cms.com>
+ *
+ * @author PIXELION CMS development team <dev@pixelion.com.ua>
+ * @link http://pixelion.com.ua PIXELION CMS
  * @version 1.0
  * @package app
  * @category app

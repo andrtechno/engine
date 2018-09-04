@@ -49,7 +49,7 @@ class Application extends \yii\web\Application {
     public static function powered() {
         return Yii::t('app', 'COPYRIGHT', [
                     'year' => date('Y'),
-                    'by' => Html::a('CORNER CMS', 'http://corner-cms.com')
+                    'by' => Html::a('PIXELION CMS', 'https://pixelion.com.ua')
         ]);
     }
 

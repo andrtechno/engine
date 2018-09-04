@@ -5,9 +5,8 @@ namespace panix\engine\bootstrap;
 /**
  * Description of AdminNav
  *
- * @author CORNER CMS development team <dev@corner-cms.com>
- * @author Semenov Andrew <andrew.panix@gmail.com>
- * @link http://corner-cms.com Website CORNER CMS
+ * @author PIXELION CMS development team <dev@pixelion.com.ua>
+ * @link http://pixelion.com.ua PIXELION CMS
  * 
  */
 class AdminNav extends \yii\bootstrap\Nav {

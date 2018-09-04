@@ -83,7 +83,7 @@ class WebModule extends Module {
     }
 
     public function getAuthor() {
-        return 'dev@corner-cms.com';
+        return 'dev@pixelion.com.ua';
     }
 
     public function getName() {

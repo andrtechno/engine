@@ -9,7 +9,7 @@ class View extends \yii\web\View {
 
     public function endPage($ajaxMode = false) {
         $this->trigger(self::EVENT_END_PAGE);
-        $copyright = '<a href="//corner-cms.com/" rel="nofollow" id="corner" target="_blank"><span>' . Yii::t('app', 'CORNER') . '</span> &mdash; <span class="cr-logo">CORNER</span></a>';
+        $copyright = '<a href="//pixelion.com.ua/" id="pixelion" target="_blank"><span>' . Yii::t('app', 'PIXELION') . '</span> &mdash; <span class="cr-logo">PIXELION</span></a>';
 
         $content = ob_get_clean();
 

@@ -2,13 +2,13 @@
 namespace panix\engine\components;
 /**
  * BrowserComponent class
- * 
- * @author CORNER CMS development team <dev@corner-cms.com>
+ *
+ * @author PIXELION CMS development team <dev@pixelion.com.ua>
+ * @link http://pixelion.com.ua PIXELION CMS
  * @package app
  * @subpackage addons
  * @uses CApplicationComponent
  * @copyright (c) 2016, Andrew Semenov
- * @link http://corner-cms.com CORNER CMS
  */
 use panix\engine\components\Browser;
 

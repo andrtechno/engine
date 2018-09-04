@@ -83,9 +83,9 @@ class Connection extends \yii\db\Connection {
                 }
             }
             $date = date('Y-m-d_Hms');
-            $this->_result.="/*----------------------- BACKUP CORNER CMS ------------------------------*/\n\r";
-            $this->_result.="/*E-mail: dev@corner-cms.com*/\n";
-            $this->_result.="/*Website: www.corner-cms.com*/\n";
+            $this->_result.="/*----------------------- BACKUP PIXELION CMS ------------------------------*/\n\r";
+            $this->_result.="/*E-mail: dev@pixelion.com.ua*/\n";
+            $this->_result.="/*Website: www.pixelion.com.ua*/\n";
             $this->_result.="/*Date backup: " . $date . "*/\n\r";
             ob_start();
             echo $this->_result;

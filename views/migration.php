@@ -15,7 +15,7 @@ if (!empty($namespace)) {
 /**
  * Generation migrate by <?= Yii::$app->name ?>
  * 
- * @author <?= Yii::$app->name ?> development team <dev@corner-cms.com>
+ * @author <?= Yii::$app->name ?> development team <dev@pixelion.com.ua>
  * 
  * Class <?= $className . "\n" ?>
  */

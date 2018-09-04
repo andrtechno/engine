@@ -13,9 +13,8 @@ use panix\mod\admin\models\Notifactions;
 /**
  * Webcontrol of Controller
  *
- * @author CORNER CMS development team <dev@corner-cms.com>
- * @author Semenov Andrew <andrew.panix@gmail.com>
- * @link http://corner-cms.com Website CORNER CMS
+ * @author PIXELION CMS development team <dev@pixelion.com.ua>
+ * @link http://pixelion.com.ua PIXELION CMS
  * 
  */
 class WebInlineController extends \panix\engine\controllers\WebController {

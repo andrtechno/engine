@@ -7,8 +7,9 @@
  * If the value is empty, the message is considered as not translated.
  * Messages that no longer need translation will have their translations
  * enclosed between a pair of '@@' marks.
- * 
- * @author CORNER CMS development team <dev@corner-cms.com>
+ *
+ * @author PIXELION CMS development team <dev@pixelion.com.ua>
+ * @link http://pixelion.com.ua PIXELION CMS
  * @package modules.messages.ru
  * @return array
  */
