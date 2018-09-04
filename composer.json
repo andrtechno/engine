@@ -25,7 +25,6 @@
         "panix/wgt-hightcharts": "*",
         "maxmind-db/reader": "~1.0",
         "profitcode/yii2-blocks": "*",
-        "bower-asset/bootstrap": "4.1.*"
     },
     "autoload": {
         "psr-4": {
