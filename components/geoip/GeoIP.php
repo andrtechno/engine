@@ -54,7 +54,7 @@ class GeoIP extends Component {
         }
 
         if (!array_key_exists($ip, $this->result)) {
-            $key = self::className() . ':' . $ip;
+            $key = self::class . ':' . $ip;
 
             if ($this->session->offsetExists($key)) {
                 $this->result[$ip] = $this->session->get($key);

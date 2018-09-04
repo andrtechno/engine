@@ -111,12 +111,12 @@ class ActiveRecord extends \yii\db\ActiveRecord
         $b = [];
         if (isset($columns['ordern'])) {
             $b['sortable'] = [
-                'class' => \panix\engine\grid\sortable\Behavior::className(),
+                'class' => \panix\engine\grid\sortable\Behavior::class,
             ];
         }
         if (isset($columns['date_create']) && isset($columns['date_update'])) {
             $b['timestamp'] = [
-                'class' => \yii\behaviors\TimestampBehavior::className(),
+                'class' => \yii\behaviors\TimestampBehavior::class,
                 'createdAtAttribute' => 'date_create',
                 'updatedAtAttribute' => 'date_update',
                 //'value' => new \yii\db\Expression('NOW()'),

@@ -11,7 +11,7 @@ class ActiveDataProvider extends \yii\data\ActiveDataProvider {
 
     public function setPagination($value) {
         if (is_array($value)) {
-            $config = ['class' => Pagination::className()];
+            $config = ['class' => Pagination::class];
             if ($this->id !== null) {
                 $config['pageParam'] = $this->id . '-page';
                 $config['pageSizeParam'] = $this->id . '-per-page';

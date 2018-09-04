@@ -126,14 +126,14 @@ class AdminGridView extends BaseListView
      *
      * ```php
      * [
-     *     ['class' => SerialColumn::className()],
+     *     ['class' => SerialColumn::class],
      *     [
-     *         'class' => DataColumn::className(),
+     *         'class' => DataColumn::class,
      *         'attribute' => 'name',
      *         'format' => 'text',
      *         'label' => 'Name',
      *     ],
-     *     ['class' => CheckboxColumn::className()],
+     *     ['class' => CheckboxColumn::class],
      * ]
      * ```
      *
@@ -506,7 +506,7 @@ class AdminGridView extends BaseListView
         }
 
         return Yii::createObject([
-            'class' => $this->dataColumnClass ? : DataColumn::className(),
+            'class' => $this->dataColumnClass ? : DataColumn::class,
             'grid' => $this,
             'attribute' => $matches[1],
             'format' => isset($matches[3]) ? $matches[3] : 'text',
