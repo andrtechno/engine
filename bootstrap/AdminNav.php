@@ -9,6 +9,6 @@ namespace panix\engine\bootstrap;
  * @link http://pixelion.com.ua PIXELION CMS
  * 
  */
-class AdminNav extends \yii\bootstrap\Nav {
+class AdminNav extends \yii\bootstrap4\Nav {
 
 }

@@ -4,7 +4,7 @@ namespace panix\engine\bootstrap;
 
 use yii\helpers\ArrayHelper;
 
-class ActiveForm extends \yii\bootstrap\ActiveForm {
+class ActiveForm extends \yii\bootstrap4\ActiveForm {
 
     public $layout = 'horizontal';
 

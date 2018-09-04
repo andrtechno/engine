@@ -12,7 +12,7 @@ class IconAsset extends AssetBundle {
     public $sourcePath = '@vendor/panix/engine/assets';
 
     public $css = [
-        'css/corner-icons.css',
+        'css/pixelion-icons.css',
     ];
 
 

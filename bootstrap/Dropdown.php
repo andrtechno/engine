@@ -6,7 +6,7 @@ use yii\base\InvalidConfigException;
 use panix\engine\Html;
 use yii\helpers\ArrayHelper;
 
-class Dropdown extends \yii\bootstrap\Dropdown {
+class Dropdown extends \yii\bootstrap4\Dropdown {
 
     public $subMenuOptions = [];
 
