@@ -21,5 +21,4 @@ class ActiveForm extends \yii\bootstrap4\ActiveForm {
         ],$this->fieldConfig);
         parent::init();
     }
-
 }
