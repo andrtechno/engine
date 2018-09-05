@@ -50,10 +50,11 @@ class Application extends \yii\web\Application {
 
     public static function powered() {
         return Yii::t('app', 'COPYRIGHT', [
-                    'year' => date('Y'),
-                    'by' => Html::a('PIXELION CMS', 'https://pixelion.com.ua')
+            'year' => date('Y'),
+            'by' => Html::a('PIXELION CMS', '//pixelion.com.ua')
         ]);
     }
+
 
     public function getVersion() {
         return self::version;

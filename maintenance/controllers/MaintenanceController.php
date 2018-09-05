@@ -1,44 +1,49 @@
 <?php
+/**
+ * @link https://github.com/brussens/yii2-maintenance-mode
+ * @copyright Copyright (c) 2017 Brusensky Dmitry
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 
 namespace panix\engine\maintenance\controllers;
 
 use Yii;
-use panix\engine\controllers\WebController;
+use yii\web\Controller;
 
-class MaintenanceController extends WebController {
-
+/**
+ * Default controller of maintenance mode component for Yii framework 2.x.x version.
+ *
+ * @see \yii\web\Controller
+ * @package brussens\maintenance\controllers
+ * @author Brusensky Dmitry <brussens@nativeweb.ru>
+ * @since 0.2.0
+ */
+class MaintenanceController extends Controller
+{
     /**
      * Initialize controller.
      */
-    public function init() {
+    public function init()
+    {
         $this->layout = Yii::$app->maintenanceMode->layoutPath;
         parent::init();
     }
 
     /**
      * Index action.
-     *
      * @return bool|string
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $app = Yii::$app;
+
         if ($app->getRequest()->getIsAjax()) {
             return false;
         }
+
         return $this->render($app->maintenanceMode->viewPath, [
-            'message' => $app->settings->get('app','maintenance_text')
+            'title' => $app->maintenanceMode->title,
+            'message' => $app->maintenanceMode->message
         ]);
     }
-
-
-    public function actionCopyright() {
-        $app = Yii::$app;
-        if ($app->getRequest()->getIsAjax()) {
-            return false;
-        }
-        return $this->render($app->maintenanceMode->viewPath, [
-            'message' => 'cxopy das'
-        ]);
-    }
-
-}
+} 

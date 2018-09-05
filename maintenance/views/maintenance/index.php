@@ -1,8 +1,9 @@
 <?php
 
-use panix\engine\Html;
+use yii\helpers\Html;
+
 ?>
-<h1>Сайт закрыт</h1>
+<h1><?= Html::encode($title) ?></h1>
 <div>
-    <p><?= Html::text($message) ?></p>
+    <p><?= Html::encode($message) ?></p>
 </div>

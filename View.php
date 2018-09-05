@@ -8,13 +8,33 @@ use yii\helpers\Url;
 class View extends \yii\web\View
 {
 
+    private $maintenance = false;
+
+    public function init()
+    {
+        parent::init();
+        $test=  Yii::$app->maintenanceMode;
+        $test->enabled = true;
+
+    }
     public function endPage($ajaxMode = false)
     {
+
         $this->trigger(self::EVENT_END_PAGE);
+
         $copyright = '<a href="//pixelion.com.ua/" id="pixelion" target="_blank"><span>' . Yii::t('app', 'PIXELION') . '</span> &mdash; <span class="cr-logo">PIXELION</span></a>';
+
+
+
 
         $content = ob_get_clean();
 
+        if (!Yii::$app->request->isAjax && !preg_match("#" . base64_decode('e2NvcHlyaWdodH0=') . "#", $content)) { // && !preg_match("/print/", $this->layout)
+           die(Yii::t('app','NO_COPYRIGHT'));
+
+            Yii::$app->maintenanceMode->enabled = true;
+
+        }
         $template = "/block_([0-9])/";
         preg_match_all($template, $content, $result);
 
@@ -26,9 +46,6 @@ class View extends \yii\web\View
         $content = str_replace(base64_decode('e2NvcHlyaWdodH0='), $copyright, $content);
 
 
-        // if (!Yii::$app->request->isAjax && !preg_match("#" . base64_decode('e2NvcHlyaWdodH0=') . "#", $content)) { // && !preg_match("/print/", $this->layout)
-        //  die(Yii::t('app','NO_COPYRIGHT'));
-        // }
 
 
         echo strtr($content, [
@@ -38,11 +55,15 @@ class View extends \yii\web\View
         ]);
 
 
+
         $this->clear();
+
+
     }
 
     public function head()
     {
+
         if (!Yii::$app->request->isAjax) {
             $this->registerMetaTag(['charset' => Yii::$app->charset]);
             $this->registerMetaTag(['name' => 'author', 'content' => Yii::$app->name]);
