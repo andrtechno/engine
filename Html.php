@@ -11,6 +11,11 @@ class Html extends \yii\helpers\Html
 
     public static $iconPrefix = 'icon-';
 
+    public static function tel($phone, $options = [])
+    {
+        return self::a($phone, 'tel:' . preg_replace('/[^0-9+]/', '', $phone), $options);
+    }
+
     public static function icon($icon, $options = [])
     {
         if (isset($options['class'])) {
