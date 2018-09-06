@@ -42,7 +42,7 @@ class LayoutBehavior extends \yii\base\Behavior {
         $theme = $controller->view->theme->name;
         if ($this->useCache && false !== ($layout = Yii::$app->cache->get($cacheKey))) {
             $controller->layout = $layout;
-            Yii::trace('Layout applied from cache:' . "\n" . $controller->layout, __METHOD__);
+            Yii::debug('Layout applied from cache:' . "\n" . $controller->layout, __METHOD__);
         } else {
             $layouts = [];
             $pathMaps = $controller->view->theme->pathMap;
@@ -101,7 +101,7 @@ class LayoutBehavior extends \yii\base\Behavior {
                     break;
                 }
             }
-            Yii::trace('Layout applied:' . "\n" . $controller->layout, __METHOD__);
+            Yii::debug('Layout applied:' . "\n" . $controller->layout, __METHOD__);
         }
     }
 

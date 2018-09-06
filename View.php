@@ -15,13 +15,20 @@ class View extends \yii\web\View
     public function endPage($ajaxMode = false)
     {
         $this->trigger(self::EVENT_END_PAGE);
+
+
+        $this->registerCss('
+        #pixelion span.cr-logo{display:inline-block;font-size:17px;padding: 0 0 0 45px;position:relative;font-family:Pixelion,Montserrat;font-weight:normal;line-height: 40px;}
+        #pixelion span.cr-logo:after{font-weight:normal;content:"\f002";left:0;top:0;position:absolute;font-size:37px;font-family:Pixelion;}
+        ', [], 'pixelion');
+
         $copyright = '<a href="//pixelion.com.ua/" id="pixelion" target="_blank"><span>' . Yii::t('app', 'PIXELION') . '</span> &mdash; <span class="cr-logo">PIXELION</span></a>';
 
         $content = ob_get_clean();
 
         if (!Yii::$app->controller instanceof \panix\engine\controllers\AdminController) {
             if (!Yii::$app->request->isAjax && !preg_match("#" . base64_decode('e2NvcHlyaWdodH0=') . "#", $content)) { // && !preg_match("/print/", $this->layout)
-               // die(Yii::t('app', 'NO_COPYRIGHT'));
+                // die(Yii::t('app', 'NO_COPYRIGHT'));
                 //Yii::$app->maintenanceMode->enabled = true;
             }
         }

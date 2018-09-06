@@ -13,8 +13,8 @@ class Breadcrumbs extends \yii\widgets\Breadcrumbs {
 
     public function run() {
         if ($this->scheme) {
-            $this->itemTemplate = '<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">{link}</li>';
-            $this->activeItemTemplate = '<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="active">{link}</li>';
+            $this->itemTemplate = '<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item">{link}</li>';
+            $this->activeItemTemplate = '<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item active">{link}</li>';
         }
         if (empty($this->links)) {
             return;
@@ -28,6 +28,7 @@ class Breadcrumbs extends \yii\widgets\Breadcrumbs {
         } elseif ($this->homeLink !== false) {
             $links[] = $this->renderItems($this->homeLink, $this->itemTemplate, 2);
         }
+
         $count = 2;
         foreach ($this->links as $link) {
             if (!is_array($link)) {
