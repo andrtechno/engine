@@ -11,6 +11,7 @@ use yii\di\Instance;
 class DbUserSession extends \yii\web\DbSession {
 
     public $writeCallback = ['panix\engine\web\DbUserSession', 'writeFields'];
+    public $sessionTable= '{{%session_user}}';
 
     public static function writeFields($session) {
 
