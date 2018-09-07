@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "panix/mod-admin": "dev-master",
+        "panix/mod-admin": "*",
         "panix/mod-user": "*",
         "panix/mod-shop": "*",
         "panix/mod-pages": "*",
