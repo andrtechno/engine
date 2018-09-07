@@ -24,7 +24,7 @@
         "panix/wgt-taginput": "*",
         "panix/wgt-hightcharts": "*",
         "maxmind-db/reader": "~1.0",
-        "profitcode/yii2-blocks": "*",
+        "profitcode/yii2-blocks": "*"
     },
     "autoload": {
         "psr-4": {
