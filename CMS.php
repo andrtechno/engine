@@ -18,6 +18,52 @@ class CMS {
 
     const MEMORY_LIMIT = 64; // Minimal memory_limit
 
+
+    /**
+     * Прячит посление цыфтры телефона
+     * Напрммер +XXXXXXXXXXXX
+     * Резулитат +XXXXXXXX****
+     *
+     * @param string $mobile Телефон
+     * @param int $end_length Количество чисел обрезаения.
+     * @return string
+     */
+    public static function hideMobile($mobile, $end_length = 4)
+    {
+        return substr($mobile, 0, -$end_length) . "****";
+    }
+
+    /**
+     * Прячит название почты
+     * Например dev@pixelion.com.ua
+     * Резулитат ***@pixelion.com.ua
+     *
+     * @param string $email Почта
+     * @return string
+     */
+    public static function hideEmail($email)
+    {
+        $mail_part = explode("@", $email);
+        $mail_part[0] = str_repeat("*", strlen($mail_part[0]));
+        return implode("@", $mail_part);
+    }
+
+    /**
+     * Прячит первые и последние значение строки
+     * Напрммер pixelion
+     * Резулитат *ixelio*
+     *
+     * @param $str
+     * @param int $start_length
+     * @param int $end_length
+     * @return string
+     */
+    public static function getStarred($str, $start_length = 1, $end_length = 1)
+    {
+        $str_length = strlen($str);
+        return substr($str, 0, $start_length) . str_repeat('*', $str_length - $start_length) . substr($str, $str_length - $end_length, $end_length);
+    }
+
     public static function isModile() {
         return (preg_match('!(tablet|pad|mobile|phone|symbian|android|ipod|ios|blackberry|webos)!i', Yii::$app->request->getUserAgent())) ? true : false;
     }
