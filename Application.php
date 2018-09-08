@@ -42,7 +42,7 @@ class Application extends \yii\web\Application {
         $sql_stats = Yii::getLogger()->getDbProfiling();
         return Yii::t('app', 'PAGE_GEN', array(
                     'time' => number_format(Yii::getLogger()->getElapsedTime(), 3, '.', ' '),
-                    'memory' => round(memory_get_peak_usage() / (1024 * 1024), 2),
+                    'memory' => CMS::fileSize(memory_get_peak_usage()),
                     'db_query' => $sql_stats[0],
                     'db_time' => number_format($sql_stats[1], 2, '.', ' '),
         ));

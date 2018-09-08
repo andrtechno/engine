@@ -14,7 +14,8 @@ use yii\helpers\Url;
  * @package app
  * @category app
  */
-class CMS {
+class CMS
+{
 
     const MEMORY_LIMIT = 64; // Minimal memory_limit
 
@@ -64,23 +65,26 @@ class CMS {
         return substr($str, 0, $start_length) . str_repeat('*', $str_length - $start_length) . substr($str, $str_length - $end_length, $end_length);
     }
 
-    public static function isModile() {
+    public static function isModile()
+    {
         return (preg_match('!(tablet|pad|mobile|phone|symbian|android|ipod|ios|blackberry|webos)!i', Yii::$app->request->getUserAgent())) ? true : false;
     }
 
     /**
      * Установление прав доступа.
-     * 
+     *
      * @param string $path
      * @param int $chm Example 0640
      */
-    public static function setChmod($path, $chm) {
+    public static function setChmod($path, $chm)
+    {
         if (!self::isChmod($path, $chm)) {
             @chmod($path, $chm);
         }
     }
 
-    public static function placeholderUrl($params = []) {
+    public static function placeholderUrl($params = [])
+    {
         $url = ['/placeholder'];
         if (!isset($params['text'])) {
             $params['text'] = 'f138';
@@ -88,7 +92,8 @@ class CMS {
         return Url::to(array_merge($url, $params));
     }
 
-    public static function hex2rgb($colour) {
+    public static function hex2rgb($colour)
+    {
         $colour = preg_replace("/[^abcdef0-9]/i", "", $colour);
         if (strlen($colour) == 6) {
             list($r, $g, $b) = str_split($colour, 2);
@@ -102,12 +107,13 @@ class CMS {
 
     /**
      * Проверка наличие нужных прав.
-     * 
+     *
      * @param string $path Абсолютный путь.
      * @param int $chm Номер прав. 0640
      * @return boolean
      */
-    public static function isChmod($path, $chm) {
+    public static function isChmod($path, $chm)
+    {
         if (file_exists($path) && intval($chm)) {
             $pdir = decoct(fileperms($path));
             $per = substr($pdir, -3);
@@ -119,13 +125,15 @@ class CMS {
         }
     }
 
-    public static function tableName() {
+    public static function tableName()
+    {
         // return table name with DB name to get relations from different DBs to work
         $name = preg_match("/dbname=([^;]*)/", Yii::$app->db->dsn, $matches);
         return $matches[1];
     }
 
-    public static function textReplace($text, $array) {
+    public static function textReplace($text, $array)
+    {
         $config = Yii::$app->settings->get('app');
         $tmpArray = [];
         $tmpArray['{sitename}'] = $config['sitename'];
@@ -138,7 +146,8 @@ class CMS {
         return $text;
     }
 
-    public static function getMemoryLimit() {
+    public static function getMemoryLimit()
+    {
         $memory_limit = ini_get('memory_limit');
         if (preg_match('/^(\d+)(.)$/', $memory_limit, $matches)) {
             if ($matches[2] == 'M') {
@@ -151,11 +160,12 @@ class CMS {
     }
 
     /**
-     * 
+     *
      * @param type $birth_date
      * @return type
      */
-    public static function age($birth_date) {
+    public static function age($birth_date)
+    {
         $birth_time = strtotime($birth_date);
         $birth = getdate($birth_time);
         $now = getdate();
@@ -172,11 +182,12 @@ class CMS {
 
     /**
      * Определение возраста
-     * 
+     *
      * @param int $age
      * @return string
      */
-    public static function years($age) {
+    public static function years($age)
+    {
         $age = abs($age);
         $t1 = $age % 10;
         $t2 = $age % 100;
@@ -195,7 +206,8 @@ class CMS {
      * @param type $sec
      * @return type
      */
-    public static function display_time($sec) {
+    public static function display_time($sec)
+    {
         $min = floor($sec / 60);
         $hours = floor($min / 60);
         $seconds = $sec % 60;
@@ -209,26 +221,29 @@ class CMS {
      * @param int $time
      * @return string
      */
-    public static function timeLeft($time) {
+    public static function timeLeft($time)
+    {
         $t = intval($time - self::time());
         return Yii::t('app', 'PURCHASED') . ": " . self::display_time($t);
     }
 
     /**
-     * 
+     *
      * @param type $gender
-     * @return type
+     * @return string
      */
-    public static function gender($gender) {
+    public static function gender($gender)
+    {
         return Yii::t('app', 'GENDER', $gender);
     }
 
     /**
-     * 
-     * @return type
+     *
+     * @return string
      * @todo водит ссылку без языка - удаляя /en, /ru etc
      */
-    public static function currentUrl() {
+    public static function currentUrl()
+    {
         $request = Yii::$app->request;
         $parts = explode('/', $request->url);
         $lang = Yii::$app->languageManager;
@@ -248,14 +263,15 @@ class CMS {
     }
 
     /**
-     * 
+     *
      * @param type $str
      * @return type
      */
-    public static function decodeHtmlEnt($str) {
+    public static function decodeHtmlEnt($str)
+    {
         $ret = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
         $p2 = -1;
-        for (;;) {
+        for (; ;) {
             $p = strpos($ret, '&#', $p2 + 1);
             if ($p === FALSE)
                 break;
@@ -269,7 +285,7 @@ class CMS {
                 $char = intval(substr($ret, $p + 2, $p2 - $p - 2));
 
             $newchar = iconv(
-                    'UCS-4', 'UTF-8', chr(($char >> 24) & 0xFF) . chr(($char >> 16) & 0xFF) . chr(($char >> 8) & 0xFF) . chr($char & 0xFF)
+                'UCS-4', 'UTF-8', chr(($char >> 24) & 0xFF) . chr(($char >> 16) & 0xFF) . chr(($char >> 8) & 0xFF) . chr($char & 0xFF)
             );
             $ret = substr_replace($ret, $newchar, $p, 1 + $p2 - $p);
             $p2 = $p + strlen($newchar);
@@ -278,14 +294,15 @@ class CMS {
     }
 
     /**
-     * 
+     *
      * @param string $dir Absolute path
-     * 
+     *
      * @return array
      * size - Размер
      * howmany - Количество файлов
      */
-    public static function dir_size($dir) {
+    public static function dir_size($dir)
+    {
         if (file_exists($dir)) {
             if (is_file($dir))
                 return array('size' => filesize($dir), 'howmany' => 0);
@@ -308,21 +325,23 @@ class CMS {
     }
 
     /**
-     * 
-     * @param int $size
-     * @return type
+     *
+     * @param int $bytes
+     * @return string
      */
-    public static function files_size($size) {
-        $name = array("Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB");
-        $mysize = $size ? round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . " " . $name[$i] : $size . " Bytes";
-        return $mysize;
+    public static function fileSize($bytes)
+    {
+        $unit = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+        if ($bytes == 0) return '0 ' . $unit[0];
+        return @round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), 2) . ' ' . (isset($unit[$i]) ? $unit[$i] : 'B');
     }
 
     /**
      * Get user agent
      * @return string
      */
-    public static function getagent() {
+    public static function getagent()
+    {
         if (getenv("HTTP_USER_AGENT") && strcasecmp(getenv("HTTP_USER_AGENT"), "unknown")) {
             $agent = getenv("HTTP_USER_AGENT");
         } elseif (!empty($_SERVER['HTTP_USER_AGENT']) && strcasecmp($_SERVER['HTTP_USER_AGENT'], "unknown")) {
@@ -333,7 +352,8 @@ class CMS {
         return $agent;
     }
 
-    public static function isBot() {
+    public static function isBot()
+    {
         $bots = array(
             'rambler' => 'Rambler',
             'googlebot' => 'Google Bot',
@@ -397,7 +417,8 @@ class CMS {
         return $result;
     }
 
-    public static function domain($url, $str = "") {
+    public static function domain($url, $str = "")
+    {
         $massiv = explode(",", $url);
         $str = intval($str);
         foreach ($massiv as $val)
@@ -409,7 +430,8 @@ class CMS {
      * Get IP
      * @return string
      */
-    public static function getip() {
+    public static function getip()
+    {
         $strRemoteIP = $_SERVER['REMOTE_ADDR'];
         if (!$strRemoteIP) {
             $strRemoteIP = urldecode(getenv('HTTP_CLIENTIP'));
@@ -433,11 +455,12 @@ class CMS {
     }
 
     /**
-     * 
+     *
      * @return string
      * @todo Get referer
      */
-    public static function get_referer() {
+    public static function get_referer()
+    {
         $referer = getenv("HTTP_REFERER");
         if (!empty($referer) && $referer != "" && !preg_match("/^unknown/i", $referer) && !preg_match("/^bookmark/i", $referer) && !strpos($referer, $_SERVER["HTTP_HOST"])) {
             $refer = $referer;
@@ -448,11 +471,12 @@ class CMS {
     }
 
     /**
-     * 
+     *
      * @param User $user
      * @return type
      */
-    public static function userLink(User $user) {
+    public static function userLink(User $user)
+    {
         $html = Html::link($user->login . ' <b class="caret caret-up"></b>', '#', array('class' => 'btn btn-link dropdown-toggle', 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "false"));
         return '<div style="position:relative;" class="btn-group">' . $html . '
             <ul class="dropdown-menu drop-up">
@@ -463,13 +487,14 @@ class CMS {
     }
 
     /**
-     * 
+     *
      * @param string $ip
      * @param int $type
      * @param type $user
      * @return string or null
      */
-    public static function ip($ip, $type = 1, $user = null) {
+    public static function ip($ip, $type = 1, $user = null)
+    {
         if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
             if (self::getMemoryLimit() > self::MEMORY_LIMIT) {
                 $geoip = Yii::$app->geoip->ip($ip);
@@ -494,11 +519,12 @@ class CMS {
     }
 
     /**
-     * 
+     *
      * @param type $mail
      * @return type
      */
-    static function _______emailLink($mail) {
+    static function _______emailLink($mail)
+    {
         if (Yii::$app->hasModule('delivery')) {
             return Html::link($mail, Yii::$app->createAbsoluteUrl('/admin/delivery/send', array('mail' => $mail)), array('onClick' => 'sendEmail("' . $mail . '")'));
         } else {
@@ -507,7 +533,7 @@ class CMS {
     }
 
     /**
-     * 
+     *
      * @param string $category файл переводов
      * @param string $message параметр перевода
      * @param int $number число
@@ -515,7 +541,8 @@ class CMS {
      * @example 'ENTRY'=>'0#елемент|1#елемента|2#елементов';
      * @return string message
      */
-    public static function GetFormatWord($category, $message, $number) {
+    public static function GetFormatWord($category, $message, $number)
+    {
         $num = $number % 10;
         if ($num == 1)
             return Yii::t($category, $message, 0);
@@ -526,13 +553,14 @@ class CMS {
     }
 
     /**
-     * 
+     *
      * @param datetime $date Y-m-d H:i:s
      * @param boolean $time Показывать время true|false
      * @param boolean $static Статичная дата. true|false
      * @return string
      */
-    public static function date($date, $time = true) {
+    public static function date($date, $time = true)
+    {
 
         $formatted = strtotime($date);
         $oneDay = 86400;
@@ -558,11 +586,11 @@ class CMS {
         }
 
 
-
         return str_replace(array_keys(self::getMonthsLocale(5)), array_values(self::getMonthsLocale(5)), $result);
     }
 
-    public static function getMonthsLocale($type = 0) {
+    public static function getMonthsLocale($type = 0)
+    {
         return [
             "January" => Yii::t('app/month', 'January', ['n' => $type]),
             "February" => Yii::t('app/month', 'February', ['n' => $type]),
@@ -581,11 +609,12 @@ class CMS {
 
     /**
      * Текушая дата с часовым поясом.
-     * 
+     *
      * @param string $format Default is "Y-m-d H:i:s"
      * @return string
      */
-    public static function getDate($format = 'Y-m-d H:i:s') {
+    public static function getDate($format = 'Y-m-d H:i:s')
+    {
         try {
             $date = new \DateTime('now');
             $date->setTimezone(new \DateTimeZone(self::timezone()));
@@ -595,7 +624,8 @@ class CMS {
         }
     }
 
-    public static function time($format = 'Y-m-d H:i:s') {
+    public static function time($format = 'Y-m-d H:i:s')
+    {
         try {
             $date = new \DateTime('now');
             $date->setTimezone(new \DateTimeZone(self::timezone()));
@@ -606,10 +636,11 @@ class CMS {
     }
 
     /**
-     * 
-     * @return string Timezone 
+     *
+     * @return string Timezone
      */
-    public static function timezone() {
+    public static function timezone()
+    {
         $user = Yii::$app->user;
         $config = Yii::$app->settings->get('app');
 
@@ -631,9 +662,10 @@ class CMS {
         return $timezone; //$timezone;
     }
 
-    public static function replace_urls($text = null) {
+    public static function replace_urls($text = null)
+    {
         $regex = '/((http|ftp|https):\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/';
-        return preg_replace_callback($regex, function( $m ) {
+        return preg_replace_callback($regex, function ($m) {
             $link = $name = $m[0];
             if (empty($m[1])) {
                 $link = "http://" . $link;
@@ -644,11 +676,12 @@ class CMS {
 
     /**
      * Youtube parse url
-     * 
+     *
      * @param string $url
      * @return string
      */
-    public static function parse_yturl($url) {
+    public static function parse_yturl($url)
+    {
         $pattern = '#^(?:https?://)?';    # Optional URL scheme. Either http or https.
         $pattern .= '(?:www\.)?';         #  Optional www subdomain.
         $pattern .= '(?:';                #  Group host alternatives:
@@ -669,12 +702,13 @@ class CMS {
 
     /**
      * Преобразование массива данных
-     * 
+     *
      * @param type $arrayofValues
      * @param type $type
      * @return type
      */
-    public static function recursiveValuesToType($arrayofValues, $type = 'integer') {
+    public static function recursiveValuesToType($arrayofValues, $type = 'integer')
+    {
         if (is_array($arrayofValues))
             foreach ($arrayofValues as &$value)
                 self::recursiveValuesToType($value, $type);
@@ -685,23 +719,25 @@ class CMS {
 
     /**
      * Замена перевода строк на <br />
-     * 
+     *
      * @param type $subject
      * @return type
      */
-    public static function slashNtoBR($subject) {
+    public static function slashNtoBR($subject)
+    {
         $replaced = preg_replace("/\r\n|\r|\n/", '<br />', $subject);
         return $replaced;
     }
 
 
     /**
-     * Генератор случайного кода
-     * 
-     * @param type $var
-     * @return type
+     * Генератор случайного кода (числа и букв)
+     *
+     * @param int $var
+     * @return string
      */
-    public static function gen($var) {
+    public static function gen($var)
+    {
         $var = intval($var);
         $gen = "";
         for ($i = 0; $i < $var; $i++) {

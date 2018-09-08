@@ -4,10 +4,11 @@ namespace panix\engine\widgets\langSwitcher;
 
 use Yii;
 use yii\base\Component;
-use yii\base\Widget;
-use yii\bootstrap4\ButtonDropdown;
+use panix\engine\data\Widget;
+use panix\engine\bootstrap\ButtonDropdown;
 use yii\helpers\Url;
 use yii\web\Cookie;
+use panix\engine\CMS;
 
 class LangSwitcher extends Widget {
 
@@ -32,7 +33,7 @@ class LangSwitcher extends Widget {
         if (count($languages) > 1) {
             foreach ($languages as $lang) {
                 $class = ($langManager->active->id == $lang->id) ? 'active' : '';
-                $link = ($lang->is_default) ? \panix\engine\CMS::currentUrl() : '/' . $lang->code . \panix\engine\CMS::currentUrl();
+                $link = ($lang->is_default) ? CMS::currentUrl() : '/' . $lang->code . CMS::currentUrl();
 
 
              //   echo \yii\helpers\Html::a($lang->code, $link, array('class' => 'text-uppercase'));
@@ -42,7 +43,7 @@ class LangSwitcher extends Widget {
         $items = [];
         foreach ($languages as $lang) {
 
-            $link = ($lang->is_default) ? \panix\engine\CMS::currentUrl() : '/' . $lang->code . \panix\engine\CMS::currentUrl();
+            $link = ($lang->is_default) ? CMS::currentUrl() : '/' . $lang->code . CMS::currentUrl();
             $class = ($langManager->active->id == $lang->id) ? 'active' : '';
             $temp = [];
             $temp['label'] = $lang->name;
@@ -51,13 +52,14 @@ class LangSwitcher extends Widget {
             array_push($items, $temp);
         }
 
-        echo ButtonDropdown::widget([
+        /*echo ButtonDropdown::widget([
             'label' => $current,
             'dropdown' => [
                 'items' => $items,
             ],
             'options'=>['class'=>'btn btn-sm btn-default'],
-        ]);
+        ]);*/
+        return $this->render($this->skin,[]);
     }
 
 }

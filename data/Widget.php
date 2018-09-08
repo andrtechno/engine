@@ -9,6 +9,7 @@ class Widget extends \yii\base\Widget {
     public $skin = 'default';
     public $assetsUrl;
 
+
     public function init() {
         parent::init();
         $reflectionClass = new \ReflectionClass(get_class($this));

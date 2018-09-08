@@ -14,7 +14,7 @@ use panix\engine\Html;
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="webpanel-logo" href="javascript:void(0)">CORNER</a>
+            <a class="webpanel-logo" href="javascript:void(0)">PIXELION</a>
         </div>
         <div id="navbar" class="webpanel-navbar-collapse wp-collapse">
 

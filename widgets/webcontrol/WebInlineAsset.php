@@ -15,9 +15,6 @@ class WebInlineAsset extends AssetBundle {
         'js/webcontrol.js',
     ];
 
-    /**
-     * @inheritdoc
-     */
     public $depends = [
         'yii\web\JqueryAsset',
         'panix\engine\assets\IconAsset',
