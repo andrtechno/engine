@@ -91,7 +91,7 @@ class Settings extends Component {
             return $default;
 
         if ($key === null)
-            return $this->data[$category];
+            return (object) $this->data[$category];
         if (isset($this->data[$category][$key]))
             return $this->data[$category][$key];
         else

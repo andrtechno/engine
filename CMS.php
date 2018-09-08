@@ -3,6 +3,7 @@
 namespace panix\engine;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 /**
@@ -92,14 +93,50 @@ class CMS
         return Url::to(array_merge($url, $params));
     }
 
-    public static function hex2rgb($colour)
+    /**
+     * Replaces variables in a string
+     *
+     * @param string $text
+     * @param array $array Array of Variables and Values (['{var}'=>'value'])
+     * @param bool $flip Replaces the value in the string with variables (Default is false)
+     * @return mixed
+     */
+    public static function textReplace($text, $array = [], $flip = false)
     {
-        $colour = preg_replace("/[^abcdef0-9]/i", "", $colour);
-        if (strlen($colour) == 6) {
-            list($r, $g, $b) = str_split($colour, 2);
+        $config = Yii::$app->settings->get('app');
+        $tmpArray = array();
+        $tmpArray['{sitename}'] = $config->sitename;
+        $tmpArray['{domain}'] = Yii::$app->request->serverName;
+        //$tmpArray['{host}'] = Yii::$app->request->hostInfo;
+        $tmpArray['{protocol}'] = (Yii::$app->request->isSecureConnection) ? 'https://' : 'http://';
+        $tmpArray['{email}'] = $config->email;
+        $resultArray = ArrayHelper::merge($tmpArray, $array);
+        if ($flip)
+            $resultArray = array_flip($resultArray);
+        foreach ($resultArray as $from => $to) {
+            $text = str_replace($from, $to, $text);
+        }
+        return $text;
+    }
+
+    /**
+     * Change color hex to rgb
+     *
+     * @param $color Color hex
+     * @return array|bool
+     * @throws \yii\base\Exception
+     */
+    public static function hex2rgb($color)
+    {
+        if(strpos($color,'#')!==false)
+            throw new \yii\base\Exception('Цвет должен быть указал без знака "#"',500);
+
+        $color = preg_replace("/[^abcdef0-9]/i", "", $color);
+        if (strlen($color) == 6) {
+            list($r, $g, $b) = str_split($color, 2);
             return array("r" => hexdec($r), "g" => hexdec($g), "b" => hexdec($b));
-        } elseif (strlen($colour) == 3) {
-            list($r, $g, $b) = array($colour[0] . $colour[0], $colour[1] . $colour[1], $colour[2] . $colour[2]);
+        } elseif (strlen($color) == 3) {
+            list($r, $g, $b) = array($color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2]);
             return array("r" => hexdec($r), "g" => hexdec($g), "b" => hexdec($b));
         }
         return false;
@@ -132,19 +169,6 @@ class CMS
         return $matches[1];
     }
 
-    public static function textReplace($text, $array)
-    {
-        $config = Yii::$app->settings->get('app');
-        $tmpArray = [];
-        $tmpArray['{sitename}'] = $config['sitename'];
-        $tmpArray['{host}'] = Yii::$app->request->serverName;
-        $tmpArray['{admin_email}'] = $config['email'];
-        $resultArray = \yii\helpers\ArrayHelper::merge($tmpArray, $array);
-        foreach ($resultArray as $from => $to) {
-            $text = str_replace($from, $to, $text);
-        }
-        return $text;
-    }
 
     public static function getMemoryLimit()
     {
