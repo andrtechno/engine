@@ -8,9 +8,11 @@ class InputMaskAsset extends AssetBundle {
 
     public $sourcePath = __DIR__ . '/assets';
     public $js = [
-        'js/inputmask.min.js',
-        'js/jquery.inputmask.min.js',
-        'js/inputmask.phone.extensions.min.js',
+        'dist/inputmask/inputmask.js',
+        'dist/inputmask/inputmask.extensions.js',
+        'dist/inputmask/inputmask.numeric.extensions.js',
+        'dist/inputmask/inputmask.date.extensions.js',
+        'dist/inputmask/jquery.inputmask.js',
         
     ];
 

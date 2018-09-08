@@ -24,6 +24,7 @@ class InputMask extends \yii\widgets\InputWidget {
         } else {
             $this->options['class'] = 'form-control';
         }
+        $this->options['type']='tel';
         if ($this->hasModel())
             echo Html::activeTextInput($this->model, $this->attribute, $this->options);
         else
