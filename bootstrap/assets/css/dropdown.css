@@ -20,19 +20,21 @@
     border-width: 5px 0 5px 5px;
     border-left-color: #cccccc;
     margin-top: 5px;
-    margin-right: -10px;
+    margin-right: 0;
 }
 
 .dropdown-submenu:hover > a:after,
-.dropdown-submenu.open > a:after {
-    border-left-color: #555;
-}
+.dropdown-submenu.show > a:after {
 
-.pull-left.dropdown-submenu {
+}
+.dropdown-submenu.show .dropdown-menu{
+    display: block;
+}
+.float-left.dropdown-submenu {
     float: none !important;
 }
 
-.pull-left.dropdown-submenu > .dropdown-menu {
+.float-left.dropdown-submenu > .dropdown-menu {
     left: -100%;
     margin-left: 10px;
 }

@@ -9,7 +9,8 @@ class DropdownAsset extends \panix\engine\web\AssetBundle {
         'css/dropdown.css'
     ];
     public $js = [
-        'js/dropdown.js'
+        'js/dropdown.js',
+        //'js/dropdown-hover.js'
     ];
 
 }

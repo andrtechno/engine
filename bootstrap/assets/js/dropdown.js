@@ -3,8 +3,8 @@
         $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
-            $(this).parent().siblings().removeClass('open');
-            $(this).parent().toggleClass('open');
+            $(this).parent().siblings().removeClass('show');
+            $(this).parent().toggleClass('show');
         });
     });
 })(jQuery);

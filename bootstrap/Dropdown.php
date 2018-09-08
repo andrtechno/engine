@@ -52,13 +52,13 @@ class Dropdown extends \yii\bootstrap4\Dropdown {
                     $content = Html::a($icon . $label, $url, $linkOptions);
                 }
             } else {
-                Html::addCssClass($linkOptions, 'nav-link dropdown-toggle');
+                Html::addCssClass($linkOptions, 'dropdown-toggle');
                 $linkOptions['data-toggle'] = 'dropdown';
                 $submenuOptions = $options;
                 unset($submenuOptions['id']);
                 $content = Html::a($icon . $label, $url === null ? '#' : $url, $linkOptions)
-                        . $this->renderItems($item['items'], $submenuOptions);
-                Html::addCssClass($itemOptions, 'nav-item dropdown dropdown-submenu');
+                    . $this->renderItems($item['items'], $submenuOptions);
+                Html::addCssClass($itemOptions, 'dropdown dropdown-submenu');
             }
 
             $lines[] = Html::tag('li', $content, $itemOptions);
