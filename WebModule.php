@@ -6,7 +6,8 @@ use Yii;
 use yii\base\Module;
 use yii\helpers\FileHelper;
 
-class WebModule extends Module {
+class WebModule extends Module
+{
 
     public $assetsUrl;
     // protected $_icon;
@@ -19,13 +20,14 @@ class WebModule extends Module {
     public $icon;
     public $uploadPath;
     public $uploadAliasPath = null;
-   
-    public function getMdFiles() {
+
+    public function getMdFiles()
+    {
         $list = [];
         $files = FileHelper::findFiles(Yii::getAlias('@' . $this->id), [
-                    'only' => ['*.md'],
-                    'recursive' => false,
-                    'caseSensitive' => false
+            'only' => ['*.md'],
+            'recursive' => false,
+            'caseSensitive' => false
         ]);
         foreach ($files as $file) {
             $list[basename($file, '.md')] = $file;
@@ -34,7 +36,8 @@ class WebModule extends Module {
     }
 
     // protected $moduleNamespace;
-    public function init() {
+    public function init()
+    {
         if (file_exists(Yii::getAlias("@{$this->id}/assets"))) {
             $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@{$this->id}/assets"));
             $this->assetsUrl = $assetsPaths[1];
@@ -51,7 +54,25 @@ class WebModule extends Module {
         parent::init();
     }
 
-    public function afterInstall() {
+    public function afterInstall()
+    {
+
+       // $reflectionClass = new \ReflectionClass(static::class);
+
+       // $test = $this::getInstance();
+//print_r(Yii::getAlias('@'.($this->id)));
+
+
+
+       // $fileName2 = (new \ReflectionClass(new \panix\engine\WebModule($this->id)))->getFileName();
+
+       // $fileName = (new \ReflectionClass(get_called_class()))->getFileName();
+       // print_r($fileName2);
+
+
+       /// print_r($reflectionClass->getNamespaceName());
+        //die;
+
         // if ($this->uploadAliasPath && !file_exists(Yii::getPathOfAlias($this->uploadAliasPath)))
         //     CFileHelper::createDirectory(Yii::getPathOfAlias($this->uploadAliasPath), 0777);
         //Yii::$app->cache->flush();
@@ -62,7 +83,8 @@ class WebModule extends Module {
     /**
      * Method will be called after module removed
      */
-    public function afterUninstall() {
+    public function afterUninstall()
+    {
         //if ($this->uploadAliasPath && !file_exists(Yii::getPathOfAlias($this->uploadAliasPath)))
         //    CFileHelper::removeDirectory(Yii::getPathOfAlias($this->uploadAliasPath), array('traverseSymlinks' => true));
         //if (file_exists(Yii::getPathOfAlias("webroot.uploads.attachments.{$this->id}")))
@@ -78,19 +100,23 @@ class WebModule extends Module {
     //    return $this->_icon;
     // }
 
-    public function setIcon($icon) {
+    public function setIcon($icon)
+    {
         $this->icon = $icon;
     }
 
-    public function getAuthor() {
+    public function getAuthor()
+    {
         return 'dev@pixelion.com.ua';
     }
 
-    public function getName() {
+    public function getName()
+    {
         return Yii::t($this->id . "/default", 'MODULE_NAME');
     }
 
-    public function getDescription() {
+    public function getDescription()
+    {
         return Yii::t($this->id . "/default", 'MODULE_DESC');
     }
 

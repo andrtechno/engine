@@ -18,7 +18,7 @@ class SettingsModel extends Model {
         if (!isset($this->category)) {
             $this->category = $this->module;
         }
-        $this->setAttributes(Yii::$app->settings->get($this->category));
+        $this->setAttributes((array)Yii::$app->settings->get($this->category));
     }
 
     public function save() {

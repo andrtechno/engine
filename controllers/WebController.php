@@ -12,6 +12,7 @@ use Viber\Bot;
 use Viber\Api\Sender;
 
 
+
 class WebController extends Controller
 {
 
@@ -71,8 +72,6 @@ class WebController extends Controller
 
     public function beforeAction($action)
     {
-
-
         $this->view->registerJs('
             common.langauge="' . Yii::$app->language . '";
             common.token="' . Yii::$app->request->csrfToken . '";
@@ -81,7 +80,35 @@ class WebController extends Controller
 
         return parent::beforeAction($action);
     }
+    public function actionTest2(){
+        set_time_limit(10);
+        //  \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
+        //  include_once 'Sample_Header.php';
+        // Autoloader::register();
 
+
+
+
+        return $this->render('test2',[]);
+    }
+
+
+    public function actionTest(){
+        set_time_limit(10);
+      //  \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
+      //  include_once 'Sample_Header.php';
+       // Autoloader::register();
+
+
+        $pptReader = IOFactory::createReader('PowerPoint2007');
+        //$pptReader = IOFactory::createReader('PowerPoint97');
+        $oPHPPresentation = $pptReader->load(Yii::getAlias('@webroot/uploads').'/test.pptx');
+
+        $oTree = new PhpPptTree($oPHPPresentation);
+
+        return $this->render('test',['oTree'=>$oTree]);
+
+    }
 
     public function init()
     {

@@ -49,10 +49,10 @@ class Html extends \yii\helpers\Html
         //  $message = strip_tags(urldecode($message));
         //$message = htmlspecialchars(trim($message), ENT_QUOTES);
         // $message=html_entity_decode(htmlentities($message));
-        if ($config['censor']) {
-            $censor_l = explode(",", $config['censor_words']);
+        if ($config->censor) {
+            $censor_l = explode(",", $config->censor_words);
             foreach ($censor_l as $val)
-                $message = preg_replace("#" . $val . "#iu", $config['censor_replace'], $message);
+                $message = preg_replace("#" . $val . "#iu", $config->censor_replace, $message);
         }
         //return Emoji::emoji_unified_to_html(Emoji::emoji_html_to_unified($message));
         return Emoji::emoji_unified_to_html($message);

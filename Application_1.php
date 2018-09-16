@@ -5,7 +5,7 @@ namespace panix\engine;
 use Yii;
 use panix\mod\admin\models\Modules;
 
-class Application extends \yii\web\Application {
+class Application_1 extends \yii\web\Application {
 
     const version = '1.0.0b';
 
