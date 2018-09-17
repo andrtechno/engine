@@ -4,7 +4,7 @@
 
 $config = Yii::$app->settings->get('app');
 $date = new \DateTime('now');
-$date->setTimezone(new \DateTimeZone((isset($config['timezone'])) ? $config['timezone'] : date_default_timezone_get()));
+$date->setTimezone(new \DateTimeZone((isset($config->timezone)) ? $config->timezone : date_default_timezone_get()));
 
 echo "<?php\n";
 if (!empty($namespace)) {
@@ -14,7 +14,6 @@ if (!empty($namespace)) {
 
 /**
  * Generation migrate by <?= Yii::$app->name ?>
- * 
  * @author <?= Yii::$app->name ?> development team <dev@pixelion.com.ua>
  * 
  * Class <?= $className . "\n" ?>
