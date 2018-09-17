@@ -13,11 +13,15 @@ class Application extends \yii\web\Application {
         $this->name = $this->settings->get('app', 'sitename');
         $langManager = $this->languageManager;
         $user = $this->user;
+
+
         if (!$user->isGuest) {
             $this->language = $langManager->default->code;
         } else {
             $this->language = $langManager->default->code;
         }
+
+
 
         return parent::run();
 

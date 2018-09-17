@@ -61,6 +61,7 @@ class ManagerLanguage extends \yii\base\Component {
      * @return LanguageModel
      */
     public function getByCode($langCode) {
+
         if (isset($this->_languages[$langCode]))
             return $this->_languages[$langCode];
     }

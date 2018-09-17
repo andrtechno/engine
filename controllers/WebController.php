@@ -47,6 +47,7 @@ class WebController extends Controller
 
     public function actionMain()
     {
+        $this->layout = 'main';
         return $this->render('index');
     }
 
