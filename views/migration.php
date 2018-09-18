@@ -11,13 +11,15 @@ if (!empty($namespace)) {
     echo "\nnamespace {$namespace};\n";
 }
 ?>
-
 /**
- * Generation migrate by <?= Yii::$app->name ?>
+ * Generation migrate by <?= Yii::$app->name . "\n" ?>
+ *
  * @author <?= Yii::$app->name ?> development team <dev@pixelion.com.ua>
- * 
+ * @link http://pixelion.com.ua <?= Yii::$app->name . "\n" ?>
+ *
  * Class <?= $className . "\n" ?>
  */
+
 use yii\db\Schema;
 use panix\engine\db\Migration;
 

@@ -1,6 +1,22 @@
 <?php
 
 namespace panix\engine;
+
+/**
+ * Class ConsoleCommandRunner
+ * @link https://github.com/tebazil/yii2-console-runner
+ *
+ * used
+ * $runner = new \panix\engine\ConsoleCommandRunner();
+ * $runner->run('migrate');
+ * $runner->run('migrate\create', ['insert_test_id','interactive'=>false]);
+ *
+ *
+ * $output = $runner->getOutput();
+ * $exitCode = $runner->getExitCode();
+ *
+ * @package panix\engine
+ */
 class ConsoleCommandRunner
 {
     private $outerApplication;
