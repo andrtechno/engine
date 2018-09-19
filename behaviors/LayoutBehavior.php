@@ -56,15 +56,21 @@ class LayoutBehavior extends \yii\base\Behavior {
 
                 $layouts[] = "@app/modules/{$moduleId}/views/layouts/{$moduleId}_{$controllerId}_{$actionId}";
                 $layouts[] = "@app/modules/{$moduleId}/views/layouts/{$moduleId}_{$controllerId}";
+                $layouts[] = "@app/modules/{$moduleId}/views/layouts/{$moduleId}";
                 $layouts[] = "@app/modules/{$moduleId}/views/layouts/main";//{$moduleId}
+
+
+
+                $layouts[] = "@app/web/themes/{$theme}/modules/{$moduleId}/views/layouts/{$moduleId}_{$controllerId}_{$actionId}";
+                $layouts[] = "@app/web/themes/{$theme}/modules/{$moduleId}/views/layouts/{$moduleId}_{$controllerId}";
+                $layouts[] = "@app/web/themes/{$theme}/modules/{$moduleId}/views/layouts/{$moduleId}";
+                $layouts[] = "@app/web/themes/{$theme}/modules/{$moduleId}/views/layouts/default";
 
                // $layouts[] = "@webroot/themes/{$theme}/views/layouts/main";
                 $layouts[] = "@webroot/themes/{$theme}/views/layouts/default";
 
                 
-                //$layouts[] = "@app/web/themes/{$theme}/{$moduleId}/views/layouts/{$moduleId}_{$controllerId}_{$actionId}";
-                //$layouts[] = "@app/web/themes/{$theme}/modules/{$moduleId}/views/layouts/{$moduleId}_{$controllerId}";
-                //$layouts[] = "@app/web/themes/{$theme}/modules/{$moduleId}/views/layouts/{$moduleId}";
+
             } else {
                 $layouts[] = "@app/views/layouts/{$controllerId}_{$actionId}";
                 $layouts[] = "@app/views/layouts/{$controllerId}";
@@ -88,7 +94,10 @@ class LayoutBehavior extends \yii\base\Behavior {
             $layouts[] = "@app/views/layouts/main";
 
          //   VarDumper::dump($layouts,10,true);die;
-
+            //foreach (Yii::$app->getModules() as $module){
+            //    print_r($module);
+            //}
+            //die;
             foreach ($layouts as $layout) {
  
                 $layoutPath = Yii::getAlias($layout . '.' . Yii::$app->getView()->defaultExtension);

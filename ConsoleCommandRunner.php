@@ -9,7 +9,7 @@ namespace panix\engine;
  * used
  * $runner = new \panix\engine\ConsoleCommandRunner();
  * $runner->run('migrate');
- * $runner->run('migrate\create', ['insert_test_id','interactive'=>false]);
+ * $runner->run('migrate/create', ['insert_test_id','interactive'=>false]);
  *
  *
  * $output = $runner->getOutput();
