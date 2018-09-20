@@ -61,9 +61,8 @@ class LayoutBehavior extends \yii\base\Behavior {
 
 
 
-                $layouts[] = "@app/web/themes/{$theme}/modules/{$moduleId}/views/layouts/{$moduleId}_{$controllerId}_{$actionId}";
-                $layouts[] = "@app/web/themes/{$theme}/modules/{$moduleId}/views/layouts/{$moduleId}_{$controllerId}";
-                $layouts[] = "@app/web/themes/{$theme}/modules/{$moduleId}/views/layouts/{$moduleId}";
+                $layouts[] = "@app/web/themes/{$theme}/modules/{$moduleId}/views/layouts/{$controllerId}_{$actionId}";
+                $layouts[] = "@app/web/themes/{$theme}/modules/{$moduleId}/views/layouts/{$controllerId}";
                 $layouts[] = "@app/web/themes/{$theme}/modules/{$moduleId}/views/layouts/default";
 
                // $layouts[] = "@webroot/themes/{$theme}/views/layouts/main";
