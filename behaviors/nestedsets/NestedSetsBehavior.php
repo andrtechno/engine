@@ -233,21 +233,21 @@ class NestedSetsBehavior extends Behavior
     /**
      * Create root node if multiple-root tree mode. Update node if it's not new.
      * @param boolean $runValidation whether to perform validation.
-     * @param array $attributes list of attributes.
+     * @param array $attributeNames list of attributes.
      * @return boolean whether the saving succeeds.
      */
-    public function save($runValidation = true, $attributes = null)
+    public function save($runValidation = true, $attributeNames = null)
     {
-        if ($runValidation && !$this->owner->validate($attributes)) {
+        if ($runValidation && !$this->owner->validate($attributeNames)) {
             return false;
         }
 
         if ($this->owner->getIsNewRecord()) {
-            return $this->makeRoot($attributes);
+            return $this->makeRoot($attributeNames);
         }
 
         $this->_ignoreEvent = true;
-        $result = $this->owner->update(false, $attributes);
+        $result = $this->owner->update(false, $attributeNames);
         $this->_ignoreEvent = false;
 
         return $result;
@@ -256,12 +256,12 @@ class NestedSetsBehavior extends Behavior
     /**
      * Create root node if multiple-root tree mode. Update node if it's not new.
      * @param boolean $runValidation whether to perform validation.
-     * @param array $attributes list of attributes.
+     * @param array $attributeNames list of attributes.
      * @return boolean whether the saving succeeds.
      */
-    public function saveNode($runValidation = true, $attributes = null)
+    public function saveNode($runValidation = true, $attributeNames = null)
     {
-        return $this->save($runValidation, $attributes);
+        return $this->save($runValidation, $attributeNames);
     }
 
     /**
