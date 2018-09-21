@@ -1,7 +1,7 @@
 <div id="topcontrol">
     <?php if ($this->context->enableTop) { ?>
         <div
-        class="backtotop" <?php echo(($this->context->opacity > 0 && $this->context->opacity <= 1) ? '' : 'style="display:none;"'); ?>></div>
+        class="backtotop btn btn-secondary" <?php echo(($this->context->opacity > 0 && $this->context->opacity <= 1) ? '' : 'style="display:none;"'); ?>></div>
     <?php } ?>
     <?php if ($this->context->enableBottom) { ?>
         <div
@@ -19,7 +19,7 @@ $this->registerJs("
 
     " . (($this->context->opacity > 0 && $this->context->opacity <= 1) ? "
         function fadeOutTo(){
-            $('.backtotop').fadeTo(" . $this->context->fadeInTime . ", " . $this->context->opacity . ");
+            $('.backtotop, .btn').fadeTo(" . $this->context->fadeInTime . ", " . $this->context->opacity . ");
             $('.backtobottom').fadeTo(" . $this->context->fadeInTime . ", " . $this->context->opacity . ");
         }
 
@@ -67,28 +67,39 @@ $this->registerJs("
 
 ", \yii\web\View::POS_READY, 'topBottomScroll-js');
 
-$this->registerCss(" 
+$this->registerCss(' 
     .hide {display:none;}
     
     #topcontrol{
         position: fixed;
-        bottom: 5px;
+        bottom: 50px;
         right: 5px;
         opacity: 1;
         cursor: pointer;
         z-index:1001;
     }
 
-    .backtotop {
-        background: url(" . $this->context->assetsUrl . "/images/icon-up.png) no-repeat;
-        width: 68px;
-        height: 68px;
+    #topcontrol .btn {
+
+        width: 42px;
+        height: 42px;
+        position:relative;
+    }
+    #topcontrol .btn:before{
+        position:absolute;
+        font-family: "Pixelion";
+        content:"\f007";
+        width: 100%;
+        font-size: 20px;
+        left:0;
+        top: 6px;
+        text-align: center;
+        display:block;
     }
 
     .backtobottom {
-        background: url(" . $this->context->assetsUrl . "/images/icon-down.png) no-repeat;
         width: 68px;
         height: 68px;
     }
-", [], 'topBottomScroll-css');
+', [], 'topBottomScroll-css');
 
