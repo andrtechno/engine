@@ -28,6 +28,7 @@ class Column extends \yii\grid\Column {
             $('#{$id} tbody').sortable({
                 connectWith: '.sortable-clipboard-area',
                 axis: 'y',
+                placeholder: 'sortable-column-placeholder',
                 handle: '.sortable-column-handler',
                 helper: function (event, ui) {
                     ui.children().each(function () {
