@@ -38,6 +38,7 @@ class ActionColumn extends \yii\grid\DataColumn
             $this->filter = ButtonDropdown::widget([
                 'label' => Html::icon('settings'),
                 'encodeLabel' => false,
+                'dropdownClass' => 'panix\engine\bootstrap\Dropdown4',
                 //'containerOptions' => ['class' => '', 'id' => 'grid-settings'],
                 'buttonOptions' => ['class' => 'btn-sm btn-secondary'],
                 'dropdown' => [

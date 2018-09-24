@@ -140,7 +140,8 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
         $this->contentOptions = ['class' => 'text-center'];
         $this->grid->footerRowOptions = ['class' => 'text-center'];
         $this->footer = ButtonDropdown::widget([
-            'dropdownClass' => 'panix\engine\bootstrap\Dropdown',
+            'dropdownClass' => 'panix\engine\bootstrap\Dropdown4',
+
             'label' => Html::icon('menu'),
             'encodeLabel' => false,
             //'containerOptions' => ['class' => 'dropup hidden', 'id' => 'grid-actions'],
