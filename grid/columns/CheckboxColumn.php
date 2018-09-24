@@ -6,7 +6,7 @@ use Yii;
 use Closure;
 use yii\base\InvalidConfigException;
 use panix\engine\Html;
-
+use panix\engine\bootstrap\ButtonDropdown;
 /**
  * CheckboxColumn displays a column of checkboxes in a grid view.
  *
@@ -137,19 +137,33 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
         //print_r($this->getCustomActions());die;
         $this->contentOptions = ['class' => 'text-center'];
         $this->grid->footerRowOptions = ['class' => 'text-center'];
-        $this->footer = \panix\engine\bootstrap\ButtonDropdown::widget([
-                    'dropdownClass' => 'panix\engine\bootstrap\Dropdown',
-                    'label' => Html::icon('menu'),
-                    'encodeLabel' => false,
-                    //'containerOptions' => ['class' => 'dropup hidden', 'id' => 'grid-actions'],
-                    'options' => ['class' => 'btn-default'],
-                    'dropdown' => [
-                        'encodeLabels' => false,
-                        'items' => $this->getCustomActions(),
-                    ],
+        $this->footer = ButtonDropdown::widget([
+            'dropdownClass' => 'panix\engine\bootstrap\Dropdown',
+            'label' => Html::icon('menu'),
+            'encodeLabel' => false,
+            //'containerOptions' => ['class' => 'dropup hidden', 'id' => 'grid-actions'],
+            'buttonOptions' => ['class' => 'btn-sm btn-secondary'],
+            'dropdown' => [
+                'encodeLabels' => false,
+                'items' => $this->getCustomActions(),
+            ],
+        ]);
+
+    }
+    protected function renderFilterCellContent()
+    {
+        return ButtonDropdown::widget([
+            'dropdownClass' => 'panix\engine\bootstrap\Dropdown',
+            'label' => Html::icon('menu'),
+            'encodeLabel' => false,
+            //'containerOptions' => ['class' => 'dropup hidden', 'id' => 'grid-actions'],
+            'buttonOptions' => ['class' => 'btn-sm btn-secondary'],
+            'dropdown' => [
+                'encodeLabels' => false,
+                'items' => $this->getCustomActions(),
+            ],
         ]);
     }
-
     public function setCustomActions($actions) {
         foreach ($actions as $action) {
             if (!isset($action['options']))
