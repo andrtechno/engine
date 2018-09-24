@@ -7,6 +7,7 @@ use Closure;
 use yii\base\InvalidConfigException;
 use panix\engine\Html;
 use panix\engine\bootstrap\ButtonDropdown;
+
 /**
  * CheckboxColumn displays a column of checkboxes in a grid view.
  *
@@ -33,7 +34,8 @@ use panix\engine\bootstrap\ButtonDropdown;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class CheckboxColumn extends Column {
+class CheckboxColumn extends Column
+{
 
     public $headerOptions = ['style' => 'width: 80px;'];
 
@@ -72,7 +74,8 @@ class CheckboxColumn extends Column {
      * @inheritdoc
      * @throws \yii\base\InvalidConfigException if [[name]] is not set.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
         if (empty($this->name)) {
             throw new InvalidConfigException('The "name" property must be set.');
@@ -82,7 +85,6 @@ class CheckboxColumn extends Column {
         }
         $id = $this->grid->getId();
         $name = strtr($this->name, array('[' => "\\[", ']' => "\\]"));
-
 
 
         $this->grid->view->registerJs("
@@ -150,21 +152,14 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
         ]);
 
     }
+
     protected function renderFilterCellContent()
     {
-        return ButtonDropdown::widget([
-            'dropdownClass' => 'panix\engine\bootstrap\Dropdown',
-            'label' => Html::icon('menu'),
-            'encodeLabel' => false,
-            //'containerOptions' => ['class' => 'dropup hidden', 'id' => 'grid-actions'],
-            'buttonOptions' => ['class' => 'btn-sm btn-secondary'],
-            'dropdown' => [
-                'encodeLabels' => false,
-                'items' => $this->getCustomActions(),
-            ],
-        ]);
+        return $this->footer;
     }
-    public function setCustomActions($actions) {
+
+    public function setCustomActions($actions)
+    {
         foreach ($actions as $action) {
             if (!isset($action['options']))
                 $action['options'] = $this->getDefaultActionOptions();
@@ -175,14 +170,15 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
         }
     }
 
-    public function getCustomActions() {
+    public function getCustomActions()
+    {
         $this->customActions = [
             [
                 'label' => Yii::t('app', 'DELETE'),
                 'url' => Yii::$app->urlManager->createUrl('delete'),
                 'icon' => 'delete',
                 'options' => [
-                    'class' => '',
+                    'class' => 'dropdown-item',
                     'data-question' => Yii::t('app', 'CONFIRM'),
                 ]
             ]
@@ -194,14 +190,16 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
     /**
      * @return array Default linkOptions for footer action.
      */
-    public function getDefaultActionOptions() {
+    public function getDefaultActionOptions()
+    {
         return [
             //'data-token' => Yii::app()->request->csrfToken,
             'data-question' => Yii::t('app', 'CONFIRM'),
+            'class' => 'dropdown-item',
             // 'model' => $this->dataProvider->modelClass,
             'onClick' => strtr('return $.fn.yiiGridView.runAction(":grid", this);', [
-                ':grid' => $this->grid->options['id']
-                    ]
+                    ':grid' => $this->grid->options['id']
+                ]
             ),
         ];
     }
@@ -212,14 +210,15 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
      * This method may be overridden to customize the rendering of the header cell.
      * @return string the rendering result
      */
-    protected function renderHeaderCellContent() {
+    protected function renderHeaderCellContent()
+    {
         $name = rtrim($this->name, '[]') . '_all';
         $id = $this->grid->options['id'];
         $options = json_encode([
             'name' => $this->name,
             'multiple' => $this->multiple,
             'checkAll' => $name,
-                ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         $this->grid->getView()->registerJs("jQuery('#$id').yiiGridView('setSelectionColumn', $options);");
 
         if ($this->header !== null || !$this->multiple) {
@@ -232,7 +231,8 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
     /**
      * @inheritdoc
      */
-    protected function renderDataCellContent($model, $key, $index) {
+    protected function renderDataCellContent($model, $key, $index)
+    {
         if ($this->checkboxOptions instanceof Closure) {
             $options = call_user_func($this->checkboxOptions, $model, $key, $index, $this);
         } else {
