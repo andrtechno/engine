@@ -162,11 +162,11 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
     public function setCustomActions($actions)
     {
         foreach ($actions as $action) {
-            if (!isset($action['options']))
-                $action['options'] = $this->getDefaultActionOptions();
-            else
-                $action['options'] = array_merge($this->getDefaultActionOptions(), $action['options']);
-
+            if (!isset($action['linkOptions'])) {
+                $action['linkOptions'] = $this->getDefaultActionOptions();
+            } else {
+                $action['linkOptions'] = array_merge($this->getDefaultActionOptions(), $action['linkOptions']);
+            }
             $this->_customActions[] = $action;
         }
     }
