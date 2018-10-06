@@ -222,7 +222,7 @@ $(document).ready(function () {
                 },
                 {
                     'text': common.message.cancel,
-                    "class": 'btn btn-default',
+                    "class": 'btn btn-secondary',
                     'click': function () {
                         $('#' + gridid + '-dialog').remove();
                     }
