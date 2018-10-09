@@ -5,7 +5,7 @@ namespace panix\engine;
 use Yii;
 use yii\base\Module;
 use yii\helpers\FileHelper;
-
+use yii2mod\rbac\filters\AccessControl;
 class WebModule extends Module
 {
 
@@ -20,7 +20,12 @@ class WebModule extends Module
     public $icon;
     public $uploadPath;
     public $uploadAliasPath = null;
-
+    public function behaviors2()
+    {
+        return [
+            AccessControl::class
+        ];
+    }
     public function getMdFiles()
     {
         $list = [];
