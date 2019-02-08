@@ -680,7 +680,7 @@ class CMS
             if (isset(Yii::$app->session['timezone'])) {
                 $timezone = Yii::$app->session['timezone'];
             } else {
-                $timezone = $config['timezone'];
+                $timezone = $config->timezone;
             }
         }
         return $timezone; //$timezone;

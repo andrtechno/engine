@@ -2,7 +2,7 @@
 
 namespace panix\engine\widgets\owlcarousel;
 
-use panix\engine\web\AssetBundle;
+use yii\web\AssetBundle;
 
 class CarouselAsset extends AssetBundle {
 

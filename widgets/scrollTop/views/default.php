@@ -65,7 +65,7 @@ $this->registerJs("
         return false;
     });
 
-", \yii\web\View::POS_READY, 'topBottomScroll-js');
+", \yii\web\View::POS_END, 'topBottomScroll-js');
 
 $this->registerCss(' 
     .hide {display:none;}

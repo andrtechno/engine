@@ -7,10 +7,10 @@ use Yii;
 use yii\web\Controller;
 use panix\engine\CMS;
 use yii\web\ForbiddenHttpException;
-
+//use yii\filters\AccessControl;
 use Viber\Bot;
 use Viber\Api\Sender;
-
+use yii2mod\rbac\filters\AccessControl;
 
 
 class WebController extends Controller
@@ -22,11 +22,11 @@ class WebController extends Controller
     public $icon;
     private $_title;
 
-    public function behaviors()
+    public function behaviors2()
     {
         return [
             'access' => [
-                'class' => \yii\filters\AccessControl::class,
+                'class' => AccessControl::class,
                 'only' => ['logout'],
                 'rules' => [
                     [
@@ -75,6 +75,7 @@ class WebController extends Controller
     public function beforeAction($action)
     {
         $this->view->registerJs('
+            var common = window.CMS_common || {};
             common.langauge="' . Yii::$app->language . '";
             common.token="' . Yii::$app->request->csrfToken . '";
             common.isDashboard=true;

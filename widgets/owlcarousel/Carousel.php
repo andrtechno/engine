@@ -23,8 +23,10 @@ class Carousel extends \panix\engine\data\Widget {
         ];
 
         $options = Json::encode(array_merge($this->options, $defaultOptions));
-        $js[] = "$('$this->target').owlCarousel($options);";
-        $view->registerJs(implode("\n", $js));
+        $js[] = "$(function () {
+            $('$this->target').owlCarousel($options);
+        });";
+        $view->registerJs(implode("\n", $js),\yii\web\View::POS_END);
     }
 
 }

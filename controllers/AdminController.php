@@ -12,18 +12,19 @@ class AdminController extends WebController
     public $layout = '@vendor/panix/mod-admin/views/layouts/main';
     public $dashboard = true;
 
-    public function behaviors2()
+    public function behaviors()
     {
         return [
             'access' => [
                 'class' => AccessControl::class,
                 'allowActions' => [
-                   // 'index',
+                    'index',
                     // The actions listed here will be allowed to everyone including guests.
                 ]
             ],
         ];
     }
+
     public function beforeAction($event)
     {
         if (Yii::$app->user->isGuest && get_class($this) !== 'panix\mod\admin\controllers\AuthController') {

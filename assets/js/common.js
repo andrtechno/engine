@@ -1,5 +1,5 @@
 
-var common = window.CMS_common || {};
+
 common = {
     debug: true,
     language: 'en',

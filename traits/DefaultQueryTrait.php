@@ -1,10 +1,14 @@
 <?php
 
 namespace panix\engine\traits;
-use Yii;
-trait DefaultQueryTrait {
 
-    public function init() {
+use Yii;
+
+trait DefaultQueryTrait
+{
+
+    public function init()
+    {
         $modelClass = $this->modelClass;
         $tableName = $modelClass::tableName();
         if (Yii::$app->getDb()->getSchema()->getTableSchema($tableName)->getColumn('ordern')) {
@@ -13,7 +17,8 @@ trait DefaultQueryTrait {
         parent::init();
     }
 
-    public function published($state = 1) {
+    public function published($state = 1)
+    {
         $modelClass = $this->modelClass;
         $tableName = $modelClass::tableName();
         if (Yii::$app->getDb()->getSchema()->getTableSchema($tableName)->getColumn('switch')) {
