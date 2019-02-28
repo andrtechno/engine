@@ -2,6 +2,7 @@
 
 namespace panix\engine\bootstrap;
 
+use panix\engine\CMS;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
@@ -48,15 +49,16 @@ class Nav extends \yii\bootstrap4\Nav {
     /**
      * @inheritdoc
      */
-    protected function renderDropdown($items, $parentItem) {
+    public function renderDropdown($items, $parentItem) {
         /**
-         * @var \yii\bootstrap4\Dropdown $ddWidget
+         * @var \panix\engine\bootstrap\Dropdown $ddWidget
          */
         $ddWidget = $this->dropdownClass;
         $ddOptions = array_replace_recursive($this->dropdownOptions, [
             'items' => $items,
             'encodeLabels' => $this->encodeLabels,
             'clientOptions' => false,
+           // 'options'=>['aria-labelledby'=>$id],
             'view' => $this->getView(),
         ]);
         return $ddWidget::widget($ddOptions);
@@ -116,16 +118,22 @@ class Nav extends \yii\bootstrap4\Nav {
         if (is_string($item)) {
             return $item;
         }
+
         if (!isset($item['label'])) {
             throw new InvalidConfigException("The 'label' option is required.");
         }
+       // $id=crc32($item['label']).CMS::gen(4);
         $encodeLabel = isset($item['encode']) ? $item['encode'] : $this->encodeLabels;
         $icon = isset($item['icon']) ? Html::icon($item['icon']) . ' ' : '';
         $label = $encodeLabel ? Html::encode($item['label']) : $item['label'];
         $options = ArrayHelper::getValue($item, 'options', []);
         $items = ArrayHelper::getValue($item, 'items');
         $url = ArrayHelper::getValue($item, 'url', '#');
-        $linkOptions = ArrayHelper::getValue($item, 'linkOptions', []);
+        $linkOptions = ArrayHelper::getValue($item, 'linkOptions', [
+           // 'id'=>'dropdown-'.$id,
+            'aria-haspopup'=>"true",
+            'aria-expanded'=>"false"
+        ]);
 
         if (isset($item['active'])) {
             $active = ArrayHelper::remove($item, 'active', false);
@@ -143,6 +151,7 @@ class Nav extends \yii\bootstrap4\Nav {
                     $items = $this->isChildActive($items, $active);
                 }
                 $items = $this->renderDropdown($items, $item);
+
             }
         }
 

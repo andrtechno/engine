@@ -47,8 +47,9 @@ class ActionColumn extends \yii\grid\DataColumn
                     'items' => [
                         [
                             'label' => Html::icon('table') . ' Изменить столбцы таблицы',
-                            'url' => 'javascript:void(0)',
+                            'url' => '/testurl',
                             'options' => [
+                                'data-target'=>"#",
                                 'class' => 'editgrid',
                                 'data-grid-id' => $this->grid->id,
                                 // 'data-model' => (isset($this->grid->dataProvider->query))?$this->grid->dataProvider->query->modelClass:'s',
@@ -57,7 +58,7 @@ class ActionColumn extends \yii\grid\DataColumn
                         ],
                         /* [
                           'label' => Html::icon('refresh') . ' Сбросить',
-                          'url' => 'javascript:void(0)',
+                          'url' => '#',
                           'options' => [
                           'class' => '',
                           'onClick'=>'$.pjax.reload("#pjax-'. strtolower(basename($this->grid->dataProvider->query->modelClass)).'", {timeout : false});',

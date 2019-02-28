@@ -525,9 +525,9 @@ class CMS
                 $title = Yii::t('app', 'COUNTRY') . ': ' . Yii::t('app/geoip_country', $geoip->country) . '/' . Yii::t('app/geoip_city', $geoip->city) . $geoip->timezone;
                 $image = Html::img('/uploads/language/' . strtolower($geoip->isoCode) . '.png', ['alt' => $ip, 'title' => $title]);
                 if ($type == 1) {
-                    $content = Html::a($image . ' ' . $ip, 'javascript:void(0)', ['onClick' => 'common.geoip("' . $ip . '")', 'title' => $title]);
+                    $content = Html::a($image . ' ' . $ip, '#', ['onClick' => 'common.geoip("' . $ip . '")', 'title' => $title]);
                 } elseif ($type == 2 && $user) {
-                    $content = Html::a($image . ' ' . $user, 'javascript:void(0)', ['onClick' => 'common.geoip("' . $ip . '")', 'title' => $title]);
+                    $content = Html::a($image . ' ' . $user, '#', ['onClick' => 'common.geoip("' . $ip . '")', 'title' => $title]);
                 } elseif ($type == 3) {
                     $content = $image . ' ' . $ip;
                 } else {

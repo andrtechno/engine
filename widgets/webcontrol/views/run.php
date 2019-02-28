@@ -14,7 +14,7 @@ use panix\engine\Html;
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="webpanel-logo" href="javascript:void(0)">PIXELION</a>
+            <a class="webpanel-logo" href="#">PIXELION</a>
         </div>
         <div id="navbar" class="webpanel-navbar-collapse wp-collapse">
 
@@ -80,7 +80,7 @@ use panix\engine\Html;
                         </li>
                     <?php } ?>
                 <?php } ?>
-                <li class="dropdown"><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle" href="javascript:void(0)"><?= Yii::$app->user->getDisplayName(); ?> <span class="caret"></span></a>
+                <li class="dropdown"><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-target="#" class="dropdown-toggle" href="/testurl"><?= Yii::$app->user->getDisplayName(); ?> <span class="caret"></span></a>
                     <ul class="webpanel-dropdown-menu">
                         <li><?= Html::a(Yii::t('app', 'UPDATE', 0), array('/admin/users/default/update', 'id' => Yii::$app->user->id)) ?></li>
                         <li><?= Html::a(Yii::t('app', 'ADMIN_PANEL'), array('/admin/users/default/update', 'id' => Yii::$app->user->id)) ?></li>

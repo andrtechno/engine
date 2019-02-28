@@ -21,7 +21,7 @@ class GridView extends \yii\grid\GridView {
                 $runModel = new $modelClass;
                 $model = GridColumns::find()->where([
                             'modelClass' => $modelClass
-                        ])->orderBy('ordern ASC')->all();
+                        ])->orderBy(['ordern'=>SORT_ASC])->all();
 
                 $colms = array();
                 if (isset($model)) {
