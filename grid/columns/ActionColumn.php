@@ -2,11 +2,15 @@
 
 namespace panix\engine\grid\columns;
 
+
+use panix\engine\View;
 use Yii;
 use Closure;
-use panix\engine\Html;
 use yii\helpers\Url;
 use panix\engine\bootstrap\ButtonDropdown;
+
+use panix\engine\Html;
+use yii\web\JsExpression;
 
 // \yii\grid\DataColumn
 // \yii\grid\ActionColumn
@@ -30,6 +34,7 @@ class ActionColumn extends \yii\grid\DataColumn
     {
         $config = Yii::$app->settings->get('app');
         $this->header = Yii::t('app', 'OPTIONS');
+
         // $this->btnSize = $config['grid_btn_icon_size'];
         // if (!$this->pjax) {
         //    $this->pjax = '#pjax-container';
@@ -47,30 +52,102 @@ class ActionColumn extends \yii\grid\DataColumn
                     'items' => [
                         [
                             'label' => Html::icon('table') . ' Изменить столбцы таблицы',
-                            'url' => '/testurl',
-                            'options' => [
-                                'data-target'=>"#",
-                                'class' => 'editgrid',
-                                'data-grid-id' => $this->grid->id,
+                            'url' => '/test',
+                            'linkOptions' => [
+                                'data-target' => "#",
+                                'class' => 'dropdown-item edit-columns',
+                                'data-pjax' => '0',
+                                // 'data-grid-id' => $this->grid->id,
                                 // 'data-model' => (isset($this->grid->dataProvider->query))?$this->grid->dataProvider->query->modelClass:'s',
                                 // 'data-pjax-id' => 'pjax-' . strtolower(basename($this->grid->dataProvider->query->modelClass)),
                             ]
                         ],
-                        /* [
-                          'label' => Html::icon('refresh') . ' Сбросить',
-                          'url' => '#',
-                          'options' => [
-                          'class' => '',
-                          'onClick'=>'$.pjax.reload("#pjax-'. strtolower(basename($this->grid->dataProvider->query->modelClass)).'", {timeout : false});',
-                          ]
-                          ], */
+                        [
+                            'label' => Html::icon('refresh') . ' Сбросить',
+                            'url' => '#',
+                            'options' => [
+                                'class' => '',
+                                'onClick' => '$.pjax.reload("#pjax-' . strtolower(basename($this->grid->dataProvider->query->modelClass)) . '", {timeout : false});',
+                            ]
+                        ],
                     ],
                 ],
             ]);
         }
         $this->filterOptions = ['class' => 'text-center'];
         $this->initDefaultButtons();
+
         parent::init();
+        // $this->registerScripts();
+
+        $view = $this->grid->getView();
+
+        // $oReflectionClass = ($this->grid->dataProvider->query->modelClass);
+
+        //  print_r($oReflectionClass);die;
+
+
+
+        $classNamePath =  '/'.implode('/', explode('\\', $this->grid->dataProvider->query->modelClass));
+
+
+
+
+        //echo $classNamePath;
+       // die;
+        $view->registerJs("
+        $(function() {
+
+            $('.edit-columns').click(function(e){
+                e.preventDefault();
+
+                $.ajax({
+                    type:'POST',
+                    url:'/admin/app/default/edit-columns',
+                    data:{
+                        grid_id:'" . $this->grid->getId() . "',
+                        model:'" . $classNamePath . "',
+                    },
+                    success:function(data){
+                        
+                        $('#edit-columns_dialog').html(data);
+                        $('#edit-columns_dialog').dialog('open');
+                    }
+                });
+            });
+                    
+        });
+        ", \panix\engine\View::POS_END, 'edit-columns_dialog');
+
+        echo \yii\jui\Dialog::widget([
+            'id' => 'edit-columns_dialog',
+            'clientOptions' => [
+                'modal' => true,
+                'autoOpen' => false,
+                'draggable' => false,
+                'resizable' => false,
+                'dialogClass' => 'test111111111',
+                'width' => '50%',
+                'buttons' => [
+                    [
+                        'text' => "Ok",
+                        'click' => new JsExpression("function(){
+                            var form = $('#edit_grid_columns_form').serialize();
+                            $.ajax({
+                                url:'/admin/app/default/edit-columns',
+                                type:'POST',
+                                data:form,
+                                success:function(){
+                               //$(\'#\'+grid.dialog_id).remove();
+                                //$.fn.yiiGridView.update(gridid);//,{url: window.location.href}
+                                //$(\'#dialog-overlay\').remove();
+                                }
+                            });
+                        }")
+                    ]
+                ]
+            ]
+        ]);
     }
 
     /**
@@ -153,7 +230,7 @@ class ActionColumn extends \yii\grid\DataColumn
         if (!isset($this->buttons['update'])) {
             $this->buttons['update'] = function ($url, $model, $key) {
 
-                if(isset($model->primaryKey)) {
+                if (isset($model->primaryKey)) {
                     if (!in_array($model->primaryKey, $model->disallow_update)) {
                         return Html::a(Html::icon('edit'), $url, [
                             'title' => Yii::t('yii', 'Update'),
@@ -161,7 +238,7 @@ class ActionColumn extends \yii\grid\DataColumn
                             'data-pjax' => '0',
                         ]);
                     }
-                }else{
+                } else {
                     return Html::a(Html::icon('edit'), $url, [
                         'title' => Yii::t('yii', 'Update'),
                         'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary linkTarget',
@@ -180,13 +257,13 @@ class ActionColumn extends \yii\grid\DataColumn
                   'data-method' => 'post',
                   'data-pjax' => '0',
                   ]); */
-                if(isset($model->primaryKey)){
-                if (!in_array($model->primaryKey, $model->disallow_delete)) {
-                    return Html::a(Html::icon('delete'), '#', [
-                        'title' => Yii::t('yii', 'Delete'),
-                        'aria-label' => Yii::t('yii', 'Delete'),
-                        'class' => 'btn ' . $this->btnSize . ' btn-outline-danger',
-                        'onclick' => "
+                if (isset($model->primaryKey)) {
+                    if (!in_array($model->primaryKey, $model->disallow_delete)) {
+                        return Html::a(Html::icon('delete'), '#', [
+                            'title' => Yii::t('yii', 'Delete'),
+                            'aria-label' => Yii::t('yii', 'Delete'),
+                            'class' => 'btn ' . $this->btnSize . ' btn-outline-danger',
+                            'onclick' => "
                                 if (confirm('" . Yii::t('app', 'DELETE_CONFIRM') . "')) {
                                     $.ajax('$url', {
                                         type: 'POST',
@@ -200,9 +277,9 @@ class ActionColumn extends \yii\grid\DataColumn
                                 }
                                 return false;
                             ",
-                    ]);
-                }
-                }else{
+                        ]);
+                    }
+                } else {
                     return Html::a(Html::icon('delete'), $url, [
                         'title' => Yii::t('yii', 'Delete'),
                         'class' => 'btn ' . $this->btnSize . ' btn-secondary',
@@ -213,6 +290,12 @@ class ActionColumn extends \yii\grid\DataColumn
                 }
             };
         }
+    }
+
+    private function registerScripts()
+    {
+        //print_r($this->grid->getView());die;
+        $this->grid->view->registerJs("alert('dsa')", View::POS_END, 'my-options');
     }
 
     /**

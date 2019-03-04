@@ -7,11 +7,11 @@ use Yii;
 use yii\web\Controller;
 use panix\engine\CMS;
 use yii\web\ForbiddenHttpException;
-//use yii\filters\AccessControl;
+
 use Viber\Bot;
 use Viber\Api\Sender;
-use yii2mod\rbac\filters\AccessControl;
-
+//use yii2mod\rbac\filters\AccessControl;
+use yii\filters\AccessControl;
 
 class WebController extends Controller
 {

@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Module;
 use yii\helpers\FileHelper;
 use yii2mod\rbac\filters\AccessControl;
+
 class WebModule extends Module
 {
 
@@ -20,12 +21,14 @@ class WebModule extends Module
     public $icon;
     public $uploadPath;
     public $uploadAliasPath = null;
+
     public function behaviors2()
     {
         return [
             AccessControl::class
         ];
     }
+
     public function getMdFiles()
     {
         $list = [];
@@ -62,20 +65,19 @@ class WebModule extends Module
     public function afterInstall()
     {
 
-       // $reflectionClass = new \ReflectionClass(static::class);
+        // $reflectionClass = new \ReflectionClass(static::class);
 
-       // $test = $this::getInstance();
+        // $test = $this::getInstance();
 //print_r(Yii::getAlias('@'.($this->id)));
 
 
+        // $fileName2 = (new \ReflectionClass(new \panix\engine\WebModule($this->id)))->getFileName();
 
-       // $fileName2 = (new \ReflectionClass(new \panix\engine\WebModule($this->id)))->getFileName();
-
-       // $fileName = (new \ReflectionClass(get_called_class()))->getFileName();
-       // print_r($fileName2);
+        // $fileName = (new \ReflectionClass(get_called_class()))->getFileName();
+        // print_r($fileName2);
 
 
-       /// print_r($reflectionClass->getNamespaceName());
+        /// print_r($reflectionClass->getNamespaceName());
         //die;
 
         // if ($this->uploadAliasPath && !file_exists(Yii::getPathOfAlias($this->uploadAliasPath)))
