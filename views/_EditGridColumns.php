@@ -17,7 +17,6 @@ echo \panix\engine\grid\GridView::widget([
             'attribute' => 'checkbox',
             'format' => 'raw',
             'header' => '',
-            // 'class' => 'IdColumn',
         ],
         [
             'attribute' => 'name',

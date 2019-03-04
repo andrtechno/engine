@@ -20,7 +20,7 @@ class GridView extends \yii\grid\GridView {
             if ($this->enableColumns && method_exists($modelClass, 'getGridColumns')) {
                 $runModel = new $modelClass;
                 $model = GridColumns::find()->where([
-                            'modelClass' => $modelClass
+                            'modelClass' => DIRECTORY_SEPARATOR.$modelClass
                         ])->orderBy(['ordern'=>SORT_ASC])->all();
 
                 $colms = array();

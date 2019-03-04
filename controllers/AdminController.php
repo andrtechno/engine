@@ -81,7 +81,7 @@ class AdminController extends WebController
                     foreach ($getGrid['check'] as $key => $post) {
                         $model = new GridColumns();
                         $model->grid_id = $grid_id;
-                        //$model->module = $mod;
+                        $model->modelClass = $modelClass;
                         $model->ordern = $getGrid['ordern'][$key];
                         $model->column_key = $key;
 
