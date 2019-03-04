@@ -3,29 +3,37 @@
 namespace panix\engine\actions;
 
 use Yii;
+use yii\db\ActiveRecordInterface;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Json;
 use yii\web\Response;
 use yii\rest\Action;
 
-class SwitchAction extends Action {
-
-    public function run() {
+class SwitchAction extends Action
+{
+    /**
+     * @inheritdoc
+     */
+    public function run()
+    {
         $json = [];
-        if (Yii::$app->request->isAjax) {// && isset($_REQUEST)
-            $model = new $this->modelClass;
-            //$entry = $model->find()->where(['id' => $_REQUEST['id']])->all();
-            $entry = $model->find()->where(['id' => $_REQUEST['id']])->all();
+        if (Yii::$app->request->isAjax) {
+            /* @var $modelClass ActiveRecordInterface */
+            $modelClass = $this->modelClass;
 
+            $entry = $modelClass::findAll($_REQUEST['id']);
             if ($entry) {
                 foreach ($entry as $obj) {
-                    if (!in_array($obj->primaryKey, $model->disallow_delete)) {
+
+                    if (!in_array($obj::primaryKey(), $obj->disallow_delete)) {
                         if (isset($_REQUEST['s'])) {
                             $obj->switch = $_REQUEST['s'];
                             $obj->update(false);
-                            $message = ($obj->switch)?'SUCCESS_RECORD_ON':'SUCCESS_RECORD_OFF';
+                            $message = ($obj->switch) ? 'SUCCESS_RECORD_ON' : 'SUCCESS_RECORD_OFF';
+                            $sw = ($obj->switch) ? 0 : 1;
                             $json = [
+                                'value' => $sw,
                                 'status' => 'success',
+                                'url' => '/' . Yii::$app->request->pathInfo . "?id={$_REQUEST['id']}&s={$sw}",
                                 'message' => Yii::t('app', $message)
                             ];
                         } else {
@@ -41,16 +49,13 @@ class SwitchAction extends Action {
                         );
                     }
                 }
-            }else{
+            } else {
                 die('error');
             }
-        }else{
+        } else {
             die('error2');
         }
         \Yii::$app->response->format = Response::FORMAT_JSON;
         return ArrayHelper::toArray($json);
-        //return Json::encode($json);
-        Yii::$app->end();
     }
-
 }

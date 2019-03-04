@@ -7,6 +7,7 @@
 
 namespace panix\engine\grid;
 
+use panix\engine\grid\columns\Column;
 use Yii;
 use Closure;
 use yii\i18n\Formatter;
@@ -359,6 +360,7 @@ class AdminGridView extends BaseListView
             /* @var $column Column */
             $cells[] = $column->renderHeaderCell();
         }
+
         $content = Html::tag('tr', implode('', $cells), $this->headerRowOptions);
         if ($this->filterPosition == self::FILTER_POS_HEADER) {
             $content = $this->renderFilters() . $content;
@@ -380,6 +382,7 @@ class AdminGridView extends BaseListView
             /* @var $column Column */
             $cells[] = $column->renderFooterCell();
         }
+
         $content = Html::tag('tr', implode('', $cells), $this->footerRowOptions);
         if ($this->filterPosition == self::FILTER_POS_FOOTER) {
             $content .= $this->renderFilters();
@@ -494,10 +497,7 @@ class AdminGridView extends BaseListView
     }
 
     /**
-     * Creates a [[DataColumn]] object based on a string in the format of "attribute:format:label".
-     * @param string $text the column specification string
-     * @return DataColumn the column instance
-     * @throws InvalidConfigException if the column specification is invalid
+     * @inheritdoc
      */
     protected function createDataColumn($text)
     {

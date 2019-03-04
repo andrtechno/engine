@@ -7,6 +7,7 @@ use Closure;
 use yii\base\InvalidConfigException;
 use panix\engine\Html;
 use panix\engine\bootstrap\ButtonDropdown;
+use yii\web\View;
 
 /**
  * CheckboxColumn displays a column of checkboxes in a grid view.
@@ -83,11 +84,12 @@ class CheckboxColumn extends Column
         if (substr_compare($this->name, '[]', -2, 2)) {
             $this->name .= '[]';
         }
+
         $id = $this->grid->getId();
         $name = strtr($this->name, array('[' => "\\[", ']' => "\\]"));
 
 
-        $this->grid->view->registerJs("
+        $this->grid->getView()->registerJs("
 
 
 jQuery(document).on('click','#{$id} .select-on-check-all',function() {
@@ -134,11 +136,14 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
     }
 });
 
-");
+",View::POS_END);
 
         //print_r($this->getCustomActions());die;
         $this->contentOptions = ['class' => 'text-center'];
         $this->grid->footerRowOptions = ['class' => 'text-center'];
+       // $this->grid->filterRowOptions = ['class' => 'text-center'];
+
+
         $this->footer = ButtonDropdown::widget([
             'dropdownClass' => 'panix\engine\bootstrap\Dropdown4',
 
@@ -206,10 +211,7 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
     }
 
     /**
-     * Renders the header cell content.
-     * The default implementation simply renders [[header]].
-     * This method may be overridden to customize the rendering of the header cell.
-     * @return string the rendering result
+     * @inheritdoc
      */
     protected function renderHeaderCellContent()
     {
@@ -220,7 +222,9 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
             'multiple' => $this->multiple,
             'checkAll' => $name,
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $this->grid->getView()->registerJs("jQuery('#$id').yiiGridView('setSelectionColumn', $options);");
+
+
+        $this->grid->view->registerJs("jQuery('#$id').yiiGridView('setSelectionColumn', $options);");
 
         if ($this->header !== null || !$this->multiple) {
             return parent::renderHeaderCellContent();

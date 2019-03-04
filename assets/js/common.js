@@ -1,5 +1,3 @@
-
-
 common = {
     debug: true,
     language: 'en',
@@ -12,12 +10,12 @@ common = {
     },
     clipboard: function (selector) {
         var clipboard = new Clipboard(selector);
-        clipboard.on('success', function (e) {
-            common.notify('Скопировано', 'info');
+        clipboard.on('success', function () {
+            //common.notify('Скопировано', 'info');
         });
     },
     notify: function (text, type) {
-        var t = (type == 'error') ? 'danger' : type;
+        var t = (type === 'error') ? 'danger' : type;
         if (common.isDashboard) {
 
             this.notify_list[0] = $.notify({message: text}, {
@@ -39,7 +37,7 @@ common = {
     geoip: function (ip) {
         // common.flashMessage = true;
 
-
+        var geoSelector = $('#geo-dialog');
         $.ajax({
             url: '/admin/app/ajax/geo/ip/' + ip,
             type: 'GET',
@@ -48,7 +46,7 @@ common = {
                 $('body').append('<div id=\"geo-dialog\"></div>');
             },
             success: function (result) {
-                $('#geo-dialog').dialog({
+                geoSelector.dialog({
                     model: true,
                     responsive: true,
                     resizable: false,
@@ -60,14 +58,14 @@ common = {
                     modal: true,
                     open: function () {
                         $('.ui-widget-overlay').bind('click', function () {
-                            $('#geo-dialog').dialog('close');
+                            geoSelector.dialog('close');
                         });
                     },
                     close: function () {
-                        $('#geo-dialog').remove();
+                        geoSelector.remove();
                     }
                 });
-                $('#geo-dialog').html(result);
+                geoSelector.html(result);
                 $('.ui-dialog').position({
                     my: 'center',
                     at: 'center',
@@ -92,10 +90,11 @@ common = {
         }
     },
     addLoader: function (text) {
+        var t;
         if (text !== undefined) {
-            var t = text;
+            t = text;
         } else {
-            var t = common.message.loading;
+            t = common.message.loading;
         }
         $('body').append('<div class="common-ajax-loading">' + t + '</div>');
     },
@@ -109,9 +108,9 @@ common = {
         var t = this;
         $.ajax({
             url: url,
-            type: (type == undefined) ? 'POST' : type,
+            type: (type === undefined) ? 'POST' : type,
             data: data,
-            dataType: (dataType == undefined) ? 'html' : dataType,
+            dataType: (dataType === undefined) ? 'html' : dataType,
             beforeSend: function (xhr) {
                 // if(t.ajax.beforeSend.message){
                 //t.report(t.ajax.beforeSend.message);
@@ -121,7 +120,7 @@ common = {
 
             },
             error: function (xhr, textStatus, errorThrown) {
-                t.notify(textStatus + ' ajax() ' + xhr.status + ' ' + xhr.statusText, 'error');
+                t.notify(textStatus + ' ajax() ' + xhr.status + ' ' + xhr.statusText, 'error'+errorThrown);
                 //t.report(textStatus+' ajax() '+xhr.responseText);
             },
             success: success
@@ -195,31 +194,31 @@ $(document).ready(function () {
                 $(this).remove();
             },
             buttons: [{
-                    'text': common.message.save,
-                    "class": 'btn btn-success',
-                    'click': function (e) {
+                'text': common.message.save,
+                "class": 'btn btn-success',
+                'click': function (e) {
 
-                        var form = $('#edit_grid_columns_form').serialize();
-                        $.ajax({
-                            url: '/admin/default/get-grid',
-                            type: 'POST',
-                            data: form,
-                            beforeSend: function () {
-                                $(e.currentTarget).attr('disabled', true).addClass('load');
-                            },
-                            success: function () {
-                                $('#' + gridid + '-dialog').remove();
-                                //$.pjax.reload({container: '#pjax-test'});
-                                $.pjax.reload('#' + pjaxId, {timeout: false});
-                                //$('#w0').yiiGridView('applyFilter');
-                                $('#dialog-overlay').remove();
-                            },
-                            complete: function () {
-                                $(e.currentTarget).attr('disabled', true).removeClass('load');
-                            }
-                        });
-                    }
-                },
+                    var form = $('#edit_grid_columns_form').serialize();
+                    $.ajax({
+                        url: '/admin/default/get-grid',
+                        type: 'POST',
+                        data: form,
+                        beforeSend: function () {
+                            $(e.currentTarget).attr('disabled', true).addClass('load');
+                        },
+                        success: function () {
+                            $('#' + gridid + '-dialog').remove();
+                            //$.pjax.reload({container: '#pjax-test'});
+                            $.pjax.reload('#' + pjaxId, {timeout: false});
+                            //$('#w0').yiiGridView('applyFilter');
+                            $('#dialog-overlay').remove();
+                        },
+                        complete: function () {
+                            $(e.currentTarget).attr('disabled', true).removeClass('load');
+                        }
+                    });
+                }
+            },
                 {
                     'text': common.message.cancel,
                     "class": 'btn btn-secondary',
@@ -229,20 +228,29 @@ $(document).ready(function () {
                 }]
         });
     });
-});
-function setSwitch(url,id, s, pjax) {
-    $.ajax({
-        url:url,
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            id: id,
-            s: s
-        }
-    }).done(function (data) {
-        common.notify(data.message,'success');
-        $.pjax.reload({container: '#'+pjax});
-        //$('#w0').yiiGridView('applyFilter');
+
+    $(document).on('click', '.switch', function (e) {
+        e.preventDefault();
+
+        var that = $(this);
+        var url = that.attr('href');
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                if (data.status === 'success') {
+                    that.attr('href', data.url);
+                    if(data.value){
+                        that.removeClass('btn-outline-success').addClass('btn-outline-secondary');
+                        that.find('i').removeClass('icon-eye').addClass('icon-eye-close');
+                    }else{
+                        that.removeClass('btn-outline-secondary').addClass('btn-outline-success');
+                        that.find('i').removeClass('icon-eye-close').addClass('icon-eye');
+                    }
+                }
+            }
+        });
     });
-    return false;
-}
+});
