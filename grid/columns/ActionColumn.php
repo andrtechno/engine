@@ -87,14 +87,11 @@ class ActionColumn extends \yii\grid\DataColumn
         //  print_r($oReflectionClass);die;
 
 
-
-        $classNamePath =  '/'.implode('/', explode('\\', $this->grid->dataProvider->query->modelClass));
-
-
+        $classNamePath = '/' . implode('/', explode('\\', $this->grid->dataProvider->query->modelClass));
 
 
         //echo $classNamePath;
-       // die;
+        // die;
         $view->registerJs("
         $(function() {
 
@@ -128,9 +125,11 @@ class ActionColumn extends \yii\grid\DataColumn
                 'resizable' => false,
                 'dialogClass' => 'test111111111',
                 'width' => '50%',
+                'title'=>'Изменить столбцы таблицы',
                 'buttons' => [
                     [
                         'text' => "Ok",
+                        'class' => "ui-button",
                         'click' => new JsExpression("function(){
                             var form = $('#edit_grid_columns_form').serialize();
                             $.ajax({
