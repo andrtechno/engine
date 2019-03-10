@@ -4,7 +4,7 @@ namespace panix\engine;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-use yii\helpers\BaseInflector;
+use yii\helpers\Inflector;
 use yii\helpers\Url;
 
 /**
@@ -39,12 +39,8 @@ class CMS
     public static function slug($text)
     {
 
-        $slugParts = [];
 
-            $slugParts[] = $text;
-
-
-        return BaseInflector::slug(implode('-', $slugParts));
+        return Inflector::slug(implode('-',$text));
     }
 
     /**
