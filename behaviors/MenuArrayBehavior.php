@@ -28,21 +28,22 @@ class MenuArrayBehavior extends \yii\base\Behavior {
     public $urlExpression;
 
     public function menuArray() {
+        /** @param $this->owner \panix\engine\db\ActiveRecord */
         return $this->walkArray($this->owner);
     }
 
     private function isActive($url = false) {
-        if($url['seo_alias']==Yii::$app->request->get('seo_alias')){
-            return true;
-        }else{
-            return false;
+        if (!Yii::$app instanceof \yii\console\Application) {
+            if ($url['seo_alias'] == Yii::$app->request->get('seo_alias')) {
+                return true;
+            }
         }
         return false;
     }
 
     /**
      * Recursively build menu array
-     * @param $model CActiveRecord model with NestedSet behavior
+     * @param $model \panix\engine\db\ActiveRecord model with NestedSet behavior
      * @return array
      */
     protected function walkArray($model) {

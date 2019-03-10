@@ -43,7 +43,7 @@ class WebModule extends Module
         return $list;
     }
 
-    // protected $moduleNamespace;
+
     public function init()
     {
         if (file_exists(Yii::getAlias("@{$this->id}/assets"))) {

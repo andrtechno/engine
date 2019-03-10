@@ -66,7 +66,7 @@ class ActionColumn extends DataColumn
                             'url' => '#',
                             'options' => [
                                 'class' => '',
-                                'onClick' => '$.pjax.reload("#pjax-' . strtolower(basename($this->grid->dataProvider->query->modelClass)) . '", {timeout : false});',
+                                'onClick' => '$.pjax.reload("#pjax-' . strtolower(basename(($this->grid->dataProvider)->query->modelClass)) . '", {timeout : false});',
                             ]
                         ],
                     ],
@@ -81,16 +81,8 @@ class ActionColumn extends DataColumn
 
         $view = $this->grid->getView();
 
-        // $oReflectionClass = ($this->grid->dataProvider->query->modelClass);
+        $classNamePath = '/' . implode('/', explode('\\', ($this->grid->dataProvider)->query->modelClass));
 
-        //  print_r($oReflectionClass);die;
-
-
-        $classNamePath = '/' . implode('/', explode('\\', $this->grid->dataProvider->query->modelClass));
-
-
-        //echo $classNamePath;
-        // die;
         $view->registerJs("
         $(function() {
 
@@ -158,7 +150,7 @@ class ActionColumn extends DataColumn
     protected function initDefaultButtons()
     {
         if (!isset($this->buttons['switch'])) {
-            $this->buttons['switch'] = function ($url, $model, $key) {
+            $this->buttons['switch'] = function ($url, $model) {
                 //unset($url,$key);
                 if (isset($model->primaryKey)) {
                     if (!in_array($model->primaryKey, $model->disallow_switch)) {
@@ -170,48 +162,13 @@ class ActionColumn extends DataColumn
                                 $icon = 'eye-close';
                                 $class = 'btn-outline-secondary';
                             }
-                            /* return Html::a('<i class="' . $icon . '"></i>', Url::toRoute(['switch', 'id' => $model->primaryKey, 's' => ($model->switch) ? 0 : 1]), [
-                             'title' => Yii::t('app', 'GRID_SWITCH'),
-                             'class' => "btn ' . $this->btnSize . ' " . $class . " switch",
-                             'data-pk' => $model->primaryKey,
-                             'data-switch' => ($model->switch) ? 0 : 1,
-                             'data-method' => 'post',
-                             'data-pjax' => '#pjax-languages',
-                             ]);*/
 
                             $switch_data = $model->switch ? 0 : 1;
                             return Html::a(Html::icon($icon), Url::toRoute(['switch', 'id' => $model->primaryKey,'s'=>$switch_data]), [
                                 'title' => Yii::t('app', 'GRID_SWITCH'),
                                 'class' => 'btn ' . $this->btnSize . ' ' . $class . ' switch linkTarget',
                                 'data-pjax' => '0',
-                                // 'data-method'=>"post",
                             ]);
-
-
-                            /*return Html::a(Html::icon($icon), Url::toRoute(['switch', 'id' => $model->primaryKey, 's' => ($model->switch) ? 0 : 1]), [
-                                'title' => Yii::t('app', 'GRID_SWITCH'),
-                                'class' => 'btn ' . $this->btnSize . ' ' . $class . ' switch',
-                                'data-pjax' => false,
-                                'data-push' => false,
-                               'data-replace'=>false,
-                               // 'data-method'=>"post",
-                                'onclick' => "
-                                         $.ajax('$url', {
-                                             type: 'POST',
-                                             //dataType:'json',
-                                             data:{
-                                                id:$model->primaryKey,
-                                                s:$switch,
-                                                " . Yii::$app->request->csrfParam . ":'" . Yii::$app->request->csrfToken . "'
-                                            },
-                                         }).done(function(data) {
-                                                 //common.notify(data.message,'success');
-                                                 $.pjax.reload({container: '#pjax-" . strtolower(basename(get_class($model))) . "});
-                                                // $('#{$this->grid->id}').yiiGridView('applyFilter');
-                                         });
-                                     return false;
-                                 ",
-                            ]);*/
                         }
                     }
                 }

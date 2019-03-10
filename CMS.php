@@ -4,6 +4,7 @@ namespace panix\engine;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\helpers\BaseInflector;
 use yii\helpers\Url;
 
 /**
@@ -33,6 +34,17 @@ class CMS
     public static function hideMobile($mobile, $end_length = 4)
     {
         return substr($mobile, 0, -$end_length) . "****";
+    }
+
+    public static function slug($text)
+    {
+
+        $slugParts = [];
+
+            $slugParts[] = $text;
+
+
+        return BaseInflector::slug(implode('-', $slugParts));
     }
 
     /**
@@ -128,8 +140,8 @@ class CMS
      */
     public static function hex2rgb($color)
     {
-        if(strpos($color,'#')!==false)
-            throw new \yii\base\Exception('Цвет должен быть указал без знака "#"',500);
+        if (strpos($color, '#') !== false)
+            throw new \yii\base\Exception('Цвет должен быть указал без знака "#"', 500);
 
         $color = preg_replace("/[^abcdef0-9]/i", "", $color);
         if (strlen($color) == 6) {
