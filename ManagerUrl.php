@@ -8,7 +8,7 @@ use yii\helpers\Url;
 
 class ManagerUrl extends UrlManager {
 
-    public function init() {
+    public function __init() {
         $this->modulesRoutes();
         parent::init();
     }
@@ -24,6 +24,10 @@ class ManagerUrl extends UrlManager {
         return $result;
     }
 
+
+    /**
+     * @deprecated use BootstrapModule Class
+     */
     protected function modulesRoutes() {
         $cacheKey = 'url_manager';
         $rules = Yii::$app->cache->get($cacheKey);
