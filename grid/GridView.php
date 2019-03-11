@@ -13,6 +13,10 @@ class GridView extends \yii\grid\GridView {
     public $emptyTextOptions = ['class' => 'alert alert-info empty'];
     public $enableLayout = true;
     public $enableColumns = true;
+
+
+    public $pager = ['class'=>'panix\engine\widgets\LinkPager'];
+
     public function init() {
         if (isset($this->dataProvider->query)) {
             $modelClass = $this->dataProvider->query->modelClass;
