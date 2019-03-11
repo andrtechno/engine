@@ -26,7 +26,7 @@ class View extends \yii\web\View
 
         $content = ob_get_clean();
 
-        if (!Yii::$app->controller instanceof \panix\engine\controllers\AdminController) {
+        if (!(Yii::$app->controller instanceof \panix\engine\controllers\AdminController)) {
             if (!Yii::$app->request->isAjax && !preg_match("#" . base64_decode('e2NvcHlyaWdodH0=') . "#", $content)) { // && !preg_match("/print/", $this->layout)
                 // die(Yii::t('app', 'NO_COPYRIGHT'));
                 //Yii::$app->maintenanceMode->enabled = true;

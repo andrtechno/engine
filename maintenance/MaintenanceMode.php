@@ -44,7 +44,7 @@ class MaintenanceMode extends Component
      * @since 0.2.4
      * @var string
      */
-    public $title = 'We’ll be back soon!';
+    public $title = 'Oops!'; //
     /**
      * Show message.
      * @since 0.2.0
@@ -160,8 +160,9 @@ class MaintenanceMode extends Component
      */
     public function getIsEnabled($onlyConsole = false)
     {
-        $exists = file_exists($this->getStatusFilePath());
-        return $onlyConsole ? $exists : $this->enabled || $exists;
+        //$exists = file_exists($this->getStatusFilePath());
+        //return $onlyConsole ? $exists : $this->enabled || $exists;
+        return (bool)Yii::$app->settings->get('app', 'maintenance');
     }
 
     /**
@@ -181,11 +182,13 @@ class MaintenanceMode extends Component
      */
     public function disable()
     {
-        $path = $this->getStatusFilePath();
-        if ($path && file_exists($path)) {
-            return (bool) unlink($path);
-        }
-        return false;
+        Yii::$app->settings->set('app', ['maintenance' => false]);
+        // $path = $this->getStatusFilePath();
+        //if ($path && file_exists($path)) {
+        //    return (bool) unlink($path);
+        //}
+        //return false;
+        return (bool)Yii::$app->settings->get('app', 'maintenance');
     }
 
     /**
@@ -195,8 +198,12 @@ class MaintenanceMode extends Component
      */
     public function enable()
     {
-        $path = $this->getStatusFilePath();
-        return (bool) file_put_contents($path, ' ');
+        Yii::$app->settings->set('app', ['maintenance' => true]);
+
+        return (bool)Yii::$app->settings->get('app', 'maintenance');
+        //$path = $this->getStatusFilePath();
+        //return (bool) file_put_contents($path, ' ');
+
     }
 
     /**
@@ -225,7 +232,7 @@ class MaintenanceMode extends Component
                     $app->getResponse()->setStatusCode(self::STATUS_CODE_OK);
                 } else {
                     $app->getResponse()->setStatusCode($this->statusCode);
-                    if ($this->retryAfter){
+                    if ($this->retryAfter) {
                         $app->getResponse()->getHeaders()->set('Retry-After', $this->retryAfter);
                     }
                 }
@@ -269,7 +276,7 @@ class MaintenanceMode extends Component
                 foreach ($this->ips as $filter) {
                     $this->disable = $this->disable || $this->checkIp($filter);
                 }
-            } elseif (is_string($this->ips)){
+            } elseif (is_string($this->ips)) {
                 $this->disable = $this->disable || $this->checkIp($this->ips);
             } else {
                 throw new InvalidConfigException('Parameter "ips" should be an array.');
@@ -277,9 +284,12 @@ class MaintenanceMode extends Component
         }
         if (!$this->disable) {
             if ($this->route === 'maintenance/index') {
-                $app->controllerMap['maintenance'] = 'panix\engine\maintenance\controllers\MaintenanceController';
+                $app->controllerMap['maintenance'] = [
+                    'class'=>'panix\engine\maintenance\controllers\MaintenanceController',
+                    'title'=>$this->title
+                ];
             }
-            $app->catchAll = [$this->route];
+            $app->catchAll = [$this->route,'title'=>'zzzz'];
         } else {
             $app->getResponse()->setStatusCode(self::STATUS_CODE_OK);
         }

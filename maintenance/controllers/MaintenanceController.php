@@ -1,9 +1,4 @@
 <?php
-/**
- * @link https://github.com/brussens/yii2-maintenance-mode
- * @copyright Copyright (c) 2017 Brusensky Dmitry
- * @license http://opensource.org/licenses/MIT MIT
- */
 
 namespace panix\engine\maintenance\controllers;
 
@@ -11,22 +6,28 @@ use Yii;
 use yii\web\Controller;
 
 /**
- * Default controller of maintenance mode component for Yii framework 2.x.x version.
+ * Default controller of maintenance mode
  *
  * @see \yii\web\Controller
- * @package brussens\maintenance\controllers
- * @author Brusensky Dmitry <brussens@nativeweb.ru>
- * @since 0.2.0
  */
 class MaintenanceController extends Controller
 {
+    public $title;
+    public $message;
+    public $viewPath;
+
     /**
      * Initialize controller.
      */
     public function init()
     {
+
         $this->layout = Yii::$app->maintenanceMode->layoutPath;
+        $this->title = ($this->title) ? $this->title : Yii::$app->maintenanceMode->title;
+        $this->message = ($this->message) ? $this->message : Yii::$app->maintenanceMode->message;
+        $this->viewPath = ($this->viewPath) ? $this->viewPath : Yii::$app->maintenanceMode->viewPath;
         parent::init();
+
     }
 
     /**
@@ -41,9 +42,9 @@ class MaintenanceController extends Controller
             return false;
         }
 
-        return $this->render($app->maintenanceMode->viewPath, [
-            'title' => $app->maintenanceMode->title,
-            'message' => $app->maintenanceMode->message
+        return $this->render($this->viewPath, [
+            'title' => $this->title,
+            'message' => $this->message
         ]);
     }
 } 

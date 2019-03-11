@@ -157,7 +157,8 @@ class TranslateBehavior extends Behavior {
      * @inheritdoc
      */
     public function __get($name) {
-        return $this->getTranslation()->getAttribute($name);
+        $translation = $this->getTranslation();
+        return $translation->getAttribute($name);
     }
 
     /**

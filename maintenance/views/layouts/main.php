@@ -21,7 +21,7 @@ Asset::register($this);
     </section>
     <footer>
         <div class="container">
-            <p class="pull-right"><?= Yii::powered() ?></p>
+            <p class="text-center"><?= Yii::$app->powered() ?></p>
         </div>
     </footer>
     <?php $this->endBody(); ?>

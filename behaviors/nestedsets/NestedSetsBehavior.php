@@ -102,7 +102,7 @@ class NestedSetsBehavior extends Behavior
      */
     public function descendants($depth = null)
     {
-        $query = $this->owner->find()->orderBy([$this->levelAttribute => SORT_ASC, $this->leftAttribute => SORT_ASC]);
+        $query = $this->owner->find()->orderBy([$this->levelAttribute => SORT_ASC]); //, $this->leftAttribute => SORT_ASC
         $db = $this->owner->getDb();
         $query->andWhere($db->quoteColumnName($this->leftAttribute) . '>'
             . $this->owner->getAttribute($this->leftAttribute));
@@ -141,7 +141,7 @@ class NestedSetsBehavior extends Behavior
      */
     public function ancestors($depth = null)
     {
-        $query = $this->owner->find()->orderBy([$this->levelAttribute => SORT_DESC, $this->leftAttribute => SORT_ASC]);
+        $query = $this->owner->find()->orderBy([$this->levelAttribute => SORT_DESC]); //panix remove , $this->leftAttribute => SORT_ASC ..duplicate
         $db = $this->owner->getDb();
         $query->andWhere($db->quoteColumnName($this->leftAttribute) . '<'
             . $this->owner->getAttribute($this->leftAttribute));

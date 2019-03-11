@@ -4,7 +4,6 @@ namespace panix\engine;
 
 use Yii;
 use yii\web\UrlManager;
-use yii\helpers\Url;
 
 class ManagerUrl extends UrlManager {
 

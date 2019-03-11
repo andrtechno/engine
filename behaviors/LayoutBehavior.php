@@ -6,7 +6,6 @@ use Yii;
 use yii\base\View;
 use yii\caching\Cache;
 use panix\engine\controllers\WebController;
-use yii\helpers\VarDumper;
 
 class LayoutBehavior extends \yii\base\Behavior {
 
@@ -21,12 +20,12 @@ class LayoutBehavior extends \yii\base\Behavior {
 
     public function init() {
         parent::init();
-        Yii::trace('Initializing SmartLayoutBehavior', __METHOD__);
+        Yii::debug('Initializing LayoutBehavior', __METHOD__);
         $this->useCache = $this->useCache && Yii::$app->cache instanceof Cache;
     }
 
     public function initialize() {
-        /** @var Controller $controller */
+        /** @var WebController $controller */
         $controller = $this->owner->context;
         if (!($controller instanceof WebController)) {
             return false;

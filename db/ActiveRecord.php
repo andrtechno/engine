@@ -140,21 +140,24 @@ class ActiveRecord extends \yii\db\ActiveRecord
     }
 
 
-
-    public function getObjectNext() {
+    public function getObjectNext()
+    {
         $next = $this->find()
             ->where(['<', 'id', $this->id])
-            ->orderBy(['id'=>SORT_ASC])
+            ->orderBy(['id' => SORT_ASC])
             //->addOrderBy(['id'=>SORT_ASC])
             ->one();
+        //$next->detachBehavior('discountsBehavior');
         return $next;
     }
 
-    public function getObjectPrev() {
+    public function getObjectPrev()
+    {
         $prev = $this->find()
             ->where(['>', 'id', $this->id])
-            ->orderBy(['id'=>SORT_DESC])
+            ->orderBy(['id' => SORT_DESC])
             ->one();
+        //$prev->detachBehavior('discountsBehavior');
         return $prev;
     }
 
@@ -179,7 +182,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
         $records = $this::find()
             ->select($options['select'])
             ->where([$this::tableName() . '.switch' => 1])
-            ->andWhere([Category::tableName().'.id' => 45])
+            ->andWhere([Category::tableName() . '.id' => 45])
             ->joinWith('mainCategory')
             ->orderBy($order)
             ->all();
