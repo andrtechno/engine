@@ -7,7 +7,7 @@ use Yii;
 use yii\web\Controller;
 use panix\engine\CMS;
 use yii\web\ForbiddenHttpException;
-
+use yii\web\NotFoundHttpException;
 use Viber\Bot;
 use Viber\Api\Sender;
 //use yii2mod\rbac\filters\AccessControl;
@@ -69,7 +69,7 @@ class WebController extends Controller
     {
         if (!$text)
             $text = Yii::t('app/error', '404');
-        throw new \yii\web\NotFoundHttpException($text);
+        throw new NotFoundHttpException($text);
     }
 
     public function beforeAction($action)
@@ -83,33 +83,34 @@ class WebController extends Controller
 
         return parent::beforeAction($action);
     }
-    public function actionTest2(){
+
+    public function actionTest2()
+    {
         set_time_limit(10);
         //  \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
         //  include_once 'Sample_Header.php';
         // Autoloader::register();
 
 
-
-
-        return $this->render('test2',[]);
+        return $this->render('test2', []);
     }
 
 
-    public function actionTest(){
+    public function actionTest()
+    {
         set_time_limit(10);
-      //  \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
-      //  include_once 'Sample_Header.php';
-       // Autoloader::register();
+        //  \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
+        //  include_once 'Sample_Header.php';
+        // Autoloader::register();
 
 
         $pptReader = IOFactory::createReader('PowerPoint2007');
         //$pptReader = IOFactory::createReader('PowerPoint97');
-        $oPHPPresentation = $pptReader->load(Yii::getAlias('@webroot/uploads').'/test.pptx');
+        $oPHPPresentation = $pptReader->load(Yii::getAlias('@webroot/uploads') . '/test.pptx');
 
         $oTree = new PhpPptTree($oPHPPresentation);
 
-        return $this->render('test',['oTree'=>$oTree]);
+        return $this->render('test', ['oTree' => $oTree]);
 
     }
 
@@ -253,5 +254,23 @@ class WebController extends Controller
             $title = $this->_title .= ' / ' . $title;
         }
         return $title;
+    }
+
+    /**
+     *
+     * @inheritdoc
+     *
+     * @param string $view
+     * @param array $params
+     * @param null $context
+     * @return string
+     */
+    public function render($view, $params = [], $context = null)
+    {
+        if (Yii::$app->request->isAjax) {
+            return parent::renderAjax($view, $params, $context);
+        } else {
+            return parent::render($view, $params);
+        }
     }
 }

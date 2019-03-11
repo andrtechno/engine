@@ -3,13 +3,16 @@
 namespace panix\engine\data;
 
 use Yii;
+use yii\base\InvalidArgumentException;
 
 //use panix\engine\data\Pagination;
-class ActiveDataProvider extends \yii\data\ActiveDataProvider {
+class ActiveDataProvider extends \yii\data\ActiveDataProvider
+{
 
     private $_pagination;
 
-    public function setPagination($value) {
+    public function setPagination($value)
+    {
         if (is_array($value)) {
             $config = ['class' => Pagination::class];
             if ($this->id !== null) {
@@ -23,7 +26,7 @@ class ActiveDataProvider extends \yii\data\ActiveDataProvider {
             $mid = $modelClass::MODULE_ID;
             $settings = Yii::$app->settings;
             if (!isset($value['pageSize'])) {
-     
+
                 $this->_pagination->pageSize = (int)($settings->get($mid, 'pagenum')) ? $settings->get($mid, 'pagenum') : $settings->get('app', 'pagenum');
             } else {
 
@@ -32,11 +35,12 @@ class ActiveDataProvider extends \yii\data\ActiveDataProvider {
         } elseif ($value instanceof Pagination || $value === false) {
             $this->_pagination = $value;
         } else {
-            throw new InvalidParamException('Only Pagination instance, configuration array or false is allowed.');
+            throw new InvalidArgumentException('Only Pagination instance, configuration array or false is allowed.');
         }
     }
 
-    public function getPagination() {
+    public function getPagination()
+    {
         if ($this->_pagination === null) {
             $this->setPagination([]);
         }
