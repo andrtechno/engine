@@ -142,21 +142,35 @@ class ActiveRecord extends \yii\db\ActiveRecord
 
     public function getObjectNext()
     {
-        $next = $this->find()
+        /*$next = $this->find()
             ->where(['<', 'id', $this->id])
             ->orderBy(['id' => SORT_ASC])
             //->addOrderBy(['id'=>SORT_ASC])
-            ->one();
+            ->one();*/
+        $next = Yii::$app->db->cache(function ($db) {
+            return $this->find()
+                ->where(['<', 'id', $this->id])
+                ->orderBy(['id' => SORT_ASC])
+                ->one();
+        }, 3600);
         //$next->detachBehavior('discountsBehavior');
         return $next;
     }
 
     public function getObjectPrev()
     {
-        $prev = $this->find()
+
+        $prev = Yii::$app->db->cache(function ($db) {
+            return $this->find()
+                ->where(['>', 'id', $this->id])
+                ->orderBy(['id' => SORT_DESC])
+                ->one();
+        }, 3600);
+
+        /*$prev = $this->find()
             ->where(['>', 'id', $this->id])
             ->orderBy(['id' => SORT_DESC])
-            ->one();
+            ->one();*/
         //$prev->detachBehavior('discountsBehavior');
         return $prev;
     }
