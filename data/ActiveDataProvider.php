@@ -5,7 +5,6 @@ namespace panix\engine\data;
 use Yii;
 use yii\base\InvalidArgumentException;
 
-//use panix\engine\data\Pagination;
 class ActiveDataProvider extends \yii\data\ActiveDataProvider
 {
 

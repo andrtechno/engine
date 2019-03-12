@@ -3,7 +3,7 @@
 namespace panix\engine\grid\columns\jui;
 
 use panix\engine\Html;
-use yii\base\InvalidArgumentException;
+use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\grid\DataColumn;
 use yii\jui\Slider;
@@ -21,13 +21,13 @@ class SliderColumn extends DataColumn
     public function init()
     {
         if (is_null($this->min) || is_null($this->max))
-            throw new InvalidArgumentException(\Yii::t('yii', '{attribute} cannot be blank.', ['attribute' => 'MIN and MAX']));
+            throw new InvalidConfigException(\Yii::t('yii', '{attribute} cannot be blank.', ['attribute' => 'MIN and MAX']));
 
         if ($this->min > $this->max)
-            throw new InvalidArgumentException(\Yii::t('yii', '{attribute} must be no less than {min}.', ['attribute' => 'MIN', 'min' => 'MAX']));
+            throw new InvalidConfigException(\Yii::t('yii', '{attribute} must be no less than {min}.', ['attribute' => 'MIN', 'min' => 'MAX']));
 
         if (!is_int($this->min) || !is_int($this->max))
-            throw new InvalidArgumentException(\Yii::t('yii', '{attribute} must be an integer.', ['attribute' => 'MIN and MAX']));
+            throw new InvalidConfigException(\Yii::t('yii', '{attribute} must be an integer.', ['attribute' => 'MIN and MAX']));
 
         parent::init();
     }

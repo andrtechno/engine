@@ -3,7 +3,6 @@
 namespace panix\engine\grid\columns;
 
 
-
 use Yii;
 use Closure;
 use yii\helpers\Url;
@@ -50,10 +49,10 @@ class ActionColumn extends DataColumn
                     'encodeLabels' => false,
                     'items' => [
                         [
-                            'label' => Html::icon('table') . ' Изменить столбцы таблицы',
-                            'url' => '/test',
+                            'label' => Html::icon('table') . ' ' . Yii::t('app/admin', 'EDIT_GRID_COLUMNS'),
+                            'url' => '#',
                             'linkOptions' => [
-                                'data-target' => "#",
+                                // 'data-target' => "#",
                                 'class' => 'dropdown-item edit-columns',
                                 'data-pjax' => '0',
                                 // 'data-grid-id' => $this->grid->id,
@@ -62,11 +61,13 @@ class ActionColumn extends DataColumn
                             ]
                         ],
                         [
-                            'label' => Html::icon('refresh') . ' Сбросить',
+                            'label' => Html::icon('refresh') . ' ' . Yii::t('app', 'REFRESH'),
                             'url' => '#',
-                            'options' => [
-                                'class' => '',
-                                'onClick' => '$.pjax.reload("#pjax-' . strtolower(basename(($this->grid->dataProvider)->query->modelClass)) . '", {timeout : false});',
+                            'linkOptions' => [
+                                'class' => 'dropdown-item',
+                                'data-pjax' => '0',
+                                //'onClick' => '$.pjax({container: "#pjax-'.$this->grid->id.'"})'
+                                'onClick' => '$.pjax.reload("#pjax-'.$this->grid->id.'", {timeout : false});',
                             ]
                         ],
                     ],
@@ -116,7 +117,7 @@ class ActionColumn extends DataColumn
                 'resizable' => false,
                 'dialogClass' => 'test111111111',
                 'width' => '50%',
-                'title'=>'Изменить столбцы таблицы',
+                'title' => Yii::t('app/admin', 'EDIT_GRID_COLUMNS'),
                 'buttons' => [
                     [
                         'text' => "Ok",
@@ -133,7 +134,7 @@ class ActionColumn extends DataColumn
                                 //$(\'#dialog-overlay\').remove();
                                 // $.pjax({container: '#pjax-product'});
                                 $.pjax.defaults.timeout = false;
-                                 $.pjax.reload({container:'#pjax-product', async: false});
+                                 $.pjax.reload({container:'#pjax-".$this->grid->id."', async: false});
                                  //$(\"#grid-product\").yiiGridView(\"applyFilter\");
                                 }
                             });
@@ -164,7 +165,7 @@ class ActionColumn extends DataColumn
                             }
 
                             $switch_data = $model->switch ? 0 : 1;
-                            return Html::a(Html::icon($icon), Url::toRoute(['switch', 'id' => $model->primaryKey,'s'=>$switch_data]), [
+                            return Html::a(Html::icon($icon), Url::toRoute(['switch', 'id' => $model->primaryKey, 's' => $switch_data]), [
                                 'title' => Yii::t('app', 'GRID_SWITCH'),
                                 'class' => 'btn ' . $this->btnSize . ' ' . $class . ' switch linkTarget',
                                 'data-pjax' => '0',

@@ -3,6 +3,9 @@
 namespace panix\engine;
 
 use Yii;
+use yii\base\Exception;
+use yii\base\InvalidArgumentException;
+use yii\base\NotSupportedException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 use yii\helpers\Url;
@@ -40,7 +43,7 @@ class CMS
     {
 
 
-        return Inflector::slug(implode('-',$text));
+        return Inflector::slug(implode('-', $text));
     }
 
     /**
@@ -640,32 +643,30 @@ class CMS
     }
 
     /**
-     * Текушая дата с часовым поясом.
+     * Текушая дата с часовым и время поясом
      *
-     * @param string $format Default is "Y-m-d H:i:s"
+     * @param string $time Default of "now"
+     * @param string|int $format Default is "Y-m-d H:i:s"
      * @return string
+     * @throws Exception
      */
-    public static function getDate($format = 'Y-m-d H:i:s')
+    public static function getDate($time = 'now', $format = 'Y-m-d H:i:s')
     {
-        try {
-            $date = new \DateTime('now');
-            $date->setTimezone(new \DateTimeZone(self::timezone()));
-            return $date->format($format);
-        } catch (Exception $e) {
-            echo $e->getMessage();
+        if (is_int($time))
+            $time = date($format, $time);
+
+        //if (is_string($time))
+        //    $time = $time;
+
+        if (empty($format)) {
+            throw new NotSupportedException('Error date format is empty!');
         }
+
+        $date = new \DateTime($time,new \DateTimeZone(self::timezone()));
+      //  $date->setTimezone();
+        return $date->format($format);
     }
 
-    public static function time($format = 'Y-m-d H:i:s')
-    {
-        try {
-            $date = new \DateTime('now');
-            $date->setTimezone(new \DateTimeZone(self::timezone()));
-            return strtotime($date->format($format));
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
-    }
 
     /**
      *
@@ -682,7 +683,7 @@ class CMS
             } elseif (isset(Yii::$app->session['timezone'])) {
                 $timezone = Yii::$app->session['timezone'];
             } else {
-                $timezone = $config['timezone'];
+                $timezone = $config->timezone;
             }
         } else {
             if (isset(Yii::$app->session['timezone'])) {
@@ -691,7 +692,7 @@ class CMS
                 $timezone = $config->timezone;
             }
         }
-        return $timezone; //$timezone;
+        return $timezone;
     }
 
     public static function replace_urls($text = null)
