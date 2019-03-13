@@ -10,6 +10,7 @@ use yii\db\Exception;
 use yii\web\ForbiddenHttpException;
 //use yii2mod\rbac\filters\AccessControl;
 use yii\filters\AccessControl;
+use yii\web\UnauthorizedHttpException;
 
 class AdminController extends WebController
 {
