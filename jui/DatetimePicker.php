@@ -57,7 +57,7 @@ class DatetimePicker extends DatePicker
 
         if (in_array($this->mode, ['datetime', 'time'])) {
             $this->clientOptions['timeFormat'] = $this->timeFormat;
-            $this->clientOptions['timeOnlyTitle'] = 'Choose Time';
+            $this->clientOptions['timeOnlyTitle'] = 'Выберите время';
             $this->clientOptions['timeText'] = 'Время';
             $this->clientOptions['hourText'] = 'Час';
             $this->clientOptions['minuteText'] = 'Минуты';
