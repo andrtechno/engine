@@ -41,9 +41,7 @@ class CMS
 
     public static function slug($text)
     {
-
-
-        return Inflector::slug(implode('-', $text));
+        return Inflector::slug($text);
     }
 
     /**
