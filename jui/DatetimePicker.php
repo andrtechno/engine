@@ -22,6 +22,15 @@ class DatetimePicker extends DatePicker
      */
     public $mode = 'datetime';
     public $timeFormat = 'hh:mm:ss';
+    public $dateFormat = 'yyyy-MM-dd';
+
+    public $timeOnlyTitle = 'Choose Time';
+    public $timeText = '';
+    public $hourText = 'Час';
+    public $minuteText = 'Минуты';
+    public $secondText = 'Секунды';
+    public $millisecText, $microsecText, $timezoneText;
+
 
     public function init()
     {
@@ -46,7 +55,18 @@ class DatetimePicker extends DatePicker
         $view = $this->getView();
         $mode = $this->mode;
 
-        $this->clientOptions['timeFormat'] = $this->timeFormat;
+        if (in_array($this->mode, ['datetime', 'time'])) {
+            $this->clientOptions['timeFormat'] = $this->timeFormat;
+            $this->clientOptions['timeOnlyTitle'] = 'Choose Time';
+            $this->clientOptions['timeText'] = 'Время';
+            $this->clientOptions['hourText'] = 'Час';
+            $this->clientOptions['minuteText'] = 'Минуты';
+            $this->clientOptions['secondText'] = 'Секунды';
+            $this->clientOptions['microsecText'] = 'Microsecond';
+            $this->clientOptions['millisecText'] = 'Millisecond';
+            $this->clientOptions['timezoneText'] = 'Timezone';
+        }
+
 
         if ($language !== 'en-US') {
             $assetBundle = DatePickerLanguageAsset::register($view);
