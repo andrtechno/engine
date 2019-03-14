@@ -37,7 +37,6 @@ class GridView extends \yii\grid\GridView {
             }
         }
 
-echo 'z';
         parent::init();
         if ($this->enableLayout) {
             $this->layout = $this->render('@theme/views/layouts/_grid_layout', $this->layoutOptions);
