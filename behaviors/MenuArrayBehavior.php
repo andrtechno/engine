@@ -2,6 +2,7 @@
 namespace panix\engine\behaviors;
 
 use Yii;
+use yii\base\Behavior;
 
 /**
  * Represent model as array needed to create CMenu.
@@ -13,13 +14,13 @@ use Yii;
  * TODO: Cache queries
  * 	)
  */
-class MenuArrayBehavior extends \yii\base\Behavior {
+class MenuArrayBehavior extends Behavior {
 
     /**
      * @var string Owner attribute to be placed in `label` key
      */
     public $labelAttr;
-    public $countProduct = true;
+    public $countItems = true;
 
     /**
      * @var string Expression will be evaluated to create url.
@@ -56,7 +57,7 @@ class MenuArrayBehavior extends \yii\base\Behavior {
             'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'),
             'itemOptions' => array('class' => 'dropdown menu-item'),
             'active' => $this->isActive($url),
-            'total_count' => ($this->countProduct) ? $model->countProducts : 0,
+            'total_count' => ($this->countItems) ? $model->countItems : 0,
         );
         // TODO: Cache result
         $children = $model->children()
