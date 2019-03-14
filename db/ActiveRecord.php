@@ -6,6 +6,7 @@ namespace panix\engine\db;
 use Yii;
 use yii\base\Exception;
 use panix\mod\shop\models\Category;
+use yii\behaviors\TimestampBehavior;
 
 class ActiveRecord extends \yii\db\ActiveRecord
 {
@@ -114,19 +115,9 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 'class' => \panix\engine\grid\sortable\Behavior::class,
             ];
         }
-        if (isset($columns['date_create']) && isset($columns['date_update'])) {
+        if (isset($columns['created_at']) && isset($columns['updated_at'])) {
             $b['timestamp'] = [
-                'class' => \yii\behaviors\TimestampBehavior::class,
-                'createdAtAttribute' => 'date_create',
-                'updatedAtAttribute' => 'date_update',
-                //'value' => new \yii\db\Expression('NOW()'),
-                //'value' => new \yii\db\Expression('CURRENT_TIMESTAMP()'),
-                'value' => new \yii\db\Expression('UTC_TIMESTAMP()'),
-                //'attributes' => [
-                //    \yii\db\ActiveRecord::EVENT_BEFORE_INSERT => 'date_create',
-                //     \yii\db\ActiveRecord::EVENT_BEFORE_UPDATE => 'date_update',
-                //],
-                // 'value' => function() { return date('U'); },// unix timestamp
+                'class' => TimestampBehavior::class,
             ];
         }
 
