@@ -2,10 +2,10 @@
 
 namespace panix\engine\db;
 
-use panix\mod\shop\models\Category;
+
 use Yii;
 use yii\base\Exception;
-use yii\helpers\Json;
+use panix\mod\shop\models\Category;
 
 class ActiveRecord extends \yii\db\ActiveRecord
 {
