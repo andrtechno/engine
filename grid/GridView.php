@@ -40,7 +40,7 @@ class GridView extends \yii\grid\GridView {
 
         parent::init();
         if ($this->enableLayout) {
-            $this->layout = $this->render('@admin/views/layouts/_grid_layout', $this->layoutOptions);
+            $this->layout = $this->render('@theme/views/layouts/_grid_layout', $this->layoutOptions);
         }
     }
 
