@@ -4,8 +4,9 @@ namespace panix\engine\data;
 
 use Yii;
 use yii\base\InvalidArgumentException;
+use yii\data\ActiveDataProvider as BaseActiveDataProvider;
 
-class ActiveDataProvider extends \yii\data\ActiveDataProvider
+class ActiveDataProvider extends BaseActiveDataProvider
 {
 
     private $_pagination;

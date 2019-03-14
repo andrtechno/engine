@@ -619,25 +619,7 @@ class CMS
         }
 
 
-        return str_replace(array_keys(self::getMonthsLocale(5)), array_values(self::getMonthsLocale(5)), $result);
-    }
-
-    public static function getMonthsLocale($type = 0)
-    {
-        return [
-            "January" => Yii::t('app/month', 'January', ['n' => $type]),
-            "February" => Yii::t('app/month', 'February', ['n' => $type]),
-            "March" => Yii::t('app/month', 'March', ['n' => $type]),
-            "April" => Yii::t('app/month', 'April', ['n' => $type]),
-            "May" => Yii::t('app/month', 'May', ['n' => $type]),
-            "June" => Yii::t('app/month', 'June', ['n' => $type]),
-            "July" => Yii::t('app/month', 'July', ['n' => $type]),
-            "August" => Yii::t('app/month', 'August', ['n' => $type]),
-            "September" => Yii::t('app/month', 'September', ['n' => $type]),
-            "October" => Yii::t('app/month', 'October', ['n' => $type]),
-            "November" => Yii::t('app/month', 'November', ['n' => $type]),
-            "December" => Yii::t('app/month', 'December', ['n' => $type])
-        ];
+        return $result;
     }
 
     /**

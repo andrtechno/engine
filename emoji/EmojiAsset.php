@@ -1,16 +1,5 @@
 <?php
 
-/**
- * EmojiAsset
- *
- * @package vendor.tangniyuqi.yii2-emoji
- * @author tangming <tangniyuqi@163.com>
- * @copyright DNA <http://www.Noooya.com/>
- * @version 1.0.0
- * @since 2017-05-18 Create
- * @todo N/A
- */
-
 namespace panix\engine\emoji;
 
 use Yii;
