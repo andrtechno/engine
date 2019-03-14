@@ -15,12 +15,12 @@ use yii\web\Controller;
 
 class AdminController extends Controller
 {
-    public $breadcrumbs, $jsMessages = [];
-    public $dataModel, $pageName, $keywords, $description;
+    public $breadcrumbs;
+    public $dataModel, $pageName;
     public $icon;
     private $_title;
     public $buttons = [];
-    public $layout = '@vendor/panix/mod-admin/views/layouts/main';
+    public $layout = '@theme/views/layouts/main';
     public $dashboard = true;
 
     public function behaviors2()
