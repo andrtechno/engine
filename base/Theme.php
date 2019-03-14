@@ -13,7 +13,12 @@ class Theme extends \yii\base\Theme
 
     public function init()
     {
-        $this->name = \Yii::$app->settings->get('app', 'theme');
+        if($this->name==null){
+            $this->name = Yii::$app->settings->get('app', 'theme');
+        }
+
+        //echo Yii::getAlias('@app');die;
+
         $this->basePath = "@app/web/themes/{$this->name}";
         $modulesPaths = [];
         foreach (Yii::$app->getModules() as $id => $mod) {
@@ -40,12 +45,6 @@ class Theme extends \yii\base\Theme
                 $this->render('_' . __FUNCTION__, ['type' => $type, 'message' => $text, 'close' => $close]);
             } else {
                 die('error alert theme');
-                Yii::$app->controller->flashMessage('warning', Yii::t('app', 'TPL_' . strtoupper(__FUNCTION__), array(
-                        '{tpl}' => __FUNCTION__,
-                        '{type}' => $type,
-                        //'{types}' => Html::encode($str)
-                    )
-                ));
             }
         }
     }

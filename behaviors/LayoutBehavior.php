@@ -34,6 +34,7 @@ class LayoutBehavior extends \yii\base\Behavior {
             return false;
         }
 
+
         $moduleId = $controller->module !== null ? $controller->module->id : null;
         $controllerId = $controller->id;
         $actionId = $controller->action->id;
@@ -70,6 +71,7 @@ class LayoutBehavior extends \yii\base\Behavior {
                 
 
             } else {
+
                 $layouts[] = "@app/views/layouts/{$controllerId}_{$actionId}";
                 $layouts[] = "@app/views/layouts/{$controllerId}";
             }
@@ -78,18 +80,18 @@ class LayoutBehavior extends \yii\base\Behavior {
                // VarDumper::dump($pathMaps,10,true);die;
                 foreach ($pathMaps as $path) {
                     if ($moduleId !== null) {
-                        $layouts[] = "{$path}/layouts/{$moduleId}_{$controllerId}_{$actionId}";
-                        $layouts[] = "{$path}/layouts/{$moduleId}_{$controllerId}";
-                        $layouts[] = "{$path}/layouts/main";
+                        $layouts[] = "{$path}/layouts6/{$moduleId}_{$controllerId}_{$actionId}";
+                        $layouts[] = "{$path}/layouts6/{$moduleId}_{$controllerId}";
+                        $layouts[] = "{$path}/layouts5/main";
                     } else {
-                        $layouts[] = "{$path}/layouts/{$controllerId}_{$actionId}";
-                        $layouts[] = "{$path}/layouts/{$controllerId}";
+                        $layouts[] = "{$path}/layouts4/{$controllerId}_{$actionId}";
+                        $layouts[] = "{$path}/layouts3/{$controllerId}";
                     }
                 }
-                $layouts[] = "{$path}/layouts/main";
+                $layouts[] = "{$path}/layouts1/main";
             }
 
-            $layouts[] = "@app/views/layouts/main";
+            $layouts[] = "@app/views/layouts2/main";
 
          //   VarDumper::dump($layouts,10,true);die;
             //foreach (Yii::$app->getModules() as $module){

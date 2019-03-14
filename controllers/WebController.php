@@ -6,7 +6,6 @@ use Viber\Client;
 use Yii;
 use yii\web\Controller;
 use panix\engine\CMS;
-use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use Viber\Bot;
 use Viber\Api\Sender;
@@ -124,9 +123,11 @@ class WebController extends Controller
         Yii::setAlias('@themeroot', Yii::getAlias("@webroot/themes/{$config->theme}"));
         Yii::setAlias('@theme', Yii::getAlias("@web/themes/{$config->theme}"));
         if (Yii::$app->hasModule('stats') && !$this->dashboard && !Yii::$app->request->isAjax) {
-            //die('count');
+
+            if(isset(Yii::$app->stats)){
             $stats = Yii::$app->stats;
             $stats->record();
+            }
 
         }
         $this->jsMessages = [

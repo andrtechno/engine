@@ -11,10 +11,14 @@ use yii\web\ForbiddenHttpException;
 //use yii2mod\rbac\filters\AccessControl;
 use yii\filters\AccessControl;
 use yii\web\UnauthorizedHttpException;
+use yii\web\Controller;
 
-class AdminController extends WebController
+class AdminController extends Controller
 {
-
+    public $breadcrumbs, $jsMessages = [];
+    public $dataModel, $pageName, $keywords, $description;
+    public $icon;
+    private $_title;
     public $buttons = [];
     public $layout = '@vendor/panix/mod-admin/views/layouts/main';
     public $dashboard = true;
@@ -32,6 +36,46 @@ class AdminController extends WebController
         ];
     }
 
+
+    public function setTitle($title)
+    {
+        $this->_title = $title;
+    }
+
+
+    public function getTitle()
+    {
+        $title = Yii::$app->settings->get('app', 'sitename');
+        if (!empty($this->_title)) {
+            $title = $this->_title .= ' / ' . $title;
+        }
+        return $title;
+    }
+
+
+    public function actionError()
+    {
+        $exception = Yii::$app->errorHandler->exception;
+
+        if ($exception !== null) {
+            $statusCode = $exception->statusCode;
+            $name = $exception->getName();
+            $message = $exception->getMessage();
+
+            $this->layout = '@theme/views/layouts/error';
+
+
+            $this->pageName = Yii::t('app/error', $statusCode);
+            $this->title = $statusCode . ' ' . $this->pageName;
+            $this->breadcrumbs = [$statusCode];
+            return $this->render('@theme/views/main/error', [
+                'exception' => $exception,
+                'statusCode' => $statusCode,
+                'name' => $name,
+                'message' => $message
+            ]);
+        }
+    }
     public function beforeAction($event)
     {
         if (Yii::$app->user->isGuest && get_class($this) !== 'panix\mod\admin\controllers\AuthController') {
@@ -47,8 +91,9 @@ class AdminController extends WebController
         if (!empty(Yii::$app->user) && !Yii::$app->user->can("admin") && get_class($this) !== 'panix\mod\admin\controllers\AuthController' && get_class($this) !== 'panix\mod\admin\controllers\DefaultController') {
             throw new ForbiddenHttpException(Yii::t('app', 'ACCESS_DENIED'));
         }
+        Yii::setAlias('@themeroot', Yii::getAlias("@app/backend/themes/dashboard"));
+        Yii::setAlias('@theme', Yii::getAlias("@app/backend/themes/dashboard"));
 
-        //Yii::setAlias('@admin', Yii::getAlias('@vendor/panix/mod-admin'));
 
         parent::init();
     }
