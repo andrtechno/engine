@@ -8,14 +8,17 @@ use Yii;
 use yii\data\ArrayDataProvider;
 use yii\db\Exception;
 use yii\web\ForbiddenHttpException;
-//use yii2mod\rbac\filters\AccessControl;
-use yii\filters\AccessControl;
+use yii2mod\rbac\filters\AccessControl;
+
 use yii\web\HttpException;
 use yii\web\UnauthorizedHttpException;
 use yii\web\Controller;
 
 class AdminController extends Controller
 {
+
+
+
     public $breadcrumbs;
     public $dataModel, $pageName;
     public $icon;
@@ -24,15 +27,15 @@ class AdminController extends Controller
     public $layout = '@theme/views/layouts/main';
     public $dashboard = true;
 
-    public function behaviors2()
+    public function behavior()
     {
         return [
             'access' => [
                 'class' => AccessControl::class,
-                // 'allowActions' => [
-                //     'index',
-                // The actions listed here will be allowed to everyone including guests.
-                // ]
+                //'allowActions' => [
+                //'index',
+                 //The actions listed here will be allowed to everyone including guests.
+               // ]
             ],
         ];
     }
@@ -80,8 +83,9 @@ class AdminController extends Controller
 
     public function beforeAction($event)
     {
+
         if (Yii::$app->user->isGuest && get_class($this) !== 'panix\mod\admin\controllers\AuthController') {
-            Yii::$app->response->redirect(['/admin/auth']);
+            return Yii::$app->response->redirect(['/admin/auth']);
         }
 
         return parent::beforeAction($event);
@@ -89,10 +93,17 @@ class AdminController extends Controller
 
     public function init()
     {
-        // Yii::$app->assetManager->bundles['yii\jui\JuiAsset']['css'] = [];
-        if (!empty(Yii::$app->user) && !Yii::$app->user->can("admin") && get_class($this) !== 'panix\mod\admin\controllers\AuthController' && get_class($this) !== 'panix\mod\admin\controllers\DefaultController') {
+       // echo get_class($this);die;
+
+        //panix\mod\admin\controllers\admin\DefaultController
+
+        /*if (!empty(Yii::$app->user)
+            && !Yii::$app->user->can("admin")
+            && get_class($this) !== 'panix\mod\admin\controllers\AuthController'
+            && get_class($this) !== 'panix\mod\admin\controllers\DefaultController'
+        ) {
             throw new ForbiddenHttpException(Yii::t('app', 'ACCESS_DENIED'));
-        }
+        }*/
         Yii::setAlias('@themeroot', Yii::getAlias("@app/backend/themes/dashboard"));
         Yii::setAlias('@theme', Yii::getAlias("@app/backend/themes/dashboard"));
 
