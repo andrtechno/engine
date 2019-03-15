@@ -8,7 +8,7 @@ use yii\web\UrlManager;
 class ManagerUrl extends UrlManager {
 
     public function init() {
-        $this->modulesRoutes();
+       // $this->modulesRoutes();
         parent::init();
     }
 

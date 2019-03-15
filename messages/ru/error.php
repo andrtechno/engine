@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     '100' => 'Continue.',
     '101' => 'Switching protocols.',
@@ -58,4 +58,4 @@ return array(
     '503' => 'Service unavailable. This error code is specific to IIS 6.0.',
     '504' => 'Gateway timeout.',
     '505' => 'HTTP version not supported.',
-);
+];

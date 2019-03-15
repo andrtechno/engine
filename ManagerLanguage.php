@@ -3,9 +3,10 @@
 namespace panix\engine;
 
 use Yii;
+use yii\base\Component;
 use panix\mod\admin\models\Languages;
 
-class ManagerLanguage extends \yii\base\Component {
+class ManagerLanguage extends Component {
 
     /**
      * @var array available system languages
@@ -31,7 +32,7 @@ class ManagerLanguage extends \yii\base\Component {
 
     /**
      * Load available languages.
-     * @return LanguageModel collection
+     * @return array Languages collection
      */
     private function loadLanguages() {
         $model = Languages::find()->published()->all();
@@ -58,7 +59,7 @@ class ManagerLanguage extends \yii\base\Component {
     /**
      * Get lang by its code
      * @param string $langCode
-     * @return LanguageModel
+     * @return Languages
      */
     public function getByCode($langCode) {
 
@@ -80,7 +81,7 @@ class ManagerLanguage extends \yii\base\Component {
 
     /**
      * Get language codes
-     * @return array array('en','ru',...)
+     * @return array ['en','ru',...]
      */
     public function getCodes() {
         return array_keys($this->_languages);
@@ -88,7 +89,7 @@ class ManagerLanguage extends \yii\base\Component {
 
     /**
      * Get default system model
-     * @return SSystemLanguage
+     * @return Languages
      */
     public function getDefault() {
         return $this->getByCode($this->_default);
@@ -96,12 +97,15 @@ class ManagerLanguage extends \yii\base\Component {
 
     /**
      * Get active language model
-     * @return SSystemLanguage
+     * @return Languages
      */
     public function getActive() {
         return $this->getByCode($this->_active);
     }
 
+    /**
+     * @return array
+     */
     public function getLangs() {
         $langs = array();
         foreach ($this->getLanguages() as $lang) {
@@ -141,7 +145,10 @@ class ManagerLanguage extends \yii\base\Component {
         if ($this->_active !== $this->_default)
             return $this->_active;
     }
-    
+
+    /**
+     * @return array
+     */
     public function getLangsByArray() {
         $langs = array();
         foreach ($this->getLanguages() as $lang) {

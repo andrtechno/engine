@@ -10,6 +10,7 @@ use yii\db\Exception;
 use yii\web\ForbiddenHttpException;
 //use yii2mod\rbac\filters\AccessControl;
 use yii\filters\AccessControl;
+use yii\web\HttpException;
 use yii\web\UnauthorizedHttpException;
 use yii\web\Controller;
 
@@ -76,6 +77,7 @@ class AdminController extends Controller
             ]);
         }
     }
+
     public function beforeAction($event)
     {
         if (Yii::$app->user->isGuest && get_class($this) !== 'panix\mod\admin\controllers\AuthController') {
@@ -132,10 +134,10 @@ class AdminController extends Controller
                         $model->column_key = $key;
 
                         //try {
-                            $model->save(false);
-                       // } catch (Exception $e) {
-                            //error
-                       // }
+                        $model->save(false);
+                        // } catch (Exception $e) {
+                        //error
+                        // }
                     }
                 }
             }
@@ -202,5 +204,12 @@ class AdminController extends Controller
         } else {
             throw new UnauthorizedHttpException(401);
         }
+    }
+
+    public function error404($message = '', $status = 404)
+    {
+        if (empty($message))
+            $message = Yii::t('app/error', '404');
+        throw new HttpException($status, $message);
     }
 }
