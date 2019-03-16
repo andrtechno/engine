@@ -19,7 +19,7 @@ class Tabs extends \yii\bootstrap4\Tabs
         }
 
         foreach ($items as $n => $item) {
-            $options = array_merge($this->itemOptions, ArrayHelper::getValue($item, 'options', []));
+            $options = array_merge($this->itemOptions, ArrayHelper::getValue($item, 'itemOptions', []));
             $options['id'] = ArrayHelper::getValue($options, 'id', $this->options['id'] . $prefix . '-tab' . $n);
 
             if (!ArrayHelper::remove($item, 'visible', true)) {
