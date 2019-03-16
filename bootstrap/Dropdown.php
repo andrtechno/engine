@@ -8,7 +8,7 @@ use yii\helpers\ArrayHelper;
 
 class Dropdown extends \yii\bootstrap4\Dropdown {
 
-    public $subMenuOptions = [];
+    public $submenuOptions = [];
 
     /**
      * Initializes the widget
@@ -52,6 +52,7 @@ class Dropdown extends \yii\bootstrap4\Dropdown {
                     $content = Html::a($icon . $label, $url, $linkOptions);
                 }
             } else {
+
                 Html::addCssClass($linkOptions, 'dropdown-toggle');
                 $linkOptions['data-toggle'] = 'dropdown';
                 $submenuOptions = $options;
