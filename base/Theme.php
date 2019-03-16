@@ -87,7 +87,7 @@ class Theme extends \yii\base\Theme
                 break;
             }
         }
-        echo Yii::$app->view->render($render, $array, false, false);
+        return Yii::$app->view->render($render, $array, false, false);
     }
 
 }

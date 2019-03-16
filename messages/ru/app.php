@@ -4,6 +4,7 @@ return [
     'PATTERN_URL' => '{attribute}, может содержать только латинские буквы, цифры и тире.',
     'PAGE_GEN' => 'Скорость загрузки страницы: <b>{time}</b> сек. Память: <b>{memory}</b>. Запросов к БД: <b>{db_query}</b> за <b>{db_time}</b> сек.',
     'IN' => 'в',
+    'ALL' => 'Все',
     'TODAY_IN' => 'Сегодня в {time}',
     'YESTERDAY_IN' => 'Вчера в {time}',
     'GRID_SWITCH' => 'Скрыть/показать',

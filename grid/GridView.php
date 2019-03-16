@@ -20,7 +20,7 @@ class GridView extends \yii\grid\GridView {
     public function init() {
         if (isset($this->dataProvider->query)) {
             $modelClass = $this->dataProvider->query->modelClass;
-
+            $this->setId('grid-'.strtolower(basename($this->dataProvider->query->modelClass)));
             if ($this->enableColumns && method_exists($modelClass, 'getGridColumns')) {
                 $runModel = new $modelClass;
                 $model = GridColumns::find()->where([

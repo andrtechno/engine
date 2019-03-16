@@ -7,7 +7,7 @@ use panix\mod\admin\models\Modules;
 
 class Application extends \yii\web\Application {
 
-    const version = '2.0.0';
+    const version = '2.0.0-alpha';
 
     public function run() {
         $this->name = $this->settings->get('app', 'sitename');
