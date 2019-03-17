@@ -1,15 +1,15 @@
 <?php
 
-namespace panix\engine\plugins\web\youtube;
+namespace panix\engine\plugins\web\bbcode;
 
 use lo\plugins\shortcodes\ShortcodeWidget;
 use yii\helpers\Html;
 
 /**
  * Class YoutubeWidget
- * @package panix\engine\plugins\web\youtube
+ * @package panix\engine\plugins\web\bbcode
  */
-class YoutubeWidget extends ShortcodeWidget
+class BBCodeWidget extends ShortcodeWidget
 {
     const PULL_LEFT = 'left';
     const PULL_RIGHT = 'right';

@@ -6,10 +6,10 @@ use panix\engine\plugins\bootstrap\widgets\Alert;
 use panix\engine\plugins\bootstrap\widgets\Badge;
 
 /**
- * Plugin Name: Bootstrap 3 Components Shortcodes
+ * Plugin Name: Bootstrap 4 Components Shortcodes
  * Plugin URI: https://github.com/andrtechno/engine/tree/master/plugins/bootstrap
  * Version: 1.0
- * Description: A shortcodes pack with Bootstrap 3 components
+ * Description: A shortcodes pack with Bootstrap 4 components
  * Author: Andrey S
  * Author URI: https://github.com/andrtechno
  */

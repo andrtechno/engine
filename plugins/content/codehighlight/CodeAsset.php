@@ -1,6 +1,6 @@
 <?php
 
-namespace panix\engine\shortcodes\content\codehighlight;
+namespace panix\engine\plugins\content\codehighlight;
 
 use yii\web\AssetBundle;
 

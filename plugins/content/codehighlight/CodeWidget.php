@@ -1,5 +1,5 @@
 <?php
-namespace panix\engine\shortcodes\content\codehighlight;
+namespace panix\engine\plugins\content\codehighlight;
 
 use lo\plugins\shortcodes\ShortcodeWidget;
 use yii\helpers\Html;

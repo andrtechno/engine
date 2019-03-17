@@ -1,5 +1,5 @@
 <?php
-namespace panix\engine\shortcodes\web\youtube;
+namespace panix\engine\plugins\web\youtube;
 
 use lo\plugins\BaseShortcode;
 use yii\helpers\Html;
