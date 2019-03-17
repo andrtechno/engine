@@ -34,6 +34,11 @@ php yii migrate --migrationPath=vendor/panix/engine/migrations
 ```
 
 
+## Plugins
+- [PIXELION CMS](https://pixelion.com.ua)
+[see](plugins/bootstrap#grid)
+
+
 ## See also
 - [PIXELION CMS](https://pixelion.com.ua)
 
