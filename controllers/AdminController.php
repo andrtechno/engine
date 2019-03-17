@@ -21,6 +21,7 @@ class AdminController extends Controller
 
     public $breadcrumbs;
     public $dataModel, $pageName;
+    public $jsMessages = [];
     public $icon;
     private $_title;
     public $buttons = [];
@@ -40,6 +41,11 @@ class AdminController extends Controller
         ];
     }
 
+    public function getAssetUrl(){
+        $theme = Yii::$app->settings->get('app', 'theme');
+        $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@webroot/themes/dashboard/assets"));
+        return $assetsPaths[1];
+    }
 
     public function setTitle($title)
     {
@@ -81,8 +87,15 @@ class AdminController extends Controller
         }
     }
 
+
     public function beforeAction($event)
     {
+        $this->view->registerJs('
+            var common = window.CMS_common || {};
+            common.langauge="' . Yii::$app->language . '";
+            common.token="' . Yii::$app->request->csrfToken . '";
+            common.isDashboard=true;
+            common.message=' . \yii\helpers\Json::encode($this->jsMessages) . ';', \yii\web\View::POS_HEAD, 'js-common');
 
         if (Yii::$app->user->isGuest && get_class($this) !== 'panix\mod\admin\controllers\AuthController') {
             return Yii::$app->response->redirect(['/admin/auth']);

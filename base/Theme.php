@@ -17,9 +17,15 @@ class Theme extends \yii\base\Theme
             $this->name = Yii::$app->settings->get('app', 'theme');
         }
 
-        //echo Yii::getAlias('@app');die;
-
         $this->basePath = "@app/web/themes/{$this->name}";
+        $this->baseUrl = "@app/web/themes/{$this->name}";
+
+
+        if(Yii::$app->id == 'backend'){
+            $this->basePath = "@backend/themes/{$this->name}";
+            $this->baseUrl = "@backend/themes/{$this->name}";
+        }
+
         $modulesPaths = [];
         foreach (Yii::$app->getModules() as $id => $mod) {
             $modulesPaths['@' . $id] = "@app/web/themes/{$this->name}/modules/{$id}";
@@ -31,7 +37,8 @@ class Theme extends \yii\base\Theme
             '@app/widgets' => "@app/web/themes/{$this->name}/widgets",
         ], $modulesPaths);
 
-        $this->baseUrl = "@app/web/themes/{$this->name}";
+
+
         parent::init();
     }
 
