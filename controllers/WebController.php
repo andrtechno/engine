@@ -83,17 +83,13 @@ class WebController extends Controller
         return parent::beforeAction($action);
     }
 
-    public function actionTest2()
-    {
-        set_time_limit(10);
-        //  \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
-        //  include_once 'Sample_Header.php';
-        // Autoloader::register();
 
 
-        return $this->render('test2', []);
+    public function getAssetUrl(){
+        $theme = Yii::$app->settings->get('app', 'theme');
+        $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@webroot/themes/{$theme}/assets"));
+        return $assetsPaths[1];
     }
-
 
     public function actionTest()
     {
