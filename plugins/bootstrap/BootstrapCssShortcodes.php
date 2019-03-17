@@ -1,18 +1,18 @@
 <?php
-namespace lo\shortcodes\bootstrap;
+namespace panix\engine\plugins\bootstrap;
 
 use lo\plugins\BaseShortcode;
-use lo\shortcodes\bootstrap\widgets\Col;
-use lo\shortcodes\bootstrap\widgets\Container;
-use lo\shortcodes\bootstrap\widgets\Row;
+use panix\engine\plugins\bootstrap\widgets\Col;
+use panix\engine\plugins\bootstrap\widgets\Container;
+use panix\engine\plugins\bootstrap\widgets\Row;
 
 /**
- * Plugin Name: Bootstrap 3 Css Shortcodes
- * Plugin URI: https://github.com/loveorigami/yii2-shortcodes-pack/tree/master/src/bootstrap
- * Version: 1.2
- * Description: A shortcodes pack with Bootstrap 3 css elements
- * Author: Andrey Lukyanov
- * Author URI: https://github.com/loveorigami
+ * Plugin Name: Bootstrap 4 Css Shortcodes
+ * Plugin URI: https://github.com/andrtechno/engine/tree/master/plugins/bootstrap
+ * Version: 1.0
+ * Description: A shortcodes pack with Bootstrap 4 css elements
+ * Author: Andrey S
+ * Author URI: https://github.com/andrtechno
  */
 class BootstrapCssShortcodes extends BaseShortcode
 {
@@ -44,19 +44,19 @@ class BootstrapCssShortcodes extends BaseShortcode
                     "lg" => false,
                     "md" => 12,
                     "sm" => false,
-                    "xs" => false,
+                    "xl" => false,
                     "lg_offset" => false,
                     "md_offset" => false,
                     "sm_offset" => false,
-                    "xs_offset" => false,
+                    "xl_offset" => false,
                     "lg_pull" => false,
                     "md_pull" => false,
                     "sm_pull" => false,
-                    "xs_pull" => false,
+                    "xl_pull" => false,
                     "lg_push" => false,
                     "md_push" => false,
                     "sm_push" => false,
-                    "xs_push" => false,
+                    "xl_push" => false,
                     "xclass" => false
                 ],
                 'tooltip' => '[col md=6] ... [/col]'
