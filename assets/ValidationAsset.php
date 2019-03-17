@@ -2,9 +2,14 @@
 
 namespace panix\engine\assets;
 
-use yii\web\AssetBundle;
+use panix\engine\web\AssetBundle;
 
-class ValidationAsset extends AssetBundle {
+/**
+ * Class ValidationAsset
+ * @package panix\engine\assets
+ */
+class ValidationAsset extends AssetBundle
+{
 
     public $sourcePath = '@vendor/panix/engine/assets';
     public $js = [

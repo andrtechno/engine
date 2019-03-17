@@ -2,8 +2,12 @@
 
 namespace panix\engine\assets;
 
-use yii\web\AssetBundle;
+use panix\engine\web\AssetBundle;
 
+/**
+ * Class ErrorAsset
+ * @package panix\engine\assets
+ */
 class ErrorAsset extends AssetBundle {
 
     public $sourcePath = '@vendor/panix/engine/assets';

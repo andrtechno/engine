@@ -2,9 +2,14 @@
 
 namespace panix\engine\assets;
 
-use yii\web\AssetBundle;
+use panix\engine\web\AssetBundle;
 
-class JqueryCookieAsset extends AssetBundle {
+/**
+ * Class JqueryCookieAsset
+ * @package panix\engine\assets
+ */
+class JqueryCookieAsset extends AssetBundle
+{
 
     public $sourcePath = '@vendor/panix/engine/assets';
     public $js = [

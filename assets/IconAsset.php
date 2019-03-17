@@ -2,9 +2,14 @@
 
 namespace panix\engine\assets;
 
-use yii\web\AssetBundle;
+use panix\engine\web\AssetBundle;
 
-class IconAsset extends AssetBundle {
+/**
+ * Class IconAsset
+ * @package panix\engine\assets
+ */
+class IconAsset extends AssetBundle
+{
 
     public $sourcePath = '@vendor/panix/engine/assets';
 

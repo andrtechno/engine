@@ -2,8 +2,12 @@
 
 namespace panix\engine\widgets\owlcarousel;
 
-use yii\web\AssetBundle;
+use panix\engine\web\AssetBundle;
 
+/**
+ * Class CarouselAsset
+ * @package panix\engine\widgets\owlcarousel
+ */
 class CarouselAsset extends AssetBundle {
 
     public $sourcePath = __DIR__ . '/assets';

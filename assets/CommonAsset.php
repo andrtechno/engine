@@ -2,16 +2,17 @@
 
 namespace panix\engine\assets;
 
-use yii\web\AssetBundle;
+use panix\engine\web\AssetBundle;
 
-class CommonAsset extends AssetBundle {
+class CommonAsset extends AssetBundle
+{
 
     public $sourcePath = '@vendor/panix/engine/assets';
+
     public $js = [
         'js/common.js',
     ];
-    public $css = [
-    ];
+
     public $depends = [
         'yii\jui\JuiAsset',
         'yii\web\YiiAsset',

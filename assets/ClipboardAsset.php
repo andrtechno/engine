@@ -2,9 +2,14 @@
 
 namespace panix\engine\assets;
 
-use yii\web\AssetBundle;
+use panix\engine\web\AssetBundle;
 
-class ClipboardAsset extends AssetBundle {
+/**
+ * Class ClipboardAsset
+ * @package panix\engine\assets
+ */
+class ClipboardAsset extends AssetBundle
+{
 
     public $sourcePath = '@vendor/panix/engine/assets';
     public $js = [
