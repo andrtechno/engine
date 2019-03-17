@@ -10,7 +10,7 @@ use panix\engine\plugins\bootstrap\widgets\Tabs;
  * Plugin Name: Bootstrap 4 JavaScript Shortcodes
  * Plugin URI: https://github.com/andrtechno/engine/tree/master/plugins/bootstrap
  * Version: 1.0
- * Description: A shortcodes pack with Bootstrap 3 JavaScript
+ * Description: A shortcodes pack with Bootstrap 4 JavaScript
  * Author: Andrey S
  * Author URI: https://github.com/andrtechno
  */
