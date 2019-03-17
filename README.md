@@ -35,9 +35,9 @@ php yii migrate --migrationPath=vendor/panix/engine/migrations
 
 
 ## Plugins
-[Bootstrap 4](plugins/bootstrap#grid)
-[Youtube](plugins/web/youtube)
-[CodeHighlight](plugins/content/codehighlight)
+- [Bootstrap 4](plugins/bootstrap)
+- [YouTube](plugins/web/youtube)
+- [CodeHighlight](plugins/content/codehighlight)
 
 
 ## See also

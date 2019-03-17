@@ -1,17 +1,17 @@
 <?php
-namespace lo\shortcodes\bootstrap;
+namespace panix\engine\plugins\bootstrap;
 
 use lo\plugins\BaseShortcode;
-use lo\shortcodes\bootstrap\widgets\Alert;
-use lo\shortcodes\bootstrap\widgets\Badge;
+use panix\engine\plugins\bootstrap\widgets\Alert;
+use panix\engine\plugins\bootstrap\widgets\Badge;
 
 /**
  * Plugin Name: Bootstrap 3 Components Shortcodes
- * Plugin URI: https://github.com/loveorigami/yii2-shortcodes-pack/tree/master/src/bootstrap
- * Version: 1.3
+ * Plugin URI: https://github.com/andrtechno/engine/tree/master/plugins/bootstrap
+ * Version: 1.0
  * Description: A shortcodes pack with Bootstrap 3 components
- * Author: Andrey Lukyanov
- * Author URI: https://github.com/loveorigami
+ * Author: Andrey S
+ * Author URI: https://github.com/andrtechno
  */
 class BootstrapComponentsShortcodes extends BaseShortcode
 {

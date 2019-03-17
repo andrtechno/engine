@@ -1,13 +1,12 @@
 <?php
-namespace lo\shortcodes\bootstrap\widgets;
+namespace panix\engine\plugins\bootstrap\widgets;
 
 use yii\bootstrap4\Html;
 use yii\bootstrap4\Alert as BootstrapAlert;
 
 /**
  * Class Alert
- * @package lo\shortcodes\bootstrap\widgets
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * @package panix\engine\plugins\bootstrap\widgets
  */
 class Alert extends BootstrapWidget
 {

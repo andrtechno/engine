@@ -1,12 +1,12 @@
 <?php
-namespace lo\shortcodes\content\codehighlight;
+
+namespace panix\engine\shortcodes\content\codehighlight;
 
 use yii\web\AssetBundle;
 
 /**
  * Class CodeAsset
- * @package lo\plugins\plugins\code
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * @package panix\engine\shortcodes\content\codehighlight
  */
 class CodeAsset extends AssetBundle
 {

@@ -1,13 +1,12 @@
 <?php
 
-namespace lo\shortcodes\bootstrap\widgets;
+namespace panix\engine\plugins\bootstrap\widgets;
 
 use yii\web\AssetBundle;
 
 /**
- * Class CollapseAsset
- * @package lo\shortcodes\bootstrap\widgets
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * Class AccordionAsset
+ * @package panix\engine\plugins\bootstrap\widgets
  */
 class AccordionAsset extends AssetBundle
 {

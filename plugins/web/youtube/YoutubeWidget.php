@@ -1,14 +1,13 @@
 <?php
 
-namespace lo\shortcodes\web\youtube;
+namespace panix\engine\shortcodes\web\youtube;
 
 use lo\plugins\shortcodes\ShortcodeWidget;
 use yii\helpers\Html;
 
 /**
  * Class YoutubeWidget
- * @package lo\plugins\shortcodes
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * @package panix\engine\shortcodes\web\youtube
  */
 class YoutubeWidget extends ShortcodeWidget
 {

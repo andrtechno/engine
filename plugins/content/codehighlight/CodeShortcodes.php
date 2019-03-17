@@ -1,15 +1,15 @@
 <?php
-namespace lo\shortcodes\content\codehighlight;
+namespace panix\engine\shortcodes\content\codehighlight;
 
 use lo\plugins\BaseShortcode;
 
 /**
  * Plugin Name: Code Highlighting
- * Plugin URI: https://github.com/loveorigami/yii2-shortcodes-pack/tree/master/src/content/codehighlight
+ * Plugin URI: https://github.com/andrtechno/engine/tree/master/plugins/content/codehighlight
  * Version: 1.12
  * Description: A shortcode for code highlighting in view. Use as [code lang="php"]...content...[/code]
- * Author: Andrey Lukyanov
- * Author URI: https://github.com/loveorigami
+ * Author: Andrey S
+ * Author URI: https://github.com/andrtechno
  */
 class CodeShortcodes extends BaseShortcode
 {

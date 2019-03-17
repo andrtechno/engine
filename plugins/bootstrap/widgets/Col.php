@@ -1,12 +1,12 @@
 <?php
-namespace lo\shortcodes\bootstrap\widgets;
+
+namespace panix\engine\plugins\bootstrap\widgets;
 
 use yii\bootstrap4\Html;
 
 /**
  * Class Col
- * @package lo\shortcodes\bootstrap\widgets
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * @package panix\engine\plugins\bootstrap\widgets
  */
 class Col extends BootstrapWidget
 {
@@ -54,7 +54,7 @@ class Col extends BootstrapWidget
         $this->sm ? Html::addCssClass($this->options, 'col-sm-' . $this->sm) : null;
         $this->xl ? Html::addCssClass($this->options, 'col-xl-' . $this->xl) : null;
 
-        if(!$this->lg && !$this->md && !$this->sm && !$this->xl){
+        if (!$this->lg && !$this->md && !$this->sm && !$this->xl) {
             Html::addCssClass($this->options, 'col');
         }
 
@@ -72,7 +72,6 @@ class Col extends BootstrapWidget
         $this->md_push ? Html::addCssClass($this->options, 'col-md-push-' . $this->md_push) : null;
         $this->sm_push ? Html::addCssClass($this->options, 'col-sm-push-' . $this->sm_push) : null;
         $this->xl_push ? Html::addCssClass($this->options, 'col-xl-push-' . $this->xl_push) : null;
-
 
 
         $this->xclass ? Html::addCssClass($this->options, $this->xclass) : null;

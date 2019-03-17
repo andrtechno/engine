@@ -1,12 +1,12 @@
 <?php
-namespace lo\shortcodes\bootstrap\widgets;
+
+namespace panix\engine\plugins\bootstrap\widgets;
 
 use yii\bootstrap4\Html;
 
 /**
- * Class Alert
- * @package lo\shortcodes\bootstrap\widgets
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * Class Badge
+ * @package panix\engine\plugins\bootstrap\widgets
  */
 class Badge extends BootstrapWidget
 {

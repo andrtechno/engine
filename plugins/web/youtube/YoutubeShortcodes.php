@@ -1,16 +1,16 @@
 <?php
-namespace lo\shortcodes\web\youtube;
+namespace panix\engine\shortcodes\web\youtube;
 
 use lo\plugins\BaseShortcode;
 use yii\helpers\Html;
 
 /**
  * Plugin Name: Youtube Video
- * Plugin URI: https://github.com/loveorigami/yii2-shortcodes-pack/tree/master/src/web/youtube
- * Version: 1.7
+ * Plugin URI: https://github.com/andrtechno/engine/tree/master/plugins/web/youtube
+ * Version: 1.0
  * Description: A shortcode for embed youtube video in view. Use as [youtube code="ZM2tVuy8B_Y"]
- * Author: Andrey Lukyanov
- * Author URI: https://github.com/loveorigami
+ * Author: Andrey S
+ * Author URI: https://github.com/andrtechno
  */
 class YoutubeShortcodes extends BaseShortcode
 {

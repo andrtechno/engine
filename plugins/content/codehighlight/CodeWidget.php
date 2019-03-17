@@ -1,14 +1,14 @@
 <?php
-namespace lo\shortcodes\content\codehighlight;
+namespace panix\engine\shortcodes\content\codehighlight;
 
 use lo\plugins\shortcodes\ShortcodeWidget;
 use yii\helpers\Html;
 use yii\web\View;
 
+
 /**
  * Class CodeWidget
- * @package lo\plugins\plugins\code
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * @package panix\engine\shortcodes\content\codehighlight
  */
 class CodeWidget extends ShortcodeWidget
 {

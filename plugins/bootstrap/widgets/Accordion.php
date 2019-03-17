@@ -1,14 +1,13 @@
 <?php
 
-namespace lo\shortcodes\bootstrap\widgets;
+namespace panix\engine\plugins\bootstrap\widgets;
 
 use lo\plugins\helpers\ShortcodesHelper;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class Collapse
- * @package lo\shortcodes\bootstrap\widgets
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * Class Accordion
+ * @package panix\engine\plugins\bootstrap\widgets
  */
 class Accordion extends BootstrapWidget
 {

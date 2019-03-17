@@ -1,10 +1,10 @@
 <?php
-namespace lo\shortcodes\bootstrap\widgets;
+
+namespace panix\engine\plugins\bootstrap\widgets;
 
 /**
  * Class Row
  * @package lo\shortcodes\bootstrap\widgets
- * @author Lukyanov Andrey <loveorigami@mail.ru>
  */
 class Row extends BootstrapWidget
 {

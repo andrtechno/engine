@@ -1,5 +1,5 @@
 <?php
-namespace lo\shortcodes\bootstrap\widgets;
+namespace panix\engine\plugins\bootstrap\widgets;
 
 use lo\plugins\helpers\ShortcodesHelper;
 use yii\bootstrap4\Tabs as BootstrapTabs;
@@ -7,8 +7,7 @@ use yii\helpers\ArrayHelper;
 
 /**
  * Class Tabs
- * @package lo\shortcodes\bootstrap\widgets
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * @package panix\engine\plugins\bootstrap\widgets
  */
 class Tabs extends BootstrapWidget
 {

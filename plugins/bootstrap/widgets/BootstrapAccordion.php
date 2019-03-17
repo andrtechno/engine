@@ -1,15 +1,14 @@
 <?php
 
-namespace lo\shortcodes\bootstrap\widgets;
+namespace panix\engine\plugins\bootstrap\widgets;
 
 use yii\base\InvalidConfigException;
 use yii\bootstrap4\Html;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class BootstrapWidget
- * @package lo\shortcodes\bootstrap\widgets
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * Class BootstrapAccordion
+ * @package panix\engine\plugins\bootstrap\widgets
  */
 class BootstrapAccordion extends \yii\bootstrap4\Accordion
 {
