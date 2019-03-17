@@ -2,10 +2,11 @@
 
 namespace panix\engine\data;
 
-
-
-class Pagination extends \yii\data\Pagination {
-
-  
+/**
+ * Class Pagination
+ * @package panix\engine\data
+ */
+class Pagination extends \yii\data\Pagination
+{
 
 }
