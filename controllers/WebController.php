@@ -19,7 +19,7 @@ class WebController extends Controller
     public $dataModel, $pageName, $keywords, $description;
     public $dashboard = false;
     public $icon;
-    private $_title;
+
 
     public function behaviors2()
     {
@@ -165,7 +165,7 @@ class WebController extends Controller
 
 
             $this->pageName = Yii::t('app/error', $statusCode);
-            $this->title = $statusCode . ' ' . $this->pageName;
+            $this->view->title = $statusCode . ' ' . $this->pageName;
             $this->breadcrumbs = [$statusCode];
             return $this->render('@themeroot/views/main/error', [
                 'exception' => $exception,
@@ -238,20 +238,6 @@ class WebController extends Controller
         Yii::$app->end();
     }
 
-    public function setTitle($title)
-    {
-        $this->_title = $title;
-    }
-
-
-    public function getTitle()
-    {
-        $title = Yii::$app->settings->get('app', 'sitename');
-        if (!empty($this->_title)) {
-            $title = $this->_title .= ' / ' . $title;
-        }
-        return $title;
-    }
 
     /**
      *
