@@ -2,6 +2,7 @@
 
 namespace panix\engine\bootstrap;
 
+use yii\base\InvalidCallException;
 use yii\helpers\ArrayHelper;
 use panix\engine\Html;
 

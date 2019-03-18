@@ -47,7 +47,7 @@ class WebModule extends Module
     public function init()
     {
 
-        if (!Yii::$app instanceof \yii\console\Application) {
+        if (!(Yii::$app instanceof \yii\console\Application)) {
             if (file_exists(Yii::getAlias("@{$this->id}/assets"))) {
                 $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@{$this->id}/assets"));
                 $this->assetsUrl = $assetsPaths[1];

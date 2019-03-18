@@ -1,3 +1,4 @@
+
 common.getMsg = function (code) {
     return this.lang[this.language][code];
 };
@@ -6,6 +7,16 @@ common.clipboard = function (selector) {
     clipboard.on('success', function () {
         //common.notify('Скопировано', 'info');
     });
+};
+common.switchInputPass = function (that,inputId) {
+    var s = $('#' + inputId);
+    var inp = (s.attr('type') === 'input');
+    if(inp){
+        $(that).find('i').removeClass('icon-eye-close').addClass('icon-eye');
+    }else{
+        $(that).find('i').removeClass('icon-eye').addClass('icon-eye-close');
+    }
+    s.attr('type', inp ? 'password' : 'input');
 };
 common.notify = function (text, type) {
     var t = (type === 'error') ? 'danger' : type;
@@ -133,11 +144,6 @@ common.enterSubmit = function (formid) {
             $(formid).submit();
         }
     });
-};
-
-common.switchInputPass = function (inputId) {
-    var s = $('#' + inputId);
-    s.attr('type', (s.attr('type') === 'input') ? 'password' : 'input');
 };
 
 common.init();
