@@ -5,12 +5,12 @@ namespace panix\engine\widgets\inputmask;
 use Yii;
 use panix\engine\Html;
 use yii\helpers\Json;
-
+use yii\widgets\InputWidget;
 /**
  * 
  * https://github.com/RobinHerbots/Inputmask/releases
  */
-class InputMask extends \yii\widgets\InputWidget {
+class InputMask extends InputWidget {
 
     public $defaultOptions = [];
 
@@ -20,7 +20,7 @@ class InputMask extends \yii\widgets\InputWidget {
         ];
 
         if (isset($this->options['class'])) {
-            $this->options['class'] = $this->options['class'];
+            $this->options['class'] .= $this->options['class'];
         } else {
             $this->options['class'] = 'form-control';
         }

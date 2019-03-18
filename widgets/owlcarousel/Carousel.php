@@ -2,10 +2,12 @@
 
 namespace panix\engine\widgets\owlcarousel;
 
-use panix\engine\widgets\owlcarousel\CarouselAsset;
-use yii\helpers\Json;
 
-class Carousel extends \panix\engine\data\Widget {
+use yii\helpers\Json;
+use panix\engine\data\Widget;
+use yii\web\View;
+
+class Carousel extends Widget {
 
     public $target;
     public $options = [];
@@ -26,7 +28,7 @@ class Carousel extends \panix\engine\data\Widget {
         $js[] = "$(function () {
             $('$this->target').owlCarousel($options);
         });";
-        $view->registerJs(implode("\n", $js),\yii\web\View::POS_END);
+        $view->registerJs(implode("\n", $js),View::POS_END);
     }
 
 }

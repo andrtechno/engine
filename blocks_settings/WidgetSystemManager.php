@@ -4,8 +4,9 @@ namespace panix\engine\blocks_settings;
 
 use Yii;
 use yii\helpers\FileHelper;
+use yii\base\Component;
 
-class WidgetSystemManager extends \yii\base\Component {
+class WidgetSystemManager extends Component {
 
     public function getSystemClass($alias) {
 
@@ -44,7 +45,7 @@ class WidgetSystemManager extends \yii\base\Component {
         $i = 0;
         foreach ($arr as $key => $value) {
             if (++$i === $numItems) {
-                Yii::import("{$alias}"); //import block class
+                //\Yii::import("{$alias}"); //import block class
                 $class = new $value;
 
                 return (isset($class->title)) ? $class->title : 'Unknown widget title';
@@ -63,6 +64,9 @@ class WidgetSystemManager extends \yii\base\Component {
         }
     }
 
+    public function getConfigurationFormHtml($alias){
+
+    }
 
 
 }

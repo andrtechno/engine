@@ -7,6 +7,10 @@ use yii\base\Module;
 use yii\helpers\FileHelper;
 use yii2mod\rbac\filters\AccessControl;
 
+/**
+ * Class WebModule
+ * @package panix\engine
+ */
 class WebModule extends Module
 {
 
@@ -21,6 +25,7 @@ class WebModule extends Module
     public $icon;
     public $uploadPath;
     public $uploadAliasPath = null;
+
 
     public function behaviors2()
     {
@@ -130,4 +135,9 @@ class WebModule extends Module
         return Yii::t($this->id . "/default", 'MODULE_DESC');
     }
 
+    public function getWidgets(){
+        if (file_exists(Yii::getAlias("@{$this->id}/widgets"))) {
+
+        }
+    }
 }
