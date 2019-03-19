@@ -48,6 +48,8 @@ class LayoutBehavior extends \yii\base\Behavior {
             $pathMaps = $controller->view->theme->pathMap;
 
 
+
+
             if (null !== $moduleId) {
                 $layouts[] = "@frontend/themes/{$theme}/modules/{$moduleId}/layouts/{$moduleId}_{$controllerId}_{$actionId}";
                 $layouts[] = "@frontend/themes/{$theme}/modules/{$moduleId}/layouts/{$moduleId}_{$controllerId}";

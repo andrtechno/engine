@@ -6,11 +6,13 @@ use Yii;
 use panix\mod\admin\models\Modules;
 use yii\web\Application;
 
-class WebApplication extends Application {
+class WebApplication extends Application
+{
 
     const version = '2.0.0-alpha';
 
-    public function run() {
+    public function run()
+    {
         $this->name = $this->settings->get('app', 'sitename');
         $langManager = $this->languageManager;
         $user = $this->user;
@@ -23,7 +25,8 @@ class WebApplication extends Application {
     }
 
 
-    public function getModulesInfo() {
+    public function getModulesInfo()
+    {
         $modules = $this->getModules();
         if (YII_DEBUG)
             unset($modules['debug'], $modules['gii'], $modules['admin']);
@@ -37,17 +40,19 @@ class WebApplication extends Application {
         return $result;
     }
 
-    public static function pageGen() {
+    public static function pageGen()
+    {
         $sql_stats = Yii::getLogger()->getDbProfiling();
         return Yii::t('app', 'PAGE_GEN', array(
-                    'time' => number_format(Yii::getLogger()->getElapsedTime(), 3, '.', ' '),
-                    'memory' => CMS::fileSize(memory_get_peak_usage()),
-                    'db_query' => $sql_stats[0],
-                    'db_time' => number_format($sql_stats[1], 2, '.', ' '),
+            'time' => number_format(Yii::getLogger()->getElapsedTime(), 3, '.', ' '),
+            'memory' => CMS::fileSize(memory_get_peak_usage()),
+            'db_query' => $sql_stats[0],
+            'db_time' => number_format($sql_stats[1], 2, '.', ' '),
         ));
     }
 
-    public static function powered() {
+    public static function powered()
+    {
         return Yii::t('app', 'COPYRIGHT', [
             'year' => date('Y'),
             'by' => Html::a('PIXELION CMS', '//pixelion.com.ua')
@@ -55,18 +60,22 @@ class WebApplication extends Application {
     }
 
 
-    public function getVersion() {
+    public function getVersion()
+    {
         return self::version;
     }
 
-    public function init() {
+    public function init()
+    {
         $this->setEngineModules();
         foreach ($this->getModules() as $id => $module) {
-            $reflectionClass = new \ReflectionClass($module['class']);
-            $this->setAliases([
-                '@' . $id => realpath(dirname($reflectionClass->getFileName())),
-            ]);
-            $this->registerTranslations($id);
+            if (isset($module['class'])) {
+                $reflectionClass = new \ReflectionClass($module['class']);
+                $this->setAliases([
+                    '@' . $id => realpath(dirname($reflectionClass->getFileName())),
+                ]);
+                $this->registerTranslations($id);
+            }
         }
         $modulesList = array_filter(glob(Yii::getAlias('@app/modules/*')), 'is_dir');
         foreach ($modulesList as $module) {
@@ -80,7 +89,8 @@ class WebApplication extends Application {
         parent::init();
     }
 
-    private function setEngineModules() {
+    private function setEngineModules()
+    {
         $mods = Modules::getEnabled();
         if ($mods) {
             foreach ($mods as $module) {
@@ -91,14 +101,15 @@ class WebApplication extends Application {
         }
     }
 
-    public function getTranslationsFileMap($id) {
+    public function getTranslationsFileMap($id)
+    {
         $lang = $this->language;
         $result = array();
         $basepath = realpath(Yii::getAlias("@{$id}/messages/{$lang}"));
         if (is_dir($basepath)) {
             $fileList = \yii\helpers\FileHelper::findFiles($basepath, [
-                        'only' => ['*.php'],
-                        'recursive' => false
+                'only' => ['*.php'],
+                'recursive' => false
             ]);
 
             foreach ($fileList as $path) {
@@ -111,7 +122,8 @@ class WebApplication extends Application {
         return $result;
     }
 
-    public function registerTranslations($id) {
+    public function registerTranslations($id)
+    {
         $this->i18n->translations[$id . '/*'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             'basePath' => '@' . $id . '/messages',

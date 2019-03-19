@@ -80,7 +80,8 @@ class Theme extends \yii\base\Theme
             $layouts = array(
                 "@vendor/panix/mod-{$module}/views/layouts/{$tpl}_{$controller}",
                 "@vendor/panix/mod-{$module}/views/layouts/" . $tpl,
-                "@vendor/panix/mod-admin/views/layouts/" . $tpl,
+                "@web/views/layouts/" . $tpl,
+
             );
         } else {
             $layouts = array(

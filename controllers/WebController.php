@@ -83,8 +83,7 @@ class WebController extends Controller
 
 
     public function getAssetUrl(){
-        $theme = Yii::$app->settings->get('app', 'theme');
-        $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@frontend/themes/{$theme}/assets"));
+        $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@theme/assets"));
         return $assetsPaths[1];
     }
 

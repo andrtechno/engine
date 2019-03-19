@@ -51,14 +51,29 @@ class WebModule extends Module
 
     public function init()
     {
-
-        if (!(Yii::$app instanceof \yii\console\Application)) {
+       // echo Yii::getAlias('@web');die;
+        if (Yii::$app->id != 'console') {
             if (file_exists(Yii::getAlias("@{$this->id}/assets"))) {
                 $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@{$this->id}/assets"));
                 $this->assetsUrl = $assetsPaths[1];
             }
         }
 
+        if (Yii::$app->id == 'backend') {
+            $baseNamespace = dirname(get_class($this));
+            $this->controllerNamespace = $baseNamespace . "\\controllers\\admin";
+            $this->setViewPath($this->getBasePath() . DIRECTORY_SEPARATOR . 'views'.DIRECTORY_SEPARATOR.'admin');
+
+          //  $this->controllerPath = "@{$this->id}/admin";
+
+        }
+        if(Yii::$app->id == 'console'){
+            $baseNamespace = dirname(get_class($this));
+            $reflector = new \ReflectionClass(get_class($this));
+            if(file_exists(dirname($reflector->getFileName()).DIRECTORY_SEPARATOR.'commands')){
+                $this->controllerNamespace = $baseNamespace . "\\commands";
+            }
+        }
         //$this->registerTranslations();
 
         $this->uploadAliasPath = "@webroot/uploads/content/{$this->id}";
@@ -135,7 +150,8 @@ class WebModule extends Module
         return Yii::t($this->id . "/default", 'MODULE_DESC');
     }
 
-    public function getWidgets(){
+    public function getWidgets()
+    {
         if (file_exists(Yii::getAlias("@{$this->id}/widgets"))) {
 
         }
