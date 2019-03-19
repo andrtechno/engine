@@ -2,15 +2,12 @@
 
 namespace panix\engine\controllers;
 
-use Viber\Client;
 use Yii;
 use yii\web\Controller;
 use panix\engine\CMS;
 use yii\web\NotFoundHttpException;
-use Viber\Bot;
-use Viber\Api\Sender;
-//use yii2mod\rbac\filters\AccessControl;
 use yii\filters\AccessControl;
+
 
 class WebController extends Controller
 {

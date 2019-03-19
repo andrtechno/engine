@@ -5,7 +5,7 @@ namespace panix\engine;
 use Yii;
 use yii\base\Module;
 use yii\helpers\FileHelper;
-use yii2mod\rbac\filters\AccessControl;
+use panix\mod\rbac\filters\AccessControl;
 
 /**
  * Class WebModule
@@ -27,7 +27,7 @@ class WebModule extends Module
     public $uploadAliasPath = null;
 
 
-    public function behaviors2()
+    public function behaviors3()
     {
         return [
             AccessControl::class

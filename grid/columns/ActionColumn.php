@@ -10,6 +10,7 @@ use panix\engine\bootstrap\ButtonDropdown;
 use panix\engine\Html;
 use yii\web\JsExpression;
 use yii\grid\DataColumn;
+use yii\web\View;
 
 class ActionColumn extends DataColumn
 {
@@ -67,7 +68,7 @@ class ActionColumn extends DataColumn
                                 'class' => 'dropdown-item',
                                 'data-pjax' => '0',
                                 //'onClick' => '$.pjax({container: "#pjax-'.$this->grid->id.'"})'
-                                'onClick' => '$.pjax.reload("#pjax-'.$this->grid->id.'", {timeout : false});',
+                                'onClick' => '$.pjax.reload("#pjax-' . $this->grid->id . '", {timeout : false});',
                             ]
                         ],
                     ],
@@ -81,10 +82,10 @@ class ActionColumn extends DataColumn
         // $this->registerScripts();
 
         $view = $this->grid->getView();
+        if (isset(($this->grid->dataProvider)->query)) {
+            $classNamePath = '/' . implode('/', explode('\\', ($this->grid->dataProvider)->query->modelClass));
 
-        $classNamePath = '/' . implode('/', explode('\\', ($this->grid->dataProvider)->query->modelClass));
-
-        $view->registerJs("
+            $view->registerJs("
         $(function() {
 
             $('.edit-columns').on('click',function(e){
@@ -106,23 +107,23 @@ class ActionColumn extends DataColumn
             });
                     
         });
-        ", \panix\engine\View::POS_END, 'edit-columns_dialog');
+        ", View::POS_END, 'edit-columns_dialog');
 
-        echo \yii\jui\Dialog::widget([
-            'id' => 'edit-columns_dialog',
-            'clientOptions' => [
-                'modal' => true,
-                'autoOpen' => false,
-                'draggable' => false,
-                'resizable' => false,
-                'dialogClass' => 'test111111111',
-                'width' => '50%',
-                'title' => Yii::t('app/admin', 'EDIT_GRID_COLUMNS'),
-                'buttons' => [
-                    [
-                        'text' => "Ok",
-                        'class' => "ui-button",
-                        'click' => new JsExpression("function(){
+            echo \yii\jui\Dialog::widget([
+                'id' => 'edit-columns_dialog',
+                'clientOptions' => [
+                    'modal' => true,
+                    'autoOpen' => false,
+                    'draggable' => false,
+                    'resizable' => false,
+                    'dialogClass' => 'test111111111',
+                    'width' => '50%',
+                    'title' => Yii::t('app/admin', 'EDIT_GRID_COLUMNS'),
+                    'buttons' => [
+                        [
+                            'text' => "Ok",
+                            'class' => "ui-button",
+                            'click' => new JsExpression("function(){
                             var form = $('#edit_grid_columns_form').serialize();
                             $.ajax({
                                 url:'/admin/app/default/edit-columns',
@@ -134,15 +135,16 @@ class ActionColumn extends DataColumn
                                 //$(\'#dialog-overlay\').remove();
                                 // $.pjax({container: '#pjax-product'});
                                 $.pjax.defaults.timeout = false;
-                                 $.pjax.reload({container:'#pjax-".$this->grid->id."', async: false});
+                                 $.pjax.reload({container:'#pjax-" . $this->grid->id . "', async: false});
                                  //$(\"#grid-product\").yiiGridView(\"applyFilter\");
                                 }
                             });
                         }")
+                        ]
                     ]
                 ]
-            ]
-        ]);
+            ]);
+        }
     }
 
     /**

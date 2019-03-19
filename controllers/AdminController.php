@@ -8,7 +8,7 @@ use Yii;
 use yii\data\ArrayDataProvider;
 use yii\db\Exception;
 use yii\web\ForbiddenHttpException;
-use yii2mod\rbac\filters\AccessControl;
+use panix\mod\rbac\filters\AccessControl;
 
 use yii\web\HttpException;
 use yii\web\UnauthorizedHttpException;
@@ -23,12 +23,25 @@ class AdminController extends Controller
     public $dataModel, $pageName;
     public $jsMessages = [];
     public $icon;
-    private $_title;
+
     public $buttons = [];
     public $layout = '@theme/views/layouts/main';
     public $dashboard = true;
 
-    public function behavior()
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'allowActions' => [
+                    'index',
+                    // The actions listed here will be allowed to everyone including guests.
+                ]
+            ],
+        ];
+    }
+
+    public function behavior2()
     {
         return [
             'access' => [
@@ -47,20 +60,6 @@ class AdminController extends Controller
         return $assetsPaths[1];
     }
 
-    public function setTitle($title)
-    {
-        $this->_title = $title;
-    }
-
-
-    public function getTitle()
-    {
-        $title = Yii::$app->settings->get('app', 'sitename');
-        if (!empty($this->_title)) {
-            $title = $this->_title .= ' / ' . $title;
-        }
-        return $title;
-    }
 
 
     public function actionError()
@@ -76,7 +75,7 @@ class AdminController extends Controller
 
 
             $this->pageName = Yii::t('app/error', $statusCode);
-            $this->title = $statusCode . ' ' . $this->pageName;
+            $this->view->title = $exception->statusCode . ' ' . $this->pageName;
             $this->breadcrumbs = [$statusCode];
             return $this->render('@theme/views/main/error', [
                 'exception' => $exception,
