@@ -76,7 +76,7 @@ class Theme extends \yii\base\Theme
         } else {
             $theme = $this->name;
         }
-        if (Yii::$app->controller instanceof \panix\engine\controllers\AdminController) {
+        if (Yii::$app->id == 'backend') {
             $layouts = array(
                 "@vendor/panix/mod-{$module}/views/layouts/{$tpl}_{$controller}",
                 "@vendor/panix/mod-{$module}/views/layouts/" . $tpl,
