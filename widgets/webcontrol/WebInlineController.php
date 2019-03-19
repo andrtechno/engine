@@ -1,32 +1,31 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace panix\engine\widgets\webcontrol;
 
-use panix\mod\admin\models\Notifactions;
+use panix\engine\controllers\WebController;
+use panix\mod\admin\models\Notifications;
 
 /**
  * Webcontrol of Controller
  *
  * @author PIXELION CMS development team <dev@pixelion.com.ua>
  * @link http://pixelion.com.ua PIXELION CMS
- * 
+ *
  */
-class WebInlineController extends \panix\engine\controllers\WebController {
+class WebInlineController extends WebController
+{
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         print_r($this->id);
         echo 'sdadsa';
     }
 
-    public function actionAjaxCounters() {
+    public function actionAjaxCounters()
+    {
 
-        $notifactions = Notifactions::find()->read(0)->all();
+
+        $notifactions = Notifications::find()->read(0)->all();
         $result = [];
         $result['count']['cart'] = 5;
         $result['count']['comments'] = 10;
@@ -42,10 +41,11 @@ class WebInlineController extends \panix\engine\controllers\WebController {
         die;
     }
 
-    public function actionAjaxReadNotifaction($id) {
+    public function actionAjaxReadNotifaction($id)
+    {
 
         //$notifactions = Notifactions::find()->where(['id'=>$id])->one();
-        $notifactions = Notifactions::findOne($id);
+        $notifactions = Notifications::findOne($id);
         $notifactions->is_read = 1;
         $notifactions->save(false);
 
