@@ -1,12 +1,11 @@
 <?php
-namespace panix\engine\plugins\extralinks;
+namespace panix\engine\plugins\goaway;
 
 use yii\base\Event;
 
 /**
- * Class RedirectController
- * @package panix\mod\plugins\core\extralinks
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * Class RedirectEvent
+ * @package panix\engine\plugins\goaway
  */
 class RedirectEvent extends Event
 {

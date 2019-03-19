@@ -1,38 +1,39 @@
 <?php
 
-namespace panix\engine\plugins\extralinks;
+namespace panix\engine\plugins\goaway;
 
 use panix\mod\plugins\BasePlugin;
 use Yii;
+use yii\base\BootstrapInterface;
 use yii\base\Event;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\Response;
 
 /**
- * Plugin Name: External Links
- * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/tree/master/src/core/extralinks
- * Version: 2.0
- * Description: AutoCorrect external links after rendering html page
- * Author: Andrey Lukyanov
- * Author URI: https://github.com/loveorigami
+ * Plugin Name: GoAway Links
+ * Plugin URI: https://pixelion.com.ua
+ * Version: 1.0
+ * Description: AutoCorrect GoAway links after rendering html page
+ * Author: Andrey S
+ * Author URI: https://pixelion.com.ua
  */
-class ExternalLinks extends BasePlugin
+class GoAway extends BasePlugin implements BootstrapInterface
 {
     /**
      * @var array
      */
     public static $configResponse = [
         'noReplaceLinksOnDomains' => [
-            //'google.com'
+            'pixelion.com.ua'
         ],
         'noReplaceLinksOnSubDomains' => [
             //'google.com'
         ],
         'noReplaceLocalDomain' => true,
-        'redirectRoute' => '/externallinks/redirect',
+        'redirectRoute' => '/goaway/redirect',
         'redirectRouteParam' => 'url',
-        'enabledB64Encode' => true,
+        'enabledB64Encode' => false,
     ];
 
     /**
@@ -40,7 +41,7 @@ class ExternalLinks extends BasePlugin
      */
     public static $configController = [
         'redirectRouteParam' => 'url',
-        'enabledB64Encode' => true,
+        'enabledB64Encode' => false,
     ];
 
     /**
@@ -58,6 +59,19 @@ class ExternalLinks extends BasePlugin
         ];
     }
 
+    public function bootstrap($app)
+    {
+
+        $route = ArrayHelper::getValue(self::$configResponse, 'redirectRoute', self::$configResponse['redirectRoute']);
+        $app->urlManager->addRules(
+            [
+                'go' => $route,
+            ],
+            false
+        );
+        Yii::$app->controllerMap = array_merge(Yii::$app->controllerMap, ['goaway' => RedirectController::class]);
+    }
+
     /**
      * @var array
      */
@@ -68,12 +82,14 @@ class ExternalLinks extends BasePlugin
      */
     public static function parse($event)
     {
+
+
         /** @var $response Response */
         $response = $event->sender;
         $request = Yii::$app->request;
 
         if (!$request->isAjax && !$request->isPjax && $response->format == Response::FORMAT_HTML) {
-            Yii::beginProfile('ExternalLinks');
+            Yii::beginProfile('GoAway');
 
             self::initConfig($event->data);
 
@@ -87,7 +103,7 @@ class ExternalLinks extends BasePlugin
             };
 
             $response->content = $content;
-            Yii::endProfile('ExternalLinks');
+            Yii::endProfile('GoAway');
         }
     }
 
@@ -96,6 +112,8 @@ class ExternalLinks extends BasePlugin
      */
     public static function loadConfig($event)
     {
+
+
         $event->config = ArrayHelper::merge(self::$configController, $event->data);
     }
 

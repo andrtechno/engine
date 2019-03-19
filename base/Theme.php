@@ -17,8 +17,10 @@ class Theme extends \yii\base\Theme
             $this->name = Yii::$app->settings->get('app', 'theme');
         }
 
-        $this->basePath = "@app/web/themes/{$this->name}";
-        $this->baseUrl = "@app/web/themes/{$this->name}";
+
+
+        $this->basePath = "@frontend/themes/{$this->name}";
+        $this->baseUrl = "@frontend/themes/{$this->name}";
 
 
         if(Yii::$app->id == 'backend'){
@@ -28,13 +30,13 @@ class Theme extends \yii\base\Theme
 
         $modulesPaths = [];
         foreach (Yii::$app->getModules() as $id => $mod) {
-            $modulesPaths['@' . $id] = "@app/web/themes/{$this->name}/modules/{$id}";
+            $modulesPaths['@' . $id] = "@frontend/themes/{$this->name}/modules/{$id}";
         }
 
         $this->pathMap = ArrayHelper::merge([
-            "@app/views" => "@app/web/themes/{$this->name}/views",
-            '@app/modules' => "@app/web/themes/{$this->name}/modules",
-            '@app/widgets' => "@app/web/themes/{$this->name}/widgets",
+            "@app/views" => "@frontend/themes/{$this->name}/views",
+            '@app/modules' => "@frontend/themes/{$this->name}/modules",
+            '@app/widgets' => "@frontend/themes/{$this->name}/widgets",
         ], $modulesPaths);
 
 
@@ -83,8 +85,8 @@ class Theme extends \yii\base\Theme
         } else {
             $layouts = array(
                 "@vendor/panix/mod-{$module}/views/layouts/" . $tpl,
-                "@web/themes/{$theme}/views/{$module}/layouts/" . $tpl,
-                "@web/themes/{$theme}/views/layouts/" . $tpl,
+                "@frontend/themes/{$theme}/views/{$module}/layouts/" . $tpl,
+                "@frontend/themes/{$theme}/views/layouts/" . $tpl,
             );
         }
         foreach ($layouts as $layout) {

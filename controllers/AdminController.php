@@ -43,7 +43,7 @@ class AdminController extends Controller
 
     public function getAssetUrl(){
         $theme = Yii::$app->settings->get('app', 'theme');
-        $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@webroot/themes/dashboard/assets"));
+        $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@backend/themes/dashboard/assets"));
         return $assetsPaths[1];
     }
 
@@ -117,8 +117,7 @@ class AdminController extends Controller
         ) {
             throw new ForbiddenHttpException(Yii::t('app', 'ACCESS_DENIED'));
         }*/
-        Yii::setAlias('@themeroot', Yii::getAlias("@app/backend/themes/dashboard"));
-        Yii::setAlias('@theme', Yii::getAlias("@app/backend/themes/dashboard"));
+        Yii::setAlias('@theme', Yii::getAlias("@backend/themes/dashboard"));
 
 
         parent::init();

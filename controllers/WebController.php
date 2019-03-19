@@ -87,7 +87,7 @@ class WebController extends Controller
 
     public function getAssetUrl(){
         $theme = Yii::$app->settings->get('app', 'theme');
-        $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@webroot/themes/{$theme}/assets"));
+        $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@frontend/themes/{$theme}/assets"));
         return $assetsPaths[1];
     }
 
@@ -116,8 +116,8 @@ class WebController extends Controller
         $config = Yii::$app->settings->get('app');
         $timeZone = $config->timezone;
         Yii::$app->timeZone = $timeZone;
-        Yii::setAlias('@themeroot', Yii::getAlias("@webroot/themes/{$config->theme}"));
-        Yii::setAlias('@theme', Yii::getAlias("@web/themes/{$config->theme}"));
+
+        Yii::setAlias('@theme', Yii::getAlias("@frontend/themes/{$config->theme}"));
         if (Yii::$app->hasModule('stats') && !$this->dashboard && !Yii::$app->request->isAjax) {
 
             if(isset(Yii::$app->stats)){
@@ -167,7 +167,7 @@ class WebController extends Controller
             $this->pageName = Yii::t('app/error', $statusCode);
             $this->view->title = $statusCode . ' ' . $this->pageName;
             $this->breadcrumbs = [$statusCode];
-            return $this->render('@themeroot/views/main/error', [
+            return $this->render('@theme/views/main/error', [
                 'exception' => $exception,
                 'statusCode' => $statusCode,
                 'name' => $name,

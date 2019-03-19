@@ -1,5 +1,5 @@
 <?php
-namespace panix\engine\plugins\extralinks;
+namespace panix\engine\plugins\goaway;
 
 use Yii;
 use yii\web\BadRequestHttpException;
@@ -7,8 +7,7 @@ use yii\web\Controller;
 
 /**
  * Class RedirectController
- * @package panix\mod\plugins\core\extralinks
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * @package panix\engine\plugins\goaway
  */
 class RedirectController extends Controller
 {
