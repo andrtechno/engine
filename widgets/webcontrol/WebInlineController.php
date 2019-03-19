@@ -2,8 +2,10 @@
 
 namespace panix\engine\widgets\webcontrol;
 
+use Yii;
 use panix\engine\controllers\WebController;
 use panix\mod\admin\models\Notifications;
+use yii\web\Response;
 
 /**
  * Webcontrol of Controller
@@ -37,8 +39,8 @@ class WebInlineController extends WebController
             ];
         }
 
-        return \yii\helpers\Json::encode($result);
-        die;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $result;
     }
 
     public function actionAjaxReadNotifaction($id)
@@ -49,8 +51,8 @@ class WebInlineController extends WebController
         $notifactions->is_read = 1;
         $notifactions->save(false);
 
-        return \yii\helpers\Json::encode(['ok']);
-        die;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return ['ok'];
     }
 
 }
