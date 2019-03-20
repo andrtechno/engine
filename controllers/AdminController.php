@@ -63,6 +63,8 @@ class AdminController extends Controller
 
             $this->pageName = Yii::t('app/error', $statusCode);
             $this->view->title = $exception->statusCode . ' ' . $this->pageName;
+
+           // $this->title = $exception->statusCode.' / '. $exception->getMessage();
             $this->breadcrumbs = [$statusCode];
             return $this->render('@theme/views/main/error', [
                 'exception' => $exception,
