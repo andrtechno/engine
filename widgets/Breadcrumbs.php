@@ -3,6 +3,7 @@
 namespace panix\engine\widgets;
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use panix\engine\Html;
 

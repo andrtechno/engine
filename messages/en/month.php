@@ -1,18 +1,23 @@
 <?php
 
-return [
-
-    'January' => '{n, plural, =0{Январь} =1{Января} =2{Янв} =3{январь} =4{января} =5{янв}}',
-    'February' => '{n, plural, =0{Февраль} =1{Февраля} =2{Фев} =3{февраль} =4{февраля} =5{фев}}',
-    'March' => '{n, plural, =0{Март} =1{Марта} =2{Мар} =3{март} =4{марта} =5{мар}}',
-    'April' => '{n, plural, =0{Апрель} =1{Апреля} =2{Апр} =3{апрель} =4{апреля} =5{апр}}',
-    'May' => '{n, plural, =0{Май} =1{Мая} =2{Май} =3{май} =4{мая} =5{май}}',
-    'June' => '{n, plural, =0{Июнь} =1{Июня} =2{Июн} =3{июнь} =4{июня} =5{июн}}',
-    'July' => '{n, plural, =0{Июль} =1{Июля} =2{Июл} =3{июль} =4{июля} =5{июл}}',
-    'August' => '{n, plural, =0{Август} =1{Августа} =2{Авг} =3{август} =4{августа} =5{авг}}',
-    'September' => '{n, plural, =0{Сентябрь} =1{Сентября} =2{Сен} =3{сентябрь} =4{сентября} =5{сен}}',
-    'October' => '{n, plural, =0{Октябрь} =1{Октября} =2{Окт} =3{октябрь} =4{октября} =5{окт}}',
-    'November' => '{n, plural, =0{Ноябрь} =1{Ноября} =2{Ноя} =3{ноябрь} =4{ноября} =5{ноя}}',
-    'December' => '{n, plural, =0{Декабрь} =1{Декабря} =2{Дек} =3{декабрь} =4{декабря} =5{дек}}',
-        ]
-?>
+/**
+ * Message translations. (auto generation translate)
+ * @author PIXELION CMS development team <info@pixelion.com.ua>
+ * @license https://pixelion.com.ua/license.txt PIXELION CMS License
+ * @link https://pixelion.com.ua PIXELION CMS
+ * @ignore
+ */
+return array (
+  'January' => '{n, plural, =0{January} =1{Jan} =2{Jan} =3{January} =4{January} =5{Jan}}',
+  'February' => '{n, plural, =0{February} =1{Feb} =2{Feb} =3{February} =4{Feb} =5{Feb}}',
+  'March' => '{n, plural, =0{March} =1{Mar} =2{Mar} =3{March} =4{Mar} =5{Mar}}',
+  'April' => '{n, plural, =0{APR} =1{APR} =2{APR} =3{April} =4{APR} =5{APR}}',
+  'May' => '{n, plural, =0{May} =1{May} =2{May} =3{may} =4{may} =5{may}}',
+  'June' => '{n, plural, =0{Jun} =1{Sep} =2{Jun} =3{June} =4{Jun} =5{Jun}}',
+  'July' => '{n, plural, =0{October} =1{Sep} =2{Jul} =3{July} =4{July} =5{Jul}}',
+  'August' => '{n, plural, =0{Aug} =1{Sep} =2{AVG} =3{August} =4{Aug} =5{Aug}}',
+  'September' => '{n, plural, =0{Sep} =1{Sep} =2{St} =3{Sep} =4{Sep} =5{Saint}}',
+  'October' => '{n, plural, =0{October} =1{Oct} =2{Oct} =3{October} =4{Oct} =5{Oct}}',
+  'November' => '{n, plural, =0{Dec} =1{Sep} =2{Noah} =3{November} =4{Nov} =5{Noah}}',
+  'December' => '{n, plural, =0{Dec} =1{Dec} =2{Dec} =3{Dec} =4{Dec} =5{Dec}}',
+);
