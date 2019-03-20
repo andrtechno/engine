@@ -15,7 +15,7 @@ class EmailTarget extends \yii\log\EmailTarget
         $this->message = [
             'from' => ['log@' . Yii::$app->request->getHostName()],
             'to' => ['dev@pixelion.com.ua'],
-            'subject' => 'Ошибки базы данных на сайте app',
+            'subject' => 'Ошибки на сайте '.Yii::$app->request->getHostName(),
         ];
         parent::init();
     }
