@@ -18,7 +18,6 @@ class AdminController extends Controller
 {
 
 
-
     public $breadcrumbs;
     public $dataModel, $pageName;
     public $jsMessages = [];
@@ -41,25 +40,13 @@ class AdminController extends Controller
         ];
     }
 
-    public function behavior2()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::class,
-                //'allowActions' => [
-                //'index',
-                 //The actions listed here will be allowed to everyone including guests.
-               // ]
-            ],
-        ];
-    }
 
-    public function getAssetUrl(){
+    public function getAssetUrl()
+    {
         $theme = Yii::$app->settings->get('app', 'theme');
         $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@backend/themes/dashboard/assets"));
         return $assetsPaths[1];
     }
-
 
 
     public function actionError()
@@ -89,6 +76,7 @@ class AdminController extends Controller
 
     public function beforeAction($event)
     {
+
         $this->view->registerJs('
             var common = window.CMS_common || {};
             common.langauge="' . Yii::$app->language . '";
@@ -105,7 +93,7 @@ class AdminController extends Controller
 
     public function init()
     {
-       // echo get_class($this);die;
+        // echo get_class($this);die;
 
         //panix\mod\admin\controllers\admin\DefaultController
 
