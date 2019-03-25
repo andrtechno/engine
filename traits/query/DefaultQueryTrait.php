@@ -11,7 +11,6 @@ use Yii;
 trait DefaultQueryTrait
 {
 
-
     /**
      * @param int $state
      * @return $this

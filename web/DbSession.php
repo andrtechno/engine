@@ -14,10 +14,10 @@ class DbSession extends Session
     public $sessionTable = '{{%session}}';
 
 
-    public static function writeFields()
+    public static function writeFields($session)
     {
 
-        try {
+        //try {
             $uid = (Yii::$app->user->getIdentity(false) == null) ? null : Yii::$app->user->getIdentity(false)->id;
             $ip = $_SERVER['REMOTE_ADDR'];
             if (Yii::$app->user->getIsGuest()) {
@@ -39,12 +39,13 @@ class DbSession extends Session
                 'ip' => $ip,
                 'expire_start' => time(),
                 'user_type' => $user_type,
-                'user_name' => $uname
+                'user_name' => $uname,
+                //'is_trusted' => $session->get('is_trusted', false),
             ];
 
-        } catch (InvalidConfigException $excp) {
-            \Yii::info(print_r($excp));
-        }
+        //} catch (InvalidConfigException $excp) {
+        //    \Yii::info(print_r($excp));
+        //}
     }
 
 }
