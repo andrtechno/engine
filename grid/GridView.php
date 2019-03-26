@@ -33,7 +33,8 @@ class GridView extends \yii\grid\GridView {
                         $colms[$col->column_key] = $col->column_key;
                     }
                 }
-                $this->columns = $runModel->getColumnSearch($colms);
+                if(!$this->columns)
+                    $this->columns = $runModel->getColumnSearch($colms);
             }
         }
 
