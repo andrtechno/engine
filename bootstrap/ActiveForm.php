@@ -21,9 +21,9 @@ class ActiveForm extends \yii\bootstrap4\ActiveForm {
         $this->fieldConfig = ArrayHelper::merge([
                     'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
                     'horizontalCssClasses' => [
-                        'label' => 'col-sm-4 col-form-label',
+                        'label' => 'col-sm-4 col-lg-2 col-form-label',
                         'offset' => 'col-sm-offset-4',
-                        'wrapper' => 'col-sm-8',
+                        'wrapper' => 'col-sm-8 col-lg-10',
                         'error' => '',
                         'hint' => '',
                     ],
