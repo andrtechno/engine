@@ -587,9 +587,8 @@ class CMS
 
     /**
      *
-     * @param datetime $date Y-m-d H:i:s
-     * @param boolean $time Показывать время true|false
-     * @param boolean $static Статичная дата. true|false
+     * @param string $date Y-m-d H:i:s
+     * @param boolean $time Показывать время
      * @return string
      */
     public static function date($date, $time = true)
@@ -598,27 +597,23 @@ class CMS
         $formatted = strtotime($date);
         $oneDay = 86400;
         $df = Yii::$app->formatter;
-        //$df->timeZone = 'Europe/Moscow';
-
         $resDate = $df->asDate($formatted);
         if ($formatted > mktime(0, 0, 0)) {
             $t = $formatted - ($oneDay * 1);
             if ($t >= time()) {
                 $result = $resDate;
             } else {
-                $result = Yii::t('app', 'TODAY_IN', array('time' => $df->asTime($formatted, 'php:H:s')));
+                $result = Yii::t('app', 'TODAY_IN', ['time' => $df->asTime($formatted, 'php:H:i')]);
             }
         } elseif ($formatted > mktime(0, 0, 0) - $oneDay) {
-            $result = Yii::t('app', 'YESTERDAY_IN', array('time' => $df->asTime($formatted, 'php:H:s')));
+            $result = Yii::t('app', 'YESTERDAY_IN', ['time' => $df->asTime($formatted, 'php:H:i')]);
         } else {
             if ($time) {
-                $result = $resDate . ' ' . Yii::t('app', 'IN') . ' ' . $df->asTime($formatted, 'php:H:s');
+                $result = $resDate . ' ' . Yii::t('app', 'IN') . ' ' . $df->asTime($formatted, 'php:H:i');
             } else {
                 $result = $resDate;
             }
         }
-
-
         return $result;
     }
 
