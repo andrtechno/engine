@@ -10,9 +10,9 @@ class ActiveForm extends \yii\bootstrap4\ActiveForm {
 
     public $layout = 'horizontal';
     public $title;
-    public $checkTemplate = "<div class=\"ds\"></div><div class=\"form-check\">\n{input}\n{label}\n{error}\n{hint}\n</div>";
+   // public $checkTemplate = "<div class=\"ds\"></div><div class=\"form-check\">\n{input}\n{label}\n{error}\n{hint}\n</div>";
 
-    public $checkEnclosedTemplate = "<div class=\"ds\"></div><div class=\"form-check\">\n{beginLabel}\n{input}\n{labelTitle}\n{endLabel}\n{error}\n{hint}\n</div>";
+   // public $checkEnclosedTemplate = "<div class=\"ds\"></div><div class=\"form-check\">\n{beginLabel}\n{input}\n{labelTitle}\n{endLabel}\n{error}\n{hint}\n</div>";
 
     /**
      * @inheritdoc
@@ -34,7 +34,6 @@ class ActiveForm extends \yii\bootstrap4\ActiveForm {
 
     /**
      * @inheritdoc
-     * @return string
      */
     public function run()
     {
