@@ -156,4 +156,8 @@ class WebModule extends Module
 
         }
     }
+
+    public function getAdminMenu(){
+        return [];
+    }
 }
