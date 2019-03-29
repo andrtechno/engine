@@ -8,7 +8,7 @@ use yii\helpers\ArrayHelper;
 
 class Dropdown extends \yii\bootstrap4\Dropdown {
 
-    public $submenuOptions = [];
+   // public $submenuOptions = [];
 
     /**
      * Initializes the widget
