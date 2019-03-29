@@ -8,8 +8,12 @@ use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use panix\engine\Html;
 
-class SiderbarNav extends \yii\bootstrap4\Nav
+class SiderbarNav extends Nav
 {
+
+
+    //public $dropdownClass = '\panix\engine\bootstrap\DropdownSidebar';
+
     public function init()
     {
         $this->view->registerJs("
@@ -59,7 +63,7 @@ class SiderbarNav extends \yii\bootstrap4\Nav
         }
         // $id=crc32($item['label']).CMS::gen(4);
         $encodeLabel = isset($item['encode']) ? $item['encode'] : $this->encodeLabels;
-        $icon = isset($item['icon']) ? 'icon-' . $item['icon'] . ' ' : '';
+        $icon = isset($item['icon']) ? Html::icon($item['icon']) . ' ' : '';
         $label = $encodeLabel ? Html::encode($item['label']) : $item['label'];
         $options = ArrayHelper::getValue($item, 'options', []);
         $items = ArrayHelper::getValue($item, 'items');
@@ -79,7 +83,7 @@ class SiderbarNav extends \yii\bootstrap4\Nav
         if ($items !== null) {
             $linkOptions['data-toggle'] = 'dropdown';
             Html::addCssClass($options, 'nav-item dropdown');
-            Html::addCssClass($linkOptions, 'nav-link ' . $icon . ' dropdown-toggle');
+            Html::addCssClass($linkOptions, 'nav-link dropdown-toggle');
             // $label .= ' ' . Html::tag('b', '', ['class' => 'caret2']);
             if (is_array($items)) {
                 if ($this->activateItems) {
@@ -90,13 +94,13 @@ class SiderbarNav extends \yii\bootstrap4\Nav
             }
         }
         Html::addCssClass($options, 'nav-item');
-        Html::addCssClass($linkOptions, 'nav-link ' . $icon);
+        Html::addCssClass($linkOptions, 'nav-link');
         if ($this->activateItems && $active) {
             Html::addCssClass($options, 'active'); // In NavBar the "nav-item" get's activated
             Html::addCssClass($linkOptions, 'active');
         }
 
-        return Html::tag('li', Html::a($label, $url, $linkOptions) . $items, $options);
+        return Html::tag('li', Html::a( $icon.$label, $url, $linkOptions) . $items, $options);
     }
 
 }
