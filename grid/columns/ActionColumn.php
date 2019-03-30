@@ -179,7 +179,7 @@ class ActionColumn extends DataColumn
         }
         if (!isset($this->buttons['view'])) {
             $this->buttons['view'] = function ($url) {
-                return Html::a(Html::icon('view'), $url, [
+                return Html::a(Html::icon('search'), '/admin'.$url, [
                     'title' => Yii::t('yii', 'View'),
                     'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary linkTarget',
                     'data-pjax' => '0',
