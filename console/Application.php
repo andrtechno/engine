@@ -1,7 +1,10 @@
 <?php
+
 namespace panix\engine\console;
+
 use panix\mod\admin\models\Modules;
 use Yii;
+
 class Application extends \yii\console\Application
 {
 
