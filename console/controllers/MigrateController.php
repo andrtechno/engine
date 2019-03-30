@@ -21,6 +21,7 @@ class MigrateController extends BaseMigrateController
 
     public function beforeAction($action)
     {
+
         foreach (Yii::$app->getModules() as $mod => $params) {
             $module = Yii::$app->getModule($mod);
             $class = new \ReflectionClass($module);
