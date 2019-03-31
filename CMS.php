@@ -280,9 +280,8 @@ class CMS
         $request = Yii::$app->request;
         $parts = explode('/', $request->url);
         $lang = Yii::$app->languageManager;
-        if ($lang->default->code == $lang->active->code) {
-            $pathInfo = $request->url;
-        } else {
+        $pathInfo = $request->url;
+        if ($lang->default->code != $lang->active->code) {
             if (in_array($parts[1], $lang->getCodes())) {
                 unset($parts[1]);
                 $pathInfo = implode($parts, '/');
@@ -292,6 +291,7 @@ class CMS
                 }
             }
         }
+
         return $pathInfo;
     }
 
@@ -637,8 +637,8 @@ class CMS
             throw new NotSupportedException('Error date format is empty!');
         }
 
-        $date = new \DateTime($time,new \DateTimeZone(self::timezone()));
-      //  $date->setTimezone();
+        $date = new \DateTime($time, new \DateTimeZone(self::timezone()));
+        //  $date->setTimezone();
         return $date->format($format);
     }
 

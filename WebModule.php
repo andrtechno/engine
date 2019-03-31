@@ -62,7 +62,7 @@ class WebModule extends Module
         if (Yii::$app->id == 'backend') {
             $baseNamespace = dirname(get_class($this));
             //$this->controllerNamespace = $baseNamespace . "\\controllers\\admin";
-            //$this->setViewPath($this->getBasePath() . DIRECTORY_SEPARATOR . 'views'.DIRECTORY_SEPARATOR.'admin');
+          //  $this->setViewPath($this->getBasePath() . DIRECTORY_SEPARATOR . 'views'.DIRECTORY_SEPARATOR.'admin');
 
           //  $this->controllerPath = "@{$this->id}/admin";
 
