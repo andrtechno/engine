@@ -61,7 +61,7 @@ class SliderColumn extends DataColumn
 
             if ($this->min !== $this->max) {
 
-                $html = '<span id="' . $id . '_value-min" class="float-left">' . $inputValueMin . '</span><span id="' . $id . '_value-max" class="float-right">' . $inputValueMax . '</span>';
+                $html = '<span id="' . $id . '_value-min" class="float-left mt-3">' . $inputValueMin . '</span><span id="' . $id . '_value-max" class="float-right mt-3">' . $inputValueMax . '</span>';
                 $html .= Slider::widget([
                     'clientOptions' => [
                         'range' => $this->range,
