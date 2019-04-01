@@ -39,6 +39,33 @@ class ActionColumn extends DataColumn
         //}
 
         if ($this->filter) {
+            if (isset(($this->grid->dataProvider)->query)) {
+                if (method_exists(($this->grid->dataProvider)->query->modelClass, 'getGridColumns')) {
+                    $items[] = [
+                        'label' => Html::icon('table') . ' ' . Yii::t('app/admin', 'EDIT_GRID_COLUMNS'),
+                        'url' => '#',
+                        'linkOptions' => [
+                            // 'data-target' => "#",
+                            'class' => 'dropdown-item edit-columns',
+                            'data-pjax' => '0',
+                            // 'data-grid-id' => $this->grid->id,
+                            // 'data-model' => (isset($this->grid->dataProvider->query))?$this->grid->dataProvider->query->modelClass:'s',
+                            // 'data-pjax-id' => 'pjax-' . strtolower(basename($this->grid->dataProvider->query->modelClass)),
+                        ]
+                    ];
+                }
+            }
+            $items[] = [
+                'label' => Html::icon('refresh') . ' ' . Yii::t('app', 'REFRESH'),
+                'url' => '#',
+                'linkOptions' => [
+                    'class' => 'dropdown-item',
+                    'data-pjax' => '0',
+                    //'onClick' => '$.pjax({container: "#pjax-'.$this->grid->id.'"})'
+                    'onClick' => '$.pjax.reload("#pjax-' . $this->grid->id . '", {timeout : false});',
+                ]
+            ];
+
             $this->filter = ButtonDropdown::widget([
                 'label' => Html::icon('settings'),
                 'encodeLabel' => false,
@@ -48,30 +75,7 @@ class ActionColumn extends DataColumn
                 'dropdown' => [
                     'options' => ['class' => 'dropdown-menu-right'],
                     'encodeLabels' => false,
-                    'items' => [
-                        [
-                            'label' => Html::icon('table') . ' ' . Yii::t('app/admin', 'EDIT_GRID_COLUMNS'),
-                            'url' => '#',
-                            'linkOptions' => [
-                                // 'data-target' => "#",
-                                'class' => 'dropdown-item edit-columns',
-                                'data-pjax' => '0',
-                                // 'data-grid-id' => $this->grid->id,
-                                // 'data-model' => (isset($this->grid->dataProvider->query))?$this->grid->dataProvider->query->modelClass:'s',
-                                // 'data-pjax-id' => 'pjax-' . strtolower(basename($this->grid->dataProvider->query->modelClass)),
-                            ]
-                        ],
-                        [
-                            'label' => Html::icon('refresh') . ' ' . Yii::t('app', 'REFRESH'),
-                            'url' => '#',
-                            'linkOptions' => [
-                                'class' => 'dropdown-item',
-                                'data-pjax' => '0',
-                                //'onClick' => '$.pjax({container: "#pjax-'.$this->grid->id.'"})'
-                                'onClick' => '$.pjax.reload("#pjax-' . $this->grid->id . '", {timeout : false});',
-                            ]
-                        ],
-                    ],
+                    'items' => $items,
                 ],
             ]);
         }
@@ -179,7 +183,7 @@ class ActionColumn extends DataColumn
         }
         if (!isset($this->buttons['view'])) {
             $this->buttons['view'] = function ($url) {
-                return Html::a(Html::icon('search'), '/admin'.$url, [
+                return Html::a(Html::icon('search'), '/admin' . $url, [
                     'title' => Yii::t('yii', 'View'),
                     'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary linkTarget',
                     'data-pjax' => '0',
@@ -191,14 +195,14 @@ class ActionColumn extends DataColumn
 
                 if (isset($model->primaryKey)) {
                     if (!in_array($model->primaryKey, $model->disallow_update)) {
-                        return Html::a(Html::icon('edit'), '/admin'.$url, [
+                        return Html::a(Html::icon('edit'), '/admin' . $url, [
                             'title' => Yii::t('yii', 'Update'),
                             'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary linkTarget',
                             'data-pjax' => '0',
                         ]);
                     }
                 } else {
-                    return Html::a(Html::icon('edit'), '/admin'.$url, [
+                    return Html::a(Html::icon('edit'), '/admin' . $url, [
                         'title' => Yii::t('yii', 'Update'),
                         'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary linkTarget',
                         'data-pjax' => '0',
