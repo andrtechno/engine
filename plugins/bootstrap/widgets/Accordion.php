@@ -2,7 +2,7 @@
 
 namespace panix\engine\plugins\bootstrap\widgets;
 
-use lo\plugins\helpers\ShortcodesHelper;
+use panix\mod\plugins\helpers\ShortcodesHelper;
 use yii\helpers\ArrayHelper;
 
 /**

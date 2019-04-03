@@ -1,7 +1,7 @@
 <?php
 namespace panix\engine\plugins\web\youtube;
 
-use lo\plugins\BaseShortcode;
+use panix\mod\plugins\BaseShortcode;
 use yii\helpers\Html;
 
 /**

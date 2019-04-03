@@ -2,7 +2,7 @@
 
 namespace panix\engine\plugins\web\bbcode;
 
-use lo\plugins\BaseShortcode;
+use panix\mod\plugins\BaseShortcode;
 use panix\engine\plugins\web\bbcode\widgets\ColorWidget;
 use panix\engine\plugins\web\bbcode\widgets\LinkWidget;
 use yii\helpers\Html;

@@ -1,7 +1,7 @@
 <?php
 namespace panix\engine\plugins\content\codehighlight;
 
-use lo\plugins\shortcodes\ShortcodeWidget;
+use panix\mod\plugins\shortcodes\ShortcodeWidget;
 use yii\helpers\Html;
 use yii\web\View;
 

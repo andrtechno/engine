@@ -1,7 +1,7 @@
 <?php
 namespace panix\engine\plugins\content\codehighlight;
 
-use lo\plugins\BaseShortcode;
+use panix\mod\plugins\BaseShortcode;
 
 /**
  * Plugin Name: Code Highlighting

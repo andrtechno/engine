@@ -1,7 +1,7 @@
 <?php
 namespace panix\engine\plugins\bootstrap\widgets;
 
-use lo\plugins\helpers\ShortcodesHelper;
+use panix\mod\plugins\helpers\ShortcodesHelper;
 use yii\bootstrap4\Tabs as BootstrapTabs;
 use yii\helpers\ArrayHelper;
 
