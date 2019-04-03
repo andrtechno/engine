@@ -1,7 +1,7 @@
 <?php
 namespace panix\engine\plugins\bootstrap;
 
-use lo\plugins\BaseShortcode;
+use panix\mod\plugins\BaseShortcode;
 use panix\engine\plugins\bootstrap\widgets\Col;
 use panix\engine\plugins\bootstrap\widgets\Container;
 use panix\engine\plugins\bootstrap\widgets\Row;

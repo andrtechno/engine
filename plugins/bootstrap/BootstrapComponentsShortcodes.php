@@ -1,7 +1,7 @@
 <?php
 namespace panix\engine\plugins\bootstrap;
 
-use lo\plugins\BaseShortcode;
+use panix\mod\plugins\BaseShortcode;
 use panix\engine\plugins\bootstrap\widgets\Alert;
 use panix\engine\plugins\bootstrap\widgets\Badge;
 
