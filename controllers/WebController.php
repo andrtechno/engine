@@ -18,6 +18,12 @@ class WebController extends Controller
     public $icon;
 
 
+    public function getViewPath2()
+    {
+        return Yii::getAlias('@frontend/views/newview');
+    }
+
+
     public function behaviors2()
     {
         return [
