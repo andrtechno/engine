@@ -22,6 +22,69 @@ use yii\helpers\Url;
 class CMS
 {
 
+
+
+    public static function processImage($size=false, $filename, $uploadAlias, $options = array())
+    {
+        $dirName = basename($uploadAlias);
+        if (!$size) {
+            $thumbPath = Yii::getAlias("@app/frontend/assets/{$dirName}");
+        } else {
+            $thumbPath = Yii::getAlias("@app/frontend/assets/{$dirName}/{$size}");
+        }
+
+        if (!file_exists($thumbPath)) {
+            mkdir($thumbPath, 0775, true);
+        }
+        // Path to source image
+        $fullPath = Yii::getAlias($uploadAlias) . DIRECTORY_SEPARATOR . $filename;
+
+        if (!file_exists($fullPath)) {
+            // return CMS::placeholderUrl(array('size' => $size));
+        }
+        // Path to thumb
+        $thumbPath = $thumbPath . DIRECTORY_SEPARATOR . $filename;
+        $sizes = explode('x', $size);
+        $optionResizeProportional = (isset($options['resize'])) ? $options['resize'] : true;
+
+        $img = Yii::$app->img;
+        $configApp = Yii::$app->settings->get('app');
+
+        //Уделение картинок с папки assets при разработке.
+        if (YII_DEBUG && file_exists($thumbPath . DIRECTORY_SEPARATOR . $filename)) {
+            die($thumbPath);
+            //unlink($thumbPath);
+        }
+
+        if (YII_DEBUG || !file_exists($thumbPath)) {
+            $img->load($fullPath);
+            if (isset($options['mod'])) {
+                if (in_array($options['mod'], explode(',', $configApp->attachment_wm_active))) {
+                    $offsetX = isset($configApp->attachment_wm_offsetx) ? $configApp->attachment_wm_offsetx : 10;
+                    $offsetY = isset($configApp->attachment_wm_offsety) ? $configApp->attachment_wm_offsety : 10;
+                    $corner = isset($configApp->attachment_wm_corner) ? $configApp->attachment_wm_corner : 4;
+                    $path = !empty($configApp->attachment_wm_path) ? $configApp->attachment_wm_path : Yii::getAlias('@uploads') . '/watermark.png';
+                    $img->watermark($path, $offsetX, $offsetY, $corner, false);
+                }
+            }
+
+            if ($size) {
+                $img->resize((!empty($sizes[0])) ? $sizes[0] : false, (!empty($sizes[1])) ? $sizes[1] : false, $optionResizeProportional);
+            }
+
+//$img->thumb((!empty($sizes[0])) ? $sizes[0] : false, (!empty($sizes[1])) ? $sizes[1] : false,false);
+            $img->save($thumbPath);
+        }
+
+        if (!$size) {
+            return "/assets/{$dirName}/" . $filename;
+        } else {
+            return "/assets/{$dirName}/{$size}/" . $filename;
+        }
+
+    }
+
+
     const MEMORY_LIMIT = 64; // Minimal memory_limit
 
 
