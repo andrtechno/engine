@@ -4,9 +4,11 @@ namespace panix\engine\behaviors;
 
 use panix\engine\CMS;
 use panix\engine\Html;
+use panix\ext\fancybox\Fancybox;
 use Yii;
 use yii\base\Behavior;
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
 use yii\web\UploadedFile;
 
 /**
@@ -112,23 +114,23 @@ class UploadFileBehavior extends Behavior
             $params[] = 'removeFile';
 
             if ($owner->getUpdateUrl())
-                $params['redirect'] = Yii::app()->createAbsoluteUrl($owner->getUpdateUrl());
+                $params['redirect'] = Url::to($owner->getUpdateUrl());
 
             $params['attribute'] = $attribute;
             $params['key'] = $owner->getPrimaryKey();
 
-            return Html::a(Html::icon('icon-delete') . ' ' . Yii::t('app', 'DELETE'), $params, array('class' => 'btn btn-sm btn-danger'));
+            return Html::a(Html::icon('icon-delete') . ' ' . Yii::t('app', 'DELETE'), $params, ['class' => 'btn btn-sm btn-outline-danger']);
         }
     }
 
     public function getImageBase64($attr)
     {
-        $owner = $this->getOwner();
+        $owner = $this->owner;
         if (isset($owner->{$attr})) {
             if ($this->checkExistFile($attr)) {
                 $path = $this->getFileAbsolutePath($attr);
                 $fileInfo = $this->getFileInfo($attr);
-                if (in_array($fileInfo['extension'], array('jpg', 'jpeg', 'gif', 'png'))) {
+                if (in_array($fileInfo['extension'], ['jpg', 'jpeg', 'gif', 'png'])) {
                     $data = file_get_contents($path);
                     return 'data:image/' . $fileInfo['extension'] . ';base64,' . base64_encode($data);
                 }
@@ -143,20 +145,21 @@ class UploadFileBehavior extends Behavior
             $fileInfo = $this->getFileInfo($attribute);
             $fancybox = false;
             $linkValue = Html::icon('icon-search') . ' Открыть файл';
-            if (in_array($fileInfo['extension'], array('jpg', 'jpeg', 'gif', 'png', 'pdf', 'svg'))) {
+            if (in_array($fileInfo['extension'], ['jpg', 'jpeg', 'gif', 'png', 'pdf', 'svg'])) {
                 $fancybox = true;
             }
+            $targetClass='';
             if ($fancybox) {
                 $targetClass = 'fancybox-popup-' . $attribute;
-                Yii::$app->controller->widget('ext.fancybox.Fancybox', array('target' => '.' . $targetClass));
+                echo Fancybox::widget(['target' => '.'.$targetClass]);
             }
 
-            return Html::a($linkValue, $this->getFileUrl($attribute), array('class' => 'btn btn-sm btn-primary ' . $targetClass)) . $this->getRemoveUrl($attribute);
+            return Html::a($linkValue.' '.$fileInfo['extension'], $this->getFileUrl($attribute), array('class' => 'btn btn-sm btn-outline-primary ' . $targetClass)) . $this->getRemoveUrl($attribute);
         }
     }
 
 
-    protected function getFileInfo($attribute)
+    public function getFileInfo($attribute)
     {
         if ($this->checkExistFile($attribute)) {
             return pathinfo($this->getFileAbsolutePath($attribute));
@@ -164,18 +167,16 @@ class UploadFileBehavior extends Behavior
         return false;
     }
 
-    private function getFilePath($attr)
+    public function getFilePath($attribute)
     {
-        $replace = str_replace('.', '/', $this->dir);
-        return "/uploads/{$replace}/" . $this->getOwner()->{$attr};
+        return "/uploads/" . basename($this->files[$attribute]) . "/" . $this->owner->{$attribute};
     }
 
-    private function getFileAbsolutePath($attribute)
+    public function getFileAbsolutePath($attribute)
     {
-        $owner = $this->getOwner();
-        //$replace = str_replace('.', '/', $this->dir);
+        $owner = $this->owner;
         if ($owner->{$attribute}) {
-            return Yii::getAlias("webroot.uploads.{$this->dir}") . DS . $owner->{$attribute};
+            return Yii::getAlias($this->files[$attribute]) . DIRECTORY_SEPARATOR . $owner->{$attribute};
         } else {
             return false;
         }

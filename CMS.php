@@ -58,15 +58,15 @@ class CMS
 
         if (YII_DEBUG || !file_exists($thumbPath)) {
             $img->load($fullPath);
-            if (isset($options['mod'])) {
-                if (in_array($options['mod'], explode(',', $configApp->attachment_wm_active))) {
+          //  if (isset($options['mod'])) {
+                //if (in_array($options['mod'], explode(',', $configApp->attachment_wm_active))) {
                     $offsetX = isset($configApp->attachment_wm_offsetx) ? $configApp->attachment_wm_offsetx : 10;
                     $offsetY = isset($configApp->attachment_wm_offsety) ? $configApp->attachment_wm_offsety : 10;
                     $corner = isset($configApp->attachment_wm_corner) ? $configApp->attachment_wm_corner : 4;
                     $path = !empty($configApp->attachment_wm_path) ? $configApp->attachment_wm_path : Yii::getAlias('@uploads') . '/watermark.png';
                     $img->watermark($path, $offsetX, $offsetY, $corner, false);
-                }
-            }
+               // }
+           // }
 
             if ($size) {
                 $img->resize((!empty($sizes[0])) ? $sizes[0] : false, (!empty($sizes[1])) ? $sizes[1] : false, $optionResizeProportional);
@@ -74,6 +74,8 @@ class CMS
 
 //$img->thumb((!empty($sizes[0])) ? $sizes[0] : false, (!empty($sizes[1])) ? $sizes[1] : false,false);
             $img->save($thumbPath);
+
+          //  $img->show();
         }
 
         if (!$size) {
