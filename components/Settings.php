@@ -16,7 +16,7 @@ class Settings extends Component {
     /**
      * @var array
      */
-    protected $data = array();
+    protected $data = [];
     private $cache_key = 'cached_settings';
 
     /**
