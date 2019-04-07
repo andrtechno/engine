@@ -695,9 +695,6 @@ class CMS
         if (is_int($time))
             $time = date($format, $time);
 
-        //if (is_string($time))
-        //    $time = $time;
-
         if (empty($format)) {
             throw new NotSupportedException('Error date format is empty!');
         }
