@@ -2,11 +2,13 @@
 
 namespace panix\engine\controllers;
 
+use DeepCopyTest\Matcher\Y;
 use panix\engine\grid\GridColumns;
 use panix\engine\Html;
 use Yii;
 use yii\data\ArrayDataProvider;
 use yii\db\Exception;
+use yii\helpers\VarDumper;
 use yii\web\ForbiddenHttpException;
 use panix\mod\rbac\filters\AccessControl;
 
@@ -49,6 +51,9 @@ class AdminController extends Controller
     }
 
 
+    /**
+     * @return string
+     */
     public function actionError()
     {
         $exception = Yii::$app->errorHandler->exception;
@@ -64,8 +69,11 @@ class AdminController extends Controller
             $this->pageName = Yii::t('app/error', $statusCode);
             $this->view->title = $exception->statusCode . ' ' . $this->pageName;
 
-           // $this->title = $exception->statusCode.' / '. $exception->getMessage();
-            $this->breadcrumbs = [$statusCode];
+            // $this->title = $exception->statusCode.' / '. $exception->getMessage();
+            $this->breadcrumbs = [$this->pageName];
+
+            //echo VarDumper::dump(Yii::$app->urlManager->rules,10,true);die;
+
             return $this->render('@theme/views/main/error', [
                 'exception' => $exception,
                 'statusCode' => $statusCode,
@@ -90,6 +98,7 @@ class AdminController extends Controller
         if (Yii::$app->user->isGuest && get_class($this) !== 'panix\mod\admin\controllers\AuthController') {
             return Yii::$app->response->redirect(['/admin/auth']);
         }
+
 
         return parent::beforeAction($event);
     }
@@ -225,5 +234,21 @@ class AdminController extends Controller
         if (empty($message))
             $message = Yii::t('app/error', '404');
         throw new HttpException($status, $message);
+    }
+
+
+    public function render($view, $params = [])
+    {
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax($view, $params);
+        } else {
+            return parent::render($view, $params);
+        }
+
+    }
+
+    public function renderAjax($view, $params = [])
+    {
+        return $this->getView()->renderAjax($view, $params, $this);
     }
 }

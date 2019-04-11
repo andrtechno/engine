@@ -3,6 +3,7 @@
 namespace panix\engine\controllers;
 
 use Yii;
+use yii\helpers\VarDumper;
 use yii\web\Controller;
 use panix\engine\CMS;
 use yii\web\NotFoundHttpException;
@@ -76,6 +77,9 @@ class WebController extends Controller
             common.token="' . Yii::$app->request->csrfToken . '";
             common.isDashboard=true;
             common.message=' . \yii\helpers\Json::encode($this->jsMessages) . ';', \yii\web\View::POS_HEAD, 'js-common');
+
+
+     //   echo VarDumper::dump(Yii::$app->urlManager->rules,10,true);die;
 
         return parent::beforeAction($action);
     }

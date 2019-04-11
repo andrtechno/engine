@@ -10,6 +10,7 @@ class ManagerUrl extends UrlManager {
     public function init() {
        // $this->modulesRoutes();
         parent::init();
+
     }
 
     public function createUrl($params, $respectLang = true) {
