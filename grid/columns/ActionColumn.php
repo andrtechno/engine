@@ -20,7 +20,7 @@ class ActionColumn extends DataColumn
     public $buttons = [];
     public $urlCreator;
     public $btnSize = 'btn-sm';
-    public $headerOptions = ['style' => 'min-width:150px;'];
+    public $headerOptions = ['style' => 'width:150px;'];
     public $contentOptions = ['class' => 'text-center'];
     public $pjax;
     public $filter = true;
