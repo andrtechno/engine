@@ -4,6 +4,10 @@ namespace panix\engine\widgets;
 
 use yii\widgets\LinkPager as Pager;
 
+/**
+ * Class LinkPager
+ * @package panix\engine\widgets
+ */
 class LinkPager extends Pager
 {
 
@@ -26,4 +30,5 @@ class LinkPager extends Pager
     public $disabledListItemSubTagOptions = ['tag' => 'span', 'class' => 'page-link', 'aria-hidden' => "true"];
 
     public $linkOptions = ['class' => 'page-link', 'tabindex' => "-1"];
+
 }

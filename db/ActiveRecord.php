@@ -3,13 +3,18 @@
 namespace panix\engine\db;
 
 
+use panix\engine\data\Pagination;
+use panix\engine\widgets\LinkPager;
 use Yii;
 use yii\base\Exception;
 use panix\mod\shop\models\Category;
 use yii\behaviors\TimestampBehavior;
+use yii\widgets\Pjax;
 
 class ActiveRecord extends \yii\db\ActiveRecord
 {
+
+
 
     /**
      * Disallow actions
@@ -280,14 +285,14 @@ class ActiveRecord extends \yii\db\ActiveRecord
 
     /**
      * Разделение текста на страницы
-     * @param string $attr
+     * @param string|boolean $attribute
      * @return string
      */
-    public function pageBreak($attr = false)
+    public function pageBreak($attribute = false)
     {
-        if ($attr) {
+        if ($attribute) {
             $pageVar = intval(Yii::$app->request->get('page'));
-            $pageBreak = explode("<!-- pagebreak -->", $this->$attr);
+            $pageBreak = explode("<!-- pagebreak -->", $this->{$attribute});
             $pageCount = count($pageBreak);
 
             $pageVar = ($pageVar == "" || $pageVar < 1) ? 1 : $pageVar;
@@ -296,12 +301,20 @@ class ActiveRecord extends \yii\db\ActiveRecord
             $arrayelement = (int)$pageVar;
             $arrayelement--;
 
-            $content = $pageBreak[$arrayelement];
-            $content .= \yii\widgets\LinkPager::widget([
-                'pagination' => new \yii\data\Pagination(['totalCount' => $pageCount, 'pageSize' => 1]),
-            ]);
+            ;
 
+            $content = $pageBreak[$arrayelement];
+            $content .= LinkPager::widget([
+                'pagination' => new Pagination([
+                    'totalCount' => $pageCount,
+                    'pageSize' => 1,
+                    'defaultPageSize'=>1,
+                ]),
+            ]);
+            ;
             return $content;
+        }else{
+            return false;
         }
     }
 
