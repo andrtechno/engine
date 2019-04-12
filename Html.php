@@ -3,6 +3,7 @@
 namespace panix\engine;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use panix\engine\emoji\Emoji;
 
@@ -14,6 +15,14 @@ class Html extends \yii\helpers\Html
     public static function tel($phone, $options = [])
     {
         return self::a($phone, 'tel:' . preg_replace('/[^0-9+]/', '', $phone), $options);
+    }
+
+    public static function error($model, $attribute, $options = [])
+    {
+        if (!isset($options['class'])) {
+            $options['class'] = 'invalid-feedback';
+        }
+        return parent::error($model, $attribute, $options);
     }
 
     public static function icon($icon, $options = [])
