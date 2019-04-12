@@ -18,7 +18,6 @@ class WebController extends Controller
     public $dashboard = false;
     public $icon;
 
-
     public function behaviors2()
     {
         return [
