@@ -182,7 +182,7 @@ class CMS
         $tmpArray['{sitename}'] = $config->sitename;
         $tmpArray['{domain}'] = Yii::$app->request->serverName;
         //$tmpArray['{host}'] = Yii::$app->request->hostInfo;
-        $tmpArray['{protocol}'] = (Yii::$app->request->isSecureConnection) ? 'https://' : 'http://';
+        $tmpArray['{scheme}'] = Yii::$app->request->isSecureConnection ? 'https://' : 'http://';
         $tmpArray['{email}'] = $config->email;
         $resultArray = ArrayHelper::merge($tmpArray, $array);
         if ($flip)
