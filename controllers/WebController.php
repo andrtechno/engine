@@ -14,7 +14,7 @@ class WebController extends Controller
 {
 
     public $breadcrumbs, $jsMessages = [];
-    public $dataModel, $pageName, $keywords, $description;
+    public $dataModel, $pageName, $description;
     public $dashboard = false;
     public $icon;
 
