@@ -4,11 +4,13 @@ namespace panix\engine\db;
 
 
 use panix\engine\data\Pagination;
+use panix\engine\Html;
 use panix\engine\widgets\LinkPager;
 use Yii;
 use yii\base\Exception;
 use panix\mod\shop\models\Category;
 use yii\behaviors\TimestampBehavior;
+
 use yii\widgets\Pjax;
 
 class ActiveRecord extends \yii\db\ActiveRecord
@@ -129,87 +131,46 @@ class ActiveRecord extends \yii\db\ActiveRecord
         return $b;
     }
 
+    /**
+     * @param string $message
+     * @param array $params
+     * @return string
+     */
     public static function t($message, $params = array())
     {
         $fileName = (new \ReflectionClass(get_called_class()))->getShortName();
         return Yii::t(strtolower(static::MODULE_ID) . '/' . $fileName, $message, $params);
     }
 
-
-    public function getObjectNext()
+    /**
+     * @return \yii\db\Query
+     */
+    public function getNext()
     {
-        /*$next = $this->find()
-            ->where(['<', 'id', $this->id])
-            ->orderBy(['id' => SORT_ASC])
-            //->addOrderBy(['id'=>SORT_ASC])
-            ->one();*/
-        $next = Yii::$app->db->cache(function ($db) {
-            return $this->find()
+        $next = static::getDb()->cache(function ($db) {
+            return static::find()
                 ->where(['<', 'id', $this->id])
-                ->orderBy(['id' => SORT_ASC])
-                ->one();
-        }, 3600);
-        //$next->detachBehavior('discountsBehavior');
+                ->orderBy(['id' => SORT_ASC]);
+        }, 0);
         return $next;
     }
 
-    public function getObjectPrev()
+    /**
+     * @return \yii\db\Query
+     */
+    public function getPrev()
     {
-
-        $prev = Yii::$app->db->cache(function ($db) {
-            return $this->find()
+        $prev = static::getDb()->cache(function ($db) {
+            return static::find()
                 ->where(['>', 'id', $this->id])
-                ->orderBy(['id' => SORT_DESC])
-                ->one();
-        }, 3600);
-
-        /*$prev = $this->find()
-            ->where(['>', 'id', $this->id])
-            ->orderBy(['id' => SORT_DESC])
-            ->one();*/
-        //$prev->detachBehavior('discountsBehavior');
+                ->orderBy(['id' => SORT_DESC]);
+        }, 0);
         return $prev;
     }
 
-
-    public function getNextOrPrev($nextOrPrev, $cid = false, $options = array())
-    {
-        $records = NULL;
-
-        if ($nextOrPrev == "prev")
-            $order = [$this::tableName() . '.id' => SORT_ASC];
-        if ($nextOrPrev == "next")
-            $order = [$this::tableName() . '.id' => SORT_DESC];
-
-        if (!isset($options['select']))
-            $options['select'] = [$this::tableName() . '.*'];
-
-        if ($cid) {//TODO: no work need job.
-            $options['params'] = array(':cid' => $cid);
-        }
-
-        //$modelParams
-        $records = $this::find()
-            ->select($options['select'])
-            ->where([$this::tableName() . '.switch' => 1])
-            ->andWhere([Category::tableName() . '.id' => 45])
-            ->joinWith('mainCategory')
-            ->orderBy($order)
-            ->all();
-
-        echo count($records);
-        echo '<br>';
-        foreach ($records as $i => $r)
-            if ($r->id == $this->id)
-                return (isset($records[$i + 1])) ? $records[$i + 1] : NULL;
-
-        return NULL;
-    }
-
     /**
-     * Special for widget ext.admin.frontControl
-     *
      * @return string
+     * @throws Exception
      */
     public function getCreateUrl()
     {
@@ -246,10 +207,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }
     }
 
-    /**
-     * Special for widget ext.admin.frontControl
-     * @return string
-     */
+
     public function getDeleteUrl()
     {
         if (static::route) {
@@ -265,10 +223,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }
     }
 
-    /**
-     * Special for widget ext.admin.frontControl
-     * @return string
-     */
+
     public function getUpdateUrl()
     {
         if (static::route) {
@@ -301,8 +256,6 @@ class ActiveRecord extends \yii\db\ActiveRecord
             $arrayelement = (int)$pageVar;
             $arrayelement--;
 
-            ;
-
             $content = $pageBreak[$arrayelement];
             $content .= LinkPager::widget([
                 'pagination' => new Pagination([
@@ -320,6 +273,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
 
     /**
      * @return string
+     * @throws Exception
      */
     public function getSwitchUrl()
     {
