@@ -9,7 +9,7 @@ use panix\engine\Html;
 class ActiveForm extends \yii\bootstrap4\ActiveForm
 {
     public $fieldClass = 'panix\engine\bootstrap\ActiveField';
-    public $layout = 'horizontal';
+    public $layout = self::LAYOUT_HORIZONTAL;
     public $title;
 
     /**

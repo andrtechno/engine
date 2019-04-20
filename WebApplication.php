@@ -24,7 +24,6 @@ class WebApplication extends Application
         return parent::run();
     }
 
-
     public function getModulesInfo()
     {
         $modules = $this->getModules();
