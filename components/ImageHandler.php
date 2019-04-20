@@ -4,6 +4,7 @@ namespace panix\engine\components;
 
 use yii\base\Component;
 use yii\base\Exception;
+use yii\web\Response;
 
 class ImageHandler extends Component
 {
@@ -16,7 +17,7 @@ class ImageHandler extends Component
     private $mimeType = '';
     private $fileName = '';
     public $transparencyColor = [0, 0, 0];
-
+    public $jpegQuality = 100;
     public $alphaColor = [255, 255, 255];
 
     protected $newDimensions;
@@ -50,6 +51,8 @@ class ImageHandler extends Component
     const FLIP_HORIZONTAL = 1;
     const FLIP_VERTICAL = 2;
     const FLIP_BOTH = 3;
+
+    public $lib = 'Imagick';//test
 
     public function getImage()
     {
@@ -232,10 +235,33 @@ class ImageHandler extends Component
     {
         $this->checkLoaded();
 
-        //$this->maxHeight = (intval($toHeight) > $this->height) ? $this->height : $toWidth;
-        // $this->maxWidth = (intval($toWidth) > $this->width) ? $this->width : $toWidth;
-        $this->maxHeight = intval($toHeight);
-        $this->maxWidth = intval($toWidth);
+
+       /* if($this->lib == 'Imagick'){
+            $image = new \Imagick($this->image);
+
+            $image->setImageCompressionQuality($this->jpegQuality);
+
+            if ($toWidth && $toHeight) {
+                if ($toWidth && $toHeight) {
+                    $image->cropThumbnailImage($toWidth, $toHeight);
+                } elseif ($toHeight) {
+                    $image->thumbnailImage(0, $toHeight);
+                } elseif ($toWidth) {
+                    $image->thumbnailImage($toWidth, 0);
+                } else {
+                    throw new \Exception('Something wrong with this->module->parseSize($sizeString)');
+                }
+            }
+
+            $image->writeImage($this->image);
+        }*/
+
+
+
+        $this->maxHeight = (intval($toHeight) > $this->height) ? $this->height : $toWidth;
+         $this->maxWidth = (intval($toWidth) > $this->width) ? $this->width : $toWidth;
+        //$this->maxHeight = intval($toHeight);
+       // $this->maxWidth = intval($toWidth);
         // get the new dimensions...
         $this->calcImageSize($this->width, $this->height);
 
@@ -825,7 +851,7 @@ class ImageHandler extends Component
         return $this;
     }
 
-    public function show($inFormat = false, $jpegQuality = 100)
+    public function show($inFormat = false)
     {
         $this->checkLoaded();
 
@@ -840,7 +866,7 @@ class ImageHandler extends Component
                 break;
             case self::IMG_JPEG:
                 header('Content-type: image/jpeg');
-                imagejpeg($this->image, null, $jpegQuality);
+                imagejpeg($this->image, null, $this->jpegQuality);
                 break;
             case self::IMG_PNG:
                 header('Content-type: image/png');
@@ -853,7 +879,7 @@ class ImageHandler extends Component
         return $this;
     }
 
-    public function save($file = false, $toFormat = false, $jpegQuality = 100, $touch = false)
+    public function save($file = false, $toFormat = false, $touch = false)
     {
         if (empty($file)) {
             $file = $this->fileName;
@@ -872,7 +898,7 @@ class ImageHandler extends Component
                 }
                 break;
             case self::IMG_JPEG:
-                if (!imagejpeg($this->image, $file, $jpegQuality)) {
+                if (!imagejpeg($this->image, $file, $this->jpegQuality)) {
                     throw new Exception('Can\'t save jpeg file');
                 }
                 break;
