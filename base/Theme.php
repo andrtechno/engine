@@ -19,25 +19,25 @@ class Theme extends \yii\base\Theme
 
 
 
-        $this->basePath = "@frontend/themes/{$this->name}";
-        $this->baseUrl = "@frontend/themes/{$this->name}";
+        $this->basePath = "@frontend/web/themes/{$this->name}";
+        $this->baseUrl = "@frontend/web/themes/{$this->name}";
 
 
         if(Yii::$app->id == 'backend'){
-            $this->basePath = "@backend/themes/{$this->name}";
-            $this->baseUrl = "@backend/themes/{$this->name}";
+            $this->basePath = "@backend/web/themes/{$this->name}";
+            $this->baseUrl = "@backend/web/themes/{$this->name}";
         }
 
         $modulesPaths = [];
         foreach (Yii::$app->getModules() as $id => $mod) {
-           $modulesPaths['@' . $id] = "@frontend/themes/{$this->name}/modules/{$id}";
+           $modulesPaths['@' . $id] = "@frontend/web/themes/{$this->name}/modules/{$id}";
           //  $modulesPaths['@app/modules/' . $id] = "@frontend/themes/{$this->name}/modules/{$id}";
         }
 
         $this->pathMap = ArrayHelper::merge([
-            "@app/views" => "@app/frontend/web/themes/{$this->name}/views",
-            '@app/modules' => "@app/frontend/web/themes/{$this->name}/modules",
-            '@app/widgets' => "@app/frontend/web/themes/{$this->name}/widgets",
+            "@app/views" => "@frontend/web/themes/{$this->name}/views",
+            '@app/modules' => "@frontend/web/themes/{$this->name}/modules",
+            '@app/widgets' => "@frontend/web/themes/{$this->name}/widgets",
         ], $modulesPaths);
 
 
@@ -89,8 +89,8 @@ class Theme extends \yii\base\Theme
         } else {
             $layouts = array(
                 "@vendor/panix/mod-{$module}/views/layouts/" . $tpl,
-                "@frontend/themes/{$theme}/views/{$module}/layouts/" . $tpl,
-                "@frontend/themes/{$theme}/views/layouts/" . $tpl,
+                "@frontend/web/themes/{$theme}/views/{$module}/layouts/" . $tpl,
+                "@frontend/web/themes/{$theme}/views/layouts/" . $tpl,
             );
         }
         foreach ($layouts as $layout) {

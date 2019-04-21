@@ -26,6 +26,7 @@ class WebRequest extends Request {
             unset($parts[0]);
             $pathInfo = implode($parts, '/');
         }
+        //var_dump($this->baseUrl);die;
         $this->_pathInfo = $pathInfo;
         // Activate language by code
         Yii::$app->languageManager->setActive($langCode);

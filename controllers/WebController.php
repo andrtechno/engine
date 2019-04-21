@@ -116,7 +116,7 @@ class WebController extends Controller
         $timeZone = $config->timezone;
         Yii::$app->timeZone = $timeZone;
 
-        Yii::setAlias('@theme', Yii::getAlias("@frontend/themes/{$config->theme}"));
+        Yii::setAlias('@theme', Yii::getAlias("@frontend/web/themes/{$config->theme}"));
         if (Yii::$app->hasModule('stats') && !$this->dashboard && !Yii::$app->request->isAjax) {
 
             if(isset(Yii::$app->stats)){

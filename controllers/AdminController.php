@@ -117,7 +117,7 @@ class AdminController extends Controller
             throw new ForbiddenHttpException(Yii::t('app', 'ACCESS_DENIED'));
         }*/
 
-        Yii::setAlias('@theme', Yii::getAlias("@backend/themes/dashboard"));
+        Yii::setAlias('@theme', Yii::getAlias("@backend/web/themes/dashboard"));
 
 
         parent::init();
