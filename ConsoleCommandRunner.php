@@ -29,7 +29,7 @@ class ConsoleCommandRunner
         if (is_null($config)) {
             $config = '@app/config/console.php';
             if (!is_file(\Yii::getAlias($config))) {
-                $config = '@common/config/console.php';
+                $config = '@console/config/console.php';
             }
             if (!is_file(\Yii::getAlias($config))) {
                 throw new \InvalidArgumentException('Config was not provided; and was not detected in common paths of basic and advanced templates');
@@ -49,7 +49,7 @@ class ConsoleCommandRunner
         defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
         defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
         $this->outerApplication = \Yii::$app;
-        $this->innerApplication = new \yii\console\Application($config); //this changes \Yii::$app;
+        $this->innerApplication = new \panix\engine\console\Application($config); //this changes \Yii::$app;
         \Yii::$app = $this->outerApplication; //we set it back
     }
 
