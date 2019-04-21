@@ -46,7 +46,7 @@ class AdminController extends Controller
     public function getAssetUrl()
     {
         $theme = Yii::$app->settings->get('app', 'theme');
-        $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@backend/themes/dashboard/assets"));
+        $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@backend/web/themes/dashboard/assets"));
         return $assetsPaths[1];
     }
 
