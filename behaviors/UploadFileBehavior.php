@@ -8,6 +8,7 @@ use panix\ext\fancybox\Fancybox;
 use Yii;
 use yii\base\Behavior;
 use yii\db\ActiveRecord;
+use yii\helpers\FileHelper;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
 
@@ -148,13 +149,13 @@ class UploadFileBehavior extends Behavior
             if (in_array($fileInfo['extension'], ['jpg', 'jpeg', 'gif', 'png', 'pdf', 'svg'])) {
                 $fancybox = true;
             }
-            $targetClass='';
+            $targetClass = '';
             if ($fancybox) {
                 $targetClass = 'fancybox-popup-' . $attribute;
-                echo Fancybox::widget(['target' => '.'.$targetClass]);
+                echo Fancybox::widget(['target' => '.' . $targetClass]);
             }
 
-            return Html::a($linkValue.' '.$fileInfo['extension'], $this->getFileUrl($attribute), array('class' => 'btn btn-sm btn-outline-primary ' . $targetClass)) . $this->getRemoveUrl($attribute);
+            return Html::a($linkValue . ' ' . $fileInfo['extension'], $this->getFileUrl($attribute), ['class' => 'btn btn-sm btn-outline-primary ' . $targetClass]) . $this->getRemoveUrl($attribute);
         }
     }
 
@@ -193,6 +194,10 @@ class UploadFileBehavior extends Behavior
         $owner = $this->owner;
         $file = UploadedFile::getInstance($owner, $attribute);
         $path = Yii::getAlias($dir) . DIRECTORY_SEPARATOR;
+        if(!file_exists($path)){
+            FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
+        }
+
 
         if (isset($file)) {
             if ($old_image && file_exists($path . $old_image))
