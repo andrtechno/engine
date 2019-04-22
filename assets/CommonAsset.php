@@ -18,7 +18,7 @@ class CommonAsset extends AssetBundle
         'yii\web\YiiAsset',
         'yii\web\JqueryAsset',
         'yii\bootstrap4\BootstrapPluginAsset',
-        'panix\engine\widgets\notify\NotifyAsset',
+        'panix\asset\bootstrap\notify\Asset',
         'panix\engine\assets\IconAsset'
     ];
 
