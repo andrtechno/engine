@@ -23,6 +23,7 @@
         "panix/wgt-owlcarousel": "*",
         "panix/wgt-taginput": "*",
         "panix/wgt-highcharts": "*",
+        "panix/asset-bootstrap-notify": "*",
         "maxmind-db/reader": "~1.0",
         "mpdf/mpdf": "~8.0",
         "components/highlightjs": "~9.0"
