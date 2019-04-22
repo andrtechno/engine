@@ -6,7 +6,7 @@ use yii\web\AssetBundle;
 
 /**
  * Class NestableAsset
- * @package voskobovich\nestedsets\widgets
+ * @package panix\engine\widgets\nestable
  */
 class NestableAsset extends AssetBundle
 {

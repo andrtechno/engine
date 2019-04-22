@@ -17,7 +17,7 @@ use yii\widgets\Pjax;
 
 /**
  * Class Nestable
- * @package voskobovich\nestedsets\widgets
+ * @package panix\engine\widgets\nestable
  */
 class Nestable extends Widget
 {
