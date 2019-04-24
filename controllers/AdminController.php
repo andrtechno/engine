@@ -95,7 +95,7 @@ class AdminController extends Controller
 
     public function actionCreate()
     {
-        return $this->actionUpdate(true);
+        return $this->actionUpdate(false);
     }
 
     public function actionEditColumns()

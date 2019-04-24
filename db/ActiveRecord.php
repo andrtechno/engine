@@ -2,20 +2,16 @@
 
 namespace panix\engine\db;
 
-
+use Yii;
+use yii\base\Exception;
+use yii\behaviors\TimestampBehavior;
+use yii\web\HttpException;
 use panix\engine\data\Pagination;
 use panix\engine\Html;
 use panix\engine\widgets\LinkPager;
-use Yii;
-use yii\base\Exception;
-use panix\mod\shop\models\Category;
-use yii\behaviors\TimestampBehavior;
-
-use yii\widgets\Pjax;
 
 class ActiveRecord extends \yii\db\ActiveRecord
 {
-
 
 
     /**
@@ -52,6 +48,24 @@ class ActiveRecord extends \yii\db\ActiveRecord
             $result[] = $col['DEFAULT_CONTROL'];
 
         return $result;
+    }
+
+
+    /**
+     * @param $id
+     * @param null|string $message
+     * @return null|static
+     * @throws HttpException
+     */
+    public static function findModel($id, $message = null)
+    {
+        if (($model = static::findOne($id)) !== null) {
+            return $model;
+        } else {
+            if (!$id)
+                return new static();
+            throw new HttpException(404, $message ? $message : Yii::t('app/error', 404));
+        }
     }
 
     public function beforeSave($insert)
@@ -261,12 +275,11 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 'pagination' => new Pagination([
                     'totalCount' => $pageCount,
                     'pageSize' => 1,
-                    'defaultPageSize'=>1,
+                    'defaultPageSize' => 1,
                 ]),
-            ]);
-            ;
+            ]);;
             return $content;
-        }else{
+        } else {
             return false;
         }
     }
