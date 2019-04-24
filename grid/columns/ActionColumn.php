@@ -183,7 +183,7 @@ class ActionColumn extends DataColumn
         }
         if (!isset($this->buttons['view'])) {
             $this->buttons['view'] = function ($url) {
-                return Html::a(Html::icon('search'), '/admin' . $url, [
+                return Html::a(Html::icon('search'), $url, [
                     'title' => Yii::t('yii', 'View'),
                     'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary linkTarget',
                     'data-pjax' => '0',
@@ -195,14 +195,14 @@ class ActionColumn extends DataColumn
 
                 if (isset($model->primaryKey)) {
                     if (!in_array($model->primaryKey, $model->disallow_update)) {
-                        return Html::a(Html::icon('edit'), '/admin' . $url, [
+                        return Html::a(Html::icon('edit'), $url, [
                             'title' => Yii::t('yii', 'Update'),
                             'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary linkTarget',
                             'data-pjax' => '0',
                         ]);
                     }
                 } else {
-                    return Html::a(Html::icon('edit'), '/admin' . $url, [
+                    return Html::a(Html::icon('edit'), $url, [
                         'title' => Yii::t('yii', 'Update'),
                         'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary linkTarget',
                         'data-pjax' => '0',

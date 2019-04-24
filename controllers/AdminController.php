@@ -45,43 +45,12 @@ class AdminController extends Controller
 
     public function getAssetUrl()
     {
-        $theme = Yii::$app->settings->get('app', 'theme');
-        $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@backend/web/themes/dashboard/assets"));
+        $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@theme/assets"));
         return $assetsPaths[1];
     }
 
 
-    /**
-     * @return string
-     */
-    public function actionError()
-    {
-        $exception = Yii::$app->errorHandler->exception;
 
-        if ($exception !== null) {
-            $statusCode = $exception->statusCode;
-            $name = $exception->getName();
-            $message = $exception->getMessage();
-
-            $this->layout = '@theme/views/layouts/error';
-
-
-            $this->pageName = Yii::t('app/error', $statusCode);
-            $this->view->title = $exception->statusCode . ' ' . $this->pageName;
-
-            // $this->title = $exception->statusCode.' / '. $exception->getMessage();
-            $this->breadcrumbs = [$this->pageName];
-
-            //echo VarDumper::dump(Yii::$app->urlManager->rules,10,true);die;
-
-            return $this->render('@theme/views/main/error', [
-                'exception' => $exception,
-                'statusCode' => $statusCode,
-                'name' => $name,
-                'message' => $message
-            ]);
-        }
-    }
 
 
     public function beforeAction($event)
@@ -117,7 +86,7 @@ class AdminController extends Controller
             throw new ForbiddenHttpException(Yii::t('app', 'ACCESS_DENIED'));
         }*/
 
-        Yii::setAlias('@theme', Yii::getAlias("@backend/web/themes/dashboard"));
+        Yii::setAlias('@theme', Yii::getAlias("@app/web/themes/dashboard"));
 
 
         parent::init();

@@ -116,7 +116,7 @@ class WebController extends Controller
         $timeZone = $config->timezone;
         Yii::$app->timeZone = $timeZone;
 
-        Yii::setAlias('@theme', Yii::getAlias("@frontend/web/themes/{$config->theme}"));
+        Yii::setAlias('@theme', Yii::getAlias("@app/web/themes/{$config->theme}"));
         if (Yii::$app->hasModule('stats') && !$this->dashboard && !Yii::$app->request->isAjax) {
 
             if(isset(Yii::$app->stats)){
@@ -160,13 +160,12 @@ class WebController extends Controller
             $name = $exception->getName();
             $message = $exception->getMessage();
 
-            $this->layout = 'error';
-
+            $this->layout = "@app/web/themes/{$this->view->theme->name}/views/layouts/error";
 
             $this->pageName = Yii::t('app/error', $statusCode);
             $this->view->title = $statusCode . ' ' . $this->pageName;
             $this->breadcrumbs = [$statusCode];
-            return $this->render('@theme/views/main/error', [
+            return $this->render('error', [
                 'exception' => $exception,
                 'statusCode' => $statusCode,
                 'name' => $name,

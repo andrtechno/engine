@@ -8,7 +8,7 @@ use yii\helpers\FileHelper;
 
 class Connection extends \yii\db\Connection {
 
-    public $backupPath = '@common/backups';
+    public $backupPath = '@app/backups';
     public $noExportTables = ['surf'];
     private $_result = '';
     public $limitBackup;

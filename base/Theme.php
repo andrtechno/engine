@@ -17,27 +17,24 @@ class Theme extends \yii\base\Theme
             $this->name = Yii::$app->settings->get('app', 'theme');
         }
 
-
-
-        $this->basePath = "@frontend/web/themes/{$this->name}";
-        $this->baseUrl = "@frontend/web/themes/{$this->name}";
-
-
-        if(Yii::$app->id == 'backend'){
-            $this->basePath = "@backend/web/themes/{$this->name}";
-            $this->baseUrl = "@backend/web/themes/{$this->name}";
+        if(preg_match("/admin/", Yii::$app->request->getUrl())){
+            $this->name = 'dashboard';
         }
+
+        $this->basePath = "@app/web/themes/{$this->name}";
+        $this->baseUrl = "@app/web/themes/{$this->name}";
+
 
         $modulesPaths = [];
         foreach (Yii::$app->getModules() as $id => $mod) {
-           $modulesPaths['@' . $id] = "@frontend/web/themes/{$this->name}/modules/{$id}";
+           $modulesPaths['@' . $id] = "@app/web/themes/{$this->name}/modules/{$id}";
           //  $modulesPaths['@app/modules/' . $id] = "@frontend/themes/{$this->name}/modules/{$id}";
         }
 
         $this->pathMap = ArrayHelper::merge([
-            "@app/views" => "@frontend/web/themes/{$this->name}/views",
-            '@app/modules' => "@frontend/web/themes/{$this->name}/modules",
-            '@app/widgets' => "@frontend/web/themes/{$this->name}/widgets",
+            "@app/views" => "@app/web/themes/{$this->name}/views",
+            '@app/modules' => "@app/web/themes/{$this->name}/modules",
+            '@app/widgets' => "@app/web/themes/{$this->name}/widgets",
         ], $modulesPaths);
 
 
