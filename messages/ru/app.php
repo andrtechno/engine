@@ -1,9 +1,10 @@
 <?php
 
 return [
+    'CHMOD_ERROR' => '<strong>{dir}</strong> не имеет нужных разрешений для записи на сервере.<br />Установите нужные атрибуты CHMOD - <strong>{chmod}</strong>',
     'GO_HOME' => 'На главную',
     'PATTERN_URL' => '{attribute}, может содержать только латинские буквы, цифры и тире.',
-    'PAGE_GEN' => 'Скорость загрузки страницы: <b>{time}</b> сек. Память: <b>{memory}</b>. Запросов к БД: <b>{db_query}</b> за <b>{db_time}</b> сек.',
+    'PAGE_GEN' => 'Скорость загрузки страницы: <strong>{time}</strong> сек. Память: <strong>{memory}</strong>. Запросов к БД: <strong>{db_query}</strong> за <strong>{db_time}</strong> сек.',
     'IN' => 'в',
     'ALL' => 'Все',
     'TODAY_IN' => 'Сегодня в {time}',
