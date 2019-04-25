@@ -23,10 +23,12 @@ class SettingsModel extends Model
         }
         $this->setAttributes((array)Yii::$app->settings->get($this->category));
     }
+
     public function submitButton()
     {
-        return Html::submitButton(Yii::t('app', 'UPDATE'), ['class' => 'btn btn-success']);
+        return Html::submitButton(Yii::t('app', 'SAVE'), ['class' => 'btn btn-success']);
     }
+
     public function save()
     {
         $shortName = (new \ReflectionClass(get_called_class()))->getShortName();
