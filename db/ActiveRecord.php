@@ -31,6 +31,14 @@ class ActiveRecord extends \yii\db\ActiveRecord
     const route = null;
     const MODULE_ID = null;
 
+    public function submitButton()
+    {
+        $html = '';
+        $html .= Html::submitButton(Yii::t('app', $this->isNewRecord ? 'CREATE' : 'SAVE'), ['class' => 'btn btn-success']);
+        $html .= Html::submitButton(Yii::t('app', $this->isNewRecord ? 'CREATE_RETURN' : 'SAVE_RETURN'), ['class' => 'btn btn-link', 'value' => \yii\helpers\Url::to(['index']), 'name' => 'redirect']);
+        return $html;
+    }
+
     public function getColumnSearch($array = array())
     {
         $col = $this->gridColumns;
@@ -96,9 +104,9 @@ class ActiveRecord extends \yii\db\ActiveRecord
 
     public function afterSave($insert, $changedAttributes)
     {
-        if(isset($this->behaviors['timestamp'])){
-            $this->touch($this->behaviors['timestamp']->updatedAtAttribute);
-        }
+        //if(isset($this->behaviors['timestamp'])){
+        //    $this->touch($this->behaviors['timestamp']->updatedAtAttribute);
+        //}
         parent::afterSave($insert, $changedAttributes);
     }
 
