@@ -3,34 +3,36 @@
 namespace panix\engine\actions;
 
 use Yii;
-use yii\helpers\Json;
+use yii\web\Response;
+use yii\rest\Action;
 
-class DeleteAction extends \yii\rest\Action {
+class DeleteAction extends Action
+{
 
-    public function run() {
+    public function run()
+    {
         $json = [];
+        $json['status'] = 'error';
         if (Yii::$app->request->isPost && isset($_REQUEST)) {
+
+            /** @var $model \yii\db\ActiveRecord */
             $model = new $this->modelClass;
             $entry = $model->find()->where(['id' => $_REQUEST['id']])->all();
             if ($entry) {
                 foreach ($entry as $obj) {
                     if (!in_array($obj->primaryKey, $model->disallow_delete)) {
                         $obj->delete();
-                        $json = [
-                            'status' => 'success',
-                            'message' => Yii::t('app', 'SUCCESS_RECORD_DELETE')
-                        ];
+                        $json['status'] = 'success';
+                        $json['message'] = Yii::t('app', 'SUCCESS_RECORD_DELETE');
                     } else {
-                        $json = array(
-                            'status' => 'error',
-                            'message' => Yii::t('app', 'ERROR_RECORD_DELETE')
-                        );
+                        $json['status'] = 'error';
+                        $json['message'] = Yii::t('app', 'ERROR_RECORD_DELETE');
                     }
                 }
             }
         }
-        echo Json::encode($json);
-        Yii::$app->end();
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $json;
     }
 
 }

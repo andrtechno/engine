@@ -50,9 +50,6 @@ class AdminController extends Controller
     }
 
 
-
-
-
     public function beforeAction($event)
     {
 
@@ -204,7 +201,6 @@ class AdminController extends Controller
             $message = Yii::t('app/error', '404');
         throw new HttpException($status, $message);
     }
-
 
     public function render($view, $params = [])
     {

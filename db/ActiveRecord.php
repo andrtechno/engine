@@ -90,21 +90,14 @@ class ActiveRecord extends \yii\db\ActiveRecord
                     $this->ordern = $row['maxOrdern'] + 1;
                 }
             }
-            //update
-        } else {
-            if (isset($columns['date_update'])) {
-                $this->date_update = date('Y-m-d H:i:s');
-            }
         }
         return parent::beforeSave($insert);
     }
 
-    public function afterSave222($insert, $changedAttributes)
+    public function afterSave($insert, $changedAttributes)
     {
-        if (isset($this->tableSchema->columns['date_update'])) {
-            //echo $this->date_update;
-            //die('s');
-            //   $this->date_update = date('Y-m-d H:i:s');
+        if(isset($this->behaviors['timestamp'])){
+            $this->touch($this->behaviors['timestamp']->updatedAtAttribute);
         }
         parent::afterSave($insert, $changedAttributes);
     }

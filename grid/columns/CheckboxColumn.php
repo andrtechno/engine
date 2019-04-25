@@ -10,7 +10,7 @@ use panix\engine\bootstrap\ButtonDropdown;
 use yii\web\View;
 
 
-class CheckboxColumn extends Column
+class CheckboxColumn extends \yii\grid\CheckboxColumn
 {
 
     public $headerOptions = ['style' => 'width: 70px;','class' => 'text-center'];
@@ -36,63 +36,40 @@ class CheckboxColumn extends Column
     public function init()
     {
         parent::init();
-        if (empty($this->name)) {
-            throw new InvalidConfigException('The "name" property must be set.');
-        }
-        if (substr_compare($this->name, '[]', -2, 2)) {
-            $this->name .= '[]';
-        }
-
-        $id = $this->grid->getId();
-        $name = strtr($this->name, array('[' => "\\[", ']' => "\\]"));
-
 
         $this->grid->getView()->registerJs("
 
 
-jQuery(document).on('click','#{$id} .select-on-check-all',function() {
-    var checked=this.checked;
-    jQuery('#{$id} input[name=\"{$name}\"]:enabled').each(function() {
-        this.checked=checked;
-        if (checked == this.checked) {
-            $(this).closest('table tbody tr').removeClass('active');
-            $('#grid-actions').addClass('hidden');
-        }
-	if (this.checked) {
-            $(this).closest('table tbody tr').addClass('active');
-            $('#grid-actions').removeClass('hidden');
-        }
-    });
-});
-    
-
-jQuery(document).on('click', '#grid-action-delete', function() {
-    var keys = $('#{$id}').yiiGridView('getSelectedRows');
-    $.ajax({
-        url:'/admin/pages/default/delete',
-        type:'POST',
-        dataType:'json',
-        data:{id:keys},
-        success:function(data){
-            common.notify(data.message,'success');
-            $('#{$id}').yiiGridView('applyFilter');
-        }
-    });
+jQuery(document).on('click','#{$this->grid->getId()} input[type=\"checkbox\"]',function(e) {
+var keys = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
+    console.log(keys);
 });
 
-jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
-    jQuery('#{$id} .select-on-check-all').prop('checked', jQuery(\"input[name='$name']\").length==jQuery(\"input[name='$name']:checked\").length);
-    var checked=this.checked;
-    this.checked=checked;
-    if (checked == this.checked) {
-        $(this).closest('table tbody tr').removeClass('active');
-        $('#grid-actions').addClass('hidden');
-    }
-    if (this.checked) {
-        $(this).closest('table tbody tr').addClass('active');
-        $('#grid-actions').removeClass('hidden');
-    }
-});
+function runAction(that){
+var keys = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
+var url = $(that).attr('href');
+var question = $(that).data('question');
+var question = $(that).data('question');
+
+
+
+	if (confirm(question)) {
+        console.log('LALAL',keys,that);
+        $.ajax({
+            url:url,
+            type:'POST',
+            data:{id:keys},
+            success:function(data){
+                console.log(data);
+                $.pjax.reload({container:'#pjax-{$this->grid->getId()}'});
+                //$('#{$this->grid->getId()}').yiiGridView('applyFilter');
+            }
+        });
+	}
+
+    return false;
+}
+
 
 ",View::POS_END);
 
@@ -139,7 +116,7 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
         $this->customActions = [
             [
                 'label' => Yii::t('app', 'DELETE'),
-                'url' => Yii::$app->urlManager->createUrl('delete'),
+                'url' => ['delete'],
                 'icon' => 'delete',
                 'options' => [
                     'class' => 'dropdown-item',
@@ -161,10 +138,11 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
             'data-question' => Yii::t('app', 'CONFIRM'),
             'class' => 'dropdown-item',
             // 'model' => $this->dataProvider->modelClass,
-            'onClick' => strtr('return $.fn.yiiGridView.runAction(":grid", this);', [
+            'onClick'=>'return runAction(this);'
+            /*'onClick' => strtr('return $.fn.yiiGridView.runAction(":grid", this);', [
                     ':grid' => $this->grid->options['id']
                 ]
-            ),
+            ),*/
         ];
     }
 
@@ -182,7 +160,7 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function() {
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
 
-        $this->grid->view->registerJs("jQuery('#$id').yiiGridView('setSelectionColumn', $options);");
+       // $this->grid->view->registerJs("jQuery('#$id').yiiGridView('setSelectionColumn', $options);");
 
         if ($this->header !== null || !$this->multiple) {
             return parent::renderHeaderCellContent();

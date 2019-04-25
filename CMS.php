@@ -23,8 +23,7 @@ class CMS
 {
 
 
-
-    public static function processImage($size=false, $filename, $uploadAlias, $options = array())
+    public static function processImage($size = false, $filename, $uploadAlias, $options = array())
     {
         $dirName = basename($uploadAlias);
         if (!$size) {
@@ -58,15 +57,15 @@ class CMS
 
         if (YII_DEBUG || !file_exists($thumbPath)) {
             $img->load($fullPath);
-          //  if (isset($options['mod'])) {
-                //if (in_array($options['mod'], explode(',', $configApp->attachment_wm_active))) {
-                    $offsetX = isset($configApp->attachment_wm_offsetx) ? $configApp->attachment_wm_offsetx : 10;
-                    $offsetY = isset($configApp->attachment_wm_offsety) ? $configApp->attachment_wm_offsety : 10;
-                    $corner = isset($configApp->attachment_wm_corner) ? $configApp->attachment_wm_corner : 4;
-                    $path = !empty($configApp->attachment_wm_path) ? $configApp->attachment_wm_path : Yii::getAlias('@uploads') . '/watermark.png';
-                    $img->watermark($path, $offsetX, $offsetY, $corner, false);
-               // }
-           // }
+            //  if (isset($options['mod'])) {
+            //if (in_array($options['mod'], explode(',', $configApp->attachment_wm_active))) {
+            $offsetX = isset($configApp->attachment_wm_offsetx) ? $configApp->attachment_wm_offsetx : 10;
+            $offsetY = isset($configApp->attachment_wm_offsety) ? $configApp->attachment_wm_offsety : 10;
+            $corner = isset($configApp->attachment_wm_corner) ? $configApp->attachment_wm_corner : 4;
+            $path = !empty($configApp->attachment_wm_path) ? $configApp->attachment_wm_path : Yii::getAlias('@uploads') . '/watermark.png';
+            $img->watermark($path, $offsetX, $offsetY, $corner, false);
+            // }
+            // }
 
             if ($size) {
                 $img->resize((!empty($sizes[0])) ? $sizes[0] : false, (!empty($sizes[1])) ? $sizes[1] : false, $optionResizeProportional);
@@ -75,7 +74,7 @@ class CMS
 //$img->thumb((!empty($sizes[0])) ? $sizes[0] : false, (!empty($sizes[1])) ? $sizes[1] : false,false);
             $img->save($thumbPath);
 
-          //  $img->show();
+            //  $img->show();
         }
 
         if (!$size) {
@@ -651,59 +650,26 @@ class CMS
     }
 
     /**
-     *
-     * @param string $date Y-m-d H:i:s
-     * @param boolean $time Показывать время
+     * @param null $timestamp
+     * @param bool $time Show time
      * @return string
      */
-    public static function date($date, $time = true)
+    public static function date($timestamp = null, $time = true)
     {
+        if (!$timestamp) {
+            $timestamp = time();
+        }
+        if (extension_loaded('intl')) {
+            $fn = ($time) ? 'asDatetime' : 'asDate';
+            return Yii::$app->formatter->{$fn}($timestamp);
 
-        $formatted = strtotime($date);
-        $oneDay = 86400;
-        $df = Yii::$app->formatter;
-        $resDate = $df->asDate($formatted);
-        if ($formatted > mktime(0, 0, 0)) {
-            $t = $formatted - ($oneDay * 1);
-            if ($t >= time()) {
-                $result = $resDate;
-            } else {
-                $result = Yii::t('app', 'TODAY_IN', ['time' => $df->asTime($formatted, 'php:H:i')]);
-            }
-        } elseif ($formatted > mktime(0, 0, 0) - $oneDay) {
-            $result = Yii::t('app', 'YESTERDAY_IN', ['time' => $df->asTime($formatted, 'php:H:i')]);
         } else {
-            if ($time) {
-                $result = $resDate . ' ' . Yii::t('app', 'IN') . ' ' . $df->asTime($formatted, 'php:H:i');
-            } else {
-                $result = $resDate;
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Текушая дата с часовым и время поясом
-     *
-     * @param string $time Default of "now"
-     * @param string|int $format Default is "Y-m-d H:i:s"
-     * @return string
-     * @throws Exception
-     */
-    public static function getDate($time = 'now', $format = 'Y-m-d H:i:s')
-    {
-        if (is_int($time))
-            $time = date($format, $time);
-
-        if (empty($format)) {
-            throw new NotSupportedException('Error date format is empty!');
+            $fn = ($time) ? 'datetimeFormat' : 'dateFormat';
+            $date = new \DateTime($timestamp, new \DateTimeZone(self::timezone()));
+            return $date->format(str_replace('php:', '', Yii::$app->formatter->{$fn}));
         }
 
-        $date = new \DateTime($time, new \DateTimeZone(self::timezone()));
-        //  $date->setTimezone();
-        return $date->format($format);
     }
-
 
     /**
      *
