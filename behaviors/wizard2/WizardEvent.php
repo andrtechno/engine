@@ -1,7 +1,6 @@
 <?php
 
-namespace panix\engine\behaviors\wizard;
-
+namespace panix\engine\behaviors\wizard2;
 use yii\base\Event;
 /**
  * Wizard event class.
