@@ -2,7 +2,6 @@
 
 namespace panix\engine\controllers;
 
-use DeepCopyTest\Matcher\Y;
 use panix\engine\grid\GridColumns;
 use panix\engine\Html;
 use Yii;

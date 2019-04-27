@@ -27,7 +27,7 @@ class WebModule extends Module
     public $uploadAliasPath = null;
 
 
-    public function behaviors3()
+    public function behaviors2()
     {
         return [
             AccessControl::class

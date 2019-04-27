@@ -2,15 +2,14 @@
 
 namespace panix\engine\components;
 
-/**
- * Компонент CManagerLanguage
- * 
- * @author Andrew S. <andrew.panix@gmail.com>
- * @package components.managers
- */
 use Yii;
 use yii\base\Component;
 
+/**
+ * Class Settings
+ * @author Andrew S. <andrew.panix@gmail.com>
+ * @package panix\engine\components
+ */
 class Settings extends Component {
 
     /**
@@ -18,7 +17,7 @@ class Settings extends Component {
      */
     protected $data = [];
     private $cache_key = 'cached_settings';
-
+    private $tableName = '{{%settings}}';
     /**
      * Initialize component
      */
@@ -33,7 +32,7 @@ class Settings extends Component {
               ->queryAll(); */
 
             $settings = (new \yii\db\Query())
-                    ->from('{{%settings}}')
+                    ->from($this->tableName)
                     ->orderBy('category')
                     ->all();
 
@@ -57,13 +56,13 @@ class Settings extends Component {
         if (!empty($data)) {
             foreach ($data as $key => $value) {
                 if ($this->get($category, $key) !== null) {
-                    Yii::$app->db->createCommand()->update('{{%settings}}', array(
-                        'value' => $value), '{{%settings}}.category=:category AND {{%settings}}.param=:param', array(
+                    Yii::$app->db->createCommand()->update($this->tableName, array(
+                        'value' => $value), $this->tableName.".category=:category AND {$this->tableName}.param=:param", array(
                         ':category' => $category,
                         ':param' => $key
                     ))->execute();
                 } else {
-                    Yii::$app->db->createCommand()->insert('{{%settings}}', array(
+                    Yii::$app->db->createCommand()->insert($this->tableName, array(
                         'category' => $category,
                         'param' => $key,
                         'value' => $value
@@ -103,7 +102,7 @@ class Settings extends Component {
      * @param $category
      */
     public function clear($category) {
-        Yii::$app->db->createCommand()->delete('{{%settings}}', 'category=:category', array(':category' => $category))->execute();
+        Yii::$app->db->createCommand()->delete($this->tableName, 'category=:category', array(':category' => $category))->execute();
         if (isset($this->data[$category]))
             unset($this->data[$category]);
 

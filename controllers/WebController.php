@@ -17,7 +17,17 @@ class WebController extends Controller
     public $dataModel, $pageName, $description;
     public $dashboard = false;
     public $icon;
-
+    public function behaviors() {
+        return [
+            'access' => [
+                'class' => \panix\mod\rbac\filters\AccessControl::class,
+                'allowActions' => [
+                    '*',
+                    // The actions listed here will be allowed to everyone including guests.
+                ]
+            ],
+        ];
+    }
     public function behaviors2()
     {
         return [
@@ -51,9 +61,6 @@ class WebController extends Controller
     public function actions()
     {
         return [
-            'error2' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
