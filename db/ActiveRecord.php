@@ -112,7 +112,6 @@ class ActiveRecord extends \yii\db\ActiveRecord
 
     public function attributeLabels()
     {
-        $lang = Yii::$app->language;
         $attrLabels = [];
         foreach ($this->behaviors() as $key => $b) {
             if (isset($b['translationAttributes'])) {
@@ -122,7 +121,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
             }
         }
         foreach ($this->attributes as $attr => $val) {
-            $attrLabels[$attr] = self::t(strtoupper($attr));
+            $attrLabels[$attr] = static::t(strtoupper($attr));
         }
 
         return $attrLabels;

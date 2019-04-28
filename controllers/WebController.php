@@ -17,7 +17,9 @@ class WebController extends Controller
     public $dataModel, $pageName, $description;
     public $dashboard = false;
     public $icon;
-    public function behaviors() {
+
+    public function behaviors()
+    {
         return [
             'access' => [
                 'class' => \panix\mod\rbac\filters\AccessControl::class,
@@ -28,6 +30,7 @@ class WebController extends Controller
             ],
         ];
     }
+
     public function behaviors2()
     {
         return [
@@ -85,14 +88,14 @@ class WebController extends Controller
             common.message=' . \yii\helpers\Json::encode($this->jsMessages) . ';', \yii\web\View::POS_HEAD, 'js-common');
 
 
-     //   echo VarDumper::dump(Yii::$app->urlManager->rules,10,true);die;
+        //   echo VarDumper::dump(Yii::$app->urlManager->rules,10,true);die;
 
         return parent::beforeAction($action);
     }
 
 
-
-    public function getAssetUrl(){
+    public function getAssetUrl()
+    {
         $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@theme/assets"));
         return $assetsPaths[1];
     }
@@ -126,9 +129,9 @@ class WebController extends Controller
         Yii::setAlias('@theme', Yii::getAlias("@app/web/themes/{$config->theme}"));
         if (Yii::$app->hasModule('stats') && !$this->dashboard && !Yii::$app->request->isAjax) {
 
-            if(isset(Yii::$app->stats)){
-            $stats = Yii::$app->stats;
-            $stats->record();
+            if (isset(Yii::$app->stats)) {
+                $stats = Yii::$app->stats;
+                $stats->record();
             }
 
         }
@@ -160,20 +163,25 @@ class WebController extends Controller
 
     public function actionError()
     {
-        $exception = Yii::$app->errorHandler->exception;
+        /** @var $handler \yii\web\ErrorHandler */
+        /** @var $exception \yii\web\HttpException */
+        $handler = Yii::$app->errorHandler;
+        $exception = $handler->exception;
 
         if ($exception !== null) {
             $statusCode = $exception->statusCode;
             $name = $exception->getName();
             $message = $exception->getMessage();
 
-            $this->layout = "@app/web/themes/{$this->view->theme->name}/views/layouts/error";
+            //$this->layout = "@app/web/themes/{$this->view->theme->name}/views/layouts/error";
+            $this->layout = "@theme/views/layouts/error";
 
             $this->pageName = Yii::t('app/error', $statusCode);
             $this->view->title = $statusCode . ' ' . $this->pageName;
             $this->breadcrumbs = [$statusCode];
             return $this->render('error', [
                 'exception' => $exception,
+                'handler' => $handler,
                 'statusCode' => $statusCode,
                 'name' => $name,
                 'message' => $message
