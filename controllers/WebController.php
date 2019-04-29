@@ -229,11 +229,11 @@ class WebController extends Controller
 
         if (strlen($text) == 4 && preg_match("/([A-Za-z]{1}[0-9]{3})$/i", $text)) {
             $text = '&#x' . $text . ';';
-            $font = Yii::getAlias('@vendor/panix/engine/assets/fonts') . DIRECTORY_SEPARATOR . 'Pixelion.ttf';
+            $font = Yii::getAlias('@vendor/panix/engine/assets/assets/fonts') . DIRECTORY_SEPARATOR . 'Pixelion.ttf';
         } elseif ($text == 'PIXELION' || $text == 'pixelion') {
-            $font = Yii::getAlias('@vendor/panix/engine/assets/fonts') . DIRECTORY_SEPARATOR . 'Pixelion.ttf';
+            $font = Yii::getAlias('@vendor/panix/engine/assets/assets/fonts') . DIRECTORY_SEPARATOR . 'Pixelion.ttf';
         } else {
-            $font = Yii::getAlias('@vendor/panix/engine/assets/fonts') . DIRECTORY_SEPARATOR . 'Exo2-Light.ttf';
+            $font = Yii::getAlias('@vendor/panix/engine/assets/assets/fonts') . DIRECTORY_SEPARATOR . 'Exo2-Light.ttf';
         }
 
         $textBoundingBox = imagettfbbox($fontsize - $padding, 0, $font, $text);

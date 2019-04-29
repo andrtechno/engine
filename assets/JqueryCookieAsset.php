@@ -11,7 +11,7 @@ use panix\engine\web\AssetBundle;
 class JqueryCookieAsset extends AssetBundle
 {
 
-    public $sourcePath = '@vendor/panix/engine/assets';
+    public $sourcePath = __DIR__ . '/assets';
     public $js = [
         'js/jquery.cookie.js',
     ];

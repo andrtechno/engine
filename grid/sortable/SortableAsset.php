@@ -1,12 +1,12 @@
 <?php
 
-namespace panix\engine\grid\sortable\assets;
+namespace panix\engine\grid\sortable;
 
 use yii\web\AssetBundle;
 
 class SortableAsset extends AssetBundle {
 
-    public $sourcePath = '@vendor/panix/engine/grid/sortable/assets';
+    public $sourcePath = __DIR__.'/assets';
     public $css = [
         'styles.css',
     ];

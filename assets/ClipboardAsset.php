@@ -11,7 +11,8 @@ use panix\engine\web\AssetBundle;
 class ClipboardAsset extends AssetBundle
 {
 
-    public $sourcePath = '@vendor/panix/engine/assets';
+    public $sourcePath = __DIR__ . '/assets';
+
     public $js = [
         'js/clipboard/clipboard.min.js',
     ];

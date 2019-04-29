@@ -10,7 +10,7 @@ use panix\engine\web\AssetBundle;
  */
 class ErrorAsset extends AssetBundle {
 
-    public $sourcePath = '@vendor/panix/engine/assets';
+    public $sourcePath = __DIR__ . '/assets';
 
     public $css = [
         'css/error.css',

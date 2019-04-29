@@ -7,7 +7,7 @@ use panix\engine\web\AssetBundle;
 class CommonAsset extends AssetBundle
 {
 
-    public $sourcePath = '@vendor/panix/engine/assets';
+    public $sourcePath = __DIR__ . '/assets';
 
     public $js = [
         'js/common.js',

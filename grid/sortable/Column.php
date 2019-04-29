@@ -3,7 +3,6 @@
 namespace panix\engine\grid\sortable;
 
 use Yii;
-use panix\engine\grid\sortable\assets\SortableAsset;
 use panix\engine\Html;
 use yii\web\View;
 use yii\helpers\Url;

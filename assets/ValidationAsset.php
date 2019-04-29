@@ -11,7 +11,7 @@ use panix\engine\web\AssetBundle;
 class ValidationAsset extends AssetBundle
 {
 
-    public $sourcePath = '@vendor/panix/engine/assets';
+    public $sourcePath = __DIR__ . '/assets';
     public $js = [
         //'js/panix.validation.js',
         'js/translitter.js',
