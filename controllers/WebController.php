@@ -173,8 +173,7 @@ class WebController extends Controller
             $name = $exception->getName();
             $message = $exception->getMessage();
 
-            //$this->layout = "@app/web/themes/{$this->view->theme->name}/views/layouts/error";
-            $this->layout = "@theme/views/layouts/error";
+            $this->layout = "@app/web/themes/{$this->view->theme->name}/views/layouts/error";
 
             $this->pageName = Yii::t('app/error', $statusCode);
             $this->view->title = $statusCode . ' ' . $this->pageName;
