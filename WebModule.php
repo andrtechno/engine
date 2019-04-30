@@ -82,6 +82,10 @@ class WebModule extends Module
         if (method_exists($this, 'getDefaultModelClasses')) {
             $this->modelClasses = array_merge($this->getDefaultModelClasses(), $this->modelClasses);
         }
+
+
+        //Yii::configure($this, ['config'=>(array) Yii::$app->settings->get($this->id)]);
+
         parent::init();
     }
 
