@@ -59,7 +59,7 @@ class AdminController extends Controller
             common.isDashboard=true;
             common.message=' . \yii\helpers\Json::encode($this->jsMessages) . ';', \yii\web\View::POS_HEAD, 'js-common');
 
-
+        Yii::$app->id = 'dashboard';
         if (Yii::$app->user->isGuest && get_class($this) !== 'panix\mod\admin\controllers\AuthController') {
             return Yii::$app->response->redirect(['/admin/auth']);
         }
@@ -70,6 +70,7 @@ class AdminController extends Controller
 
     public function init()
     {
+
         // echo get_class($this);die;
 
         //panix\mod\admin\controllers\admin\DefaultController
