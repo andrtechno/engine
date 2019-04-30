@@ -16,7 +16,6 @@
         "ext-json": "*",
         "ext-curl": "*",
         "panix/mod-admin": "*",
-        "panix/mod-user": "*",
         "panix/mod-shop": "*",
         "panix/mod-pages": "*",
         "panix/mod-images": "*",
