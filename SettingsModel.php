@@ -8,8 +8,7 @@ use yii\base\InvalidConfigException;
 
 class SettingsModel extends Model
 {
-    public static $category;
-    const NAME = null;
+    public static $category = null;
 
     public function init()
     {
@@ -18,7 +17,7 @@ class SettingsModel extends Model
                 'params' => 'module'
             ]));
         }
-        if (!isset(static::$category)) {
+        if (static::$category == null) {
             static::$category = $this->module;
         }
         $this->setAttributes((array)Yii::$app->settings->get(static::$category));
