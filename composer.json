@@ -15,11 +15,6 @@
     "require": {
         "ext-json": "*",
         "ext-curl": "*",
-        "panix/mod-admin": "*",
-        "panix/mod-shop": "*",
-        "panix/mod-pages": "*",
-        "panix/mod-images": "*",
-        "panix/mod-contacts": "*",
         "panix/wgt-tinymce": "*",
         "panix/wgt-owlcarousel": "*",
         "panix/wgt-taginput": "*",
