@@ -31,11 +31,17 @@ class ActiveRecord extends \yii\db\ActiveRecord
     const route = null;
     const MODULE_ID = null;
 
-    public function submitButton()
+    /**
+     * @param null|string $redirect
+     * @return string
+     */
+    public function submitButton($redirect = null)
     {
+        $redirect = ($redirect) ? $redirect : \yii\helpers\Url::to(['index']);
+
         $html = '';
         $html .= Html::submitButton(Yii::t('app', $this->isNewRecord ? 'CREATE' : 'SAVE'), ['class' => 'btn btn-success']);
-        $html .= Html::submitButton(Yii::t('app', $this->isNewRecord ? 'CREATE_RETURN' : 'SAVE_RETURN'), ['class' => 'btn btn-link', 'value' => \yii\helpers\Url::to(['index']), 'name' => 'redirect']);
+        $html .= Html::submitButton(Yii::t('app', $this->isNewRecord ? 'CREATE_RETURN' : 'SAVE_RETURN'), ['class' => 'btn btn-link', 'value' => $redirect, 'name' => 'redirect']);
         return $html;
     }
 
