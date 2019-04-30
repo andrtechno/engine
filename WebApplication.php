@@ -90,7 +90,7 @@ class WebApplication extends Application
 
     private function setEngineModules()
     {
-        $mods = Modules::getEnabled();
+        $mods = (new Modules)->getEnabled();
         if ($mods) {
             foreach ($mods as $module) {
                 $this->setModule($module->name, [
