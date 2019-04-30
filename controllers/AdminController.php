@@ -7,6 +7,7 @@ use panix\engine\Html;
 use Yii;
 use yii\data\ArrayDataProvider;
 use yii\db\Exception;
+use yii\helpers\Url;
 use yii\helpers\VarDumper;
 use yii\web\ForbiddenHttpException;
 use panix\mod\rbac\filters\AccessControl;
@@ -58,7 +59,6 @@ class AdminController extends Controller
             common.token="' . Yii::$app->request->csrfToken . '";
             common.isDashboard=true;
             common.message=' . \yii\helpers\Json::encode($this->jsMessages) . ';', \yii\web\View::POS_HEAD, 'js-common');
-
 
         if (Yii::$app->user->isGuest && get_class($this) !== 'panix\mod\admin\controllers\AuthController') {
             return Yii::$app->response->redirect(['/admin/auth']);
