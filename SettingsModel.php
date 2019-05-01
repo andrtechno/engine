@@ -3,13 +3,18 @@
 namespace panix\engine;
 
 use Yii;
-use panix\engine\base\Model;
 use yii\base\InvalidConfigException;
+use panix\engine\base\Model;
+use panix\engine\components\Settings;
 
+/**
+ * Class SettingsModel
+ * @package panix\engine
+ */
 class SettingsModel extends Model
 {
     public static $category = null;
-    public static $tableName = '{{%settings}}';
+    public static $tableName = null;
 
     public function init()
     {
@@ -18,6 +23,7 @@ class SettingsModel extends Model
                 'params' => 'module'
             ]));
         }
+        static::$tableName = Settings::$tableName;
         if (static::$category == null) {
             static::$category = $this->module;
         }
