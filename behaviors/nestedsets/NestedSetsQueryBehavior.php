@@ -35,6 +35,7 @@ class NestedSetsQueryBehavior extends Behavior {
 
     public function options($root = 0, $level = null) {
         $res = [];
+
         if (is_object($root)) {
             $res[$root->{$root->idAttribute}] = str_repeat('—', $root->{$root->levelAttribute} - 1)
                     . ((($root->{$root->levelAttribute}) > 1) ? '›' : '')
