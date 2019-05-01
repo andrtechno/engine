@@ -5,14 +5,12 @@ namespace panix\engine\behaviors\nestedsets\actions;
 use Yii;
 use yii\base\Action;
 use yii\base\InvalidConfigException;
-use voskobovich\nestedsets\behaviors\NestedSetsBehavior;
-use yii\db\ActiveRecord;
 use yii\web\HttpException;
-use yii\web\NotFoundHttpException;
+
 
 /**
  * Class CreateNodeAction
- * @package voskobovich\nestedsets\actions
+ * @package panix\engine\behaviors\nestedsets\actions
  */
 class CreateNodeAction extends Action
 {
@@ -46,7 +44,7 @@ class CreateNodeAction extends Action
     {
         $name = Yii::$app->request->post('name');
 
-        /** @var ActiveRecord|NestedSetsBehavior $model */
+        /** @var \panix\engine\behaviors\nestedsets\NestedSetsBehavior|\yii\db\ActiveRecord $model */
         $model = new $this->modelClass;
         $model->{$this->nameAttribute} = $name;
 
@@ -55,7 +53,7 @@ class CreateNodeAction extends Action
         if (isset($roots[0])) {
             $model->appendTo($roots[0]);
         } else {
-            $model->makeRoot();
+            $model->moveAsRoot();
         }
 
         return null;

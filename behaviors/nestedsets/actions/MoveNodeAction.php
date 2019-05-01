@@ -11,7 +11,7 @@ use yii\web\HttpException;
 
 /**
  * Class MoveNodeAction
- * @package voskobovich\nestedsets\actions
+ * @package panix\engine\behaviors\nestedsets\actions
  */
 class MoveNodeAction extends Action
 {

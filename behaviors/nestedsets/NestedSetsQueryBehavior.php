@@ -16,16 +16,16 @@ use yii\base\Behavior;
 class NestedSetsQueryBehavior extends Behavior {
 
     /**
-     * @var ActiveQuery the owner of this behavior.
+     * @var \yii\db\ActiveQuery the owner of this behavior.
      */
     public $owner;
 
     /**
      * Gets root node(s).
-     * @return ActiveRecord the owner.
+     * @return \yii\db\ActiveRecord the owner.
      */
     public function roots() {
-        /** @var $modelClass ActiveRecord */
+        /** @var $modelClass \yii\db\ActiveRecord */
         $modelClass = $this->owner->modelClass;
         $model = new $modelClass;
         $this->owner->andWhere($modelClass::getDb()->quoteColumnName($model->leftAttribute) . '=1');

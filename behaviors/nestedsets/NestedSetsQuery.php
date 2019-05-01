@@ -2,9 +2,9 @@
 
 namespace panix\engine\behaviors\nestedsets;
 
-use panix\engine\behaviors\nestedsets\NestedSetsQueryBehavior;
+use yii\db\ActiveQuery;
 
-class NestedSetsQuery extends \yii\db\ActiveQuery {
+class NestedSetsQuery extends ActiveQuery {
 
     public function behaviors() {
         return [

@@ -5,13 +5,12 @@ namespace panix\engine\behaviors\nestedsets\actions;
 use Yii;
 use yii\base\Action;
 use yii\base\InvalidConfigException;
-use voskobovich\nestedsets\behaviors\NestedSetsBehavior;
 use yii\db\ActiveRecord;
 use yii\web\NotFoundHttpException;
 
 /**
  * Class DeleteNodeAction
- * @package voskobovich\nestedsets\actions
+ * @package panix\engine\behaviors\nestedsets\actions
  */
 class DeleteNodeAction extends Action
 {
@@ -40,7 +39,7 @@ class DeleteNodeAction extends Action
      */
     public function run($id)
     {
-        /** @var ActiveRecord $model */
+        /** @var \panix\engine\behaviors\nestedsets\NestedSetsBehavior|\yii\db\ActiveRecord $model */
         $model = new $this->modelClass;
 
         /*
@@ -48,7 +47,7 @@ class DeleteNodeAction extends Action
          */
         $pkAttribute = $model->getTableSchema()->primaryKey[0];
 
-        /** @var ActiveRecord|NestedSetsBehavior $model */
+        /** @var \panix\engine\behaviors\nestedsets\NestedSetsBehavior|\yii\db\ActiveRecord $model */
         $model = $model::find()->where([$pkAttribute => $id])->one();
 
         if ($model == null) {

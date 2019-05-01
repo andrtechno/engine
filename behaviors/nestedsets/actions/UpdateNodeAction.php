@@ -13,7 +13,7 @@ use yii\web\NotFoundHttpException;
 
 /**
  * Class UpdateNodeAction
- * @package voskobovich\nestedsets\actions
+ * @package panix\engine\behaviors\nestedsets\actions
  */
 class UpdateNodeAction extends Action
 {
@@ -57,7 +57,7 @@ class UpdateNodeAction extends Action
          */
         $pkAttribute = $model->getTableSchema()->primaryKey[0];
 
-        /** @var ActiveRecord|NestedSetsBehavior $model */
+        /** @var \panix\engine\behaviors\nestedsets\NestedSetsBehavior|\yii\db\ActiveRecord $model */
         $model = $model::find()->where([$pkAttribute => $id])->one();
 
         if ($model == null) {
