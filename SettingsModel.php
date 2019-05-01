@@ -9,6 +9,7 @@ use yii\base\InvalidConfigException;
 class SettingsModel extends Model
 {
     public static $category = null;
+    public static $tableName = '{{%settings}}';
 
     public function init()
     {
