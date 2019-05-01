@@ -3,8 +3,10 @@
 namespace panix\engine\validators;
 
 use yii\helpers\Html;
+use yii\validators\Validator;
+use panix\engine\assets\ValidationAsset;
 
-class UrlValidator extends \yii\validators\Validator {
+class UrlValidator extends Validator {
 
     public $attributeSlug = 'seo_alias';
     public $attributeCompare = 'title';
@@ -20,6 +22,7 @@ class UrlValidator extends \yii\validators\Validator {
      * @inheritdoc
      */
     public function validateAttribute($model, $attribute) {
+        /** @var \yii\db\ActiveRecord $model */
         if (!$model->isNewRecord) {
             $check = $model::find()
                     ->where([$this->attributeSlug => $model->$attribute])
@@ -39,7 +42,7 @@ class UrlValidator extends \yii\validators\Validator {
     }
 
     public function clientValidateAttribute($model, $attribute, $view) {
-        \panix\engine\assets\ValidationAsset::register($view);
+        ValidationAsset::register($view);
         $options = [
             'model' => get_class($model),
             'pk' => $model->primaryKey,
