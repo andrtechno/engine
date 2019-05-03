@@ -4,17 +4,16 @@ namespace panix\engine\grid\columns;
 
 use Yii;
 use Closure;
-use yii\base\InvalidConfigException;
+use yii\web\View;
+use yii\grid\CheckboxColumn as BaseCheckboxColumn;
 use panix\engine\Html;
 use panix\engine\bootstrap\ButtonDropdown;
-use yii\web\View;
 
-
-class CheckboxColumn extends \yii\grid\CheckboxColumn
+class CheckboxColumn extends BaseCheckboxColumn
 {
 
-    public $headerOptions = ['style' => 'width: 70px;','class' => 'text-center'];
-
+    public $headerOptions = ['style' => 'width: 70px;', 'class' => 'text-center'];
+    public $filterOptions = ['class' => 'text-center'];
     /**
      * @var string the name of the input checkbox input fields. This will be appended with `[]` to ensure it is an array.
      */
@@ -71,12 +70,12 @@ var question = $(that).data('question');
 }
 
 
-",View::POS_END);
+", View::POS_END);
 
         //print_r($this->getCustomActions());die;
         $this->contentOptions = ['class' => 'text-center'];
         $this->grid->footerRowOptions = ['class' => 'text-center'];
-       // $this->grid->filterRowOptions = ['class' => 'text-center'];
+        // $this->grid->filterRowOptions = ['class' => 'text-center'];
 
 
         $this->footer = ButtonDropdown::widget([
@@ -138,7 +137,7 @@ var question = $(that).data('question');
             'data-question' => Yii::t('app', 'CONFIRM'),
             'class' => 'dropdown-item',
             // 'model' => $this->dataProvider->modelClass,
-            'onClick'=>'return runAction(this);'
+            'onClick' => 'return runAction(this);'
             /*'onClick' => strtr('return $.fn.yiiGridView.runAction(":grid", this);', [
                     ':grid' => $this->grid->options['id']
                 ]
@@ -160,7 +159,7 @@ var question = $(that).data('question');
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
 
-       // $this->grid->view->registerJs("jQuery('#$id').yiiGridView('setSelectionColumn', $options);");
+        // $this->grid->view->registerJs("jQuery('#$id').yiiGridView('setSelectionColumn', $options);");
 
         if ($this->header !== null || !$this->multiple) {
             return parent::renderHeaderCellContent();
