@@ -870,6 +870,7 @@ class NestedSetsBehavior extends Behavior
      */
     private function moveNode($target, $key, $levelUp)
     {
+
         if ($this->owner->getIsNewRecord()) {
             throw new Exception('The node should not be new record.');
         }
