@@ -10,19 +10,15 @@ namespace panix\engine\maintenance;
 use yii\web\AssetBundle;
 
 /**
- * Maintenance mode component asset bundle.
- *
- * @since 0.2.0
- * @see \yii\web\AssetBundle
- * @package brussens\maintenance
- * @author Brusensky Dmitry <brussens@nativeweb.ru>
+ * Class Asset
+ * @package panix\engine\maintenance
  */
 class Asset extends AssetBundle
 {
     /**
      * @inheritdoc
      */
-    public $sourcePath = '@vendor/panix/engine/maintenance/assets';
+    public $sourcePath = __DIR__ . '/assets';
     /**
      * @inheritdoc
      */

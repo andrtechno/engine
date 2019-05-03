@@ -11,12 +11,8 @@ class Column extends \yii\grid\Column {
 
     public $headerOptions = ['style' => 'width: 30px;'];
     public $url = null;
-    public $successMessage = null;
 
     public function init() {
-
-        if ($this->successMessage == null)
-            $this->successMessage = Yii::t('app/admin', 'SORT_SUCCESS_MESSAGE');
 
         $this->url = Url::toRoute($this->url);
 
@@ -44,8 +40,13 @@ class Column extends \yii\grid\Column {
                         url: '{$this->url}',
                         type: 'POST',
                         data: ({'ids': ids}),
-                        success: function () {
-                            common.notify('{$this->successMessage}', 'success');
+                        dataType:'json',
+                        success: function (data) {
+                            if(data.status){
+                                common.notify(data.message, 'success');
+                            }else{
+                                common.notify(data.message, 'error');
+                            }
                         }
                     });
 
