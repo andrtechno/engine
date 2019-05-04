@@ -15,6 +15,9 @@ class Connection extends \yii\db\Connection {
     public $enable_limit = true;
     public $filesizes = 0;
 
+    /**
+     * @inheritdoc
+     */
     public function init() {
 
         if (!file_exists(Yii::getAlias($this->backupPath))) {
@@ -28,6 +31,9 @@ class Connection extends \yii\db\Connection {
         $this->noExportTables = $result;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function close() {
         if (isset(Yii::$app->settings)) {
             $this->limitBackup = (int) Yii::$app->settings->get('db', 'backup_limit') * 1024 * 1024;
@@ -58,6 +64,12 @@ class Connection extends \yii\db\Connection {
         }
     }
 
+    /**
+     * @param bool $withData
+     * @param bool $dropTable
+     * @param bool $savePath
+     * @return bool
+     */
     public function export($withData = true, $dropTable = true, $savePath = true) {
 
         if ($this->checkLimit()) {
@@ -109,6 +121,9 @@ class Connection extends \yii\db\Connection {
         }
     }
 
+    /**
+     * @param $tableName
+     */
     private function withData($tableName) {
         $itemsQuery = $this->pdo->query("select * from `$tableName`");
         $values = "";

@@ -4,13 +4,13 @@ namespace panix\engine\widgets;
 
 use panix\engine\Html;
 use yii\helpers\ArrayHelper;
-use yii\widgets\LinkPager as Pager;
+use yii\widgets\LinkPager as BasePager;
 
 /**
  * Class LinkPager
  * @package panix\engine\widgets
  */
-class LinkPager extends Pager
+class LinkPager extends BasePager
 {
 
     public $options = ['class' => 'pagination'];
