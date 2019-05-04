@@ -6,12 +6,14 @@ use yii\helpers\Html;
 use yii\validators\Validator;
 use panix\engine\assets\ValidationAsset;
 
-class UrlValidator extends Validator {
+class UrlValidator extends Validator
+{
 
     public $attributeSlug = 'seo_alias';
     public $attributeCompare = 'title';
 
-    public function init() {
+    public function init()
+    {
         if ($this->message == null) {
             $this->message = 'URL занят';
         }
@@ -21,17 +23,18 @@ class UrlValidator extends Validator {
     /**
      * @inheritdoc
      */
-    public function validateAttribute($model, $attribute) {
+    public function validateAttribute($model, $attribute)
+    {
         /** @var \yii\db\ActiveRecord $model */
         if (!$model->isNewRecord) {
             $check = $model::find()
-                    ->where([$this->attributeSlug => $model->$attribute])
-                    ->andWhere(['!=', 'id', $model->primaryKey])
-                    ->one();
+                ->where([$this->attributeSlug => $model->$attribute])
+                ->andWhere(['!=', 'id', $model->primaryKey])
+                ->one();
         } else {
             $check = $model::find()
-                    ->where([$this->attributeSlug => $model->$attribute])
-                    ->one();
+                ->where([$this->attributeSlug => $model->$attribute])
+                ->one();
         }
 
         if (isset($check)) {
@@ -41,7 +44,8 @@ class UrlValidator extends Validator {
         return null;
     }
 
-    public function clientValidateAttribute($model, $attribute, $view) {
+    public function clientValidateAttribute($model, $attribute, $view)
+    {
         ValidationAsset::register($view);
         $options = [
             'model' => get_class($model),
