@@ -10,6 +10,7 @@ class Action extends \yii\rest\Action
 {
 
     public $column = 'ordern';
+    public $successMessage;
 
     public function run()
     {
@@ -31,7 +32,7 @@ class Action extends \yii\rest\Action
 
 
                 $this->savePositions($_POST['ids'], $max);
-                $result['message'] = Yii::t('app/admin', 'SORT_SUCCESS_MESSAGE');
+                $result['message'] = ($this->successMessage) ? $this->successMessage : Yii::t('app/admin', 'SORT_SUCCESS_MESSAGE');
                 $result['status'] = true;
             }
         } else {

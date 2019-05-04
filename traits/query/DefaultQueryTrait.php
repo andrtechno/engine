@@ -15,7 +15,7 @@ trait DefaultQueryTrait
         /** @var \yii\db\ActiveRecord $modelClass */
         $modelClass = $this->modelClass;
         $tableName = $modelClass::tableName();
-        if ($modelClass::getDb()->getSchema()->getTableSchema($tableName)->getColumn('switch')) {
+        if ($modelClass::getDb()->getSchema()->getTableSchema($tableName)->getColumn('ordern')) {
             $this->addOrderBy(["{$tableName}.ordern" => SORT_DESC]);
         }
         parent::init();
