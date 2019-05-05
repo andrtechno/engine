@@ -9,7 +9,6 @@ use panix\engine\CMS;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 
-
 class WebController extends Controller
 {
 
@@ -263,9 +262,10 @@ class WebController extends Controller
     public function render($view, $params = [], $context = null)
     {
         if (Yii::$app->request->isAjax) {
-            return parent::renderAjax($view, $params, $context);
+            return $this->getView()->renderAjax($view, $params, $this);
         } else {
             return parent::render($view, $params);
         }
     }
+
 }
