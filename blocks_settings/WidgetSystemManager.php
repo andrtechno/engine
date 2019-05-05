@@ -6,26 +6,28 @@ use Yii;
 use yii\helpers\FileHelper;
 use yii\base\Component;
 
-class WidgetSystemManager extends Component {
+class WidgetSystemManager extends Component
+{
 
-    public function getSystemClass($alias) {
+    public function getSystemClass($alias)
+    {
 
         $reflect = new \ReflectionClass($alias);
 
 
-        $namespace = $reflect->getNamespaceName().'\\form';
+        $namespace = $reflect->getNamespaceName() . '\\form';
         $fpath = dirname($reflect->getFileName()) . DIRECTORY_SEPARATOR . 'form';
 
         if (file_exists($fpath)) {
-    
+
             $test = FileHelper::findFiles($fpath, [
-                        'only' => ['*.php'],
-                        'recursive' => false
+                'only' => ['*.php'],
+                'recursive' => false
             ]);
 
             foreach ($test as $formpath) {
-                $test = basename($formpath,'.php');
-                $classNamespace = $namespace.'\\'.$test;
+                $test = basename($formpath, '.php');
+                $classNamespace = $namespace . '\\' . $test;
 
                 return new $classNamespace;
             }
@@ -39,7 +41,8 @@ class WidgetSystemManager extends Component {
     }
 
 
-    public function getWidgetTitle($alias) {
+    public function getWidgetTitle($alias)
+    {
         $arr = explode('.', $alias);
         $numItems = count($arr);
         $i = 0;
@@ -53,20 +56,21 @@ class WidgetSystemManager extends Component {
             }
         }
     }
-    public function getClass($classNamespace) {
+
+    public function getClass($classNamespace)
+    {
         $reflect = new \ReflectionClass($classNamespace);
         $path = dirname($reflect->getFileName()) . DIRECTORY_SEPARATOR . 'form';
         if (file_exists($path)) {
             return new $classNamespace;
         } else {
-
             return false;
         }
     }
 
-    public function getConfigurationFormHtml($alias){
-
-    }
+    // public function getConfigurationFormHtml($alias){
+//
+    // }
 
 
 }

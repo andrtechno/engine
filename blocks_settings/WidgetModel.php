@@ -73,11 +73,9 @@ class WidgetModel extends Model
     public function getConfigurationFormHtml($obj)
     {
 
-
         $this->attributes = (array) $this->getSettings($obj);
-
-
         $ref = new \ReflectionClass($this);
+
         Yii::setAlias('@viewPath', dirname(dirname($ref->getFileName())) . DIRECTORY_SEPARATOR . 'views');
         return Yii::$app->controller->renderPartial('@viewPath/_form', ['model' => $this]);
     }
