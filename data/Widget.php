@@ -75,8 +75,8 @@ class Widget extends \yii\base\Widget
     }
 
     public function getConfig()
-    {
-        return Yii::$app->settings->get($this->getName());
+    {//$this->getName()
+        return Yii::$app->settings->get('wgt_HostingForm');
     }
 
     public function getName()

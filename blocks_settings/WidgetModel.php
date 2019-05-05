@@ -8,13 +8,14 @@ use yii\base\Model;
 class WidgetModel extends Model
 {
 
+    private $widget_id;
     public function attributeLabels()
     {
         $class = (new \ReflectionClass(get_called_class()));
         $labels = [];
         $aliasName = 'wgt_' . $class->getShortName();
         foreach ($this->attributes as $attr => $val) {
-            $labels[$attr] = Yii::t($aliasName . '/' . $class->getShortName(), strtoupper($attr));
+            $labels[$attr] = Yii::t($this->widget_id . '/' . $class->getShortName(), strtoupper($attr));
         }
         return $labels;
     }
@@ -24,14 +25,14 @@ class WidgetModel extends Model
     {
 
         $reflectionClass = new \ReflectionClass(get_class($this));
-        $aliasName = 'wgt_' . $reflectionClass->getShortName();
+        $this->widget_id = 'wgt_' . $reflectionClass->getShortName();
         //die(realpath(dirname(dirname($reflectionClass->getFileName()))));
         Yii::$app->setAliases([
-            '@' . $aliasName => realpath(dirname(dirname($reflectionClass->getFileName()))),
+            '@' . $this->widget_id => realpath(dirname(dirname($reflectionClass->getFileName()))),
         ]);
 
 
-        $this->registerTranslations($aliasName);
+        $this->registerTranslations($this->widget_id);
 
 
         parent::init();
@@ -69,16 +70,16 @@ class WidgetModel extends Model
     }
 
 
-    public function getSettings($obj)
+    public function getSettings($id)
     {
-        return Yii::$app->settings->get($obj);
+        return Yii::$app->settings->get($id);
     }
 
     public function getConfigurationFormHtml($obj)
     {
 
         $className = basename(Yii::getAlias($obj));
-        $this->attributes = $this->getSettings($className);
+        $this->attributes = (array) $this->getSettings($this->widget_id);
         //if (method_exists($this, 'registerScript')) {
         //    $this->registerScript();
         //}
@@ -93,7 +94,11 @@ class WidgetModel extends Model
 
     public function saveSettings($obj, $postData)
     {
+
         $reflect = new \ReflectionClass($this);
+
+
+
         $this->setSettings($obj, $postData[$reflect->getShortName()]);
     }
 
@@ -101,11 +106,14 @@ class WidgetModel extends Model
     {
         if ($data) {
             $className = basename(Yii::getAlias($obj));
-            $cache = Yii::$app->cache->get(md5(Yii::$app->cache->keyPrefix . $className));
-            if (isset($cache)) {
-                Yii::$app->cache->delete($className);
-            }
-            Yii::$app->settings->set($className, $data);
+           // $cache = Yii::$app->cache->get(md5(Yii::$app->cache->keyPrefix . $className));
+           // if (isset($cache)) {
+           //     Yii::$app->cache->delete($className);
+           // }
+
+
+
+            Yii::$app->settings->set($this->widget_id, $data);
         }
     }
 

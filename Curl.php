@@ -8,13 +8,14 @@
 namespace panix\engine;
 
 use Yii;
+use yii\base\Component;
 
 
 /**
  * Class Curl
  * @package panix\engine
  */
-class Curl
+class Curl extends Component
 {
 
     /**
