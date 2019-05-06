@@ -9,7 +9,7 @@ use panix\engine\assets\ValidationAsset;
 class UrlValidator extends Validator
 {
 
-    public $attributeSlug = 'seo_alias';
+    public $attributeSlug = 'slug';
     public $attributeCompare = 'title';
 
     public function init()

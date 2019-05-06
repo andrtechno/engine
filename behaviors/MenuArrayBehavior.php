@@ -35,7 +35,7 @@ class MenuArrayBehavior extends Behavior {
 
     private function isActive($url = false) {
         if (!Yii::$app instanceof \yii\console\Application) {
-            if ($url['seo_alias'] == Yii::$app->request->get('seo_alias')) {
+            if ($url['slug'] == Yii::$app->request->get('slug')) {
                 return true;
             }
         }

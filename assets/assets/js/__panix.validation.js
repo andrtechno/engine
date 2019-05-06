@@ -9,7 +9,7 @@ window.yii.panixValidation = (function ($) {
         },
         ajaxSlug: function (value, messages, options) {
             var xhr;
-            var alias = $('#seo_alias');
+            var alias = $('#slug');
             alias.parent().append('<div id="alias_result"></div>');
             //if (translate_object_url == 0) {
             $('#title').keyup(function (event) {
