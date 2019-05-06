@@ -11,7 +11,7 @@ class ImageColumn extends DataColumn
 
     public $format = 'raw';
     public $contentOptions = ['class' => 'text-center image'];
-    public $headerOptions = ['class' => 'text-center'];
+    public $headerOptions = ['class' => 'text-center', 'style' => 'width:100px'];
     public $filter = true;
     public $filterInputOptions = ['label' => 'Только с фото'];
 
