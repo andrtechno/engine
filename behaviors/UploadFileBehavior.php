@@ -8,14 +8,14 @@ use panix\ext\fancybox\Fancybox;
 use Yii;
 use yii\base\Behavior;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
 
 /**
- * @version 1.0
- * @author Andrew S. <andrew.panix@gmail.com>
- * @name $attributes array attributes model
+ * Class UploadFileBehavior
+ * @package panix\engine\behaviors
  */
 class UploadFileBehavior extends Behavior
 {
@@ -23,7 +23,14 @@ class UploadFileBehavior extends Behavior
 
     public $files = [];
     public $extensions = ['jpg', 'jpeg', 'png', 'gif'];
+    public $options = [];
     private $oldUploadFiles = [];
+
+
+    public function attach($owner)
+    {
+        parent::attach($owner);
+    }
 
     public function events()
     {
@@ -34,7 +41,6 @@ class UploadFileBehavior extends Behavior
             ActiveRecord::EVENT_AFTER_FIND => 'afterFind',
         ];
     }
-
 
     public function afterSave()
     {
@@ -47,7 +53,7 @@ class UploadFileBehavior extends Behavior
 
     public function beforeValidate()
     {
-
+        $owner = $this->owner;
         foreach ($this->files as $attribute => $dir) {
 
 
@@ -56,12 +62,12 @@ class UploadFileBehavior extends Behavior
             $this->file = $this->owner->{$this->attribute};
             return;
         }
-        $this->file = UploadedFile::getInstance($this->owner, $this->attribute);
+        $this->file = UploadedFile::getInstance($owner, $this->attribute);
         if (empty($this->file)) {
             $this->file = UploadedFile::getInstanceByName($this->attribute);
         }
         if ($this->file instanceof UploadedFile) {
-            $this->owner->{$this->attribute} = $this->file;
+            $owner->{$this->attribute} = $this->file;
         }
     }
 
@@ -78,8 +84,12 @@ class UploadFileBehavior extends Behavior
 
     public function getImageUrl($attribute, $size = false, $options = array())
     {
+
+        $options = ArrayHelper::merge($this->options, $options);
+
+
         $owner = $this->owner;
-        if (!empty($owner->{$attribute})) {
+        if ($owner->{$attribute}) {
             return CMS::processImage($size, $owner->{$attribute}, $this->files[$attribute], $options);
         } else {
             return $imgSource = CMS::placeholderUrl(['size' => $size]);
@@ -194,7 +204,7 @@ class UploadFileBehavior extends Behavior
         $owner = $this->owner;
         $file = UploadedFile::getInstance($owner, $attribute);
         $path = Yii::getAlias($dir) . DIRECTORY_SEPARATOR;
-        if(!file_exists($path)){
+        if (!file_exists($path)) {
             FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
         }
 

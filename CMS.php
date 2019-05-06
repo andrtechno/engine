@@ -27,9 +27,9 @@ class CMS
     {
         $dirName = basename($uploadAlias);
         if (!$size) {
-            $thumbPath = Yii::getAlias("@app/frontend/assets/{$dirName}");
+            $thumbPath = Yii::getAlias("@app/web/assets/{$dirName}");
         } else {
-            $thumbPath = Yii::getAlias("@app/frontend/assets/{$dirName}/{$size}");
+            $thumbPath = Yii::getAlias("@app/web/assets/{$dirName}/{$size}");
         }
 
         if (!file_exists($thumbPath)) {
@@ -59,11 +59,13 @@ class CMS
             $img->load($fullPath);
             //  if (isset($options['mod'])) {
             //if (in_array($options['mod'], explode(',', $configApp->attachment_wm_active))) {
-            $offsetX = isset($configApp->attachment_wm_offsetx) ? $configApp->attachment_wm_offsetx : 10;
-            $offsetY = isset($configApp->attachment_wm_offsety) ? $configApp->attachment_wm_offsety : 10;
-            $corner = isset($configApp->attachment_wm_corner) ? $configApp->attachment_wm_corner : 4;
-            $path = !empty($configApp->attachment_wm_path) ? $configApp->attachment_wm_path : Yii::getAlias('@uploads') . '/watermark.png';
-            $img->watermark($path, $offsetX, $offsetY, $corner, false);
+            if (isset($options['watermark']) && $options['watermark']) {
+                $offsetX = isset($configApp->attachment_wm_offsetx) ? $configApp->attachment_wm_offsetx : 10;
+                $offsetY = isset($configApp->attachment_wm_offsety) ? $configApp->attachment_wm_offsety : 10;
+                $corner = isset($configApp->attachment_wm_corner) ? $configApp->attachment_wm_corner : 4;
+                $path = !empty($configApp->attachment_wm_path) ? $configApp->attachment_wm_path : Yii::getAlias('@uploads') . '/watermark.png';
+                $img->watermark($path, $offsetX, $offsetY, $corner, false);
+            }
             // }
             // }
 
