@@ -33,7 +33,7 @@ function init_translitter(options) {
                         alias.removeClass("loading");
                         if (data.result) {
                             alias.parent().parent().addClass('has-error').removeClass('has-success');
-                            $("#alias_result").html('<span class="label label-danger">' + data.message + '</span>').show();
+                            $("#alias_result").html('<span class="badge badge-danger">' + data.message + '</span>').show();
                         } else {
                             // alias.parent().parent().addClass('has-success').removeClass('has-error');
                             // $("#alias_result").html('<span class="label label-success">' + data.message + '</span>').show();
