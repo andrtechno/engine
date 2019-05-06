@@ -40,7 +40,7 @@ class SettingsModel extends Model
     {
         $shortName = (new \ReflectionClass(get_called_class()))->getShortName();
         if ($this->validate()) {
-            Yii::$app->settings->set($this->category, Yii::$app->request->post($shortName));
+            Yii::$app->settings->set(static::$category, Yii::$app->request->post($shortName));
             Yii::$app->session->setFlash("success", Yii::t('app', 'SUCCESS_UPDATE'));
             return true;
         } else {
