@@ -44,7 +44,7 @@ class CMS
         // Path to thumb
         $thumbPath = $thumbPath . DIRECTORY_SEPARATOR . $filename;
         $sizes = explode('x', $size);
-        $optionResizeProportional = (isset($options['resize'])) ? $options['resize'] : true;
+
 
         $img = Yii::$app->img;
         $configApp = Yii::$app->settings->get('app');
@@ -70,7 +70,7 @@ class CMS
             // }
 
             if ($size) {
-                $img->resize((!empty($sizes[0])) ? $sizes[0] : false, (!empty($sizes[1])) ? $sizes[1] : false, $optionResizeProportional);
+                $img->resize((!empty($sizes[0])) ? $sizes[0] : 0, (!empty($sizes[1])) ? $sizes[1] : 0);
             }
 
 //$img->thumb((!empty($sizes[0])) ? $sizes[0] : false, (!empty($sizes[1])) ? $sizes[1] : false,false);
