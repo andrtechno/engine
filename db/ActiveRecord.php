@@ -5,10 +5,10 @@ namespace panix\engine\db;
 use Yii;
 use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
-use yii\web\HttpException;
 use panix\engine\data\Pagination;
 use panix\engine\Html;
 use panix\engine\widgets\LinkPager;
+use yii\web\NotFoundHttpException;
 
 class ActiveRecord extends \yii\db\ActiveRecord
 {
@@ -69,7 +69,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
      * @param $id
      * @param null|string $message
      * @return null|static
-     * @throws HttpException
+     * @throws NotFoundHttpException
      */
     public static function findModel($id, $message = null)
     {
@@ -78,7 +78,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
         } else {
             if (!$id)
                 return new static();
-            throw new HttpException(404, $message ? $message : Yii::t('app/error', 404));
+            throw new NotFoundHttpException($message ? $message : Yii::t('app/error', 404));
         }
     }
 
