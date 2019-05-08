@@ -93,7 +93,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 $this->ip_create = Yii::$app->request->getUserIP();
             }
             if (isset($columns['user_id'])) {
-                $this->user_id = (Yii::$app->user->isGuest) ? 0 : Yii::$app->user->id;
+                $this->user_id = (Yii::$app->user->isGuest) ? NULL : Yii::$app->user->id;
             }
             if (isset($columns['user_agent'])) {
                 $this->user_agent = Yii::$app->request->userAgent;
