@@ -3,6 +3,7 @@
 namespace panix\engine;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
 use panix\engine\base\Model;
 use panix\engine\components\Settings;
@@ -39,8 +40,9 @@ class SettingsModel extends Model
     public function save()
     {
         $shortName = (new \ReflectionClass(get_called_class()))->getShortName();
+        $this->attributes = ArrayHelper::merge(Yii::$app->request->post($shortName), $this->attributes);
         if ($this->validate()) {
-            Yii::$app->settings->set(static::$category, Yii::$app->request->post($shortName));
+            Yii::$app->settings->set(static::$category, $this->attributes);
             Yii::$app->session->setFlash("success", Yii::t('app', 'SUCCESS_UPDATE'));
             return true;
         } else {
