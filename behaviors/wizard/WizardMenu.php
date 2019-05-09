@@ -1,101 +1,89 @@
 <?php
+/**
+ * WizardMenu Class file
+ *
+ * @author    Chris Yates
+ * @copyright Copyright &copy; 2015 BeastBytes - All Rights Reserved
+ * @license   BSD 3-Clause
+ * @package   Wizard
+ */
 
 namespace panix\engine\behaviors\wizard;
 
-use yii\base\InvalidConfigException;
-use yii\base\Widget;
-use yii\helpers\ArrayHelper;
-use yii\web\Controller;
+use yii\widgets\Menu;
 
-class WizardMenu extends Widget {
-
-    /** @var array */
-    public $options = [
-        'activeCssClass' => 'active',
-        'firstItemCssClass' => 'first',
-        'lastItemCssClass' => 'last',
-        'previousItemsCssClass' => 'previous'
-    ];
-    public $items;
+/**
+ * WizardMenu class.
+ * Creates a menu from the wizard steps.
+ */
+class WizardMenu extends Menu
+{
+    /**
+     * @var string The CSS class for the current step
+     */
+    public $currentStepCssClass = 'current-step';
+    /**
+     * @var array The item to be shown to indicate completion of the wizard.
+     * e.g. ['label' => 'Done', 'url' => null]
+     */
+    public $finalItem;
+    /**
+     * @var string The CSS class for future steps
+     */
+    public $futureStepCssClass = 'future-step';
+    /**
+     * @var string The CSS class for past steps
+     */
+    public $pastStepCssClass = 'past-step';
+    /**
+     * @var string The current step
+     */
+    public $step;
+    /**
+     * @var \beastbytes\wizard\WizardBehavior The Wizard
+     */
+    public $wizard;
 
     /**
-     * @property string If not empty, this is added to the menu as the last item.
-     * Used to add the conclusion, i.e. what happens when the wizard completes -
-     * e.g. Register, to a menu.
+     * Initialise the widget
      */
-    public $menuLastItem;
+    public function init()
+    {
+        $route  = ['/'.$this->wizard->owner->route];
+        $params = $this->wizard->owner->actionParams;
+        $steps  = $this->wizard->steps;
+        $index  = array_search($this->step, $steps);
 
-    /** @var Behavior Wizard behavior class */
-    protected $wizard;
+        foreach ($steps as $step) {
+            $stepIndex = array_search($step, $steps);
+            $params[$this->wizard->queryParam] = $step;
 
-    /** @var Controller */
-    private $controller;
-
-    /** @var Object */
-    protected $widget;
-    public $menuConfig = [];
-
-    public function init() {
-        $this->controller = $this->getView()->context;
-
-        foreach ($this->controller->getBehaviors() as $behavior) {
-            if ($behavior instanceof WizardBehavior)
-                $this->wizard = $behavior;
-        }
-        if (!$this->wizard instanceof WizardBehavior)
-            throw new InvalidConfigException(\Yii::t('app', 'Behavior ' . __NAMESPACE__ . '\Behavior not found at Controller'));
-
-        
-
-            
-        $defaultConfig = [];
-        $defaultConfig['class'] = '\yii\bootstrap4\Nav';
-        $defaultConfig['items'] = $this->generateMenuItems();
-        
-
-            
-        $this->widget = \Yii::createObject(ArrayHelper::merge($defaultConfig, $this->menuConfig));
-
-        parent::init();
-    }
-
-    public function run() {
-        return $this->widget->run();
-    }
-
-    private function generateMenuItems() {
-
-        $previous = true;
-        $items = [];
-        $url = [$this->controller->id . '/' . $this->controller->action->id];
-        $parsedSteps = $this->wizard->getParsedSteps();
-
-        foreach ($parsedSteps as $step) {
-            $item = [];
-            $item['label'] = $this->wizard->getStepLabel($step);
-            if (($previous && !$this->wizard->forwardOnly) || ($step === $this->wizard->getCurrentStep())) {
-                $item['url'] = $url + [$this->wizard->queryParam => $step];
-      
-                if ($step === $this->wizard->getCurrentStep()){
-                    $previous = false;
-                }
+            if ($stepIndex == $index) {
+                $active = true;
+                $class  = $this->currentStepCssClass;
+                $url    = array_merge($route, $params);
+            } elseif ($stepIndex < $index) {
+                $active = false;
+                $class  = $this->pastStepCssClass;
+                $url    = ($this->wizard->forwardOnly
+                    ? null : array_merge($route, $params)
+                );
+            } else {
+                $active = false;
+                $class  = $this->futureStepCssClass;
+                $url    = null;
             }
-            $item['active'] = $step === $this->wizard->getCurrentStep();
-            if ($previous && !empty($this->options['previousItemsCssClass'])){
-                $item['label'] .= \panix\engine\Html::tag('i','',['class'=>'icon-check text-success']);
-                $item['options'] = ['class' => $this->options['previousItemsCssClass']];
+
+            $this->items[] = [
+                'label'   => $this->wizard->stepLabel($step),
+                'url'     => $url,
+                'active'  => $active,
+                'options' => compact('class')
+            ];
+
+            if (!empty($this->finalItem)) {
+                $this->items[] = $this->finalItem;
             }
-            $item['encode']=false;
-
-            $items[] = $item;
         }
-        if (!empty($this->menuLastItem))
-            $items[] = array(
-                'label' => $this->menuLastItem,
-                'active' => false,
-            );
-      
-        return $items;
     }
-
 }
