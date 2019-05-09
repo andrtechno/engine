@@ -135,19 +135,24 @@ class ActiveRecord extends \yii\db\ActiveRecord
 
     public function behaviors()
     {
-        $columns = $this->tableSchema->columns;
         $b = [];
-        if (isset($columns['ordern'])) {
-            $b['sortable'] = [
-                'class' => \panix\engine\grid\sortable\Behavior::class,
-            ];
-        }
-        if (isset($columns['created_at']) && isset($columns['updated_at'])) {
-            $b['timestamp'] = [
-                'class' => TimestampBehavior::class,
-            ];
-        }
+        try {
 
+            $columns = $this->tableSchema->columns;
+
+            if (isset($columns['ordern'])) {
+                $b['sortable'] = [
+                    'class' => \panix\engine\grid\sortable\Behavior::class,
+                ];
+            }
+            if (isset($columns['created_at']) && isset($columns['updated_at'])) {
+                $b['timestamp'] = [
+                    'class' => TimestampBehavior::class,
+                ];
+            }
+        } catch (\yii\db\Exception $e) {
+
+        }
         return $b;
     }
 

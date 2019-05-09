@@ -16,11 +16,10 @@ class WebApplication extends Application
         $this->name = $this->settings->get('app', 'sitename');
         $langManager = $this->languageManager;
         $user = $this->user;
-        if (!$user->isGuest) {
-            $this->language = $langManager->default->code;
-        } else {
-            $this->language = $langManager->default->code;
-        }
+
+        $this->language = (isset($langManager->default->code)) ? $langManager->default->code : $this->language;
+
+
         return parent::run();
     }
 
@@ -29,7 +28,7 @@ class WebApplication extends Application
         $modules = $this->getModules();
         if (YII_DEBUG)
             unset($modules['debug'], $modules['gii'], $modules['admin']);
-        $result = array();
+        $result = [];
         foreach ($modules as $name => $className) {
             //$info = $this->getModule($name)->info;
             if (isset($this->getModule($name)->info))

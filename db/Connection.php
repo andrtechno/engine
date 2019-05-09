@@ -24,7 +24,7 @@ class Connection extends \yii\db\Connection {
             FileHelper::createDirectory(Yii::getAlias($this->backupPath));
         }
 
-        $result = array();
+        $result = [];
         foreach ($this->noExportTables as $table) {
             $result[] = $this->tablePrefix . $table;
         }
