@@ -1,9 +1,9 @@
 <?php
-namespace beastbytes\wizard\controllers;
+namespace panix\engine\behaviors\wizard\controllers;
 
 use Yii;
 use yii\web\Controller;
-use beastbytes\wizard\WizardBehavior;
+use panix\engine\behaviors\wizard\WizardBehavior;
 
 class WizardController extends Controller
 {

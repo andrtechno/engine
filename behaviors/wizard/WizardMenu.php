@@ -40,7 +40,7 @@ class WizardMenu extends Menu
      */
     public $step;
     /**
-     * @var \beastbytes\wizard\WizardBehavior The Wizard
+     * @var \panix\engine\behaviors\wizard\WizardBehavior The Wizard
      */
     public $wizard;
 

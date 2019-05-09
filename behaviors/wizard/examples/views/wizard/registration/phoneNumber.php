@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use beastbytes\wizard\WizardMenu;
+use panix\engine\behaviors\wizard\WizardMenu;
 
 $this->title = 'Registration Wizard';
 

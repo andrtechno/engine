@@ -1,5 +1,5 @@
 <?php
-namespace beastbytes\wizard\models\wizard\survey;
+namespace panix\engine\behaviors\wizard\models\wizard\survey;
 
 class Pet extends \yii\base\Model
 {
