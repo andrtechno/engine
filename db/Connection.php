@@ -6,19 +6,20 @@ use PDO;
 use Yii;
 use yii\helpers\FileHelper;
 
-class Connection extends \yii\db\Connection {
+class Connection extends \yii\db\Connection
+{
 
     public $backupPath = '@app/backups';
     public $noExportTables = ['surf'];
     private $_result = '';
     public $limitBackup;
     public $enable_limit = true;
-    public $filesizes = 0;
 
     /**
      * @inheritdoc
      */
-    public function init() {
+    public function init()
+    {
 
         if (!file_exists(Yii::getAlias($this->backupPath))) {
             FileHelper::createDirectory(Yii::getAlias($this->backupPath));
@@ -28,31 +29,35 @@ class Connection extends \yii\db\Connection {
         foreach ($this->noExportTables as $table) {
             $result[] = $this->tablePrefix . $table;
         }
+
+        if (isset(Yii::$app->settings)) {
+            $this->limitBackup = (int)Yii::$app->settings->get('db', 'backup_limit') * 1024 * 1024;
+        }
+
         $this->noExportTables = $result;
     }
 
     /**
-     * @inheritdoc
+     * @return int
      */
-    public function close() {
-        if (isset(Yii::$app->settings)) {
-            $this->limitBackup = (int) Yii::$app->settings->get('db', 'backup_limit') * 1024 * 1024;
-        }
-        parent::close();
-    }
-
-    public function checkFilesSize() {
-        $fdir = opendir(Yii::getAlias($this->backupPath));
-        while ($file = readdir($fdir)) {
-            if ($file != '.' & $file != '..' & $file != '.htaccess' & $file != '.gitignore' & $file != 'index.html') {
-                $this->filesizes += filesize(Yii::getAlias($this->backupPath) . DIRECTORY_SEPARATOR . $file);
+    public function checkFilesSize()
+    {
+        $size = 0;
+        $path = realpath(Yii::getAlias($this->backupPath));
+        if ($path !== false && $path != '' && file_exists($path)) {
+            foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS)) as $object) {
+                $size += $object->getSize();
             }
         }
-        closedir($fdir);
-        return $this->filesizes;
+        return $size;
     }
 
-    public function checkLimit() {
+
+    /**
+     * @return bool
+     */
+    public function checkLimit()
+    {
         if ($this->enable_limit) {
             if ($this->checkFilesSize() <= $this->limitBackup) {
                 return true;
@@ -70,10 +75,10 @@ class Connection extends \yii\db\Connection {
      * @param bool $savePath
      * @return bool
      */
-    public function export($withData = true, $dropTable = true, $savePath = true) {
+    public function export($withData = true, $dropTable = true, $savePath = true)
+    {
 
         if ($this->checkLimit()) {
-
 
 
             $statments = $this->pdo->query("show tables");
@@ -82,23 +87,23 @@ class Connection extends \yii\db\Connection {
                 $tableName = $value[0];
                 if ($dropTable === true) {
                     $tableName2 = str_replace($this->tablePrefix, '{prefix}', $tableName);
-                    $this->_result.="DROP TABLE IF EXISTS `$tableName2`;\n";
+                    $this->_result .= "DROP TABLE IF EXISTS `$tableName2`;\n";
                 }
 
                 if (!in_array($tableName, $this->noExportTables)) {
                     $tableQuery = $this->pdo->query("show create table `$tableName`");
                     $createSql = $tableQuery->fetch();
                     $createSql['Create Table'] = str_replace($this->tablePrefix, '{prefix}', $createSql['Create Table']);
-                    $this->_result.=$createSql['Create Table'] . ";\r\n\r\n";
+                    $this->_result .= $createSql['Create Table'] . ";\r\n\r\n";
                     if ($withData)
                         $this->withData($tableName);
                 }
             }
             $date = date('Y-m-d_Hms');
-            $this->_result.="/*----------------------- BACKUP PIXELION CMS ------------------------------*/\n\r";
-            $this->_result.="/*E-mail: dev@pixelion.com.ua*/\n";
-            $this->_result.="/*Website: www.pixelion.com.ua*/\n";
-            $this->_result.="/*Date backup: " . $date . "*/\n\r";
+            $this->_result .= "/*----------------------- BACKUP PIXELION CMS ------------------------------*/\n\r";
+            $this->_result .= "/*E-mail: dev@pixelion.com.ua*/\n";
+            $this->_result .= "/*Website: www.pixelion.com.ua*/\n";
+            $this->_result .= "/*Date backup: " . $date . "*/\n\r";
             ob_start();
             echo $this->_result;
             $content = ob_get_contents();
@@ -115,7 +120,7 @@ class Connection extends \yii\db\Connection {
 
             if (Yii::$app->controller instanceof \panix\engine\controllers\AdminController) {
                 Yii::$app->session->addFlash('success', Yii::t('app', 'BACKUP_DB_SUCCESS', [
-                            'settings' => Html::a(Yii::t('app', 'SETTINGS'), ['/admin/app/security'])
+                    'settings' => Html::a(Yii::t('app', 'SETTINGS'), ['/admin/app/security'])
                 ]));
             }
         }
@@ -124,7 +129,8 @@ class Connection extends \yii\db\Connection {
     /**
      * @param $tableName
      */
-    private function withData($tableName) {
+    private function withData($tableName)
+    {
         $itemsQuery = $this->pdo->query("select * from `$tableName`");
         $values = "";
         $items = "";
@@ -136,52 +142,53 @@ class Connection extends \yii\db\Connection {
             $itemValues = array_map("addslashes", $itemValues);
             $valueString = join("','", $itemValues);
             $valueString = "('" . $valueString . "'),";
-            $values.="\n" . $valueString;
+            $values .= "\n" . $valueString;
         }
         if ($values != "") {
             $tableName = str_replace($this->tablePrefix, '{prefix}', $tableName);
             $tableName = str_replace($this->charset, '{charset}', $tableName);
             $insertSql = "INSERT INTO `$tableName` (`$items`) VALUES" . rtrim($values, ",") . ";\n\r";
-            $this->_result.=$insertSql;
+            $this->_result .= $insertSql;
         }
     }
 
     /**
      * import sql from a *.sql file
      *
-     * @param string $file: with the path and the file name
+     * @param string $file : with the path and the file name
      * @return mixed
      */
-    public function import($mod, $fileName = 'scheme.sql') {
+    public function import($mod, $fileName = 'scheme.sql')
+    {
 
-        $file = Yii::$app->getModule($mod)->basePath. DIRECTORY_SEPARATOR .'migrations'.DIRECTORY_SEPARATOR. $fileName;
-           //if (file_exists($file)) {
-            //$this->pdo = Yii::app()->db->pdoInstance;
-            try {
-                if (file_exists($file)) {
-                    $sqlStream = file_get_contents($file);
-                    $sqlStream = rtrim($sqlStream);
-                    $newStream = preg_replace_callback("/\((.*)\)/", create_function('$matches', 'return str_replace(";"," $$$ ",$matches[0]);'), $sqlStream);
-                    $sqlArray = explode(";", $newStream);
-                    foreach ($sqlArray as $value) {
-                        if (!empty($value)) {
-                            $value = str_replace("{prefix}", $this->tablePrefix, $value);
-                            $value = str_replace("{charset}", $this->charset, $value);
-                            $sql = str_replace(" $$$ ", ";", $value) . ";";
-                            $this->pdo->exec($sql);
-                        }
+        $file = Yii::$app->getModule($mod)->basePath . DIRECTORY_SEPARATOR . 'migrations' . DIRECTORY_SEPARATOR . $fileName;
+        //if (file_exists($file)) {
+        //$this->pdo = Yii::app()->db->pdoInstance;
+        try {
+            if (file_exists($file)) {
+                $sqlStream = file_get_contents($file);
+                $sqlStream = rtrim($sqlStream);
+                $newStream = preg_replace_callback("/\((.*)\)/", create_function('$matches', 'return str_replace(";"," $$$ ",$matches[0]);'), $sqlStream);
+                $sqlArray = explode(";", $newStream);
+                foreach ($sqlArray as $value) {
+                    if (!empty($value)) {
+                        $value = str_replace("{prefix}", $this->tablePrefix, $value);
+                        $value = str_replace("{charset}", $this->charset, $value);
+                        $sql = str_replace(" $$$ ", ";", $value) . ";";
+                        $this->pdo->exec($sql);
                     }
-                    //Yii::log('Success import db ' . $mod, 'info', 'install');
-                    return true;
                 }
-            } catch (PDOException $e) {
-                Yii::log('Error install DB', 'info', 'install');
-                echo $e->getMessage();
-                exit;
+                //Yii::log('Success import db ' . $mod, 'info', 'install');
+                return true;
             }
-       // } else {
-       //     throw new CException("no find {$fileName}");
-       // }
+        } catch (PDOException $e) {
+            Yii::log('Error install DB', 'info', 'install');
+            echo $e->getMessage();
+            exit;
+        }
+        // } else {
+        //     throw new CException("no find {$fileName}");
+        // }
     }
 
 }
