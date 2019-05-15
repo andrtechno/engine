@@ -61,12 +61,9 @@ class Connection extends \yii\db\Connection
         if ($this->enable_limit) {
             if ($this->checkFilesSize() <= $this->limitBackup) {
                 return true;
-            } else {
-                return false;
             }
-        } else {
-            return true;
         }
+        return false;
     }
 
     /**
