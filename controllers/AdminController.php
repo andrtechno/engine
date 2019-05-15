@@ -20,11 +20,8 @@ class AdminController extends Controller
 {
 
 
-    public $breadcrumbs;
-    public $dataModel, $pageName;
+    public $icon, $breadcrumbs, $dataModel, $pageName;
     public $jsMessages = [];
-    public $icon;
-
     public $buttons = [];
     public $layout = '@theme/views/layouts/main';
     public $dashboard = true;
@@ -52,7 +49,18 @@ class AdminController extends Controller
 
     public function beforeAction($event)
     {
-
+        $this->jsMessages = [
+            'error' => [
+                '404' => Yii::t('app/error', '404')
+            ],
+            'cancel' => Yii::t('app', 'CANCEL'),
+            'send' => Yii::t('app', 'SEND'),
+            'delete' => Yii::t('app', 'DELETE'),
+            'save' => Yii::t('app', 'SAVE'),
+            'close' => Yii::t('app', 'CLOSE'),
+            //  'ok' => Yii::t('app', 'OK'),
+            'loading' => Yii::t('app', 'LOADING'),
+        ];
         $this->view->registerJs('
             var common = window.CMS_common || {};
             common.langauge="' . Yii::$app->language . '";

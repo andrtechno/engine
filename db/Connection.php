@@ -30,11 +30,16 @@ class Connection extends \yii\db\Connection
             $result[] = $this->tablePrefix . $table;
         }
 
+
+        $this->noExportTables = $result;
+    }
+
+    public function close()
+    {
         if (isset(Yii::$app->settings)) {
             $this->limitBackup = (int)Yii::$app->settings->get('db', 'backup_limit') * 1024 * 1024;
         }
-
-        $this->noExportTables = $result;
+        parent::close();
     }
 
     /**

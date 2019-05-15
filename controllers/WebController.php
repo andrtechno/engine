@@ -79,11 +79,23 @@ class WebController extends Controller
 
     public function beforeAction($action)
     {
+        $this->jsMessages = [
+            'error' => [
+                '404' => Yii::t('app/error', '404')
+            ],
+            'cancel' => Yii::t('app', 'CANCEL'),
+            'send' => Yii::t('app', 'SEND'),
+            'delete' => Yii::t('app', 'DELETE'),
+            'save' => Yii::t('app', 'SAVE'),
+            'close' => Yii::t('app', 'CLOSE'),
+            //  'ok' => Yii::t('app', 'OK'),
+            'loading' => Yii::t('app', 'LOADING'),
+        ];
         $this->view->registerJs('
             var common = window.CMS_common || {};
             common.langauge="' . Yii::$app->language . '";
             common.token="' . Yii::$app->request->csrfToken . '";
-            common.isDashboard=true;
+            common.isDashboard=false;
             common.message=' . \yii\helpers\Json::encode($this->jsMessages) . ';', \yii\web\View::POS_HEAD, 'js-common');
 
 
@@ -134,19 +146,6 @@ class WebController extends Controller
             }
 
         }
-        $this->jsMessages = [
-            'error' => [
-                '404' => Yii::t('app/error', '404')
-            ],
-            'cancel' => Yii::t('app', 'CANCEL'),
-            'send' => Yii::t('app', 'SEND'),
-            'delete' => Yii::t('app', 'DELETE'),
-            'save' => Yii::t('app', 'SAVE'),
-            'close' => Yii::t('app', 'CLOSE'),
-            //  'ok' => Yii::t('app', 'OK'),
-            'loading' => Yii::t('app', 'LOADING'),
-        ];
-
         parent::init();
     }
 
