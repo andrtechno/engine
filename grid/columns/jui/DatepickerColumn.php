@@ -35,7 +35,7 @@ class DatepickerColumn extends DataColumn
             $html = DatePicker::widget([
                 'model' => $model,
                 'attribute' => $this->attribute,
-                'dateFormat' => 'yyyy-MM-dd',
+                'dateFormat' => $this->dateFormat,
                 'options' => ['class' => 'form-control','autocomplete'=>'off']
             ]);
 
