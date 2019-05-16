@@ -13,7 +13,7 @@
  * @package modules.messages.ru
  * @return array
  */
-return array (
+return [
   'Cherkas\'ka Oblast\'' => 'Черкасская обл.',
   'Chernihivs\'ka Oblast\'' => 'Черниговская  обл.',
   'Chernivets\'ka Oblast\'' => 'Черновицкая обл.',
@@ -43,4 +43,4 @@ return array (
   'Zhytomyrs\'ka Oblast\'' => 'Житомирская обл.',
         'Moscow City'=>'Московская обл.',
         'California'=>'Калифорния',
-);
+];

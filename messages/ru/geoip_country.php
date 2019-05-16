@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     "country_" => "",
     "country_Asia/Pacific Region" => "",
     "Europe" => "Европа",
@@ -254,4 +254,4 @@ return array(
     "Jersey" => "Джерси",
     "Saint Barthelemy" => "Сен-Бартельми",
     "Saint Martin" => "Сен-Мартен"
-);
+];
