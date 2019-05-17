@@ -76,7 +76,7 @@ class WebModule extends Module
         }
         //$this->registerTranslations();
 
-        $this->uploadAliasPath = "@webroot/uploads/content/{$this->id}";
+        $this->uploadAliasPath = "@app/web/uploads/content/{$this->id}";
         $this->uploadPath = "/uploads/content/{$this->id}";
 
         if (method_exists($this, 'getDefaultModelClasses')) {
