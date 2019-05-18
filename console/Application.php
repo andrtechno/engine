@@ -40,27 +40,25 @@ class Application extends \yii\console\Application
     public function getTranslationsFileMap($id)
     {
         $lang = $this->language;
-        $result = array();
-        $basepath = realpath(Yii::getAlias("@{$id}/messages/{$lang}"));
-        if (is_dir($basepath)) {
-            $fileList = \yii\helpers\FileHelper::findFiles($basepath, [
+        $result = [];
+        $basePath = realpath(Yii::getAlias("@{$id}/messages/{$lang}"));
+        if (is_dir($basePath)) {
+            $fileList = \yii\helpers\FileHelper::findFiles($basePath, [
                 'only' => ['*.php'],
                 'recursive' => false
             ]);
-
             foreach ($fileList as $path) {
                 $result[$id . '/' . basename($path, '.php')] = basename($path);
             }
         } else {
             $result = [];
         }
-
         return $result;
     }
 
     public function registerTranslations($id)
     {
-        $this->i18n->translations[$id . '/*'] = [
+        $this->i18n->translations[$id . '*'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             'basePath' => '@' . $id . '/messages',
             'fileMap' => $this->getTranslationsFileMap($id)
