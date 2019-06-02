@@ -33,7 +33,7 @@ class ActiveDataProvider extends BaseActiveDataProvider
                 $this->_pagination->pageSize = $value['pageSize'];
             }
 
-            if(Yii::$app->request->get($this->_pagination->pageSizeParam)){
+            if (Yii::$app->request->get($this->_pagination->pageSizeParam)) {
                 $this->_pagination->setPageSize(Yii::$app->request->get($this->_pagination->pageSizeParam));
             }
 
@@ -53,5 +53,3 @@ class ActiveDataProvider extends BaseActiveDataProvider
     }
 
 }
-
-?>
