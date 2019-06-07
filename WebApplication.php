@@ -15,11 +15,7 @@ class WebApplication extends Application
     {
         $this->name = $this->settings->get('app', 'sitename');
         $langManager = $this->languageManager;
-        $user = $this->user;
-
         $this->language = (isset($langManager->default->code)) ? $langManager->default->code : $this->language;
-
-
         return parent::run();
     }
 
@@ -38,17 +34,6 @@ class WebApplication extends Application
         return $result;
     }
 
-    public static function pageGen()
-    {
-        $sql_stats = Yii::getLogger()->getDbProfiling();
-        return Yii::t('app', 'PAGE_GEN', array(
-            'time' => number_format(Yii::getLogger()->getElapsedTime(), 3, '.', ' '),
-            'memory' => CMS::fileSize(memory_get_peak_usage()),
-            'db_query' => $sql_stats[0],
-            'db_time' => number_format($sql_stats[1], 2, '.', ' '),
-        ));
-    }
-
     public static function powered()
     {
         return Yii::t('app', 'COPYRIGHT', [
@@ -56,7 +41,6 @@ class WebApplication extends Application
             'by' => Html::a('PIXELION CMS', '//pixelion.com.ua')
         ]);
     }
-
 
     public function getVersion()
     {
