@@ -1,0 +1,60 @@
+.like{
+    display: inline-block;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border:1px solid #D6D6D6;
+    height:20px;
+    font-family: Verdana;
+
+    line-height: 20px;
+}
+.like a:link,
+.like a:hover,
+.like a:active,
+.like a:visited{
+    text-decoration: none;
+    display: block;
+    padding: 2px;
+    width: 16px;
+    color:#fff;
+    /*text-shadow: 0px 2px 0px rgba(150, 150, 150, 1);*/
+    height: 16px;
+}
+.like a.like-up{
+    background: #77BB00;
+    float: left;
+    border-right:1px solid #EEEEEE;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+.like a.like-down{
+    float: right;
+    background: #E0441B;
+    border-left:1px solid #EEEEEE;
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-bottomright: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+.like .like-counter{
+    padding: 0 10px;
+    display: inline-block;
+    text-align: center;
+    font-weight: bold;
+    font-size:12px;
+
+}
+.like.loading .like-counter {
+    background: url(../images/loading.gif) center center no-repeat;
+
+}
+.like.loading .like-counter:before{
+       content: ' '; 
+}

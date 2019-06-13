@@ -1,0 +1,1 @@
+<?= Yii::app()->controller->vote_graphic($votes,$rating); ?>
