@@ -10,23 +10,24 @@ class LikeWidget extends Widget {
     public $model;
 
     public function init() {
-        $this->publishAssets();
+
+        //echo strtolower(basename(get_class($this->model)));
+        $this->setId(strtolower(basename(get_class($this->model))).'-like-'.$this->model->primaryKey);
     }
 
     public function run() {
-        $m = $this->model;
-        $pk = $m->getObjectPkAttribute();
-        $counter = $m->getLikes(true);
+        LikeAsset::register($this->getView());
+      //  $m = $this->model;
+     //   $pk = $m->getObjectPkAttribute();
+    //    $counter = $m->getLikes(true);
 
 
-        if ($m->checkUserLiked()) {
-            $this->render('voted', array(
-                'counter' => $counter,
-                'object_id' => $m->primaryKey,
-            ));
-        } else {
-            echo 'access denie widget.like';
-        }
+
+            return $this->render('voted', [
+                'counter' => 0,
+                'object_id' => $this->model->primaryKey,
+            ]);
+
     }
 /*
     public function checkUserLiked($modelClass, $object_id) {
@@ -47,15 +48,5 @@ class LikeWidget extends Widget {
         }
     }*/
 
-    public function publishAssets() {
-        $assets = dirname(__FILE__) . '/assets';
-        $baseUrl = Yii::app()->assetManager->publish($assets);
-        if (is_dir($assets)) {
-            Yii::app()->clientScript->registerScriptFile($baseUrl . '/js/like.js', CClientScript::POS_HEAD);
-            Yii::app()->clientScript->registerCssFile($baseUrl . '/css/like.css');
-        } else {
-            throw new Exception('Like - Error: Couldn\'t find assets to publish.');
-        }
-    }
 
 }

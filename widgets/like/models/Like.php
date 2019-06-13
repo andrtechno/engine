@@ -4,6 +4,7 @@ namespace panix\engine\widgets\like\models;
 
 use Yii;
 use panix\engine\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
 
 class Like extends ActiveRecord
 {
@@ -17,9 +18,9 @@ class Like extends ActiveRecord
         return '{{%like}}';
     }
 
-    public static function find2()
+    public static function find()
     {
-        return new CategoryQuery(get_called_class());
+        return new LikeQuery(get_called_class());
     }
 
 
@@ -36,10 +37,15 @@ class Like extends ActiveRecord
 
 
 
-    public function behaviors()
+    public function behaviors2()
     {
         return [
-
+            'timestamp' => [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    'created_at',
+                ]
+            ]
         ];
     }
 

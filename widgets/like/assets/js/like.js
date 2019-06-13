@@ -1,24 +1,24 @@
-$(function(){
+$(function () {
     var xhr;
 
-    $('a.like-down, a.like-up').click(function(e){
+    $('a.like-down, a.like-up').click(function (e) {
         e.preventDefault();
-        if(typeof xhr !== 'undefined') xhr.abort();
+        if (typeof xhr !== 'undefined') xhr.abort();
         var widget = $(this).attr('data-widget-id');
         xhr = $.ajax({
-            type:'POST',
-            dataType:'json',
-            url:$(this).attr('href'),
-            data:{
-                token:$(this).attr('data-csrf'),
+            type: 'POST',
+            // dataType:'json',
+            url: $(this).attr('href'),
+            data: {
+                 model:$(this).data('model'),
             },
-            success:function(data){
+            success: function (data) {
                 //  console.log(data); 
-                $('#'+widget).removeClass('loading'); 
-                $('#'+widget+' .like-counter').html(data.num);
+                $('#' + widget).removeClass('loading');
+                $('#' + widget + ' .like-counter').html(data.num);
             },
-            beforeSend:function(){
-               $('#'+widget).addClass('loading'); 
+            beforeSend: function () {
+                $('#' + widget).addClass('loading');
             }
         });
         console.log(xhr);
@@ -27,4 +27,4 @@ $(function(){
 
     });
     return false;
-})
+});

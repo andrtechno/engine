@@ -67,6 +67,10 @@ class WebController extends Controller
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
+            'like' => [
+                'class' => 'panix\engine\widgets\like\actions\LikeAction',
+              //  'model'=>$this->dataModel
+            ],
         ];
     }
 
