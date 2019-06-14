@@ -1,6 +1,5 @@
 $(function () {
     var xhr;
-
     $('a.like-down, a.like-up').click(function (e) {
         e.preventDefault();
         if (typeof xhr !== 'undefined') xhr.abort();
@@ -35,10 +34,7 @@ $(function () {
                 $('.' + widget).addClass('loading');
             }
         });
-
-
         return false;
-
     });
     return false;
 });
