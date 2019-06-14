@@ -20,8 +20,10 @@ class LikeWidget extends Widget
 
     public function run()
     {
-        LikeAsset::register($this->getView());
-
+        LikeCssAsset::register($this->getView());
+        if(!Yii::$app->user->isGuest){
+            LikeJsAsset::register($this->getView());
+        }
         $response['likeCount'] = CMS::counterUnit(Like::find()->where([
             'object_id' => $this->model->primaryKey,
             'handler_hash' => $this->hash,
@@ -36,21 +38,23 @@ class LikeWidget extends Widget
         ])->count());
 
 
-        $q = Like::find()->where([
-            'object_id' => $this->model->primaryKey,
-            'handler_hash' => $this->hash,
-            'user_id' => Yii::$app->user->id
-        ])->one();
+
         $response['activeDislike'] = false;
         $response['activeLike'] = false;
-
-        if ($q) {
-            if ($q->value) {
-                $response['activeLike'] = true;
-                $response['activeDislike'] = false;
-            } else {
-                $response['activeLike'] = false;
-                $response['activeDislike'] = true;
+        if(!Yii::$app->user->isGuest) {
+            $q = Like::find()->where([
+                'object_id' => $this->model->primaryKey,
+                'handler_hash' => $this->hash,
+                'user_id' => Yii::$app->user->id
+            ])->one();
+            if ($q) {
+                if ($q->value) {
+                    $response['activeLike'] = true;
+                    $response['activeDislike'] = false;
+                } else {
+                    $response['activeLike'] = false;
+                    $response['activeDislike'] = true;
+                }
             }
         }
         return $this->render($this->skin, [

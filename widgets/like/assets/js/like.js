@@ -19,19 +19,22 @@ $(function () {
 
                 if (data.active !== undefined) {
                     if (data.active) {
-                        $('.' + widget + ' .like-up').addClass('active');
-                        $('.' + widget + ' .like-down').removeClass('active');
+                        $('.' + widget + ' .like-up').parent().addClass('active');
+                        $('.' + widget + ' .like-down').parent().removeClass('active');
                     } else {
-                        $('.' + widget + ' .like-up').removeClass('active');
-                        $('.' + widget + ' .like-down').addClass('active');
+                        $('.' + widget + ' .like-up').parent().removeClass('active');
+                        $('.' + widget + ' .like-down').parent().addClass('active');
                     }
                 } else {
-                    $('.' + widget + ' .like-up').removeClass('active');
-                    $('.' + widget + ' .like-down').removeClass('active');
+                    $('.' + widget + ' .like-up').parent().removeClass('active');
+                    $('.' + widget + ' .like-down').parent().removeClass('active');
                 }
             },
             beforeSend: function () {
                 $('.' + widget).addClass('loading');
+            },
+            error: function(jsxhr , textStatus, errorThrown ){
+                $('.' + widget).removeClass('loading');
             }
         });
         return false;

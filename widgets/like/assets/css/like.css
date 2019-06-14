@@ -16,25 +16,32 @@
     position: relative;
     margin: 0 10px;
     padding-left: 20px;
+    color: #D4D4D4;
+}
+.like a.like-up:hover,
+.like a.like-down:hover{
+    color: #c5c5c5;
+}
+.like .active,
+.like .active a,
+.like .active:before {
+    color: #007bff !important;
 }
 
-.like a.like-up.active:before,
-.like a.like-down.active:before {
-    color: red;
-}
-
-.like a.like-up:before {
+.like .like-up:before {
     content: "\f170";
 }
 
-.like a.like-down:before {
+.like .like-down:before {
     content: "\f171";
 }
 
-.like a.like-up:before,
-.like a.like-down:before {
+.like .like-up:before,
+.like .like-down:before {
     font-family: Pixelion, Montserrat;
     position: absolute;
     display: inline-block;
     left: 0;
 }
+
+

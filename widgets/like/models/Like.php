@@ -8,22 +8,25 @@ use yii\behaviors\TimestampBehavior;
 
 class Like extends ActiveRecord
 {
-
-    const MODULE_ID = 'shop';
-
-
-
+    /**
+     * @inheritdoc
+     */
     public static function tableName()
     {
         return '{{%like}}';
     }
 
+    /**
+     * @inheritdoc
+     */
     public static function find()
     {
         return new LikeQuery(get_called_class());
     }
 
-
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
@@ -34,17 +37,18 @@ class Like extends ActiveRecord
         ];
     }
 
-
-
-
-    public function behaviors2()
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
     {
         return [
             'timestamp' => [
                 'class' => TimestampBehavior::class,
                 'attributes' => [
-                    'created_at',
-                ]
+                    static::EVENT_BEFORE_INSERT => ['created_at'],
+                    static::EVENT_BEFORE_UPDATE => ['created_at']
+                ],
             ]
         ];
     }

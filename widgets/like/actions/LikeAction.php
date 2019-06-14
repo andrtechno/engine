@@ -20,7 +20,7 @@ class LikeAction extends Action
         $request = Yii::$app->request;
         $this->object_id = $id;
         $this->modelClass = Yii::$app->request->post('handler_hash');
-        if ($request->isAjax) {
+        if ($request->isAjax && !Yii::$app->user->isGuest) {
 
             if ($this->modelClass) {
                 $value = ($type == 'up') ? 1 : 0;
@@ -84,6 +84,8 @@ class LikeAction extends Action
             $response['likeCount'] = CMS::counterUnit((int)$this->queryCount(1)->count());
             $response['dislikeCount'] = CMS::counterUnit((int)$this->queryCount(0)->count());
             $response['ratio'] = $response['likeCount'] - $response['dislikeCount'];
+        } else {
+            $response['message'] = Yii::t('app/error', 401);
         }
         return $response;
     }
