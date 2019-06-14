@@ -61,6 +61,7 @@ class LikeAction extends Action
 
             $response['likeCount'] = $this->queryCount(1)->count();
             $response['dislikeCount'] = $this->queryCount(0)->count();
+            $response['ratio'] = $response['likeCount'] - $response['dislikeCount'];
         }
         return $response;
     }

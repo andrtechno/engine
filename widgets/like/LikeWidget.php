@@ -38,7 +38,7 @@ class LikeWidget extends Widget {
             'value' => 0
         ])->count();
 
-            return $this->render('voted', [
+            return $this->render($this->skin, [
                 'response' => $response,
                 'object_id' => $this->model->primaryKey,
             ]);
