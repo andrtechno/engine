@@ -1,4 +1,4 @@
-<div class="like <?= $this->context->id ?> clearfix">
+<div class="like <?= $this->context->id ?> clearfix btn btn-sm">
     <div class="float-left <?= $response['activeLike'] ? 'active' : ''; ?>">
         <a class="like-up" href="/like/up/<?= $object_id; ?>"
            title="Мне нравиться"

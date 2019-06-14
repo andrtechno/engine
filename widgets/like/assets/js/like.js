@@ -12,7 +12,6 @@ $(function () {
                 handler_hash: $(this).data('hash')
             },
             success: function (data) {
-                console.log(data, widget);
                 $('.' + widget).removeClass('loading');
                 $('.' + widget + ' .count-like').html(data.likeCount);
                 $('.' + widget + ' .count-dislike').html(data.dislikeCount);
