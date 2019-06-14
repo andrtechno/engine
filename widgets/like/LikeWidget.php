@@ -11,9 +11,10 @@ class LikeWidget extends Widget
 {
 
     public $model;
-
+    public $hash;
     public function init()
     {
+        $this->hash=CMS::hash(get_class($this->model));
         $this->setId(strtolower(basename(get_class($this->model))) . '-like-' . $this->model->primaryKey);
     }
 
@@ -23,21 +24,21 @@ class LikeWidget extends Widget
 
         $response['likeCount'] = CMS::counterUnit(Like::find()->where([
             'object_id' => $this->model->primaryKey,
-            'model' => get_class($this->model),
+            'handler_hash' => $this->hash,
             'value' => 1
         ])->count());
 
 
         $response['dislikeCount'] = CMS::counterUnit(Like::find()->where([
             'object_id' => $this->model->primaryKey,
-            'model' => get_class($this->model),
+            'handler_hash' => $this->hash,
             'value' => 0
         ])->count());
 
 
         $q = Like::find()->where([
             'object_id' => $this->model->primaryKey,
-            'model' => get_class($this->model),
+            'handler_hash' => $this->hash,
             'user_id' => Yii::$app->user->id
         ])->one();
         $response['activeDislike'] = false;

@@ -19,15 +19,16 @@ class LikeAction extends Action
         $response = [];
         $request = Yii::$app->request;
         $this->object_id = $id;
+        $this->modelClass = Yii::$app->request->post('handler_hash');
         if ($request->isAjax) {
-            $this->modelClass = Yii::$app->request->post('model');
+
             if ($this->modelClass) {
                 $value = ($type == 'up') ? 1 : 0;
 
                 $newlike = new Like();
                 $newlike->object_id = $this->object_id;
                 $newlike->user_id = Yii::$app->user->id;
-                $newlike->model = $this->modelClass;
+                $newlike->handler_hash = $this->modelClass;
                 $newlike->value = $value;
 
                 if ($value) {//like
@@ -62,7 +63,7 @@ class LikeAction extends Action
 
             $q = Like::find()->where([
                 'object_id' => $this->object_id,
-                'model' => $this->modelClass,
+                'handler_hash' => $this->modelClass,
                 'user_id' => Yii::$app->user->id
             ])->one();
             $response['activeDislike'] = false;
@@ -97,7 +98,7 @@ class LikeAction extends Action
         return Like::find()->where([
             'object_id' => $this->object_id,
             'user_id' => Yii::$app->user->id,
-            'model' => $this->modelClass,
+            'handler_hash' => $this->modelClass,
             'value' => $value
         ]);
     }
@@ -110,7 +111,7 @@ class LikeAction extends Action
     {
         return Like::find()->where([
             'object_id' => $this->object_id,
-            'model' => $this->modelClass,
+            'handler_hash' => $this->modelClass,
             'value' => $value
         ]);
     }

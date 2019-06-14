@@ -805,5 +805,13 @@ class CMS
         return number_format($n);
     }
 
+    /**
+     * @param $string
+     * @return string
+     */
+    public static function hash($string)
+    {
+        return sprintf('%x', crc32($string));
+    }
 
 }

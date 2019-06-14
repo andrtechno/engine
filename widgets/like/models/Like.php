@@ -27,9 +27,9 @@ class Like extends ActiveRecord
     public function rules()
     {
         return [
-            [['model'], 'trim'],
-            [['model', 'object_id'], 'required'],
-            [['model'], 'string', 'max' => 100],
+            [['handler_hash'], 'trim'],
+            [['handler_hash', 'object_id'], 'required'],
+            [['handler_hash'], 'string', 'max' => 8],
             ['model', 'safe']
         ];
     }
@@ -48,11 +48,5 @@ class Like extends ActiveRecord
             ]
         ];
     }
-
-    public function getCountItems()
-    {
-        return $this->hasMany(ProductCategoryRef::class, ['category' => 'id'])->count();
-    }
-
 
 }

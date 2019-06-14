@@ -10,7 +10,7 @@ $(function () {
             dataType: 'json',
             url: $(this).attr('href'),
             data: {
-                model: $(this).data('model')
+                handler_hash: $(this).data('hash')
             },
             success: function (data) {
                 console.log(data, widget);
