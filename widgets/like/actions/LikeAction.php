@@ -2,6 +2,7 @@
 
 namespace panix\engine\widgets\like\actions;
 
+use panix\engine\CMS;
 use panix\engine\widgets\like\models\Like;
 use Yii;
 use yii\base\Action;
@@ -59,8 +60,28 @@ class LikeAction extends Action
                 }
             }
 
-            $response['likeCount'] = $this->queryCount(1)->count();
-            $response['dislikeCount'] = $this->queryCount(0)->count();
+            $q = Like::find()->where([
+                'object_id' => $this->object_id,
+                'model' => $this->modelClass,
+                'user_id' => Yii::$app->user->id
+            ])->one();
+            $response['activeDislike'] = false;
+            $response['activeLike'] = false;
+            if ($q) {
+                if ($q->value) {
+                    $response['active'] = true;
+                    $response['activeLike'] = true;
+                    $response['activeDislike'] = false;
+                } else {
+                    $response['active'] = false;
+                    $response['activeLike'] = false;
+                    $response['activeDislike'] = true;
+                }
+            }
+
+
+            $response['likeCount'] = CMS::counterUnit((int)$this->queryCount(1)->count());
+            $response['dislikeCount'] = CMS::counterUnit((int)$this->queryCount(0)->count());
             $response['ratio'] = $response['likeCount'] - $response['dislikeCount'];
         }
         return $response;
