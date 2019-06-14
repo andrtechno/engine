@@ -2,6 +2,7 @@
 
 namespace panix\engine\widgets\like;
 
+use panix\engine\widgets\like\models\Like;
 use Yii;
 use panix\engine\data\Widget;
 
@@ -23,8 +24,22 @@ class LikeWidget extends Widget {
 
 
 
+
+        $response['likeCount'] = Like::find()->where([
+            'object_id' => $this->model->primaryKey,
+            'model' => get_class($this->model),
+            'value' => 1
+        ])->count();
+
+
+        $response['dislikeCount'] = Like::find()->where([
+            'object_id' => $this->model->primaryKey,
+            'model' => get_class($this->model),
+            'value' => 0
+        ])->count();
+
             return $this->render('voted', [
-                'counter' => 0,
+                'response' => $response,
                 'object_id' => $this->model->primaryKey,
             ]);
 

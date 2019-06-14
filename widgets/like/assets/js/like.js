@@ -4,21 +4,22 @@ $(function () {
     $('a.like-down, a.like-up').click(function (e) {
         e.preventDefault();
         if (typeof xhr !== 'undefined') xhr.abort();
-        var widget = $(this).attr('data-widget-id');
+        var widget = $(this).data('widget');
         xhr = $.ajax({
             type: 'POST',
-            // dataType:'json',
+             dataType:'json',
             url: $(this).attr('href'),
             data: {
                  model:$(this).data('model'),
             },
             success: function (data) {
-                //  console.log(data); 
-                $('#' + widget).removeClass('loading');
-                $('#' + widget + ' .like-counter').html(data.num);
+                 console.log(data,widget);
+                $('.' + widget).removeClass('loading');
+                $('.' + widget + ' .count-like').html(data.likeCount);
+                $('.' + widget + ' .count-dislike').html(data.dislikeCount);
             },
             beforeSend: function () {
-                $('#' + widget).addClass('loading');
+                $('.' + widget).addClass('loading');
             }
         });
         console.log(xhr);
