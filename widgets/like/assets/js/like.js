@@ -1,6 +1,6 @@
 $(function () {
     var xhr;
-    $('a.like-down, a.like-up').click(function (e) {
+    $(document).on('click','a.like-down, a.like-up',function (e) {
         e.preventDefault();
         if (typeof xhr !== 'undefined') xhr.abort();
         var widget = $(this).data('widget');
