@@ -13,7 +13,6 @@ use yii\web\NotFoundHttpException;
 class ActiveRecord extends \yii\db\ActiveRecord
 {
 
-
     /**
      * Disallow actions
      * @disallow_delete array ids
