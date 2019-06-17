@@ -11,7 +11,7 @@ class Mailer extends \yii\swiftmailer\Mailer
     {
         $config = Yii::$app->settings->get('app');
         $this->messageConfig['from'] = [$config->email => $config->sitename];
-
+        //$this->useFileTransport = true;
         if (isset($config->mailer_transport_smtp_enabled) && $config->mailer_transport_smtp_enabled) {
             $transport['class'] = 'Swift_SmtpTransport';
             $transport['host'] = isset($config->mailer_transport_smtp_host) ? $config->mailer_transport_smtp_host : 'localhost';
