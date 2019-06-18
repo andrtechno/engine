@@ -6,6 +6,10 @@ use Yii;
 use panix\mod\admin\models\Modules;
 use yii\web\Application;
 
+/**
+ * Class WebApplication
+ * @package panix\engine
+ */
 class WebApplication extends Application
 {
 
