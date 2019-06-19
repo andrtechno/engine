@@ -40,7 +40,8 @@ class ActiveRecord extends \yii\db\ActiveRecord
 
         $html = '';
         $html .= Html::submitButton(Yii::t('app', $this->isNewRecord ? 'CREATE' : 'SAVE'), ['class' => 'btn btn-success']);
-        $html .= Html::submitButton(Yii::t('app', $this->isNewRecord ? 'CREATE_RETURN' : 'SAVE_RETURN'), ['class' => 'btn btn-link', 'value' => $redirect, 'name' => 'redirect']);
+        if(!$this->isNewRecord)
+            $html .= Html::submitButton(Yii::t('app', $this->isNewRecord ? 'CREATE_RETURN' : 'SAVE_RETURN'), ['class' => 'btn btn-link', 'value' => $redirect, 'name' => 'redirect']);
         return $html;
     }
 
@@ -126,6 +127,9 @@ class ActiveRecord extends \yii\db\ActiveRecord
         return parent::beforeSave($insert);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function afterSave($insert, $changedAttributes)
     {
         //if(isset($this->behaviors['timestamp'])){
@@ -134,6 +138,9 @@ class ActiveRecord extends \yii\db\ActiveRecord
         parent::afterSave($insert, $changedAttributes);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function attributeLabels()
     {
         $attrLabels = [];

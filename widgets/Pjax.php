@@ -4,9 +4,11 @@ namespace panix\engine\widgets;
 
 use yii\helpers\Json;
 
-class Pjax extends \yii\widgets\Pjax {
+class Pjax extends \yii\widgets\Pjax
+{
 
-    public function registerClientScript2() {
+    public function registerClientScript2()
+    {
         $id = $this->options['id'];
         $this->clientOptions['push'] = $this->enablePushState;
         $this->clientOptions['replace'] = $this->enableReplaceState;
@@ -32,6 +34,23 @@ class Pjax extends \yii\widgets\Pjax {
         if ($js !== '') {
             $view->registerJs($js);
         }
+    }
+
+    public function registerClientScript()
+    {
+        parent::registerClientScript();
+        $id = $this->options['id'];
+        $this->getView()->registerJs("
+            $(document).on('pjax:beforeSend', function() {
+                $('#{$id}').addClass('pjax-loader');
+                console.log('add loader','{$id}');
+            });
+            
+            $(document).on('pjax:end', function() {
+                $('#{$id}').removeClass('pjax-loader');
+                console.log('remove loader','{$id}');
+            });
+        ");
     }
 
 }
