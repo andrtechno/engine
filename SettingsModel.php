@@ -52,5 +52,3 @@ class SettingsModel extends Model
     }
 
 }
-
-?>
