@@ -6,6 +6,7 @@ use panix\engine\CMS;
 use Yii;
 use yii\base\Component;
 use yii\helpers\Json;
+use yii\helpers\VarDumper;
 
 /**
  * Class Settings
@@ -44,10 +45,22 @@ class Settings extends Component
                 if (!empty($settings)) {
                     foreach ($settings as $row) {
                         if (!isset($this->data[$row['category']]))
-                            $this->data[$row['category']] = array();
+                            $this->data[$row['category']] = [];
+
+                        // if(is_array($row['value'])){
+                        // if($row['category'] == 'contacts' && $row['param'] == 'phone'){
+                        //     print_r($row['value']);die;
+                        // }
+                        // }
+
                         $this->data[$row['category']][$row['param']] = $row['value'];
                     }
                 }
+
+
+
+
+
                 Yii::$app->cache->set($this->cache_key, $this->data);
             } catch (\yii\db\Exception $e) {
 
@@ -65,19 +78,20 @@ class Settings extends Component
         if (!empty($data)) {
             foreach ($data as $key => $value) {
 
+                $value = (is_array($value)) ? Json::encode($value) : $value;
                 try {
                     if ($this->get($category, $key) !== null) {
-                        Yii::$app->db->createCommand()->update($tableName, array(
-                            'value' => $value), $tableName . ".category=:category AND {$tableName}.param=:param", array(
+                        Yii::$app->db->createCommand()->update($tableName, ['value' => $value], $tableName . ".category=:category AND {$tableName}.param=:param", [
                             ':category' => $category,
                             ':param' => $key
-                        ))->execute();
+                        ])->execute();
                     } else {
-                        Yii::$app->db->createCommand()->insert($tableName, array(
+
+                        Yii::$app->db->createCommand()->insert($tableName, [
                             'category' => $category,
                             'param' => $key,
                             'value' => $value
-                        ))->execute();
+                        ])->execute();
                     }
                 } catch (\yii\db\Exception $e) {
 
@@ -86,8 +100,9 @@ class Settings extends Component
             }
 
             if (!isset($this->data[$category]))
-                $this->data[$category] = array();
+                $this->data[$category] = [];
             $this->data[$category] = array_merge($this->data[$category], $data);
+
 
             // Update cache
             Yii::$app->cache->set($this->cache_key, $this->data);
@@ -107,10 +122,10 @@ class Settings extends Component
 
         if ($key === null) {
             $result = [];
-            foreach ($this->data[$category] as $k => $data) {
-                $result[$k] = (!empty($data) && CMS::isJson($data)) ? Json::decode($data) : $data;
+            foreach ($this->data[$category] as $key => $data) {
+                $result[$key] = (!empty($data) && CMS::isJson($data)) ? Json::decode($data) : $data;
             }
-            return (object)$result;
+            return (object) $result;
         }
         if (isset($this->data[$category][$key])) {
             return CMS::isJson($this->data[$category][$key]) ? Json::decode($this->data[$category][$key]) : $this->data[$category][$key];
@@ -125,7 +140,7 @@ class Settings extends Component
      */
     public function clear($category)
     {
-        Yii::$app->db->createCommand()->delete(static::$tableName, 'category=:category', array(':category' => $category))->execute();
+        Yii::$app->db->createCommand()->delete(static::$tableName, 'category=:category', [':category' => $category])->execute();
         if (isset($this->data[$category]))
             unset($this->data[$category]);
 

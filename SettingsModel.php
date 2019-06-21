@@ -42,10 +42,12 @@ class SettingsModel extends Model
         $shortName = (new \ReflectionClass(get_called_class()))->getShortName();
         $this->attributes = ArrayHelper::merge(Yii::$app->request->post($shortName), $this->attributes);
         if ($this->validate()) {
+
             Yii::$app->settings->set(static::$category, $this->attributes);
             Yii::$app->session->setFlash("success", Yii::t('app', 'SUCCESS_UPDATE'));
             return true;
         } else {
+            //print_r($this->getErrors());die;
             Yii::$app->session->setFlash("error", Yii::t('app', 'ERROR_UPDATE'));
             return false;
         }
