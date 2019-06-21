@@ -3,9 +3,6 @@
 namespace panix\engine;
 
 use Yii;
-use yii\base\Exception;
-use yii\base\InvalidArgumentException;
-use yii\base\NotSupportedException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 use yii\helpers\Url;
@@ -21,7 +18,38 @@ use yii\helpers\Url;
  */
 class CMS
 {
+    /**
+     * Check string of json
+     *
+     * @param $string
+     * @return bool
+     */
+    public static function isJson($string)
+    {
+        return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
+    }
 
+    /**
+     * @param string $number +380XXXXXXX
+     * @return string
+     */
+    public static function phoneOperator($number)
+    {
+
+        if (preg_match('/([\+]38039|[\+]38067|[\+]38068|[\+]38096|[\+]38097|[\+]38098)/i', $number, $match)) {
+            return 'Киевстар';
+        } elseif (preg_match('/([\+]38050|[\+]38066|[\+]38095|[\+]38099)/i', $number, $match)) {
+            return 'Vodafone (МТС)';
+        } elseif (preg_match('/([\+]38063|[\+]38093)/i', $number, $match)) {
+            return 'lifecell (life:))';
+        } elseif (preg_match('/([\+]38091)/i', $number, $match)) {
+            return 'Utel Украина';
+        } elseif (preg_match('/([\+]38092)/i', $number, $match)) {
+            return 'EOPLEnet Украина';
+        } elseif (preg_match('/([\+]38094)/i', $number, $match)) {
+            return 'Интертелеком Украина';
+        }
+    }
 
     public static function processImage($size = false, $filename, $uploadAlias, $options = array())
     {

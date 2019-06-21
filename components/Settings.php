@@ -2,8 +2,10 @@
 
 namespace panix\engine\components;
 
+use panix\engine\CMS;
 use Yii;
 use yii\base\Component;
+use yii\helpers\Json;
 
 /**
  * Class Settings
@@ -103,12 +105,18 @@ class Settings extends Component
         if (!isset($this->data[$category]))
             return $default;
 
-        if ($key === null)
-            return (object)$this->data[$category];
-        if (isset($this->data[$category][$key]))
-            return $this->data[$category][$key];
-        else
+        if ($key === null) {
+            $result = [];
+            foreach ($this->data[$category] as $k => $data) {
+                $result[$k] = (!empty($data) && CMS::isJson($data)) ? Json::decode($data) : $data;
+            }
+            return (object)$result;
+        }
+        if (isset($this->data[$category][$key])) {
+            return CMS::isJson($this->data[$category][$key]) ? Json::decode($this->data[$category][$key]) : $this->data[$category][$key];
+        } else {
             return $default;
+        }
     }
 
     /**
