@@ -21,11 +21,16 @@ class CMS
 
     /**
      * @param string $number +380XXXXXXX
+     * @param null $replace
      * @return string
      */
-    public static function phone_number_format($number)
+    public static function phone_number_format($number, $replace = null)
     {
-        $number = preg_replace("/^([\+]38)(\d{3})(\d{3})(\d{2})(\d{2})$/", "$1 ($2) $3-$4-$5", $number);
+        if (!$replace) {
+            $replace = '$1 ($2) $3-$4-$5';
+        }
+        $pattern = "/^([\+]38)(\d{3})(\d{3})(\d{2})(\d{2})$/";
+        $number = preg_replace($pattern, $replace, $number);
         return $number;
 
     }
