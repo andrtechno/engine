@@ -14,7 +14,7 @@ class Html extends \yii\helpers\Html
 
     public static function tel($phone, $options = [])
     {
-        return self::a($phone, 'tel:' . preg_replace('/[^0-9+]/', '', $phone), $options);
+        return self::a(CMS::phone_number_format($phone), 'tel:' . preg_replace('/[^0-9+]/', '', $phone), $options);
     }
 
     public static function error($model, $attribute, $options = [])

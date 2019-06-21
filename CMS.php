@@ -18,6 +18,18 @@ use yii\helpers\Url;
  */
 class CMS
 {
+
+    /**
+     * @param string $number +380XXXXXXX
+     * @return string
+     */
+    public static function phone_number_format($number)
+    {
+        $number = preg_replace("/^([\+]38)(\d{3})(\d{3})(\d{2})(\d{2})$/", "$1 ($2) $3-$4-$5", $number);
+        return $number;
+
+    }
+
     /**
      * Check string of json
      *
