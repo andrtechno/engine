@@ -21,7 +21,7 @@ class DatetimePicker extends DatePicker
      * @var string
      */
     public $mode = 'datetime';
-    public $timeFormat = 'hh:mm:ss';
+    public $timeFormat = 'hh:HH:ss';
     public $dateFormat = 'yyyy-MM-dd';
 
     public $timeOnlyTitle = 'Choose Time';

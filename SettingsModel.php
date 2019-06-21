@@ -7,6 +7,7 @@ use yii\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
 use panix\engine\base\Model;
 use panix\engine\components\Settings;
+use yii\helpers\VarDumper;
 
 /**
  * Class SettingsModel
@@ -28,7 +29,7 @@ class SettingsModel extends Model
         if (static::$category == null) {
             static::$category = $this->module;
         }
-        $this->setAttributes((array)Yii::$app->settings->get(static::$category));
+        $this->setAttributes((array) Yii::$app->settings->get(static::$category));
     }
 
 
@@ -39,10 +40,9 @@ class SettingsModel extends Model
 
     public function save()
     {
-        $shortName = (new \ReflectionClass(get_called_class()))->getShortName();
-        $this->attributes = ArrayHelper::merge(Yii::$app->request->post($shortName), $this->attributes);
+      //  $shortName = (new \ReflectionClass(get_called_class()))->getShortName();
+     //   $this->attributes = ArrayHelper::merge(Yii::$app->request->post($shortName), $this->attributes);
         if ($this->validate()) {
-
             Yii::$app->settings->set(static::$category, $this->attributes);
             Yii::$app->session->setFlash("success", Yii::t('app', 'SUCCESS_UPDATE'));
             return true;

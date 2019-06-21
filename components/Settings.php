@@ -47,19 +47,9 @@ class Settings extends Component
                         if (!isset($this->data[$row['category']]))
                             $this->data[$row['category']] = [];
 
-                        // if(is_array($row['value'])){
-                        // if($row['category'] == 'contacts' && $row['param'] == 'phone'){
-                        //     print_r($row['value']);die;
-                        // }
-                        // }
-
                         $this->data[$row['category']][$row['param']] = $row['value'];
                     }
                 }
-
-
-
-
 
                 Yii::$app->cache->set($this->cache_key, $this->data);
             } catch (\yii\db\Exception $e) {
@@ -76,6 +66,9 @@ class Settings extends Component
     {
         $tableName = static::$tableName;
         if (!empty($data)) {
+            if($category == 'contacts'){
+               // VarDumper::dump($data,10,true);die;
+            }
             foreach ($data as $key => $value) {
 
                 $value = (is_array($value)) ? Json::encode($value) : $value;
