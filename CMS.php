@@ -58,7 +58,7 @@ class CMS
         } elseif (preg_match('/([\+]38050|[\+]38066|[\+]38095|[\+]38099)/i', $number, $match)) {
             return 'Vodafone (МТС)';
         } elseif (preg_match('/([\+]38063|[\+]38093)/i', $number, $match)) {
-            return 'lifecell (life:))';
+            return 'lifecell life:)';
         } elseif (preg_match('/([\+]38091)/i', $number, $match)) {
             return 'Utel Украина';
         } elseif (preg_match('/([\+]38092)/i', $number, $match)) {
@@ -135,6 +135,10 @@ class CMS
 
     const MEMORY_LIMIT = 64; // Minimal memory_limit
 
+    public static function phoneFormat($phone)
+    {
+        return preg_replace('/[^0-9+]/', '', $phone);
+    }
 
     /**
      * Прячит посление цыфтры телефона
