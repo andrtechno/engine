@@ -18,6 +18,7 @@ use yii\helpers\Url;
  */
 class CMS
 {
+    const MEMORY_LIMIT = 64; // Minimal memory_limit
 
     /**
      * @param string $number +380XXXXXXX
@@ -131,9 +132,6 @@ class CMS
         }
 
     }
-
-
-    const MEMORY_LIMIT = 64; // Minimal memory_limit
 
     public static function phoneFormat($phone)
     {
