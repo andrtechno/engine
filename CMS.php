@@ -143,13 +143,13 @@ class CMS
      * Напрммер +XXXXXXXXXXXX
      * Резулитат +XXXXXXXX****
      *
-     * @param string $mobile Телефон
+     * @param string $string Строка
      * @param int $end_length Количество чисел обрезаения.
      * @return string
      */
-    public static function hideMobile($mobile, $end_length = 4)
+    public static function hideString($string, $end_length = 4)
     {
-        return substr($mobile, 0, -$end_length) . "****";
+        return substr($string, 0, -$end_length) . "****";
     }
 
     public static function slug($text)
@@ -188,7 +188,7 @@ class CMS
         return substr($str, 0, $start_length) . str_repeat('*', $str_length - $start_length) . substr($str, $str_length - $end_length, $end_length);
     }
 
-    public static function isModile()
+    public static function isMobile()
     {
         return (preg_match('!(tablet|pad|mobile|phone|symbian|android|ipod|ios|blackberry|webos)!i', Yii::$app->request->getUserAgent())) ? true : false;
     }
