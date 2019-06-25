@@ -111,7 +111,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 //Текущий IP адресс, автора добавление
                 $this->ip_create = Yii::$app->request->getUserIP();
             }
-            if (isset($columns['user_id'])) {
+            if (isset($columns['user_id']) && !$this->user_id) {
                 $this->user_id = (Yii::$app->user->isGuest) ? NULL : Yii::$app->user->id;
             }
             if (isset($columns['user_agent'])) {
