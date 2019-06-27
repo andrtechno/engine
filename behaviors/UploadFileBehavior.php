@@ -10,6 +10,7 @@ use yii\base\Behavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
+use yii\helpers\Inflector;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
 
@@ -121,16 +122,16 @@ class UploadFileBehavior extends Behavior
         if ($this->checkExistFile($attribute)) {
 
             $owner = $this->owner;
-            $params = array();
-            $params[] = 'removeFile';
+            $params = [];
+            $params[] = 'deleteFile';
 
             if ($owner->getUpdateUrl())
                 $params['redirect'] = Url::to($owner->getUpdateUrl());
 
-            $params['attribute'] = $attribute;
+            //$params['attribute'] = $attribute;
             $params['key'] = $owner->getPrimaryKey();
 
-            return Html::a(Html::icon('icon-delete') . ' ' . Yii::t('app', 'DELETE'), $params, ['class' => 'btn btn-sm btn-outline-danger']);
+            return Html::a(Html::icon('delete') . ' ' . Yii::t('app', 'DELETE'), $params, ['class' => 'btn btn-sm btn-outline-danger']);
         }
     }
 
@@ -155,7 +156,7 @@ class UploadFileBehavior extends Behavior
         if ($this->checkExistFile($attribute)) {
             $fileInfo = $this->getFileInfo($attribute);
             $fancybox = false;
-            $linkValue = Html::icon('icon-search') . ' Открыть файл';
+            $linkValue = Html::icon('search') . ' Открыть файл';
             if (in_array($fileInfo['extension'], ['jpg', 'jpeg', 'gif', 'png', 'pdf', 'svg'])) {
                 $fancybox = true;
             }
@@ -213,7 +214,7 @@ class UploadFileBehavior extends Behavior
             if ($old_image && file_exists($path . $old_image))
                 unlink($path . $old_image);
 
-            $newFileName = CMS::gen(10) . "." . $file->extension;
+            $newFileName = Inflector::transliterate($file->name);
             if (in_array($file->extension, $this->extensions)) { //Загрузка для изображений
                 $img = Yii::$app->img;
                 $img->load($file->tempName);
