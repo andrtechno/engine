@@ -8,7 +8,6 @@
 namespace panix\engine\behaviors\nestedsets;
 
 use yii\base\Behavior;
-use yii\base\Event;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\db\Exception;
@@ -897,10 +896,7 @@ class NestedSetsBehavior extends Behavior
      */
     private function moveNode($target, $key, $levelUp)
     {
-        /**
-         * @var \yii\db\Connection $db
-         * @var ActiveRecord $owner
-         */
+        /** @var ActiveRecord $owner */
         $owner = $this->owner;
         if ($owner->getIsNewRecord()) {
             throw new Exception('The node should not be new record.');
@@ -929,7 +925,6 @@ class NestedSetsBehavior extends Behavior
         $db = $owner->getDb();
 
         if ($db->getTransaction() === null) {
-            /** @var \yii\db\Transaction $transaction */
             $transaction = $db->beginTransaction();
         }
 
@@ -1023,14 +1018,13 @@ class NestedSetsBehavior extends Behavior
                         $params
                     );
                 }
-
                 $this->shiftLeftRight($right + 1, -$delta);
 
                 if (isset($transaction)) {
                     $transaction->commit();
                 }
-
-                $this->correctCachedOnMoveNode($key, $levelDelta);
+                //todo Баг, не правильно перемещает (с ошибкой)
+                //$this->correctCachedOnMoveNode($key, $levelDelta);
             }
         } catch (\Exception $e) {
             if (isset($transaction)) {
