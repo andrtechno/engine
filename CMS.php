@@ -374,19 +374,9 @@ class CMS
     }
 
     /**
-     *
-     * @param type $gender
-     * @return string
-     */
-    public static function gender($gender)
-    {
-        return Yii::t('app', 'GENDER', $gender);
-    }
-
-    /**
+     * водит ссылку без языка - удаляя /en, /ru etc
      *
      * @return string
-     * @todo водит ссылку без языка - удаляя /en, /ru etc
      */
     public static function currentUrl()
     {
@@ -409,9 +399,8 @@ class CMS
     }
 
     /**
-     *
-     * @param type $str
-     * @return type
+     * @param $str
+     * @return mixed|string
      */
     public static function decodeHtmlEnt($str)
     {
@@ -500,7 +489,7 @@ class CMS
 
     public static function isBot()
     {
-        $bots = array(
+        $bots = [
             'rambler' => 'Rambler',
             'googlebot' => 'Google Bot',
             'aport' => 'aport',
@@ -549,8 +538,8 @@ class CMS
             'Nigma.ru' => 'Nigma.ru',
             'bing.com' => 'bing.com',
             'dotnetdotcom' => 'dotnetdotcom'
-        );
-        $result = array();
+        ];
+        $result = [];
         foreach ($bots as $key => $bot) {
             if (stripos(Yii::$app->request->userAgent, $key) !== false) {
                 $result['success'] = true;
@@ -563,6 +552,11 @@ class CMS
         return $result;
     }
 
+    /**
+     * @param $url
+     * @param string $str
+     * @return mixed
+     */
     public static function domain($url, $str = "")
     {
         $massiv = explode(",", $url);
@@ -576,7 +570,7 @@ class CMS
      * Get IP
      * @return string
      */
-    public static function getip()
+    public static function getIp()
     {
         $strRemoteIP = $_SERVER['REMOTE_ADDR'];
         if (!$strRemoteIP) {
@@ -601,27 +595,10 @@ class CMS
     }
 
     /**
-     *
+     * @param \panix\mod\user\models\User $user
      * @return string
-     * @todo Get referer
      */
-    public static function get_referer()
-    {
-        $referer = getenv("HTTP_REFERER");
-        if (!empty($referer) && $referer != "" && !preg_match("/^unknown/i", $referer) && !preg_match("/^bookmark/i", $referer) && !strpos($referer, $_SERVER["HTTP_HOST"])) {
-            $refer = $referer;
-        } else {
-            $refer = "";
-        }
-        return $refer;
-    }
-
-    /**
-     *
-     * @param User $user
-     * @return type
-     */
-    public static function userLink(User $user)
+    public static function userLink(\panix\mod\user\models\User $user)
     {
         $html = Html::link($user->login . ' <b class="caret caret-up"></b>', '#', array('class' => 'btn btn-link dropdown-toggle', 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "false"));
         return '<div style="position:relative;" class="btn-group">' . $html . '
@@ -662,40 +639,6 @@ class CMS
         } else {
             return $ip . ' (IPv6)';
         }
-    }
-
-    /**
-     *
-     * @param type $mail
-     * @return type
-     */
-    static function _______emailLink($mail)
-    {
-        if (Yii::$app->hasModule('delivery')) {
-            return Html::link($mail, Yii::$app->createAbsoluteUrl('/admin/delivery/send', array('mail' => $mail)), array('onClick' => 'sendEmail("' . $mail . '")'));
-        } else {
-            return $mail;
-        }
-    }
-
-    /**
-     *
-     * @param string $category файл переводов
-     * @param string $message параметр перевода
-     * @param int $number число
-     * @example CMS::GetFormatWord('app','ENTRY',$num);
-     * @example 'ENTRY'=>'0#елемент|1#елемента|2#елементов';
-     * @return string message
-     */
-    public static function GetFormatWord($category, $message, $number)
-    {
-        $num = $number % 10;
-        if ($num == 1)
-            return Yii::t($category, $message, 0);
-        elseif ($num > 1 && $num < 5)
-            return Yii::t($category, $message, 1);
-        else
-            return Yii::t($category, $message, 2);
     }
 
     /**
@@ -788,9 +731,9 @@ class CMS
     /**
      * Преобразование массива данных
      *
-     * @param type $arrayofValues
-     * @param type $type
-     * @return type
+     * @param $arrayofValues
+     * @param string $type
+     * @return mixed
      */
     public static function recursiveValuesToType($arrayofValues, $type = 'integer')
     {
@@ -805,8 +748,8 @@ class CMS
     /**
      * Замена перевода строк на <br />
      *
-     * @param type $subject
-     * @return type
+     * @param $subject
+     * @return mixed
      */
     public static function slashNtoBR($subject)
     {
