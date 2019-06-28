@@ -9,11 +9,13 @@
 namespace panix\engine\behaviors\nestedsets;
 
 use yii\base\Behavior;
+use yii\helpers\Url;
 
 /**
  * @author Wanderson Bragança <wanderson.wbc@gmail.com>
  */
-class NestedSetsQueryBehavior extends Behavior {
+class NestedSetsQueryBehavior extends Behavior
+{
 
     /**
      * @var \yii\db\ActiveQuery the owner of this behavior.
@@ -24,7 +26,8 @@ class NestedSetsQueryBehavior extends Behavior {
      * Gets root node(s).
      * @return \yii\db\ActiveRecord the owner.
      */
-    public function roots() {
+    public function roots()
+    {
         /** @var $modelClass \yii\db\ActiveRecord */
         $modelClass = $this->owner->modelClass;
         $model = new $modelClass;
@@ -33,13 +36,14 @@ class NestedSetsQueryBehavior extends Behavior {
         return $this->owner;
     }
 
-    public function options($root = 0, $level = null) {
+    public function options($root = 0, $level = null)
+    {
         $res = [];
 
         if (is_object($root)) {
             $res[$root->{$root->idAttribute}] = str_repeat('—', $root->{$root->levelAttribute} - 1)
-                    . ((($root->{$root->levelAttribute}) > 1) ? '›' : '')
-                    . $root->{$root->titleAttribute};
+                . ((($root->{$root->levelAttribute}) > 1) ? '›' : '')
+                . $root->{$root->titleAttribute};
 
             if ($level) {
                 foreach ($root->children()->all() as $childRoot) {
@@ -72,18 +76,21 @@ class NestedSetsQueryBehavior extends Behavior {
         return $res;
     }
 
-    public function dataFancytree($root = 0, $level = null) {
+    public function dataFancytree($root = 0, $level = null)
+    {
         $data = array_values($this->prepareData2Fancytree($root, $level));
         return $this->makeData2Fancytree($data);
     }
 
-    private function prepareData2Fancytree($root = 0, $level = null) {
+    private function prepareData2Fancytree($root = 0, $level = null)
+    {
         $res = [];
         if (is_object($root)) {
-            $res[$root->{$root->idAttribute}] = [
-                'key' => $root->{$root->idAttribute},
-                'title' => $root->{$root->titleAttribute}
-            ];
+
+            $res[$root->{$root->idAttribute}]['key'] = $root->{$root->idAttribute};
+            $res[$root->{$root->idAttribute}]['title'] = $root->{$root->titleAttribute};
+            if (method_exists($root,'getUrl'))
+                $res[$root->{$root->idAttribute}]['url'] = Url::to($root->getUrl());
 
             if ($level) {
                 foreach ($root->children()->all() as $childRoot) {
@@ -103,6 +110,7 @@ class NestedSetsQueryBehavior extends Behavior {
                     if (isset($res[$root->{$root->idAttribute}]['children']) && !empty($aux)) {
                         $res[$root->{$root->idAttribute}]['folder'] = true;
                         $res[$root->{$root->idAttribute}]['children'] += $aux;
+
                     } elseif (!empty($aux)) {
                         $res[$root->{$root->idAttribute}]['folder'] = true;
                         $res[$root->{$root->idAttribute}]['children'] = $aux;
@@ -131,7 +139,8 @@ class NestedSetsQueryBehavior extends Behavior {
         return $res;
     }
 
-    private function makeData2Fancytree(&$data) {
+    private function makeData2Fancytree(&$data)
+    {
         $tree = [];
         foreach ($data as $key => &$item) {
             if (isset($item['children'])) {
