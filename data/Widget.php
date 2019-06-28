@@ -17,10 +17,10 @@ class Widget extends \yii\base\Widget
         parent::init();
         $reflectionClass = new \ReflectionClass(get_class($this));
         $this->widget_id = 'wgt_' . $reflectionClass->getShortName();
+
         Yii::$app->setAliases([
             '@' . $this->widget_id => realpath(dirname($reflectionClass->getFileName())),
         ]);
-
 
         $this->registerTranslations($this->widget_id);
 
@@ -28,9 +28,6 @@ class Widget extends \yii\base\Widget
             $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@{$this->widget_id}/assets"));
             $this->assetsUrl = $assetsPaths[1];
         }
-
-        // echo VarDumper::dump(Yii::$app->i18n->translations,15,true);die;
-
     }
 
     public function getTranslationsFileMap($id)

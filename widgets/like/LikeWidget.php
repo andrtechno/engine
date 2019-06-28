@@ -2,26 +2,28 @@
 
 namespace panix\engine\widgets\like;
 
-use panix\engine\CMS;
-use panix\engine\widgets\like\models\Like;
 use Yii;
 use panix\engine\data\Widget;
+use panix\engine\CMS;
+use panix\engine\widgets\like\models\Like;
 
 class LikeWidget extends Widget
 {
 
     public $model;
     public $hash;
+
     public function init()
     {
-        $this->hash=CMS::hash(get_class($this->model));
+        parent::init();
+        $this->hash = CMS::hash(get_class($this->model));
         $this->setId(strtolower(basename(get_class($this->model))) . '-like-' . $this->model->primaryKey);
     }
 
     public function run()
     {
         LikeCssAsset::register($this->getView());
-        if(!Yii::$app->user->isGuest){
+        if (!Yii::$app->user->isGuest) {
             LikeJsAsset::register($this->getView());
         }
         $response['likeCount'] = CMS::counterUnit(Like::find()->where([
@@ -38,10 +40,9 @@ class LikeWidget extends Widget
         ])->count());
 
 
-
         $response['activeDislike'] = false;
         $response['activeLike'] = false;
-        if(!Yii::$app->user->isGuest) {
+        if (!Yii::$app->user->isGuest) {
             $q = Like::find()->where([
                 'object_id' => $this->model->primaryKey,
                 'handler_hash' => $this->hash,

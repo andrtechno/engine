@@ -1,7 +1,7 @@
-<div class="like <?= $this->context->id ?> clearfix btn btn-sm">
+<div class="like <?= $this->context->id ?> clearfix">
     <div class="float-left <?= $response['activeLike'] ? 'active' : ''; ?>">
         <a class="like-up" href="/like/up/<?= $object_id; ?>"
-           title="Мне нравиться"
+           title="<?= Yii::t('wgt_LikeWidget/default', 'LIKE'); ?>"
            data-toggle="tooltip"
            data-widget="<?= $this->context->id ?>"
            data-hash="<?= $this->context->hash ?>" onclick="return false;">
@@ -10,7 +10,7 @@
     </div>
     <div class="float-left <?= $response['activeDislike'] ? 'active' : ''; ?>">
         <a class="like-down" href="/like/down/<?= $object_id; ?>"
-           title="Мне не нравиться"
+           title="<?= Yii::t('wgt_LikeWidget/default', 'DISLIKE'); ?>"
            data-toggle="tooltip"
            data-widget="<?= $this->context->id ?>"
            data-hash="<?= $this->context->hash ?>" onclick="return false;">
