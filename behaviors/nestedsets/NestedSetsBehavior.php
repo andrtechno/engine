@@ -82,15 +82,6 @@ class NestedSetsBehavior extends Behavior
     }
 
     /**
-     * @inheritdoc
-     */
-    public function attach($owner)
-    {
-        parent::attach($owner);
-        self::$_cached[get_class($this->owner)][$this->_id = self::$_c++] = $this->owner;
-    }
-
-    /**
      * Gets descendants for node.
      * @param int $depth the depth.
      * @return \yii\db\ActiveQuery.
@@ -1023,8 +1014,7 @@ class NestedSetsBehavior extends Behavior
                 if (isset($transaction)) {
                     $transaction->commit();
                 }
-                //todo Баг, не правильно перемещает (с ошибкой)
-                //$this->correctCachedOnMoveNode($key, $levelDelta);
+                $this->correctCachedOnMoveNode($key, $levelDelta);
             }
         } catch (\Exception $e) {
             if (isset($transaction)) {
