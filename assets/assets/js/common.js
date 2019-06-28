@@ -139,6 +139,7 @@ common.setText = function (param, text) {
 common.getText = function (param) {
     return common.lang[this.language][param];
 };
+
 common.enterSubmit = function (formid) {
     $(formid).keydown(function (event) {
         if (event.which === 13) {

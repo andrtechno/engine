@@ -19,7 +19,7 @@ class TranslateBehavior extends Behavior
     /**
      * @var string the translations relation name
      */
-    public $translationRelation = 'translations';
+    public $relation = 'translations';
 
     /**
      * @var string the translations model language attribute name
@@ -80,7 +80,7 @@ class TranslateBehavior extends Behavior
             throw new InvalidConfigException('Language not found ' . $language);
 
         /* @var ActiveRecord[] $translations */
-        $translations = $this->owner->{$this->translationRelation};
+        $translations = $this->owner->{$this->relation};
 
         foreach ($translations as $translation) {
             if ($translation->getAttribute($this->translationLanguageAttribute) === $lang->id) {
@@ -88,12 +88,12 @@ class TranslateBehavior extends Behavior
             }
         }
         /* @var ActiveRecord $class */
-        $class = $this->owner->getRelation($this->translationRelation)->modelClass;
+        $class = $this->owner->getRelation($this->relation)->modelClass;
         /* @var ActiveRecord $translation */
         $translation = new $class();
         $translation->setAttribute($this->translationLanguageAttribute, $lang->id);
         $translations[] = $translation;
-        $this->owner->populateRelation($this->translationRelation, $translations);
+        $this->owner->populateRelation($this->relation, $translations);
         return $translation;
     }
 
@@ -113,7 +113,7 @@ class TranslateBehavior extends Behavior
             throw new InvalidConfigException('Language not found ' . $language);
 
         /* @var ActiveRecord $translation */
-        foreach ($this->owner->{$this->translationRelation} as $translation) {
+        foreach ($this->owner->{$this->relation} as $translation) {
             if ($translation->getAttribute($this->translationLanguageAttribute) === $lang->id) {
                 return true;
             }
@@ -126,14 +126,14 @@ class TranslateBehavior extends Behavior
      */
     public function afterValidate()
     {
-        if (!Model::validateMultiple($this->owner->{$this->translationRelation})) {
-            $this->owner->addError($this->translationRelation);
+        if (!Model::validateMultiple($this->owner->{$this->relation})) {
+            $this->owner->addError($this->relation);
         }
     }
 
     public function afterDelete()
     {
-        foreach ($this->owner->{$this->translationRelation} as $translation) {
+        foreach ($this->owner->{$this->relation} as $translation) {
             $translation::deleteAll(['object_id' => $this->owner->getPrimaryKey()]);
         }
         return true;
@@ -145,8 +145,8 @@ class TranslateBehavior extends Behavior
     public function afterSave()
     {
         /* @var ActiveRecord $translation */
-        foreach ($this->owner->{$this->translationRelation} as $translation) {
-            $this->owner->link($this->translationRelation, $translation);
+        foreach ($this->owner->{$this->relation} as $translation) {
+            $this->owner->link($this->relation, $translation);
         }
     }
 

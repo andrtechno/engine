@@ -2,6 +2,7 @@
 
 namespace panix\engine\validators;
 
+use Yii;
 use yii\helpers\Html;
 use yii\validators\Validator;
 use panix\engine\assets\ValidationAsset;
@@ -56,7 +57,9 @@ class UrlValidator extends Validator
             'AttributeSlugId' => Html::getInputId($model, $attribute),
             'attributeCompareId' => Html::getInputId($model, $this->attributeCompare),
         ];
-        $view->registerJs("init_translitter(" . json_encode($options, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ");");
+        if (Yii::$app->language == Yii::$app->languageManager->default->code) {
+            $view->registerJs("init_translitter(" . json_encode($options, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ");");
+        }
         return null;
     }
 

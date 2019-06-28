@@ -61,9 +61,11 @@ class AdminController extends Controller
             //  'ok' => Yii::t('app', 'OK'),
             'loading' => Yii::t('app', 'LOADING'),
         ];
+        $languagePath = (Yii::$app->language != Yii::$app->languageManager->default->code) ? '/' . Yii::$app->language : '';
         $this->view->registerJs('
             var common = window.CMS_common || {};
-            common.langauge="' . Yii::$app->language . '";
+            common.language="' . Yii::$app->language . '";
+            common.language_path="' . $languagePath . '";
             common.token="' . Yii::$app->request->csrfToken . '";
             common.isDashboard=true;
             common.message=' . \yii\helpers\Json::encode($this->jsMessages) . ';', \yii\web\View::POS_HEAD, 'js-common');

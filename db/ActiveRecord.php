@@ -2,6 +2,7 @@
 
 namespace panix\engine\db;
 
+use panix\engine\behaviors\TranslateBehavior;
 use Yii;
 use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
@@ -29,6 +30,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
     const route_create = 'create';
     const route = null;
     const MODULE_ID = null;
+    public $translationOptions;
 
     /**
      * @param null|string $redirect
@@ -40,7 +42,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
 
         $html = '';
         $html .= Html::submitButton(Yii::t('app', $this->isNewRecord ? 'CREATE' : 'SAVE'), ['class' => 'btn btn-success']);
-        if(!$this->isNewRecord)
+        if (!$this->isNewRecord)
             $html .= Html::submitButton(Yii::t('app', $this->isNewRecord ? 'CREATE_RETURN' : 'SAVE_RETURN'), ['class' => 'btn btn-link', 'value' => $redirect, 'name' => 'redirect']);
         return $html;
     }
@@ -158,9 +160,35 @@ class ActiveRecord extends \yii\db\ActiveRecord
         return $attrLabels;
     }
 
+    public function getTranslations()
+    {
+        return $this->hasMany($this->translationOptions['model'], ['object_id' => 'id']);
+    }
+
+
+    public function __get22($name)
+    {
+
+        if ($this->translationOptions && $name == 'Translations') {
+            //   return $this->hasMany($this->translationOptions['model'], ['object_id' => 'id']);
+        }
+
+        return parent::__get($name);
+
+
+    }
+
     public function behaviors()
     {
         $b = [];
+        if ($this->translationOptions) {
+            if (isset($this->translationOptions['translationAttributes'])) {
+                $b['translateBehavior']['class'] = TranslateBehavior::class;
+                $b['translateBehavior']['translationAttributes'] = $this->translationOptions['translationAttributes'];
+                if (isset($this->translationOptions['relation']))
+                    $b['translateBehavior']['relation'] = $this->translationOptions['relation'];
+            }
+        }
         try {
 
             $columns = $this->tableSchema->columns;
