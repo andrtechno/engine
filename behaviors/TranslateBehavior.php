@@ -2,6 +2,7 @@
 
 namespace panix\engine\behaviors;
 
+use panix\mod\admin\components\YandexTranslate;
 use Yii;
 use yii\base\Behavior;
 use yii\base\InvalidConfigException;
@@ -145,9 +146,56 @@ class TranslateBehavior extends Behavior
     public function afterSave()
     {
         /* @var ActiveRecord $translation */
+        //foreach ($this->owner->{$this->relation} as $translation) {
+        //     $this->owner->link($this->relation, $translation);
+        // }
+
         foreach ($this->owner->{$this->relation} as $translation) {
-            $this->owner->link($this->relation, $translation);
+            if ($translation->isNewRecord) {
+                $this->insertTranslations();
+            } else {
+                $this->owner->link($this->relation, $translation);
+            }
+            // var_dump($translation->isNewRecord);die;
+
+
         }
+    }
+
+    /**
+     * Create new object translation for each language.
+     * Used on creating new object.
+     */
+    public function insertTranslations()
+    {
+        foreach (Yii::$app->languageManager->languages as $lang)
+            $this->createTranslation($lang);
+    }
+
+    public function createTranslation($language)
+    {
+        $languageId = $language->id;
+        $className = $this->owner->translationClass;
+
+        /** @var \yii\db\ActiveRecord $translate */
+        $translate = new $className;
+        $translate->object_id = $this->owner->getPrimaryKey();
+        $translate->language_id = $languageId;
+        if (Yii::$app->languageManager->default->code == $language->code && false) {
+            foreach ($this->translationAttributes as $attr) {
+                $translate->{$attr} = $this->owner->{$attr};
+                //$translate->setAttribute($attr,$this->owner->link($this->relation, $attr));
+            }
+        } else {
+             $api = new YandexTranslate();
+             foreach ($this->translationAttributes as $attr){
+                 $data = $api->translate([Yii::$app->languageManager->default->code,$language->code],$this->owner->$attr);
+                 $translate->{$attr} = (isset($data['text']))?$data['text'][0]:$this->owner->$attr;
+             }
+        }
+
+
+        return $translate->save(false);
     }
 
     /**
