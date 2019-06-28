@@ -10,28 +10,24 @@ namespace panix\engine\behaviors\nestedsets;
 use yii\base\Behavior;
 use yii\base\Event;
 use yii\db\ActiveRecord;
-use yii\db\ActiveQuery;
 use yii\db\Expression;
 use yii\db\Exception;
 
 /**
- * @author Alexander Kochetov <creocoder@gmail.com>
- * @author Wanderson Bragança <wanderson.wbc@gmail.com>
+ * Class NestedSetsBehavior
+ * @package panix\engine\behaviors\nestedsets
  */
 class NestedSetsBehavior extends Behavior
 {
+    public $titleAttribute = 'name';
     /**
-     * @var ActiveQuery the owner of this behavior.
+     * @var \yii\db\ActiveQuery the owner of this behavior.
      */
     public $owner;
     /**
      * @var bool
      */
     public $hasManyRoots = false;
-    /**
-     * @var string
-     */
-    public $titleAttribute = 'title';
     /**
      * @var string
      */
@@ -98,27 +94,34 @@ class NestedSetsBehavior extends Behavior
     /**
      * Gets descendants for node.
      * @param int $depth the depth.
-     * @return ActiveQuery.
+     * @return \yii\db\ActiveQuery.
      */
     public function descendants($depth = null)
     {
-        $query = $this->owner->find()->orderBy([$this->levelAttribute => SORT_ASC]); //, $this->leftAttribute => SORT_ASC
-        $db = $this->owner->getDb();
+        /** @var ActiveRecord $owner */
+        $owner = $this->owner;
+
+        //$query = $this->owner->find()->orderBy([$this->leftAttribute => SORT_ASC]); //, $this->leftAttribute => SORT_ASC
+        $query = $owner->find();
+        //$query->orderBy([$this->leftAttribute => SORT_ASC]);
+        $db = $owner->getDb();
         $query->andWhere($db->quoteColumnName($this->leftAttribute) . '>'
-            . $this->owner->getAttribute($this->leftAttribute));
+            . $owner->getAttribute($this->leftAttribute));
+
         $query->andWhere($db->quoteColumnName($this->rightAttribute) . '<'
-            . $this->owner->getAttribute($this->rightAttribute));
+            . $owner->getAttribute($this->rightAttribute));
+
         $query->addOrderBy($db->quoteColumnName($this->leftAttribute));
 
         if ($depth !== null) {
             $query->andWhere($db->quoteColumnName($this->levelAttribute) . '<='
-                . ($this->owner->getAttribute($this->levelAttribute) + $depth));
+                . ($owner->getAttribute($this->levelAttribute) + $depth));
         }
 
         if ($this->hasManyRoots) {
             $query->andWhere(
                 $db->quoteColumnName($this->rootAttribute) . '=:' . $this->rootAttribute,
-                [':' . $this->rootAttribute => $this->owner->getAttribute($this->rootAttribute)]
+                [':' . $this->rootAttribute => $owner->getAttribute($this->rootAttribute)]
             );
         }
 
@@ -127,7 +130,7 @@ class NestedSetsBehavior extends Behavior
 
     /**
      * Gets children for node (direct descendants only).
-     * @return ActiveQuery.
+     * @return \yii\db\ActiveQuery.
      */
     public function children()
     {
@@ -137,27 +140,30 @@ class NestedSetsBehavior extends Behavior
     /**
      * Gets ancestors for node.
      * @param int $depth the depth.
-     * @return ActiveQuery.
+     * @return \yii\db\ActiveQuery.
      */
     public function ancestors($depth = null)
     {
-        $query = $this->owner->find()->orderBy([$this->levelAttribute => SORT_DESC]); //panix remove , $this->leftAttribute => SORT_ASC ..duplicate
-        $db = $this->owner->getDb();
+        /** @var ActiveRecord $owner */
+        $owner = $this->owner;
+        //$query = $this->owner->find()->orderBy([$this->leftAttribute => SORT_ASC]); //panix remove , $this->leftAttribute => SORT_ASC ..duplicate
+        $query = $owner->find(); //panix remove , $this->leftAttribute => SORT_ASC ..duplicate
+        $db = $owner->getDb();
         $query->andWhere($db->quoteColumnName($this->leftAttribute) . '<'
-            . $this->owner->getAttribute($this->leftAttribute));
+            . $owner->getAttribute($this->leftAttribute));
         $query->andWhere($db->quoteColumnName($this->rightAttribute) . '>'
-            . $this->owner->getAttribute($this->rightAttribute));
+            . $owner->getAttribute($this->rightAttribute));
         $query->addOrderBy($db->quoteColumnName($this->leftAttribute));
 
         if ($depth !== null) {
             $query->andWhere($db->quoteColumnName($this->levelAttribute) . '>='
-                . ($this->owner->getAttribute($this->levelAttribute) - $depth));
+                . ($owner->getAttribute($this->levelAttribute) - $depth));
         }
 
         if ($this->hasManyRoots) {
             $query->andWhere(
                 $db->quoteColumnName($this->rootAttribute) . '=:' . $this->rootAttribute,
-                [':' . $this->rootAttribute => $this->owner->getAttribute($this->rootAttribute)]
+                [':' . $this->rootAttribute => $owner->getAttribute($this->rootAttribute)]
             );
         }
 
@@ -166,22 +172,24 @@ class NestedSetsBehavior extends Behavior
 
     /**
      * Gets parent of node.
-     * @return ActiveQuery.
+     * @return \yii\db\ActiveQuery.
      */
     public function parent()
     {
-        $query = $this->owner->find();
-        $db = $this->owner->getDb();
+        /** @var ActiveRecord $owner */
+        $owner = $this->owner;
+        $query = $owner->find();
+        $db = $owner->getDb();
         $query->andWhere($db->quoteColumnName($this->leftAttribute) . '<'
-            . $this->owner->getAttribute($this->leftAttribute));
+            . $owner->getAttribute($this->leftAttribute));
         $query->andWhere($db->quoteColumnName($this->rightAttribute) . '>'
-            . $this->owner->getAttribute($this->rightAttribute));
+            . $owner->getAttribute($this->rightAttribute));
         $query->addOrderBy($db->quoteColumnName($this->rightAttribute));
 
         if ($this->hasManyRoots) {
             $query->andWhere(
                 $db->quoteColumnName($this->rootAttribute) . '=:' . $this->rootAttribute,
-                [':' . $this->rootAttribute => $this->owner->getAttribute($this->rootAttribute)]
+                [':' . $this->rootAttribute => $owner->getAttribute($this->rootAttribute)]
             );
         }
 
@@ -190,19 +198,23 @@ class NestedSetsBehavior extends Behavior
 
     /**
      * Gets previous sibling of node.
-     * @return ActiveQuery.
+     * @return \yii\db\ActiveQuery.
      */
     public function prev()
     {
-        $query = $this->owner->find();
-        $db = $this->owner->getDb();
+        /**
+         * @var ActiveRecord $owner
+         */
+        $owner = $this->owner;
+        $query = $owner->find();
+        $db = $owner->getDb();
         $query->andWhere($db->quoteColumnName($this->rightAttribute) . '='
-            . ($this->owner->getAttribute($this->leftAttribute) - 1));
+            . ($owner->getAttribute($this->leftAttribute) - 1));
 
         if ($this->hasManyRoots) {
             $query->andWhere(
                 $db->quoteColumnName($this->rootAttribute) . '=:' . $this->rootAttribute,
-                [':' . $this->rootAttribute => $this->owner->getAttribute($this->rootAttribute)]
+                [':' . $this->rootAttribute => $owner->getAttribute($this->rootAttribute)]
             );
         }
 
@@ -211,19 +223,25 @@ class NestedSetsBehavior extends Behavior
 
     /**
      * Gets next sibling of node.
-     * @return ActiveQuery.
+     * @return \yii\db\ActiveQuery.
      */
     public function next()
     {
-        $query = $this->owner->find();
-        $db = $this->owner->getDb();
+        /**
+         * @var \yii\db\ActiveQuery $query
+         * @var \yii\db\Connection $db
+         * @var ActiveRecord $owner
+         */
+        $owner = $this->owner;
+        $query = $owner->find();
+        $db = $owner->getDb();
         $query->andWhere($db->quoteColumnName($this->leftAttribute) . '='
-            . ($this->owner->getAttribute($this->rightAttribute) + 1));
+            . ($owner->getAttribute($this->rightAttribute) + 1));
 
         if ($this->hasManyRoots) {
             $query->andWhere(
                 $db->quoteColumnName($this->rootAttribute) . '=:' . $this->rootAttribute,
-                [':' . $this->rootAttribute => $this->owner->getAttribute($this->rootAttribute)]
+                [':' . $this->rootAttribute => $owner->getAttribute($this->rootAttribute)]
             );
         }
 
@@ -238,16 +256,18 @@ class NestedSetsBehavior extends Behavior
      */
     public function save($runValidation = true, $attributeNames = null)
     {
-        if ($runValidation && !$this->owner->validate($attributeNames)) {
+        /** @var ActiveRecord $owner */
+        $owner = $this->owner;
+        if ($runValidation && !$owner->validate($attributeNames)) {
             return false;
         }
 
-        if ($this->owner->getIsNewRecord()) {
+        if ($owner->getIsNewRecord()) {
             return $this->makeRoot($attributeNames);
         }
 
         $this->_ignoreEvent = true;
-        $result = $this->owner->update(false, $attributeNames);
+        $result = $owner->update(false, $attributeNames);
         $this->_ignoreEvent = false;
 
         return $result;
@@ -272,7 +292,9 @@ class NestedSetsBehavior extends Behavior
      */
     public function delete()
     {
-        if ($this->owner->getIsNewRecord()) {
+        /** @var ActiveRecord|self $owner */
+        $owner = $this->owner;
+        if ($owner->getIsNewRecord()) {
             throw new Exception('The node can\'t be deleted because it is new.');
         }
 
@@ -280,7 +302,7 @@ class NestedSetsBehavior extends Behavior
             throw new Exception('The node can\'t be deleted because it is already deleted.');
         }
 
-        $db = $this->owner->getDb();
+        $db = $owner->getDb();
 
         if ($db->getTransaction() === null) {
             $transaction = $db->beginTransaction();
@@ -288,22 +310,22 @@ class NestedSetsBehavior extends Behavior
 
         try {
             $this->_ignoreEvent = true;
-            if ($this->owner->isLeaf()) {
-                $result = $this->owner->delete();
-            } elseif ($this->owner->beforeDelete()) {
+            if ($owner->isLeaf()) {
+                $result = $owner->delete();
+            } elseif ($owner->beforeDelete()) {
                 $condition = $db->quoteColumnName($this->leftAttribute) . '>='
-                    . $this->owner->getOldAttribute($this->leftAttribute) . ' AND '
+                    . $owner->getOldAttribute($this->leftAttribute) . ' AND '
                     . $db->quoteColumnName($this->rightAttribute) . '<='
-                    . $this->owner->getOldAttribute($this->rightAttribute);
+                    . $owner->getOldAttribute($this->rightAttribute);
                 $params = [];
 
                 if ($this->hasManyRoots) {
                     $condition .= ' AND ' . $db->quoteColumnName($this->rootAttribute) . '=:' . $this->rootAttribute;
-                    $params[':' . $this->rootAttribute] = $this->owner->getOldAttribute($this->rootAttribute);
+                    $params[':' . $this->rootAttribute] = $owner->getOldAttribute($this->rootAttribute);
                 }
 
-                $result = $this->owner->deleteAll($condition, $params) > 0;
-                $this->owner->afterDelete();
+                $result = $owner->deleteAll($condition, $params) > 0;
+                $owner->afterDelete();
             }
             $this->_ignoreEvent = false;
 
@@ -316,8 +338,8 @@ class NestedSetsBehavior extends Behavior
             }
 
             $this->shiftLeftRight(
-                $this->owner->getAttribute($this->rightAttribute) + 1,
-                $this->owner->getAttribute($this->leftAttribute) - $this->owner->getAttribute($this->rightAttribute) - 1
+                $owner->getAttribute($this->rightAttribute) + 1,
+                $owner->getAttribute($this->leftAttribute) - $owner->getAttribute($this->rightAttribute) - 1
             );
 
             if (isset($transaction)) {
@@ -372,11 +394,12 @@ class NestedSetsBehavior extends Behavior
      */
     public function prepend($target, $runValidation = true, $attributes = null)
     {
-        return $target->prependTo(
-            $this->owner,
-            $runValidation,
-            $attributes
-        );
+        /**
+         * @var self $target
+         * @var ActiveRecord $owner
+         */
+        $owner = $this->owner;
+        return $target->prependTo($owner, $runValidation, $attributes);
     }
 
     /**
@@ -406,11 +429,12 @@ class NestedSetsBehavior extends Behavior
      */
     public function append($target, $runValidation = true, $attributes = null)
     {
-        return $target->appendTo(
-            $this->owner,
-            $runValidation,
-            $attributes
-        );
+        /**
+         * @var self $target
+         * @var ActiveRecord $owner
+         */
+        $owner = $this->owner;
+        return $target->appendTo($owner, $runValidation, $attributes);
     }
 
     /**
@@ -456,11 +480,7 @@ class NestedSetsBehavior extends Behavior
      */
     public function moveBefore($target)
     {
-        return $this->moveNode(
-            $target,
-            $target->getAttribute($this->leftAttribute),
-            0
-        );
+        return $this->moveNode($target, $target->getAttribute($this->leftAttribute), 0);
     }
 
     /**
@@ -470,11 +490,7 @@ class NestedSetsBehavior extends Behavior
      */
     public function moveAfter($target)
     {
-        return $this->moveNode(
-            $target,
-            $target->getAttribute($this->rightAttribute) + 1,
-            0
-        );
+        return $this->moveNode($target, $target->getAttribute($this->rightAttribute) + 1, 0);
     }
 
     /**
@@ -513,11 +529,13 @@ class NestedSetsBehavior extends Behavior
      */
     public function moveAsRoot()
     {
+        /** @var ActiveRecord|self $owner */
+        $owner = $this->owner;
         if (!$this->hasManyRoots) {
             throw new Exception('Many roots mode is off.');
         }
 
-        if ($this->owner->getIsNewRecord()) {
+        if ($owner->getIsNewRecord()) {
             throw new Exception('The node should not be new record.');
         }
 
@@ -525,22 +543,22 @@ class NestedSetsBehavior extends Behavior
             throw new Exception('The node should not be deleted.');
         }
 
-        if ($this->owner->isRoot()) {
+        if ($owner->isRoot()) {
             throw new Exception('The node already is root node.');
         }
 
-        $db = $this->owner->getDb();
+        $db = $owner->getDb();
 
         if ($db->getTransaction() === null) {
             $transaction = $db->beginTransaction();
         }
 
         try {
-            $left = $this->owner->getAttribute($this->leftAttribute);
-            $right = $this->owner->getAttribute($this->rightAttribute);
-            $levelDelta = 1 - $this->owner->getAttribute($this->levelAttribute);
+            $left = $owner->getAttribute($this->leftAttribute);
+            $right = $owner->getAttribute($this->rightAttribute);
+            $levelDelta = 1 - $owner->getAttribute($this->levelAttribute);
             $delta = 1 - $left;
-            $this->owner->updateAll(
+            $owner->updateAll(
                 [
                     $this->leftAttribute => new Expression($db->quoteColumnName($this->leftAttribute)
                         . sprintf('%+d', $delta)),
@@ -548,12 +566,12 @@ class NestedSetsBehavior extends Behavior
                         . sprintf('%+d', $delta)),
                     $this->levelAttribute => new Expression($db->quoteColumnName($this->levelAttribute)
                         . sprintf('%+d', $levelDelta)),
-                    $this->rootAttribute => $this->owner->getPrimaryKey(),
+                    $this->rootAttribute => $owner->getPrimaryKey(),
                 ],
                 $db->quoteColumnName($this->leftAttribute) . '>=' . $left . ' AND '
-                    . $db->quoteColumnName($this->rightAttribute) . '<=' . $right . ' AND '
-                    . $db->quoteColumnName($this->rootAttribute) . '=:' . $this->rootAttribute,
-                [':' . $this->rootAttribute => $this->owner->getAttribute($this->rootAttribute)]
+                . $db->quoteColumnName($this->rightAttribute) . '<=' . $right . ' AND '
+                . $db->quoteColumnName($this->rootAttribute) . '=:' . $this->rootAttribute,
+                [':' . $this->rootAttribute => $owner->getAttribute($this->rootAttribute)]
             );
             $this->shiftLeftRight($right + 1, $left - $right - 1);
 
@@ -561,7 +579,7 @@ class NestedSetsBehavior extends Behavior
                 $transaction->commit();
             }
 
-            $this->correctCachedOnMoveBetweenTrees(1, $levelDelta, $this->owner->getPrimaryKey());
+            $this->correctCachedOnMoveBetweenTrees(1, $levelDelta, $owner->getPrimaryKey());
         } catch (\Exception $e) {
             if (isset($transaction)) {
                 $transaction->rollback();
@@ -580,12 +598,14 @@ class NestedSetsBehavior extends Behavior
      */
     public function isDescendantOf($subj)
     {
-        $result = ($this->owner->getAttribute($this->leftAttribute) > $subj->getAttribute($this->leftAttribute))
-            && ($this->owner->getAttribute($this->rightAttribute) < $subj->getAttribute($this->rightAttribute));
+        /** @var ActiveRecord $owner */
+        $owner = $this->owner;
+        $result = ($owner->getAttribute($this->leftAttribute) > $subj->getAttribute($this->leftAttribute))
+            && ($owner->getAttribute($this->rightAttribute) < $subj->getAttribute($this->rightAttribute));
 
         if ($this->hasManyRoots) {
-            $result = $result && ($this->owner->getAttribute($this->rootAttribute)
-                === $subj->getAttribute($this->rootAttribute));
+            $result = $result && ($owner->getAttribute($this->rootAttribute)
+                    === $subj->getAttribute($this->rootAttribute));
         }
 
         return $result;
@@ -597,8 +617,10 @@ class NestedSetsBehavior extends Behavior
      */
     public function isLeaf()
     {
-        return $this->owner->getAttribute($this->rightAttribute)
-            - $this->owner->getAttribute($this->leftAttribute) === 1;
+        /** @var ActiveRecord $owner */
+        $owner = $this->owner;
+        return $owner->getAttribute($this->rightAttribute)
+            - $owner->getAttribute($this->leftAttribute) === 1;
     }
 
     /**
@@ -607,7 +629,9 @@ class NestedSetsBehavior extends Behavior
      */
     public function isRoot()
     {
-        return $this->owner->getAttribute($this->leftAttribute) == 1;
+        /** @var ActiveRecord $owner */
+        $owner = $this->owner;
+        return $owner->getAttribute($this->leftAttribute) == 1;
     }
 
     /**
@@ -630,20 +654,18 @@ class NestedSetsBehavior extends Behavior
 
     /**
      * Handle 'afterFind' event of the owner.
-     * @param Event $event event parameter.
      */
-    public function afterFind($event)
+    public function afterFind()
     {
         self::$_cached[get_class($this->owner)][$this->_id = self::$_c++] = $this->owner;
     }
 
     /**
      * Handle 'beforeInsert' event of the owner.
-     * @param Event $event event parameter.
      * @throws Exception.
      * @return boolean.
      */
-    public function beforeInsert($event)
+    public function beforeInsert()
     {
         if ($this->_ignoreEvent) {
             return true;
@@ -654,11 +676,10 @@ class NestedSetsBehavior extends Behavior
 
     /**
      * Handle 'beforeUpdate' event of the owner.
-     * @param Event $event event parameter.
      * @throws Exception.
      * @return boolean.
      */
-    public function beforeUpdate($event)
+    public function beforeUpdate()
     {
         if ($this->_ignoreEvent) {
             return true;
@@ -669,11 +690,10 @@ class NestedSetsBehavior extends Behavior
 
     /**
      * Handle 'beforeDelete' event of the owner.
-     * @param Event $event event parameter.
      * @throws Exception.
      * @return boolean.
      */
-    public function beforeDelete($event)
+    public function beforeDelete()
     {
         if ($this->_ignoreEvent) {
             return true;
@@ -683,12 +703,14 @@ class NestedSetsBehavior extends Behavior
     }
 
     /**
-     * @param int $key.
-     * @param int $delta.
+     * @param int $key .
+     * @param int $delta .
      */
     private function shiftLeftRight($key, $delta)
     {
-        $db = $this->owner->getDb();
+        /** @var ActiveRecord $owner */
+        $owner = $this->owner;
+        $db = $owner->getDb();
 
         foreach ([$this->leftAttribute, $this->rightAttribute] as $attribute) {
             $condition = $db->quoteColumnName($attribute) . '>=' . $key;
@@ -696,10 +718,10 @@ class NestedSetsBehavior extends Behavior
 
             if ($this->hasManyRoots) {
                 $condition .= ' AND ' . $db->quoteColumnName($this->rootAttribute) . '=:' . $this->rootAttribute;
-                $params[':' . $this->rootAttribute] = $this->owner->getAttribute($this->rootAttribute);
+                $params[':' . $this->rootAttribute] = $owner->getAttribute($this->rootAttribute);
             }
 
-            $this->owner->updateAll(
+            $owner->updateAll(
                 [$attribute => new Expression($db->quoteColumnName($attribute) . sprintf('%+d', $delta))],
                 $condition,
                 $params
@@ -708,18 +730,20 @@ class NestedSetsBehavior extends Behavior
     }
 
     /**
-     * @param ActiveRecord $target.
-     * @param int $key.
-     * @param int $levelUp.
-     * @param boolean $runValidation.
-     * @param array $attributes.
-     * @throws Exception.
-     * @throws \Exception.
-     * @return boolean.
+     * @param ActiveRecord|self $target
+     * @param int $key .
+     * @param int $levelUp .
+     * @param boolean $runValidation
+     * @param array $attributes
+     * @throws Exception
+     * @throws \Exception
+     * @return boolean
      */
     private function addNode($target, $key, $levelUp, $runValidation, $attributes)
     {
-        if (!$this->owner->getIsNewRecord()) {
+        /** @var ActiveRecord $owner */
+        $owner = $this->owner;
+        if (!$owner->getIsNewRecord()) {
             throw new Exception('The node can\'t be inserted because it is not new.');
         }
 
@@ -731,7 +755,7 @@ class NestedSetsBehavior extends Behavior
             throw new Exception('The node can\'t be inserted because target node is deleted.');
         }
 
-        if ($this->owner->equals($target)) {
+        if ($owner->equals($target)) {
             throw new Exception('The target node should not be self.');
         }
 
@@ -739,15 +763,15 @@ class NestedSetsBehavior extends Behavior
             throw new Exception('The target node should not be root.');
         }
 
-        if ($runValidation && !$this->owner->validate()) {
+        if ($runValidation && !$owner->validate()) {
             return false;
         }
 
         if ($this->hasManyRoots) {
-            $this->owner->setAttribute($this->rootAttribute, $target->getAttribute($this->rootAttribute));
+            $owner->setAttribute($this->rootAttribute, $target->getAttribute($this->rootAttribute));
         }
 
-        $db = $this->owner->getDb();
+        $db = $owner->getDb();
 
         if ($db->getTransaction() === null) {
             $transaction = $db->beginTransaction();
@@ -755,11 +779,11 @@ class NestedSetsBehavior extends Behavior
 
         try {
             $this->shiftLeftRight($key, 2);
-            $this->owner->setAttribute($this->leftAttribute, $key);
-            $this->owner->setAttribute($this->rightAttribute, $key + 1);
-            $this->owner->setAttribute($this->levelAttribute, $target->getAttribute($this->levelAttribute) + $levelUp);
+            $owner->setAttribute($this->leftAttribute, $key);
+            $owner->setAttribute($this->rightAttribute, $key + 1);
+            $owner->setAttribute($this->levelAttribute, $target->getAttribute($this->levelAttribute) + $levelUp);
             $this->_ignoreEvent = true;
-            $result = $this->owner->insert(false, $attributes);
+            $result = $owner->insert(false, $attributes);
             $this->_ignoreEvent = false;
 
             if (!$result) {
@@ -787,19 +811,22 @@ class NestedSetsBehavior extends Behavior
     }
 
     /**
-     * @param array $attributes.
+     * @param array $attributes .
      * @throws Exception.
      * @throws \Exception.
      * @return boolean.
      */
     private function makeRoot($attributes)
     {
-        $this->owner->setAttribute($this->leftAttribute, 1);
-        $this->owner->setAttribute($this->rightAttribute, 2);
-        $this->owner->setAttribute($this->levelAttribute, 1);
+        /** @var ActiveRecord $owner */
+        $owner = $this->owner;
+
+        $owner->setAttribute($this->leftAttribute, 1);
+        $owner->setAttribute($this->rightAttribute, 2);
+        $owner->setAttribute($this->levelAttribute, 1);
 
         if ($this->hasManyRoots) {
-            $db = $this->owner->getDb();
+            $db = $owner->getDb();
 
             if ($db->getTransaction() === null) {
                 $transaction = $db->beginTransaction();
@@ -807,7 +834,7 @@ class NestedSetsBehavior extends Behavior
 
             try {
                 $this->_ignoreEvent = true;
-                $result = $this->owner->insert(false, $attributes);
+                $result = $owner->insert(false, $attributes);
                 $this->_ignoreEvent = false;
 
                 if (!$result) {
@@ -818,23 +845,23 @@ class NestedSetsBehavior extends Behavior
                     return false;
                 }
 
-                if ($this->owner->getAttribute($this->rootAttribute)) {
+                if ($owner->getAttribute($this->rootAttribute)) {
                     if (isset($transaction)) {
                         $transaction->commit();
                     }
                     return $result;
                 }
 
-                $this->owner->setAttribute($this->rootAttribute, $this->owner->getPrimaryKey());
-                $primaryKey = $this->owner->primaryKey();
+                $owner->setAttribute($this->rootAttribute, $owner->getPrimaryKey());
+                $primaryKey = $owner->primaryKey();
 
                 if (!isset($primaryKey[0])) {
                     throw new Exception(get_class($this->owner) . ' must have a primary key.');
                 }
 
-                $this->owner->updateAll(
-                    [$this->rootAttribute => $this->owner->getAttribute($this->rootAttribute)],
-                    [$primaryKey[0] => $this->owner->getAttribute($this->rootAttribute)]
+                $owner->updateAll(
+                    [$this->rootAttribute => $owner->getAttribute($this->rootAttribute)],
+                    [$primaryKey[0] => $owner->getAttribute($this->rootAttribute)]
                 );
 
                 if (isset($transaction)) {
@@ -849,7 +876,7 @@ class NestedSetsBehavior extends Behavior
             }
         } else {
             $this->_ignoreEvent = true;
-            $result = $this->owner->insert(false, $attributes);
+            $result = $owner->insert(false, $attributes);
             $this->_ignoreEvent = false;
 
             if (!$result) {
@@ -861,17 +888,21 @@ class NestedSetsBehavior extends Behavior
     }
 
     /**
-     * @param ActiveRecord $target.
-     * @param int $key.
-     * @param int $levelUp.
+     * @param ActiveRecord|self $target .
+     * @param int $key .
+     * @param int $levelUp .
      * @throws Exception.
      * @throws \Exception.
      * @return boolean.
      */
     private function moveNode($target, $key, $levelUp)
     {
-
-        if ($this->owner->getIsNewRecord()) {
+        /**
+         * @var \yii\db\Connection $db
+         * @var ActiveRecord $owner
+         */
+        $owner = $this->owner;
+        if ($owner->getIsNewRecord()) {
             throw new Exception('The node should not be new record.');
         }
 
@@ -883,11 +914,11 @@ class NestedSetsBehavior extends Behavior
             throw new Exception('The target node should not be deleted.');
         }
 
-        if ($this->owner->equals($target)) {
+        if ($owner->equals($target)) {
             throw new Exception('The target node should not be self.');
         }
 
-        if ($target->isDescendantOf($this->owner)) {
+        if ($target->isDescendantOf($owner)) {
             throw new Exception('The target node should not be descendant.');
         }
 
@@ -895,33 +926,36 @@ class NestedSetsBehavior extends Behavior
             throw new Exception('The target node should not be root.');
         }
 
-        $db = $this->owner->getDb();
+        $db = $owner->getDb();
 
         if ($db->getTransaction() === null) {
+            /** @var \yii\db\Transaction $transaction */
             $transaction = $db->beginTransaction();
         }
 
         try {
-            $left = $this->owner->getAttribute($this->leftAttribute);
-            $right = $this->owner->getAttribute($this->rightAttribute);
-            $levelDelta = $target->getAttribute($this->levelAttribute) - $this->owner->getAttribute($this->levelAttribute)
+            $left = $owner->getAttribute($this->leftAttribute);
+            $right = $owner->getAttribute($this->rightAttribute);
+            $levelDelta = $target->getAttribute($this->levelAttribute) - $owner->getAttribute($this->levelAttribute)
                 + $levelUp;
 
-            if ($this->hasManyRoots && $this->owner->getAttribute($this->rootAttribute) !==
-                $target->getAttribute($this->rootAttribute)) {
+
+            if ($this->hasManyRoots && $owner->getAttribute($this->rootAttribute) !==
+                $target->getAttribute($this->rootAttribute)
+            ) {
 
                 foreach ([$this->leftAttribute, $this->rightAttribute] as $attribute) {
-                    $this->owner->updateAll(
+                    $owner->updateAll(
                         [$attribute => new Expression($db->quoteColumnName($attribute)
                             . sprintf('%+d', $right - $left + 1))],
                         $db->quoteColumnName($attribute) . '>=' . $key . ' AND '
-                            . $db->quoteColumnName($this->rootAttribute) . '=:' . $this->rootAttribute,
+                        . $db->quoteColumnName($this->rootAttribute) . '=:' . $this->rootAttribute,
                         [':' . $this->rootAttribute => $target->getAttribute($this->rootAttribute)]
                     );
                 }
 
                 $delta = $key - $left;
-                $this->owner->updateAll(
+                $owner->updateAll(
                     [
                         $this->leftAttribute => new Expression($db->quoteColumnName($this->leftAttribute)
                             . sprintf('%+d', $delta)),
@@ -932,9 +966,9 @@ class NestedSetsBehavior extends Behavior
                         $this->rootAttribute => $target->getAttribute($this->rootAttribute),
                     ],
                     $db->quoteColumnName($this->leftAttribute) . '>=' . $left . ' AND '
-                        . $db->quoteColumnName($this->rightAttribute) . '<=' . $right . ' AND '
-                        . $db->quoteColumnName($this->rootAttribute) . '=:' . $this->rootAttribute,
-                    [':' . $this->rootAttribute => $this->owner->getAttribute($this->rootAttribute)]
+                    . $db->quoteColumnName($this->rightAttribute) . '<=' . $right . ' AND '
+                    . $db->quoteColumnName($this->rootAttribute) . '=:' . $this->rootAttribute,
+                    [':' . $this->rootAttribute => $owner->getAttribute($this->rootAttribute)]
                 );
                 $this->shiftLeftRight($right + 1, $left - $right - 1);
 
@@ -944,6 +978,7 @@ class NestedSetsBehavior extends Behavior
 
                 $this->correctCachedOnMoveBetweenTrees($key, $levelDelta, $target->getAttribute($this->rootAttribute));
             } else {
+
                 $delta = $right - $left + 1;
                 $this->shiftLeftRight($key, $delta);
 
@@ -958,10 +993,10 @@ class NestedSetsBehavior extends Behavior
 
                 if ($this->hasManyRoots) {
                     $condition .= ' AND ' . $db->quoteColumnName($this->rootAttribute) . '=:' . $this->rootAttribute;
-                    $params[':' . $this->rootAttribute] = $this->owner->getAttribute($this->rootAttribute);
+                    $params[':' . $this->rootAttribute] = $owner->getAttribute($this->rootAttribute);
                 }
 
-                $this->owner->updateAll(
+                $owner->updateAll(
                     [
                         $this->levelAttribute => new Expression($db->quoteColumnName($this->levelAttribute)
                             . sprintf('%+d', $levelDelta)),
@@ -978,10 +1013,10 @@ class NestedSetsBehavior extends Behavior
                     if ($this->hasManyRoots) {
                         $condition .= ' AND ' . $db->quoteColumnName($this->rootAttribute) . '=:'
                             . $this->rootAttribute;
-                        $params[':' . $this->rootAttribute] = $this->owner->getAttribute($this->rootAttribute);
+                        $params[':' . $this->rootAttribute] = $owner->getAttribute($this->rootAttribute);
                     }
 
-                    $this->owner->updateAll(
+                    $owner->updateAll(
                         [$attribute => new Expression($db->quoteColumnName($attribute)
                             . sprintf('%+d', $key - $left))],
                         $condition,
@@ -1013,24 +1048,28 @@ class NestedSetsBehavior extends Behavior
      */
     private function correctCachedOnDelete()
     {
-        $left = $this->owner->getAttribute($this->leftAttribute);
-        $right = $this->owner->getAttribute($this->rightAttribute);
+        /** @var ActiveRecord $owner */
+        $owner = $this->owner;
+        $left = $owner->getAttribute($this->leftAttribute);
+        $right = $owner->getAttribute($this->rightAttribute);
         $key = $right + 1;
         $delta = $left - $right - 1;
 
-        foreach (self::$_cached[get_class($this->owner)] as $node) {
-            /** @var $node ActiveRecord */
+        foreach (self::$_cached[get_class($owner)] as $node) {
+            /** @var ActiveRecord|self $node */
             if ($node->getIsNewRecord() || $node->getIsDeletedRecord()) {
                 continue;
             }
 
-            if ($this->hasManyRoots && $this->owner->getAttribute($this->rootAttribute)
-                !== $node->getAttribute($this->rootAttribute)) {
+            if ($this->hasManyRoots && $owner->getAttribute($this->rootAttribute)
+                !== $node->getAttribute($this->rootAttribute)
+            ) {
                 continue;
             }
 
             if ($node->getAttribute($this->leftAttribute) >= $left
-                && $node->getAttribute($this->rightAttribute) <= $right) {
+                && $node->getAttribute($this->rightAttribute) <= $right
+            ) {
                 $node->setIsDeletedRecord(true);
             } else {
                 if ($node->getAttribute($this->leftAttribute) >= $key) {
@@ -1052,18 +1091,21 @@ class NestedSetsBehavior extends Behavior
 
     /**
      * Correct cache for [[addNode()]].
-     * @param int $key.
+     * @param int $key .
      */
     private function correctCachedOnAddNode($key)
     {
-        foreach (self::$_cached[get_class($this->owner)] as $node) {
-            /** @var $node ActiveRecord */
+        /** @var ActiveRecord $owner */
+        $owner = $this->owner;
+        foreach (self::$_cached[get_class($owner)] as $node) {
+            /** @var ActiveRecord|self $node */
             if ($node->getIsNewRecord() || $node->getIsDeletedRecord()) {
                 continue;
             }
 
-            if ($this->hasManyRoots && $this->owner->getAttribute($this->rootAttribute)
-                !== $node->getAttribute($this->rootAttribute)) {
+            if ($this->hasManyRoots && $owner->getAttribute($this->rootAttribute)
+                !== $node->getAttribute($this->rootAttribute)
+            ) {
                 continue;
             }
 
@@ -1089,13 +1131,15 @@ class NestedSetsBehavior extends Behavior
 
     /**
      * Correct cache for [[moveNode()]].
-     * @param int $key.
-     * @param int $levelDelta.
+     * @param int $key .
+     * @param int $levelDelta .
      */
     private function correctCachedOnMoveNode($key, $levelDelta)
     {
-        $left = $this->owner->getAttribute($this->leftAttribute);
-        $right = $this->owner->getAttribute($this->rightAttribute);
+        /** @var ActiveRecord $owner */
+        $owner = $this->owner;
+        $left = $owner->getAttribute($this->leftAttribute);
+        $right = $owner->getAttribute($this->rightAttribute);
         $delta = $right - $left + 1;
 
         if ($left >= $key) {
@@ -1105,14 +1149,15 @@ class NestedSetsBehavior extends Behavior
 
         $delta2 = $key - $left;
 
-        foreach (self::$_cached[get_class($this->owner)] as $node) {
-            /** @var $node ActiveRecord */
+        foreach (self::$_cached[get_class($owner)] as $node) {
+            /** @var ActiveRecord|self $node */
             if ($node->getIsNewRecord() || $node->getIsDeletedRecord()) {
                 continue;
             }
 
-            if ($this->hasManyRoots && $this->owner->getAttribute($this->rootAttribute)
-                !== $node->getAttribute($this->rootAttribute)) {
+            if ($this->hasManyRoots && $owner->getAttribute($this->rootAttribute)
+                !== $node->getAttribute($this->rootAttribute)
+            ) {
                 continue;
             }
 
@@ -1131,7 +1176,8 @@ class NestedSetsBehavior extends Behavior
             }
 
             if ($node->getAttribute($this->leftAttribute) >= $left
-                && $node->getAttribute($this->rightAttribute) <= $right) {
+                && $node->getAttribute($this->rightAttribute) <= $right
+            ) {
                 $node->setAttribute(
                     $this->levelAttribute,
                     $node->getAttribute($this->levelAttribute) + $levelDelta
@@ -1139,7 +1185,8 @@ class NestedSetsBehavior extends Behavior
             }
 
             if ($node->getAttribute($this->leftAttribute) >= $left
-                && $node->getAttribute($this->leftAttribute) <= $right) {
+                && $node->getAttribute($this->leftAttribute) <= $right
+            ) {
                 $node->setAttribute(
                     $this->leftAttribute,
                     $node->getAttribute($this->leftAttribute) + $delta2
@@ -1147,7 +1194,8 @@ class NestedSetsBehavior extends Behavior
             }
 
             if ($node->getAttribute($this->rightAttribute) >= $left
-                && $node->getAttribute($this->rightAttribute) <= $right) {
+                && $node->getAttribute($this->rightAttribute) <= $right
+            ) {
                 $node->setAttribute(
                     $this->rightAttribute,
                     $node->getAttribute($this->rightAttribute) + $delta2
@@ -1172,20 +1220,22 @@ class NestedSetsBehavior extends Behavior
 
     /**
      * Correct cache for [[moveNode()]].
-     * @param int $key.
-     * @param int $levelDelta.
-     * @param int $root.
+     * @param int $key .
+     * @param int $levelDelta .
+     * @param int $root .
      */
     private function correctCachedOnMoveBetweenTrees($key, $levelDelta, $root)
     {
-        $left = $this->owner->getAttribute($this->leftAttribute);
-        $right = $this->owner->getAttribute($this->rightAttribute);
+        /** @var ActiveRecord $owner */
+        $owner = $this->owner;
+        $left = $owner->getAttribute($this->leftAttribute);
+        $right = $owner->getAttribute($this->rightAttribute);
         $delta = $right - $left + 1;
         $delta2 = $key - $left;
         $delta3 = $left - $right - 1;
 
-        foreach (self::$_cached[get_class($this->owner)] as $node) {
-            /** @var $node ActiveRecord */
+        foreach (self::$_cached[get_class($owner)] as $node) {
+            /** @var ActiveRecord|self $node */
             if ($node->getIsNewRecord() || $node->getIsDeletedRecord()) {
                 continue;
             }
@@ -1205,9 +1255,11 @@ class NestedSetsBehavior extends Behavior
                     );
                 }
             } elseif ($node->getAttribute($this->rootAttribute)
-                === $this->owner->getAttribute($this->rootAttribute)) {
+                === $owner->getAttribute($this->rootAttribute)
+            ) {
                 if ($node->getAttribute($this->leftAttribute) >= $left
-                    && $node->getAttribute($this->rightAttribute) <= $right) {
+                    && $node->getAttribute($this->rightAttribute) <= $right
+                ) {
                     $node->setAttribute(
                         $this->leftAttribute,
                         $node->getAttribute($this->leftAttribute) + $delta2
