@@ -796,12 +796,18 @@ class CMS
     }
 
     /**
-     * @param $string
-     * @return string
+     * @param string $string
+     * @param boolean $int
+     * @return string|integer
      */
-    public static function hash($string)
+    public static function hash($string, $int = false)
     {
-        return sprintf('%x', crc32($string));
+        if ($int) {
+            return crc32($string);
+        } else {
+            return sprintf('%x', crc32($string));
+
+        }
     }
 
 }
