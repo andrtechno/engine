@@ -93,7 +93,7 @@ class NestedSetsBehavior extends Behavior
 
         //$query = $this->owner->find()->orderBy([$this->leftAttribute => SORT_ASC]); //, $this->leftAttribute => SORT_ASC
         $query = $owner->find();
-        //$query->orderBy([$this->leftAttribute => SORT_ASC]);
+        //$query->addOrderBy([$this->leftAttribute => SORT_ASC]);
         $db = $owner->getDb();
         $query->andWhere($db->quoteColumnName($this->leftAttribute) . '>'
             . $owner->getAttribute($this->leftAttribute));

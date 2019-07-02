@@ -30,7 +30,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
     const route_create = 'create';
     const route = null;
     const MODULE_ID = null;
-    public $translationOptions;
+  //  public $translationOptions;
 
     /**
      * @param null|string $redirect
@@ -160,10 +160,10 @@ class ActiveRecord extends \yii\db\ActiveRecord
         return $attrLabels;
     }
 
-    public function getTranslations()
-    {
-        return $this->hasMany($this->translationOptions['model'], ['object_id' => 'id']);
-    }
+   // public function getTranslations()
+  //  {
+  //      return $this->hasMany($this->translationOptions['model'], ['object_id' => 'id']);
+  //  }
 
 
     public function __get22($name)
@@ -181,14 +181,14 @@ class ActiveRecord extends \yii\db\ActiveRecord
     public function behaviors()
     {
         $b = [];
-        if ($this->translationOptions) {
+       /* if ($this->translationOptions) {
             if (isset($this->translationOptions['translationAttributes'])) {
                 $b['translateBehavior']['class'] = TranslateBehavior::class;
                 $b['translateBehavior']['translationAttributes'] = $this->translationOptions['translationAttributes'];
                 if (isset($this->translationOptions['relation']))
                     $b['translateBehavior']['relation'] = $this->translationOptions['relation'];
             }
-        }
+        }*/
         try {
 
             $columns = $this->tableSchema->columns;
