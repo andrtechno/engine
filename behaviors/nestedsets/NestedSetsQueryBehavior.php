@@ -120,6 +120,7 @@ class NestedSetsQueryBehavior extends Behavior
                 }
             }
         } elseif (is_scalar($root)) {
+
             if ($root == 0) {
                 foreach ($this->roots()->all() as $rootItem) {
                     if ($level) {
@@ -129,11 +130,23 @@ class NestedSetsQueryBehavior extends Behavior
                     }
                 }
             } else {
+
                 $modelClass = $this->owner->modelClass;
                 $model = new $modelClass;
-                $root = $modelClass::find()->andWhere([$model->idAttribute => $root])->one();
-                if ($root) {
-                    $res += $this->prepareData2Fancytree($root, $level);
+                $root = $modelClass::find()
+                    ->andWhere([$model->idAttribute => $root])
+                    ->one();
+                //if ($root) {
+                //    $res += $this->prepareData2Fancytree($root, $level);
+                //}
+
+                //New by panix
+                foreach ($root->children()->all() as $rootItem) {
+                    if ($level) {
+                        $res += $this->prepareData2Fancytree($rootItem, $level - 1);
+                    } elseif (is_null($level)) {
+                        $res += $this->prepareData2Fancytree($rootItem, null);
+                    }
                 }
                 unset($model);
             }
