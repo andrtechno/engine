@@ -29,7 +29,9 @@ class SettingsModel extends Model
         if (static::$category == null) {
             static::$category = $this->module;
         }
-        $this->setAttributes((array) Yii::$app->settings->get(static::$category));
+        $this->setAttributes(ArrayHelper::merge((array) Yii::$app->settings->get(static::$category),$this->attributes));
+
+       // $this->setAttributes((array) Yii::$app->settings->get(static::$category));
     }
 
 
