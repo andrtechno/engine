@@ -18,6 +18,10 @@ use yii\web\NotFoundHttpException;
  * @property array $disallow_delete IDs
  * @property array $disallow_switch IDs
  * @property array $disallow_update IDs
+ * @property integer $user_id
+ * @property string $user_agent
+ * @property string $ip_create IP адрес
+ * @property integer $ordern Sorting drag-n-drop
  */
 class ActiveRecord extends \yii\db\ActiveRecord
 {
@@ -78,6 +82,18 @@ class ActiveRecord extends \yii\db\ActiveRecord
      */
     public static function findModel($id, $message = null)
     {
+        if (($model = static::find()->one($id)) !== null) {
+            return $model;
+        } else {
+            if (!$id)
+                return new static();
+            throw new NotFoundHttpException($message ? $message : Yii::t('app/error', 404));
+        }
+    }
+
+
+    public static function findModel2($id, $message = null)
+    {
         if (($model = static::findOne($id)) !== null) {
             return $model;
         } else {
@@ -137,9 +153,9 @@ class ActiveRecord extends \yii\db\ActiveRecord
      */
     public function afterSave($insert, $changedAttributes)
     {
-        //if(isset($this->behaviors['timestamp'])){
-        //    $this->touch($this->behaviors['timestamp']->updatedAtAttribute);
-        //}
+        if(isset($this->behaviors['timestamp'])){
+            $this->touch($this->behaviors['timestamp']->updatedAtAttribute);
+        }
         parent::afterSave($insert, $changedAttributes);
     }
 
@@ -150,12 +166,11 @@ class ActiveRecord extends \yii\db\ActiveRecord
     {
         $attrLabels = [];
 
-        foreach ($this->behaviors() as $key => $b) {
-            if ($key == 'translateBehavior') {
-                if (isset($b['translationAttributes'])) {
-                    foreach ($b['translationAttributes'] as $attr) {
-                        $attrLabels[$attr] = static::t(strtoupper($attr));
-                    }
+
+        if(isset($this->behaviors['translate'])){
+            if (isset($this->behaviors['translate']->translationAttributes)) {
+                foreach ($this->behaviors['translate']->translationAttributes as $attr) {
+                    $attrLabels[$attr] = static::t(strtoupper($attr));
                 }
             }
         }
@@ -178,15 +193,15 @@ class ActiveRecord extends \yii\db\ActiveRecord
     public function behaviors()
     {
         $b = [];
-        if ($this->translationClass) {
-            $class = $this->translationClass;
-            $b['translateBehavior']['class'] = TranslateBehavior::class;
-            $b['translateBehavior']['translationClass'] = $class;
-            $b['translateBehavior']['translationAttributes'] = $class::$translationAttributes;
-        }
         try {
-
             $columns = $this->tableSchema->columns;
+
+            if ($this->translationClass) {
+                $class = $this->translationClass;
+                $b['translate']['class'] = TranslateBehavior::class;
+                $b['translate']['translationClass'] = $class;
+                $b['translate']['translationAttributes'] = $class::$translationAttributes;
+            }
 
             if (isset($columns['ordern'])) {
                 $b['sortable'] = [
@@ -222,7 +237,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
     {
         $next = static::getDb()->cache(function ($db) {
             return static::find()
-                ->where(['<', 'id', $this->id])
+                ->where(['<', 'id', $this->getPrimaryKey()])
                 ->orderBy(['id' => SORT_ASC]);
         }, 0);
         return $next;
@@ -235,7 +250,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
     {
         $prev = static::getDb()->cache(function ($db) {
             return static::find()
-                ->where(['>', 'id', $this->id])
+                ->where(['>', 'id', $this->getPrimaryKey()])
                 ->orderBy(['id' => SORT_DESC]);
         }, 0);
         return $prev;
