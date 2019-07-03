@@ -6,6 +6,10 @@ use PDO;
 use Yii;
 use yii\helpers\FileHelper;
 
+/**
+ * Class Connection
+ * @package panix\engine\db
+ */
 class Connection extends \yii\db\Connection
 {
 
@@ -34,6 +38,9 @@ class Connection extends \yii\db\Connection
         $this->noExportTables = $result;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function close()
     {
         if (isset(Yii::$app->settings)) {
@@ -157,7 +164,8 @@ class Connection extends \yii\db\Connection
     /**
      * import sql from a *.sql file
      *
-     * @param string $file : with the path and the file name
+     * @param string $mod
+     * @param string $fileName : with the path and the file name
      * @return mixed
      */
     public function import($mod, $fileName = 'scheme.sql')
@@ -183,8 +191,8 @@ class Connection extends \yii\db\Connection
                 //Yii::log('Success import db ' . $mod, 'info', 'install');
                 return true;
             }
-        } catch (PDOException $e) {
-            Yii::log('Error install DB', 'info', 'install');
+        } catch (\PDOException $e) {
+            Yii::debug('Error install DB', 'info');
             echo $e->getMessage();
             exit;
         }

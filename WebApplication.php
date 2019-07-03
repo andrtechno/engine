@@ -9,6 +9,11 @@ use yii\web\Application;
 /**
  * Class WebApplication
  * @package panix\engine
+ *
+ * @property \panix\engine\components\Settings $settings The user component. This property is read-only.
+ * @property ManagerLanguage $languageManager The user component. This property is read-only.
+ * @property \panix\engine\db\Connection $db The database connection. This property is read-only.
+ *
  */
 class WebApplication extends Application
 {
@@ -114,5 +119,35 @@ class WebApplication extends Application
             'fileMap' => $this->getTranslationsFileMap($id)
         ];
     }
+
+    /**
+     * Returns the settings component.
+     * @return \panix\engine\components\Settings the settings component.
+     */
+    public function getSettings()
+    {
+        return $this->get('settings');
+    }
+
+    /**
+     * Returns the languageManager component.
+     * @return ManagerLanguage the languageManager component.
+     */
+    public function getLanguageManager()
+    {
+        return $this->get('languageManager');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function coreComponents()
+    {
+        return array_merge(parent::coreComponents(), [
+            'settings' => ['class' => 'panix\engine\components\Settings'],
+            'languageManager' => ['class' => 'panix\engine\ManagerLanguage'],
+        ]);
+    }
+
 
 }

@@ -6,6 +6,14 @@ use Yii;
 use yii\base\Component;
 use panix\mod\admin\models\Languages;
 
+/**
+ * Class ManagerLanguage
+ * @package panix\engine
+ *
+ * @property Languages $default
+ * @property Languages $active
+ * @property array $languages
+ */
 class ManagerLanguage extends Component
 {
 
@@ -41,6 +49,7 @@ class ManagerLanguage extends Component
         try {
             $model = Languages::find()->published()->all();
             foreach ($model as $lang) {
+                /** @var Languages $lang */
                 $this->_languages[$lang->code] = $lang;
 
                 if ($lang->is_default === 1) {
