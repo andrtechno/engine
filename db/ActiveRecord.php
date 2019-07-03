@@ -11,15 +11,17 @@ use panix\engine\Html;
 use panix\engine\widgets\LinkPager;
 use yii\web\NotFoundHttpException;
 
+/**
+ * Class ActiveRecord
+ * @package panix\engine\db
+ *
+ * @property array $disallow_delete IDs
+ * @property array $disallow_switch IDs
+ * @property array $disallow_update IDs
+ */
 class ActiveRecord extends \yii\db\ActiveRecord
 {
 
-    /**
-     * Disallow actions
-     * @disallow_delete array ids
-     * @disallow_switch array ids
-     * @disallow_update array ids
-     */
     public $disallow_delete = [];
     public $disallow_switch = [];
     public $disallow_update = [];
@@ -30,7 +32,8 @@ class ActiveRecord extends \yii\db\ActiveRecord
     const route_create = 'create';
     const route = null;
     const MODULE_ID = null;
-  //  public $translationOptions;
+    public $translationClass;
+    //  public $translationOptions;
 
     /**
      * @param null|string $redirect
@@ -146,10 +149,13 @@ class ActiveRecord extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         $attrLabels = [];
+
         foreach ($this->behaviors() as $key => $b) {
-            if (isset($b['translationAttributes'])) {
-                foreach ($b['translationAttributes'] as $attr) {
-                    $attrLabels[$attr] = self::t(strtoupper($attr));
+            if ($key == 'translateBehavior') {
+                if (isset($b['translationAttributes'])) {
+                    foreach ($b['translationAttributes'] as $attr) {
+                        $attrLabels[$attr] = static::t(strtoupper($attr));
+                    }
                 }
             }
         }
@@ -160,35 +166,24 @@ class ActiveRecord extends \yii\db\ActiveRecord
         return $attrLabels;
     }
 
-   // public function getTranslations()
-  //  {
-  //      return $this->hasMany($this->translationOptions['model'], ['object_id' => 'id']);
-  //  }
-
-
-    public function __get22($name)
+    public function getTranslations()
     {
-
-        if ($this->translationOptions && $name == 'Translations') {
-            //   return $this->hasMany($this->translationOptions['model'], ['object_id' => 'id']);
+        if ($this->translationClass) {
+            return $this->hasMany($this->translationClass, ['object_id' => 'id']);
+        } else {
+            return $this;
         }
-
-        return parent::__get($name);
-
-
     }
 
     public function behaviors()
     {
         $b = [];
-       /* if ($this->translationOptions) {
-            if (isset($this->translationOptions['translationAttributes'])) {
-                $b['translateBehavior']['class'] = TranslateBehavior::class;
-                $b['translateBehavior']['translationAttributes'] = $this->translationOptions['translationAttributes'];
-                if (isset($this->translationOptions['relation']))
-                    $b['translateBehavior']['relation'] = $this->translationOptions['relation'];
-            }
-        }*/
+        if ($this->translationClass) {
+            $class = $this->translationClass;
+            $b['translateBehavior']['class'] = TranslateBehavior::class;
+            $b['translateBehavior']['translationClass'] = $class;
+            $b['translateBehavior']['translationAttributes'] = $class::$translationAttributes;
+        }
         try {
 
             $columns = $this->tableSchema->columns;

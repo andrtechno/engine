@@ -3,6 +3,7 @@
 namespace panix\engine\grid\columns;
 
 
+use panix\engine\db\ActiveRecord;
 use Yii;
 use Closure;
 use yii\helpers\Url;
@@ -158,6 +159,7 @@ class ActionColumn extends DataColumn
     {
         if (!isset($this->buttons['switch'])) {
             $this->buttons['switch'] = function ($url, $model) {
+                /** @var $model ActiveRecord */
                 //unset($url,$key);
                 if (isset($model->primaryKey)) {
                     if (!in_array($model->primaryKey, $model->disallow_switch)) {
@@ -192,7 +194,7 @@ class ActionColumn extends DataColumn
         }
         if (!isset($this->buttons['update'])) {
             $this->buttons['update'] = function ($url, $model) {
-
+                /** @var $model ActiveRecord */
                 if (isset($model->primaryKey)) {
                     if (!in_array($model->primaryKey, $model->disallow_update)) {
                         return Html::a(Html::icon('edit'), $url, [
@@ -213,6 +215,7 @@ class ActionColumn extends DataColumn
 
         if (!isset($this->buttons['delete'])) {
             $this->buttons['delete'] = function ($url, $model) {
+                /** @var $model ActiveRecord */
                 /* return Html::a('<i class="text-danger icon-delete"></i>', $url, [
                   'title' => Yii::t('yii', 'Delete'),
                   'class' => 'btn ' . $this->btnSize . ' btn-secondary',

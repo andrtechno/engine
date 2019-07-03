@@ -17,6 +17,7 @@ use yii\db\ActiveRecord;
 class TranslateBehavior extends Behavior
 {
 
+    public $translationClass;
     /**
      * @var string the translations relation name
      */
@@ -187,11 +188,11 @@ class TranslateBehavior extends Behavior
                 //$translate->setAttribute($attr,$this->owner->link($this->relation, $attr));
             }
         } else {
-             $api = new YandexTranslate();
-             foreach ($this->translationAttributes as $attr){
-                 $data = $api->translate([Yii::$app->languageManager->default->code,$language->code],$this->owner->$attr);
-                 $translate->{$attr} = (isset($data['text']))?$data['text'][0]:$this->owner->$attr;
-             }
+            $api = new YandexTranslate();
+            foreach ($this->translationAttributes as $attr) {
+                $data = $api->translate([Yii::$app->languageManager->default->code, $language->code], $this->owner->$attr);
+                $translate->{$attr} = (isset($data['text'])) ? $data['text'][0] : $this->owner->$attr;
+            }
         }
 
 
