@@ -2,10 +2,10 @@
 
 namespace panix\engine\web;
 
-use panix\engine\CMS;
+
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\web\DbSession as Session;
+use panix\engine\CMS;
 
 class DbSession extends Session
 {
