@@ -3,6 +3,7 @@
 namespace panix\engine\db;
 
 use panix\engine\behaviors\TranslateBehavior;
+use panix\mod\shop\models\Manufacturer;
 use Yii;
 use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
@@ -82,19 +83,9 @@ class ActiveRecord extends \yii\db\ActiveRecord
      */
     public static function findModel($id, $message = null)
     {
-        if (($model = static::find()->one($id)) !== null) {
-            return $model;
-        } else {
-            if (!$id)
-                return new static();
-            throw new NotFoundHttpException($message ? $message : Yii::t('app/error', 404));
-        }
-    }
 
-
-    public static function findModel2($id, $message = null)
-    {
         if (($model = static::findOne($id)) !== null) {
+        //if (($model = static::find()->one((int)$id)) !== null) {
             return $model;
         } else {
             if (!$id)
@@ -102,6 +93,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
             throw new NotFoundHttpException($message ? $message : Yii::t('app/error', 404));
         }
     }
+
 
     public static function dropdown()
     {

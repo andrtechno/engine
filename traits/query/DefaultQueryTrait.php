@@ -33,7 +33,6 @@ trait DefaultQueryTrait
         $tableName = $modelClass::tableName();
         if ($modelClass::getDb()->getSchema()->getTableSchema($tableName)->getColumn('switch')) {
             $this->andWhere(["{$tableName}.switch" => $state]);
-
         }
         return $this;
     }
@@ -50,7 +49,6 @@ trait DefaultQueryTrait
         $tableName = $modelClass::tableName();
         if ($modelClass::getDb()->getSchema()->getTableSchema($tableName)->getColumn('ordern')) {
             $this->addOrderBy(["{$tableName}.ordern" => $sort]);
-
         }
         return $this;
     }
