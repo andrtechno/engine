@@ -39,6 +39,18 @@ class AdminController extends Controller
         ];
     }
 
+    /**
+     * @param boolean $isNewRecord
+     * @param array $post
+     * @return \yii\web\Response
+     */
+    public function redirectPage($isNewRecord, $post)
+    {
+        Yii::$app->session->setFlash('success', Yii::t('app', ($isNewRecord) ? 'SUCCESS_CREATE' : 'SUCCESS_UPDATE'));
+        $redirect = (isset($post['redirect'])) ? $post['redirect'] : Yii::$app->request->url;
+        if (!Yii::$app->request->isAjax)
+            return $this->redirect($redirect);
+    }
 
     public function getAssetUrl()
     {
