@@ -30,7 +30,7 @@ class SettingsModel extends Model
             static::$category = $this->module;
         }
 
-        $this->setAttributes((array) Yii::$app->settings->get(static::$category));
+        $this->setAttributes((array)Yii::$app->settings->get(static::$category));
     }
 
 
@@ -41,8 +41,25 @@ class SettingsModel extends Model
 
     public function save()
     {
-      //  $shortName = (new \ReflectionClass(get_called_class()))->getShortName();
-     //   $this->attributes = ArrayHelper::merge(Yii::$app->request->post($shortName), $this->attributes);
+        Yii::$app->settings->set(static::$category, $this->attributes);
+    }
+
+    public function validate($attributeNames = null, $clearErrors = true)
+    {
+        if (parent::validate($attributeNames, $clearErrors)) {
+            Yii::$app->session->addFlash("success", Yii::t('app', 'SUCCESS_UPDATE'));
+            return true;
+        } else {
+            //print_r($this->getErrors());die;
+            Yii::$app->session->addFlash("error", Yii::t('app', 'ERROR_UPDATE'));
+            return false;
+        }
+    }
+
+    public function saveOLD()
+    {
+        //  $shortName = (new \ReflectionClass(get_called_class()))->getShortName();
+        //   $this->attributes = ArrayHelper::merge(Yii::$app->request->post($shortName), $this->attributes);
         if ($this->validate()) {
             Yii::$app->settings->set(static::$category, $this->attributes);
             Yii::$app->session->setFlash("success", Yii::t('app', 'SUCCESS_UPDATE'));
