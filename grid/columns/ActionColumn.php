@@ -32,7 +32,8 @@ class ActionColumn extends DataColumn
     public function init()
     {
 
-        $this->header = Yii::t('app', 'OPTIONS');
+        if(!$this->header)
+            $this->header = Yii::t('app', 'OPTIONS');
 
         // $this->btnSize = $config['grid_btn_icon_size'];
         // if (!$this->pjax) {
