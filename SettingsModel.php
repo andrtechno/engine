@@ -22,6 +22,11 @@ class SettingsModel extends Model
         return Settings::tableName();
     }
 
+    public function defaultSettings()
+    {
+        return [];
+    }
+
     public function init()
     {
         if (!isset($this->module)) {
