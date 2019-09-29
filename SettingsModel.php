@@ -22,7 +22,7 @@ class SettingsModel extends Model
         return Settings::tableName();
     }
 
-    public function defaultSettings()
+    public static function defaultSettings()
     {
         return [];
     }

@@ -107,7 +107,6 @@ class WebController extends Controller
 
 
         //   echo VarDumper::dump(Yii::$app->urlManager->rules,10,true);die;
-
         return parent::beforeAction($action);
     }
 

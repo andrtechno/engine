@@ -642,20 +642,22 @@ class CMS
     }
 
     /**
-     * @param null $timestamp
+     * @param integer|null $timestamp
      * @param bool $time Show time
      * @return string
      */
-    public static function date($timestamp = null, $time = true)
+    public static function date( int $timestamp = null, $time = true)
     {
         if (!$timestamp) {
             $timestamp = time();
         }
+
         if (extension_loaded('intl')) {
             $fn = ($time) ? 'asDatetime' : 'asDate';
             return Yii::$app->formatter->{$fn}($timestamp);
 
         } else {
+            $timestamp = date('Y-m-d H:i:s',$timestamp);
             $fn = ($time) ? 'datetimeFormat' : 'dateFormat';
             $date = new \DateTime($timestamp, new \DateTimeZone(self::timezone()));
             return $date->format(str_replace('php:', '', Yii::$app->formatter->{$fn}));
