@@ -20,7 +20,11 @@ class Settings extends Component
      */
     protected $data = [];
     private $cache_key = 'cached_settings';
-    public static $tableName = '{{%settings}}';
+
+    public static function tableName()
+    {
+        return '{{%settings}}';
+    }
 
     /**
      * Initialize component
@@ -37,7 +41,7 @@ class Settings extends Component
               ->queryAll(); */
             try {
                 $settings = (new \yii\db\Query())
-                    ->from(static::$tableName)
+                    ->from(static::tableName())
                     ->orderBy('category')
                     ->all();
 
@@ -64,10 +68,10 @@ class Settings extends Component
      */
     public function set($category, array $data)
     {
-        $tableName = static::$tableName;
+        $tableName = static::tableName();
         if (!empty($data)) {
-            if($category == 'contacts'){
-               // VarDumper::dump($data,10,true);die;
+            if ($category == 'contacts') {
+                // VarDumper::dump($data,10,true);die;
             }
             foreach ($data as $key => $value) {
 
@@ -118,7 +122,7 @@ class Settings extends Component
             foreach ($this->data[$category] as $key => $data) {
                 $result[$key] = (!empty($data) && CMS::isJson($data)) ? Json::decode($data) : $data;
             }
-            return (object) $result;
+            return (object)$result;
         }
         if (isset($this->data[$category][$key])) {
             return CMS::isJson($this->data[$category][$key]) ? Json::decode($this->data[$category][$key]) : $this->data[$category][$key];
@@ -133,7 +137,7 @@ class Settings extends Component
      */
     public function clear($category)
     {
-        Yii::$app->db->createCommand()->delete(static::$tableName, 'category=:category', [':category' => $category])->execute();
+        Yii::$app->db->createCommand()->delete(static::tableName(), 'category=:category', [':category' => $category])->execute();
         if (isset($this->data[$category]))
             unset($this->data[$category]);
 

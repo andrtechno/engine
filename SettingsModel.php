@@ -16,7 +16,11 @@ use yii\helpers\VarDumper;
 class SettingsModel extends Model
 {
     public static $category = null;
-    public static $tableName = null;
+
+    public static function tableName()
+    {
+        return Settings::tableName();
+    }
 
     public function init()
     {
@@ -25,7 +29,6 @@ class SettingsModel extends Model
                 'params' => 'module'
             ]));
         }
-        static::$tableName = Settings::$tableName;
         if (static::$category == null) {
             static::$category = $this->module;
         }

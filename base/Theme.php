@@ -3,8 +3,8 @@
 namespace panix\engine\base;
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Inflector;
 
 class Theme extends \yii\base\Theme
 {
@@ -24,7 +24,8 @@ class Theme extends \yii\base\Theme
         $this->basePath = "@app/web/themes/{$this->name}";
         $this->baseUrl = "@app/web/themes/{$this->name}";
         if(!file_exists(Yii::getAlias($this->basePath))){
-            die("Error: theme \"{$this->name}\" not found!");
+            throw new InvalidConfigException("Error: theme \"{$this->name}\" not found!");
+
         }
 
         $modulesPaths = [];
