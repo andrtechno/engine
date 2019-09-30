@@ -4,6 +4,7 @@ namespace panix\engine\console\controllers;
 
 use Yii;
 use yii\console\controllers\MigrateController as BaseMigrateController;
+use yii\helpers\ArrayHelper;
 
 
 class MigrateController extends BaseMigrateController
@@ -21,14 +22,15 @@ class MigrateController extends BaseMigrateController
 
     public function beforeAction($action)
     {
-
+        $list = [];
         foreach (Yii::$app->getModules() as $mod => $params) {
             $module = Yii::$app->getModule($mod);
             $class = new \ReflectionClass($module);
-            if (!in_array($mod, ['rbac'])) {
-                $this->migrationNamespaces[] = $class->getNamespaceName() . '\\migrations';
-            }
+           // if (!in_array($mod, ['rbac'])) {
+                $list[] = $class->getNamespaceName() . '\\migrations';
+            //}
         }
+        $this->migrationNamespaces = ArrayHelper::merge($this->migrationNamespaces,$list);
         return parent::beforeAction($action);
 
     }
