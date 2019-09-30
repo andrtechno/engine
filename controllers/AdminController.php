@@ -22,7 +22,7 @@ class AdminController extends Controller
     public $layout = '@theme/views/layouts/main';
     public $dashboard = true;
 
-    public function behaviors2()
+    public function behaviors()
     {
         return [
             'access' => [

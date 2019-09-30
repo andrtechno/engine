@@ -3,8 +3,8 @@
 namespace panix\engine;
 
 use Yii;
-use panix\mod\admin\models\Modules;
 use yii\web\Application;
+use panix\mod\admin\models\Modules;
 
 /**
  * Class WebApplication
