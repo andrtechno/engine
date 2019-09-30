@@ -2,19 +2,15 @@
 
 namespace panix\engine\controllers;
 
-use panix\engine\grid\GridColumns;
-use panix\engine\Html;
+
 use Yii;
 use yii\data\ArrayDataProvider;
-use yii\db\Exception;
-use yii\helpers\Url;
-use yii\helpers\VarDumper;
-use yii\web\ForbiddenHttpException;
-use panix\mod\rbac\filters\AccessControl;
-
 use yii\web\HttpException;
 use yii\web\UnauthorizedHttpException;
 use yii\web\Controller;
+use panix\mod\rbac\filters\AccessControl;
+use panix\engine\grid\GridColumns;
+use panix\engine\Html;
 
 class AdminController extends Controller
 {
@@ -26,13 +22,13 @@ class AdminController extends Controller
     public $layout = '@theme/views/layouts/main';
     public $dashboard = true;
 
-    public function behaviors()
+    public function behaviors2()
     {
         return [
             'access' => [
                 'class' => AccessControl::class,
                 'allowActions' => [
-                    'index',
+                   // 'index',
                     // The actions listed here will be allowed to everyone including guests.
                 ]
             ],

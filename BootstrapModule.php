@@ -15,7 +15,6 @@ class BootstrapModule extends Component implements BootstrapInterface
             if ($module->hasMethod('bootstrap')) {
                 $module->bootstrap(Yii::$app);
             }
-
         }
     }
 }

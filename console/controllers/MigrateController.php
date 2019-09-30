@@ -25,7 +25,9 @@ class MigrateController extends BaseMigrateController
         foreach (Yii::$app->getModules() as $mod => $params) {
             $module = Yii::$app->getModule($mod);
             $class = new \ReflectionClass($module);
-            $this->migrationNamespaces[] = $class->getNamespaceName() . '\\migrations';
+            if (!in_array($mod, ['rbac'])) {
+                $this->migrationNamespaces[] = $class->getNamespaceName() . '\\migrations';
+            }
         }
         return parent::beforeAction($action);
 
