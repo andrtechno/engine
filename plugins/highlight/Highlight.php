@@ -9,10 +9,10 @@ use yii\helpers\ArrayHelper;
 use yii\web\Response;
 
 /**
- * Plugin Name: Censor
+ * Plugin Name: Highlight
  * Plugin URI: https://pixelion.com.ua
  * Version: 1.0
- * Description: A Censor plugin
+ * Description: Highlight plugin
  * Author: Andrey S
  * Author URI: https://pixelion.com.ua
  */

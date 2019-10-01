@@ -10,7 +10,7 @@ use yii\web\Response;
  * Plugin Name: Censor
  * Plugin URI: https://pixelion.com.ua
  * Version: 1.0
- * Description: A Censor plugin
+ * Description: Censor plugin
  * Author: Andrey S
  * Author URI: https://pixelion.com.ua
  */

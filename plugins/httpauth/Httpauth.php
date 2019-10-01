@@ -19,8 +19,8 @@ class Httpauth extends BasePlugin
 {
     /**
      * Application id, where plugin will be worked.
-     * Support values: frontend, backend, common
-     * Default: frontend
+     * Support values: web, backend, common
+     * Default: web
      * @var string appId
      */
     public static $appId = self::APP_BACKEND;
