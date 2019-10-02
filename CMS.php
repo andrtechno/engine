@@ -35,7 +35,10 @@ class CMS
         return $number;
 
     }
-
+    public static function isMobile()
+    {
+        return (preg_match('!(tablet|pad|mobile|phone|symbian|android|ipod|ios|blackberry|webos)!i', Yii::$app->request->getUserAgent())) ? true : false;
+    }
     /**
      * Check string of json
      *
@@ -188,10 +191,6 @@ class CMS
         return substr($str, 0, $start_length) . str_repeat('*', $str_length - $start_length) . substr($str, $str_length - $end_length, $end_length);
     }
 
-    public static function isMobile()
-    {
-        return (preg_match('!(tablet|pad|mobile|phone|symbian|android|ipod|ios|blackberry|webos)!i', Yii::$app->request->getUserAgent())) ? true : false;
-    }
 
     /**
      * Установление прав доступа.

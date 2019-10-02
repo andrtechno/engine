@@ -3,7 +3,6 @@
 namespace panix\engine;
 
 use Yii;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use panix\engine\emoji\Emoji;
 
@@ -12,9 +11,85 @@ class Html extends \yii\helpers\Html
 
     public static $iconPrefix = 'icon-';
 
-    public static function tel($phone, $options = [], $replace=null)
+    /**
+     * Viber link
+     * @param $text
+     * @param string $number
+     * @param array $options
+     * @return string
+     */
+    public static function viber($text, $number = '', $options = [])
     {
-        return self::a(CMS::phone_number_format($phone,$replace), 'tel:' . CMS::phoneFormat($phone), $options);
+        $number = preg_replace('/[^0-9]+/', '', $number);
+        if (CMS::isMobile()) {
+            return parent::a($text, 'viber://add?number=' . $number, $options);
+        } else {
+            $options['title'] = 'Должен быть устоновлен Viber для ПК';
+            return parent::a($text, 'viber://chat?number=+' . $number, $options);
+        }
+    }
+
+    /**
+     * Telegram link
+     * @param $text
+     * @param string $name
+     * @param array $options
+     * @return string
+     */
+    public static function telegram($text, $name = '', $options = [])
+    {
+        return parent::a($text, 'tg://resolve?domain=' . $name, $options);
+    }
+
+    /**
+     * WhatsApp link
+     * @param $text
+     * @param string $number
+     * @param array $options
+     * @return string
+     */
+    public static function whatsapp($text, $number = '', $options = [])
+    {
+        $number = preg_replace('/[^0-9]+/', '', $number);
+        return parent::a($text, 'whatsapp://send?phone=+' . $number, $options);
+    }
+
+    /**
+     * skypeCall link
+     * @param $text
+     * @param string $number
+     * @param array $options
+     * @return string
+     */
+    public static function skypeCall($text, $number, $options = [])
+    {
+        $number = preg_replace('/[^0-9]+/', '', $number);
+        return parent::a($text, "skype:{$number}?call", $options);
+    }
+
+    /**
+     * skypeChat link
+     * @param $text
+     * @param string $number
+     * @param array $options
+     * @return string
+     */
+    public static function skypeChat($text, $number, $options = [])
+    {
+        $number = preg_replace('/[^0-9]+/', '', $number);
+        return parent::a($text, "skype:{$number}?chat", $options);
+    }
+
+    /**
+     * Telephone link
+     * @param $phone
+     * @param array $options
+     * @param null $replace
+     * @return string
+     */
+    public static function tel($phone, $options = [], $replace = null)
+    {
+        return parent::a(CMS::phone_number_format($phone, $replace), 'tel:' . CMS::phoneFormat($phone), $options);
     }
 
     public static function error($model, $attribute, $options = [])
@@ -102,12 +177,9 @@ class Html extends \yii\helpers\Html
                         $options['rel'] = 'nofollow';
                     }
                 }
-
             }
         }
         return parent::a($text, $url, $options);
     }
 
 }
-
-?>
