@@ -85,7 +85,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
     {
 
         if (($model = static::findOne($id)) !== null) {
-        //if (($model = static::find()->one((int)$id)) !== null) {
+            //if (($model = static::find()->one((int)$id)) !== null) {
             return $model;
         } else {
             if (!$id)
@@ -145,8 +145,10 @@ class ActiveRecord extends \yii\db\ActiveRecord
      */
     public function afterSave($insert, $changedAttributes)
     {
-        if(isset($this->behaviors['timestamp'])){
-            $this->touch($this->behaviors['timestamp']->updatedAtAttribute);
+        if (isset($this->behaviors['timestamp'])) {
+            //if ($this->scenario != 'disallow-timestamp') {
+                $this->touch($this->behaviors['timestamp']->updatedAtAttribute);
+            //}
         }
         parent::afterSave($insert, $changedAttributes);
     }
@@ -159,7 +161,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
         $attrLabels = [];
 
 
-        if(isset($this->behaviors['translate'])){
+        if (isset($this->behaviors['translate'])) {
             if (isset($this->behaviors['translate']->translationAttributes)) {
                 foreach ($this->behaviors['translate']->translationAttributes as $attr) {
                     $attrLabels[$attr] = static::t(strtoupper($attr));

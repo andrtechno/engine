@@ -82,7 +82,6 @@ class AdminController extends Controller
             return Yii::$app->response->redirect(['/admin/auth']);
         }
 
-
         return parent::beforeAction($event);
     }
 

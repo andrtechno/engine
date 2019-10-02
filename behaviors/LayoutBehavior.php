@@ -6,6 +6,7 @@ use Yii;
 use yii\base\View;
 use yii\caching\Cache;
 use panix\engine\controllers\WebController;
+use panix\engine\controllers\AdminController;
 
 class LayoutBehavior extends \yii\base\Behavior {
 
@@ -20,27 +21,30 @@ class LayoutBehavior extends \yii\base\Behavior {
 
     public function init() {
         parent::init();
-        Yii::debug('Initializing LayoutBehavior', __METHOD__);
         $this->useCache = $this->useCache && Yii::$app->cache instanceof Cache;
     }
 
     public function initialize() {
         /** @var WebController $controller */
+        //var_dump($this->owner->context);die;
         $controller = $this->owner->context;
-        if (!($controller instanceof WebController)) {
+        if (!($controller instanceof WebController) || !($controller instanceof AdminController)) {
+            Yii::debug('LayoutBehavior error [1]', __METHOD__);
             return false;
         }
         if (!empty($controller->layout)) {
+            Yii::debug('LayoutBehavior error [2]', __METHOD__);
             return false;
         }
 
 
-        $moduleId = $controller->module !== null ? $controller->module->id : null;
+        $moduleId = (isset($controller->module) && $controller->module !== null) ? $controller->module->id : null;
         $controllerId = $controller->id;
         $actionId = $controller->action->id;
         $cacheKey = __CLASS__ . "_{$moduleId}_{$controllerId}_{$actionId}";
         $theme = $controller->view->theme->name;
-        if ($this->useCache && false !== ($layout = Yii::$app->cache->get($cacheKey))) {
+
+        if ($this->useCache && ($layout = Yii::$app->cache->get($cacheKey))) {
             $controller->layout = $layout;
             Yii::debug('Layout applied from cache:' . "\n" . $controller->layout, __METHOD__);
         } else {
@@ -50,7 +54,7 @@ class LayoutBehavior extends \yii\base\Behavior {
 
             $app_id = Yii::$app->id;
 
-            if (null !== $moduleId) {
+           /* if (null !== $moduleId) {
                 $layouts[] = "@app/web/themes/{$theme}/modules/{$moduleId}/layouts/{$moduleId}_{$controllerId}_{$actionId}";
                 $layouts[] = "@app/web/themes/{$theme}/modules/{$moduleId}/layouts/{$moduleId}_{$controllerId}";
                 $layouts[] = "@app/web/themes/{$theme}/modules/{$moduleId}/layouts/main";//{$moduleId}
@@ -69,17 +73,12 @@ class LayoutBehavior extends \yii\base\Behavior {
 
                // $layouts[] = "@webroot/themes/{$theme}/views/layouts/main";
                 $layouts[] = "@app/web/themes/{$theme}/views/layouts/default";
-
-                
-
             } else {
-
                 $layouts[] = "@app/views/layouts/{$controllerId}_{$actionId}";
                 $layouts[] = "@app/views/layouts/{$controllerId}";
-            }
+            }*/
 
             if (is_array($pathMaps) && !empty($pathMaps)) {
-               // VarDumper::dump($pathMaps,10,true);die;
                 foreach ($pathMaps as $path) {
                     if ($moduleId !== null) {
                         $layouts[] = "{$path}/layouts6/{$moduleId}_{$controllerId}_{$actionId}";
@@ -90,16 +89,11 @@ class LayoutBehavior extends \yii\base\Behavior {
                         $layouts[] = "{$path}/layouts3/{$controllerId}";
                     }
                 }
-                $layouts[] = "{$path}/layouts1/main";
+               // $layouts[] = "{$path}/layouts1/main";
             }
 
             $layouts[] = "@app/views/layouts2/main";
 
-         //   VarDumper::dump($layouts,10,true);die;
-            //foreach (Yii::$app->getModules() as $module){
-            //    print_r($module);
-            //}
-            //die;
             foreach ($layouts as $layout) {
  
                 $layoutPath = Yii::getAlias($layout . '.' . Yii::$app->getView()->defaultExtension);

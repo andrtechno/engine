@@ -18,6 +18,20 @@ class WebController extends Controller
     public $dashboard = false;
     public $icon;
 
+    public function actions()
+    {
+        return [
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+            'like' => [
+                'class' => 'panix\engine\widgets\like\actions\LikeAction',
+                //  'model'=>$this->dataModel
+            ],
+        ];
+    }
+
     public function behaviors()
     {
         return [
@@ -58,22 +72,10 @@ class WebController extends Controller
     public function actionIndex()
     {
         $this->layout = 'main';
+        $this->view->title = Yii::t('yii', 'Home');
         return $this->render('index');
     }
 
-    public function actions()
-    {
-        return [
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
-            'like' => [
-                'class' => 'panix\engine\widgets\like\actions\LikeAction',
-                //  'model'=>$this->dataModel
-            ],
-        ];
-    }
 
     protected function error404($text = null)
     {
