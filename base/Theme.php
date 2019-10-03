@@ -5,6 +5,7 @@ namespace panix\engine\base;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 
 class Theme extends \yii\base\Theme
 {
@@ -24,13 +25,12 @@ class Theme extends \yii\base\Theme
         }
 
 
-
-        Yii::debug('Loading '.$this->name, __METHOD__);
+        Yii::debug('Loading ' . $this->name, __METHOD__);
 
 
         $this->basePath = "@app/web/themes/{$this->name}";
         $this->baseUrl = "@web/themes/{$this->name}";
-        if(!file_exists(Yii::getAlias($this->basePath))){
+        if (!file_exists(Yii::getAlias($this->basePath))) {
             throw new InvalidConfigException("Error: theme \"{$this->name}\" not found!");
         }
 
@@ -47,6 +47,22 @@ class Theme extends \yii\base\Theme
         ], $modulesPaths);
 
         parent::init();
+    }
+
+
+    public function alert($content, $type = 'secondary')
+    {
+        return Yii::$app->view->render('@theme/views/_bootstrap/alert',[
+            'type'=>$type,
+            'content'=>$content
+        ]);
+        //return Html::tag('div', $text, ['class' => 'alert alert-' . $type]);
+    }
+
+
+    public function badge($text, $type = 'secondary')
+    {
+        return Html::tag('span', $text, ['class' => 'badge badge-' . $type]);
     }
 
 }
