@@ -29,7 +29,7 @@ class Theme extends \yii\base\Theme
 
 
         $this->basePath = "@app/web/themes/{$this->name}";
-        $this->baseUrl = "@app/web/themes/{$this->name}";
+        $this->baseUrl = "@web/themes/{$this->name}";
         if(!file_exists(Yii::getAlias($this->basePath))){
             throw new InvalidConfigException("Error: theme \"{$this->name}\" not found!");
         }

@@ -20,7 +20,7 @@ class Html extends \yii\helpers\Html
      */
     public static function viber($text, $number = '', $options = [])
     {
-        $number = preg_replace('/[^0-9]+/', '', $number);
+        $number = CMS::phoneFormat($number);
         if (CMS::isMobile()) {
             return parent::a($text, 'viber://add?number=' . $number, $options);
         } else {
@@ -50,7 +50,7 @@ class Html extends \yii\helpers\Html
      */
     public static function whatsapp($text, $number = '', $options = [])
     {
-        $number = preg_replace('/[^0-9]+/', '', $number);
+        $number = CMS::phoneFormat($number);
         return parent::a($text, 'whatsapp://send?phone=+' . $number, $options);
     }
 
@@ -63,7 +63,7 @@ class Html extends \yii\helpers\Html
      */
     public static function skypeCall($text, $number, $options = [])
     {
-        $number = preg_replace('/[^0-9]+/', '', $number);
+        $number = CMS::phoneFormat($number);
         return parent::a($text, "skype:{$number}?call", $options);
     }
 
@@ -76,7 +76,7 @@ class Html extends \yii\helpers\Html
      */
     public static function skypeChat($text, $number, $options = [])
     {
-        $number = preg_replace('/[^0-9]+/', '', $number);
+        $number = CMS::phoneFormat($number);
         return parent::a($text, "skype:{$number}?chat", $options);
     }
 
@@ -105,43 +105,36 @@ class Html extends \yii\helpers\Html
         if (isset($options['class'])) {
             $options['class'] .= ' ' . self::$iconPrefix . $icon;
         }
-        return static::tag('i', '', array_merge(['class' => self::$iconPrefix . $icon], $options));
+        return parent::tag('i', '', array_merge(['class' => self::$iconPrefix . $icon], $options));
     }
 
     public static function aIconL($icon, $text, $url = null, $options = [])
     {
         if ($url !== null) {
-            $options['href'] = Url::to($url);
+            $url = Url::to($url);
         }
-        $iconHtml = '<i class="' . self::$iconPrefix . ' ' . $icon . '"></i> ';
-        return static::tag('a', $iconHtml . $text, $options);
+        $icon = '<i class="' . self::$iconPrefix . ' ' . $icon . '"></i> ';
+        return parent::a($icon . $text, $url, $options);
     }
 
     public static function aIconR($icon, $text, $url = null, $options = [])
     {
         if ($url !== null) {
-            $options['href'] = Url::to($url);
+            $url = Url::to($url);
         }
-        $iconHtml = '<i class="' . self::$iconPrefix . ' ' . $icon . '"></i> ';
-        return static::tag('a', $text . $iconHtml, $options);
+        $icon = '<i class="' . self::$iconPrefix . ' ' . $icon . '"></i> ';
+        return parent::a($text . $icon, $url, $options);
     }
 
-    public static function text($message, $cut = false)
+    public static function text($message)
     {
         $config = Yii::$app->settings->get('app');
-        //if (!$mode)
-        //  $message = strip_tags(urldecode($message));
-        //$message = htmlspecialchars(trim($message), ENT_QUOTES);
-        // $message=html_entity_decode(htmlentities($message));
         if ($config->censor) {
             $censor_l = explode(",", $config->censor_words);
             foreach ($censor_l as $val)
                 $message = preg_replace("#" . $val . "#iu", $config->censor_replace, $message);
         }
-        //return Emoji::emoji_unified_to_html(Emoji::emoji_html_to_unified($message));
         return Emoji::emoji_unified_to_html($message);
-        //return Emoji::emoji_html_to_unified($message);
-        //  return self::highlight($message, $cut);
     }
 
     public static function highlight($text, $cut = false)
