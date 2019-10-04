@@ -53,7 +53,6 @@ class ManagerLanguage extends Component
                 $this->_languages[$lang->code] = $lang;
 
                 if ($lang->is_default === 1) {
-
                     $this->_default = $lang->code;
                 }
             }
@@ -65,12 +64,19 @@ class ManagerLanguage extends Component
 
     /**
      * Get system languages
+     * @param boolean $published
      * @return array
      */
-    public function getLanguages()
+    public function getLanguages($published = true)
     {
-        return $this->_languages;
+        if($published){
+            return $this->_languages;
+        }else{
+            return Languages::find()->asArray()->all();
+        }
+
     }
+
 
     /**
      * Get lang by its code

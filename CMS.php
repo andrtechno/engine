@@ -35,10 +35,12 @@ class CMS
         return $number;
 
     }
+
     public static function isMobile()
     {
         return (preg_match('!(tablet|pad|mobile|phone|symbian|android|ipod|ios|blackberry|webos)!i', Yii::$app->request->getUserAgent())) ? true : false;
     }
+
     /**
      * Check string of json
      *
@@ -69,6 +71,8 @@ class CMS
             return 'EOPLEnet Украина';
         } elseif (preg_match('/([\+]38094)/i', $number, $match)) {
             return 'Интертелеком Украина';
+        } else {
+            return 'Unknown';
         }
     }
 
@@ -157,7 +161,7 @@ class CMS
 
     public static function slug($text)
     {
-        return Inflector::slug($text);
+        return (extension_loaded('intl')) ? Inflector::slug($text) : $text;
     }
 
     /**
@@ -645,7 +649,7 @@ class CMS
      * @param bool $time Show time
      * @return string
      */
-    public static function date( int $timestamp = null, $time = true)
+    public static function date(int $timestamp = null, $time = true)
     {
         if (!$timestamp) {
             $timestamp = time();
@@ -656,7 +660,7 @@ class CMS
             return Yii::$app->formatter->{$fn}($timestamp);
 
         } else {
-            $timestamp = date('Y-m-d H:i:s',$timestamp);
+            $timestamp = date('Y-m-d H:i:s', $timestamp);
             $fn = ($time) ? 'datetimeFormat' : 'dateFormat';
             $date = new \DateTime($timestamp, new \DateTimeZone(self::timezone()));
             return $date->format(str_replace('php:', '', Yii::$app->formatter->{$fn}));
