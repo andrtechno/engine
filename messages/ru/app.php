@@ -12,6 +12,7 @@ return [
     'GRID_SWITCH' => 'Скрыть/показать',
     'COPYRIGHT' => '&copy; 2013-{year} {by}',
     'HOME' => 'Главная',
+    'NO_INFO' => 'Нет информации',
     'SUCCESS_CREATE' => 'Запись успешно создана.',
     'SUCCESS_UPDATE' => 'Изменение успешно сохранены.',
     'PIXELION' => 'Разработка сайта',
