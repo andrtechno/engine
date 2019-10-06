@@ -5,15 +5,18 @@ namespace panix\engine;
 use Yii;
 use yii\web\UrlManager;
 
-class ManagerUrl extends UrlManager {
+class ManagerUrl extends UrlManager
+{
 
-    public function init() {
-       // $this->modulesRoutes();
+    public function init()
+    {
+        // $this->modulesRoutes();
         parent::init();
 
     }
 
-    public function createUrl($params, $respectLang = true) {
+    public function createUrl($params, $respectLang = true)
+    {
         $result = parent::createUrl($params);
         if ($respectLang === true) {
             $langPrefix = Yii::$app->languageManager->getUrlPrefix();
@@ -28,7 +31,8 @@ class ManagerUrl extends UrlManager {
     /**
      * BootstrapModule Class
      */
-    protected function modulesRoutes() {
+    protected function modulesRoutes()
+    {
         $cacheKey = 'url_manager';
         $rules = Yii::$app->cache->get($cacheKey);
         if (YII_DEBUG || !$rules) {
@@ -53,11 +57,12 @@ class ManagerUrl extends UrlManager {
      * @param $selectMany
      * @return string
      */
-    public function addUrlParam($route, $data, $selectMany = false) {
+    public function addUrlParam($route, $data, $selectMany = false)
+    {
         foreach ($data as $key => $val) {
             if (isset($_GET[$key]) && $key !== 'url' && $selectMany === true) {
                 $tempData = explode(',', $_GET[$key]);
-                $data[$key] = implode(',', array_unique(array_merge((array) $data[$key], $tempData)));
+                $data[$key] = implode(',', array_unique(array_merge((array)$data[$key], $tempData)));
             }
         }
 
@@ -72,7 +77,8 @@ class ManagerUrl extends UrlManager {
      * @param null $value If not value - delete whole key
      * @return string new url
      */
-    public function removeUrlParam($route, $key, $value = null) {
+    public function removeUrlParam($route, $key, $value = null)
+    {
         $get = Yii::$app->request->get();
         if (isset($get[$key])) {
             if ($value === null)
@@ -84,9 +90,9 @@ class ManagerUrl extends UrlManager {
                 if (isset($get[$key][$pos]))
                     unset($get[$key][$pos]);
                 // Save changes
-                if (!empty($get[$key]))
+                if (!empty($get[$key])) {
                     $get[$key] = implode(',', $get[$key]);
-                // Delete key if empty
+                } // Delete key if empty
                 else
                     unset($get[$key]);
             }
