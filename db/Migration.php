@@ -3,6 +3,7 @@
 namespace panix\engine\db;
 
 use panix\engine\components\Settings;
+use panix\mod\admin\models\GridColumns;
 
 
 class Migration extends \yii\db\Migration
@@ -21,6 +22,19 @@ class Migration extends \yii\db\Migration
         parent::init();
     }
 
+    /**
+     * @param string $gridId
+     * @param $model
+     * @param array $columns
+     */
+    public function loadColumns($gridId, $model, $columns = [])
+    {
+        foreach ($columns as $key => $column) {
+            $this->batchInsert(GridColumns::tableName(), ['grid_id', 'modelClass', 'column_key'], [
+                [$gridId, $model, $column]
+            ]);
+        }
+    }
 
     public function loadSettings()
     {
