@@ -48,7 +48,7 @@ class ReCaptcha extends InputWidget
     const SIZE_COMPACT = 'compact';
 
     /** @var string Your key. */
-    //public $key;
+    public $key;
 
     /**
      * @var string Use [[ReCaptchaConfig::JS_API_URL_ALTERNATIVE]] when [[ReCaptchaConfig::JS_API_URL_DEFAULT]]
@@ -83,9 +83,6 @@ class ReCaptcha extends InputWidget
      */
     public $jsErrorCallback;
 
-    /** @var string */
-    //public $configComponentName = 'reCaptcha';
-
     /** @var array Additional html widget options, such as `class`. */
     public $widgetOptions = [];
 
@@ -101,7 +98,21 @@ class ReCaptcha extends InputWidget
     public function init()
     {
         parent::init();
-        //$this->configComponentProcess();
+
+        if (!$this->key) {
+            if ($this->key) {
+                $this->key = Yii::$app->settings->get('app','recaptcha_key');
+            } else {
+                throw new InvalidConfigException('Required `key` param isn\'t set.');
+            }
+        }
+        if (!$this->jsApiUrl) {
+            //if ($reCaptchaConfig && $reCaptchaConfig->jsApiUrl) {
+            //    $this->jsApiUrl = $reCaptchaConfig->jsApiUrl;
+            //} else {
+                $this->jsApiUrl = ReCaptchaConfig::JS_API_URL_DEFAULT;
+           // }
+        }
     }
 
     public function run()
@@ -272,25 +283,4 @@ JS
         return \str_replace(['[]', '][', '[', ']', ' ', '.'], ['', '-', '-', '', '-', '-'], \strtolower($name));
     }
 
-    protected function ___configComponentProcess()
-    {
-        /** @var ReCaptchaConfig $reCaptchaConfig */
-        //$reCaptchaConfig = Yii::$app->get($this->configComponentName, false);
-        $reCaptchaConfig = Yii::$app->settings->get('app');
-
-        if (!$reCaptchaConfig->recaptcha_key) {
-            if ($reCaptchaConfig && $reCaptchaConfig->recaptcha_key) {
-                $this->siteKey = $reCaptchaConfig->siteKeyV2;
-            } else {
-                throw new InvalidConfigException('Required `siteKey` param isn\'t set.');
-            }
-        }
-        if (!$this->jsApiUrl) {
-            if ($reCaptchaConfig && $reCaptchaConfig->jsApiUrl) {
-                $this->jsApiUrl = $reCaptchaConfig->jsApiUrl;
-            } else {
-                $this->jsApiUrl = ReCaptchaConfig::JS_API_URL_DEFAULT;
-            }
-        }
-    }
 }
