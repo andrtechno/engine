@@ -15,7 +15,7 @@ class GridView extends \yii\grid\GridView
     public $enableLayout = true;
     public $enableColumns = true;
     public $layoutPath = '@theme/views/layouts/_grid_layout';
-
+    public $filterErrorOptions = ['class' => 'badge badge-danger'];
     public $pager = ['class' => 'panix\engine\widgets\LinkPager'];
 
     public function init()
@@ -42,7 +42,7 @@ class GridView extends \yii\grid\GridView
 
         parent::init();
 
-        if (file_exists(Yii::getAlias($this->layoutPath) . '.'.Yii::$app->view->defaultExtension)) {
+        if (file_exists(Yii::getAlias($this->layoutPath) . '.' . Yii::$app->view->defaultExtension)) {
             if ($this->enableLayout) {
                 $this->layout = $this->render($this->layoutPath, $this->layoutOptions);
             }

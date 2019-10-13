@@ -17,7 +17,6 @@ class SliderColumn extends DataColumn
     public $headerOptions = ['style' => 'width:150px'];
     public $range = true;
 
-
     public function init()
     {
         if (is_null($this->min) || is_null($this->max))
@@ -86,7 +85,7 @@ class SliderColumn extends DataColumn
                 $html .= Html::hiddenInput(Html::getInputName($model, $this->attribute) . '[min]', $inputValueMin, ['id' => $id . '_min']);
                 $html .= Html::hiddenInput(Html::getInputName($model, $this->attribute) . '[max]', $inputValueMax, ['id' => $id . '_max']);
 
-                return $html . $error;
+                return '<div class="clearfix">' . $html . '</div>' . $error;
             }
         }
 

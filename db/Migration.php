@@ -31,7 +31,7 @@ class Migration extends \yii\db\Migration
     {
         foreach ($columns as $key => $column) {
             $this->batchInsert(GridColumns::tableName(), ['grid_id', 'modelClass', 'column_key'], [
-                [$gridId, $model, $column]
+                [$gridId, '\\'.$model, $column]
             ]);
         }
     }

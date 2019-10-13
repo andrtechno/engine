@@ -146,9 +146,10 @@ class ActiveRecord extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         if (isset($this->behaviors['timestamp'])) {
-            //if ($this->scenario != 'disallow-timestamp') {
-                $this->touch($this->behaviors['timestamp']->updatedAtAttribute);
-            //}
+            $updatedAt = $this->behaviors['timestamp']->updatedAtAttribute;
+            if (isset($this->{$updatedAt})) {
+                $this->touch($updatedAt);
+            }
         }
         parent::afterSave($insert, $changedAttributes);
     }
@@ -207,6 +208,8 @@ class ActiveRecord extends \yii\db\ActiveRecord
                     'class' => TimestampBehavior::class,
                 ];
             }
+
+
         } catch (\yii\db\Exception $e) {
 
         }

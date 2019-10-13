@@ -8,5 +8,6 @@ return [
     'EDIT_GRID_COLUMNS' => 'Изменить столбцы таблицы',
     'SUCCESS_CLR_CACHE' => 'Кэш <strong>{id}</strong> успешно очищен',
     'SUCCESS_CLR_ASSETS' => 'Активы <strong>assets</strong> успешно очищены',
-    'USE_DND' => 'Используйте "drag-and-drop" для сортировки категорий.'
+    'USE_DND' => 'Используйте "drag-and-drop" для сортировки категорий.',
+    'NOTIFICATIONS_BUTTON' => 'Всего уведомлений ({count})'
 ];

@@ -6,6 +6,7 @@ use yii\helpers\Json;
 
 class Pjax extends \yii\widgets\Pjax
 {
+    public $timeout = false;
 
     public function registerClientScript2()
     {
