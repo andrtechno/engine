@@ -99,13 +99,13 @@ class ReCaptcha extends InputWidget
     {
         parent::init();
 
-        if (!$this->key) {
-            if ($this->key) {
+
+            if (Yii::$app->settings->get('app','recaptcha_key')) {
                 $this->key = Yii::$app->settings->get('app','recaptcha_key');
             } else {
                 throw new InvalidConfigException('Required `key` param isn\'t set.');
             }
-        }
+
         if (!$this->jsApiUrl) {
             //if ($reCaptchaConfig && $reCaptchaConfig->jsApiUrl) {
             //    $this->jsApiUrl = $reCaptchaConfig->jsApiUrl;

@@ -57,7 +57,7 @@ class ReCaptchaValidator extends ReCaptchaBaseValidator
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
-        $message = \addslashes($this->uncheckedMessage ?: Yii::t(
+        $message = \addslashes($this->message ?: Yii::t(
             'yii',
             '{attribute} cannot be blank.',
             ['attribute' => $model->getAttributeLabel($attribute)]
