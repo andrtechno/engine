@@ -3,19 +3,21 @@
 namespace panix\engine\widgets\recaptcha\form;
 
 use Yii;
-use panix\engine\blocks_settings\WidgetForm;
+use panix\engine\blocks_settings\WidgetModel;
 
-class ReCaptchaForm extends WidgetForm {
+class ReCaptchaForm extends WidgetModel
+{
 
     public $auth_login;
     public $auth_token;
     public $account;
 
 
-    public function rules() {
+    public function rules()
+    {
         return [
-            [['auth_login', 'auth_token','account'], 'string'],
-            [['auth_token','auth_login','account'], 'required'],
+            [['auth_login', 'auth_token', 'account'], 'string'],
+            [['auth_token', 'auth_login', 'account'], 'required'],
         ];
     }
 
