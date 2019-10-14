@@ -174,9 +174,9 @@ class ActionColumn extends DataColumn
                             }
 
                             $switch_data = $model->switch ? 0 : 1;
-                            return Html::a(Html::icon($icon), Url::toRoute(['switch', 'id' => $model->primaryKey, 's' => $switch_data]), [
+                            return Html::a(Html::icon($icon), Url::toRoute(['switch', 'id' => $model->primaryKey, 'value' => $switch_data]), [
                                 'title' => Yii::t('app', 'GRID_SWITCH'),
-                                'class' => 'btn ' . $this->btnSize . ' ' . $class . ' switch linkTarget',
+                                'class' => 'btn ' . $this->btnSize . ' ' . $class . ' switch', //linkTarget
                                 'data-pjax' => '0',
                             ]);
                         }
@@ -188,7 +188,7 @@ class ActionColumn extends DataColumn
             $this->buttons['view'] = function ($url) {
                 return Html::a(Html::icon('search'), $url, [
                     'title' => Yii::t('yii', 'View'),
-                    'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary linkTarget',
+                    'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary',
                     'data-pjax' => '0',
                 ]);
             };
@@ -200,7 +200,7 @@ class ActionColumn extends DataColumn
                     if (!in_array($model->primaryKey, $model->disallow_update)) {
                         return Html::a(Html::icon('edit'), $url, [
                             'title' => Yii::t('yii', 'Update'),
-                            'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary linkTarget',
+                            'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary',
                             'data-pjax' => '0',
                         ]);
                     }

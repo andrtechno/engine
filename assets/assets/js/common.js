@@ -8,12 +8,12 @@ common.clipboard = function (selector) {
         //common.notify('Скопировано', 'info');
     });
 };
-common.switchInputPass = function (that,inputId) {
+common.switchInputPass = function (that, inputId) {
     var s = $('#' + inputId);
     var inp = (s.attr('type') === 'input');
-    if(inp){
+    if (inp) {
         $(that).find('i').removeClass('icon-eye-close').addClass('icon-eye');
-    }else{
+    } else {
         $(that).find('i').removeClass('icon-eye').addClass('icon-eye-close');
     }
     s.attr('type', inp ? 'password' : 'input');
@@ -249,7 +249,7 @@ $(document).ready(function () {
             type: 'POST',
             dataType: 'json',
             success: function (data) {
-                if (data.status === 'success') {
+                if (data.success) {
                     that.attr('href', data.url);
                     if (data.value) {
                         that.removeClass('btn-outline-success').addClass('btn-outline-secondary');
@@ -258,6 +258,9 @@ $(document).ready(function () {
                         that.removeClass('btn-outline-secondary').addClass('btn-outline-success');
                         that.find('i').removeClass('icon-eye-close').addClass('icon-eye');
                     }
+                    common.notify(data.message, 'success');
+                } else {
+                    common.notify(data.message, 'error');
                 }
             }
         });
