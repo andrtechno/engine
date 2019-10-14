@@ -3,6 +3,7 @@
 namespace panix\engine;
 
 use Yii;
+use yii\helpers\VarDumper;
 use yii\web\Application;
 use panix\mod\admin\models\Modules;
 
@@ -26,6 +27,11 @@ class WebApplication extends Application
         $langManager = $this->languageManager;
         $this->language = (isset($langManager->default->code)) ? $langManager->default->code : $this->language;
         return parent::run();
+    }
+
+    public static function dump($var, int $depth = 10, bool $highlight = true)
+    {
+        VarDumper::dump($var, $depth, $highlight);
     }
 
     public function getModulesInfo()

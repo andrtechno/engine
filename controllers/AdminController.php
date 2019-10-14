@@ -73,6 +73,7 @@ class AdminController extends Controller
         $this->view->registerJs('
             var common = window.CMS_common || {};
             common.language="' . Yii::$app->language . '";
+            common.language_default="' . Yii::$app->languageManager->default->code . '";
             common.language_path="' . $languagePath . '";
             common.token="' . Yii::$app->request->csrfToken . '";
             common.isDashboard=true;

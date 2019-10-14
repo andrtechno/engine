@@ -40,6 +40,12 @@ common.notify = function (text, type) {
     }
 
 };
+common.url = function (url) {
+    if (common.language_default !== common.language) {
+        return common.language + '/' + url;
+    }
+    return url;
+};
 common.geoip = function (ip) {
     // common.flashMessage = true;
 
