@@ -201,13 +201,13 @@ class ActionColumn extends DataColumn
                         return Html::a(Html::icon('edit'), $url, [
                             'title' => Yii::t('yii', 'Update'),
                             'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary',
-                            'data-pjax' => '0',
+                           // 'data-pjax' => 0,
                         ]);
                     }
                 } else {
                     return Html::a(Html::icon('edit'), $url, [
                         'title' => Yii::t('yii', 'Update'),
-                        'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary linkTarget',
+                        'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary',
                         'data-pjax' => '0',
                     ]);
                 }
