@@ -21,6 +21,19 @@ trait DefaultQueryTrait
         parent::init();
     }
 
+    /**
+     * @param string $start
+     * @param string $end
+     * @param string $attribute
+     * @return $this
+     */
+    public function between($start, $end, $attribute = 'created_at')
+    {
+        $modelClass = $this->modelClass;
+        $tableName = $modelClass::tableName();
+        $this->andWhere(['between', $tableName . '.' . $attribute, $start, $end]);
+        return $this;
+    }
 
     /**
      * @param int $state
