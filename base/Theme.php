@@ -7,6 +7,13 @@ use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
+/**
+ * Class Theme
+ *
+ * @property string $name
+ *
+ * @package panix\engine\base
+ */
 class Theme extends \yii\base\Theme
 {
 

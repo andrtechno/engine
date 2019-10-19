@@ -32,7 +32,8 @@ class LayoutBehavior extends \yii\base\Behavior
     public function initialize()
     {
         /** @var WebController $controller */
-        $controller = $this->owner->context;
+        //$controller = $this->owner->context;
+        $controller = Yii::$app->controller;
         //if (!($controller instanceof WebController) || !($controller instanceof AdminController) || ($controller instanceof FilterController)) {
         if (!isset($controller->view)) {
             Yii::debug('LayoutBehavior error [1]', __METHOD__);
@@ -43,7 +44,9 @@ class LayoutBehavior extends \yii\base\Behavior
             return false;
         }
         $layouts = [];
+
         $theme = $controller->view->theme->name;
+
 
         if (isset($controller->module)) {
             $layouts[] = "@app/web/themes/{$theme}/modules/{$controller->module->id}/views/layouts/{$controller->id}_{$controller->action->id}";
@@ -64,7 +67,7 @@ class LayoutBehavior extends \yii\base\Behavior
             $layoutPath = Yii::getAlias($layout . '.' . Yii::$app->getView()->defaultExtension);
             if (file_exists($layoutPath)) {
                 $controller->layout = $layout;
-                Yii::debug('Layout load '.$layout, __METHOD__);
+                Yii::debug('Layout load ' . $layout, __METHOD__);
                 break;
             }
         }

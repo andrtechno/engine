@@ -36,6 +36,11 @@ class NestedSetsQueryBehavior extends Behavior
         return $this->owner;
     }
 
+    /**
+     * @param int $root
+     * @param null $level
+     * @return array
+     */
     public function options($root = 0, $level = null)
     {
         $res = [];
@@ -76,27 +81,37 @@ class NestedSetsQueryBehavior extends Behavior
         return $res;
     }
 
-    public function dataFancytree($root = 0, $level = null)
+    /**
+     * @param int $root
+     * @param null $level
+     * @return array
+     */
+    public function dataTree($root = 0, $level = null)
     {
-        $data = array_values($this->prepareData2Fancytree($root, $level));
-        return $this->makeData2Fancytree($data);
+        $data = array_values($this->prepareData2($root, $level));
+        return $this->makeData2($data);
     }
 
-    private function prepareData2Fancytree($root = 0, $level = null)
+    /**
+     * @param int $root
+     * @param null $level
+     * @return array
+     */
+    private function prepareData2($root = 0, $level = null)
     {
         $res = [];
         if (is_object($root)) {
 
             $res[$root->{$root->idAttribute}]['key'] = $root->{$root->idAttribute};
             $res[$root->{$root->idAttribute}]['title'] = $root->{$root->titleAttribute};
-            if (method_exists($root,'getUrl'))
+            if (method_exists($root, 'getUrl'))
                 $res[$root->{$root->idAttribute}]['url'] = Url::to($root->getUrl());
             if (isset($root->switch))
                 $res[$root->{$root->idAttribute}]['switch'] = $root->switch;
 
             if ($level) {
                 foreach ($root->children()->all() as $childRoot) {
-                    $aux = $this->prepareData2Fancytree($childRoot, $level - 1);
+                    $aux = $this->prepareData2($childRoot, $level - 1);
 
                     if (isset($res[$root->{$root->idAttribute}]['children']) && !empty($aux)) {
                         $res[$root->{$root->idAttribute}]['folder'] = true;
@@ -108,7 +123,7 @@ class NestedSetsQueryBehavior extends Behavior
                 }
             } elseif (is_null($level)) {
                 foreach ($root->children()->all() as $childRoot) {
-                    $aux = $this->prepareData2Fancytree($childRoot, null);
+                    $aux = $this->prepareData2($childRoot, null);
                     if (isset($res[$root->{$root->idAttribute}]['children']) && !empty($aux)) {
                         $res[$root->{$root->idAttribute}]['folder'] = true;
                         $res[$root->{$root->idAttribute}]['children'] += $aux;
@@ -124,9 +139,9 @@ class NestedSetsQueryBehavior extends Behavior
             if ($root == 0) {
                 foreach ($this->roots()->all() as $rootItem) {
                     if ($level) {
-                        $res += $this->prepareData2Fancytree($rootItem, $level - 1);
+                        $res += $this->prepareData2($rootItem, $level - 1);
                     } elseif (is_null($level)) {
-                        $res += $this->prepareData2Fancytree($rootItem, null);
+                        $res += $this->prepareData2($rootItem, null);
                     }
                 }
             } else {
@@ -143,9 +158,9 @@ class NestedSetsQueryBehavior extends Behavior
                 //New by panix
                 foreach ($root->children()->all() as $rootItem) {
                     if ($level) {
-                        $res += $this->prepareData2Fancytree($rootItem, $level - 1);
+                        $res += $this->prepareData2($rootItem, $level - 1);
                     } elseif (is_null($level)) {
-                        $res += $this->prepareData2Fancytree($rootItem, null);
+                        $res += $this->prepareData2($rootItem, null);
                     }
                 }
                 unset($model);
@@ -154,13 +169,17 @@ class NestedSetsQueryBehavior extends Behavior
         return $res;
     }
 
-    private function makeData2Fancytree(&$data)
+    /**
+     * @param $data
+     * @return array
+     */
+    private function makeData2(&$data)
     {
         $tree = [];
         foreach ($data as $key => &$item) {
             if (isset($item['children'])) {
                 $item['children'] = array_values($item['children']);
-                $tree[$key] = $this->makeData2Fancytree($item['children']);
+                $tree[$key] = $this->makeData2($item['children']);
             }
             $tree[$key] = $item;
         }
