@@ -1,11 +1,4 @@
 <?php
-
-/**
- * @link https://github.com/wbraganca/yii2-nested-set-behavior
- * @copyright Copyright (c) 2014 Wanderson Bragança
- * @license http://opensource.org/licenses/BSD-3-Clause
- */
-
 namespace panix\engine\behaviors\nestedsets;
 
 use yii\base\Behavior;
@@ -110,6 +103,7 @@ class NestedSetsQueryBehavior extends Behavior
                 $res[$root->{$root->idAttribute}]['switch'] = $root->switch;
 
             if ($level) {
+                /** @var NestedSetsBehavior $root */
                 foreach ($root->children()->all() as $childRoot) {
                     $aux = $this->prepareData2($childRoot, $level - 1);
 
@@ -122,6 +116,7 @@ class NestedSetsQueryBehavior extends Behavior
                     }
                 }
             } elseif (is_null($level)) {
+                /** @var NestedSetsBehavior $root */
                 foreach ($root->children()->all() as $childRoot) {
                     $aux = $this->prepareData2($childRoot, null);
                     if (isset($res[$root->{$root->idAttribute}]['children']) && !empty($aux)) {
@@ -151,10 +146,7 @@ class NestedSetsQueryBehavior extends Behavior
                 $root = $modelClass::find()
                     ->andWhere([$model->idAttribute => $root])
                     ->one();
-                //if ($root) {
-                //    $res += $this->prepareData2Fancytree($root, $level);
-                //}
-
+                /** @var NestedSetsBehavior $root */
                 //New by panix
                 foreach ($root->children()->all() as $rootItem) {
                     if ($level) {
@@ -173,7 +165,7 @@ class NestedSetsQueryBehavior extends Behavior
      * @param $data
      * @return array
      */
-    private function makeData2(&$data)
+    public function makeData2(&$data)
     {
         $tree = [];
         foreach ($data as $key => &$item) {

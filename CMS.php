@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 use yii\helpers\Url;
+use yii\helpers\VarDumper;
 
 /**
  * Дополнительные функции системы.
@@ -19,6 +20,19 @@ use yii\helpers\Url;
 class CMS
 {
     const MEMORY_LIMIT = 64; // Minimal memory_limit
+
+    /**
+     * Displays a variable.
+     * This method achieves the similar functionality as var_dump and print_r
+     * but is more robust when handling complex objects such as Yii controllers.
+     * @param mixed $var variable to be dumped
+     * @param int $depth maximum depth that the dumper should go into the variable. Defaults to 10.
+     * @param bool $highlight whether the result should be syntax-highlighted
+     */
+    public static function dump($var, int $depth = 10, bool $highlight = true)
+    {
+        VarDumper::dump($var, $depth, $highlight);
+    }
 
     /**
      * @param string $number +380XXXXXXX
