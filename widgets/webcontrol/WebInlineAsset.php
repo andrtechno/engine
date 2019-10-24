@@ -18,7 +18,7 @@ class WebInlineAsset extends AssetBundle {
     public $depends = [
         'yii\web\JqueryAsset',
         'panix\engine\assets\IconAsset',
-        'panix\asset\bootstrap\notify\Asset',
+        'panix\engine\assets\BootstrapNotifyAsset',
         'panix\mod\admin\assets\AdminCountersAsset',
     ];
 
