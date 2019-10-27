@@ -3,10 +3,13 @@
 namespace panix\engine\i18n;
 
 use panix\engine\CMS;
+use panix\engine\Html;
+use panix\engine\components\Browser;
 
 /**
  * Class Formatter
  * @package panix\engine\i18n
+ * @use \yii\i18n\Formatter
  */
 class Formatter extends \yii\i18n\Formatter
 {
@@ -24,4 +27,20 @@ class Formatter extends \yii\i18n\Formatter
         parent::init();
     }
 
+    public function asIp($value, $options = [])
+    {
+        if ($value === null) {
+            return $this->nullDisplay;
+        }
+        return Html::a(CMS::ip($value), ['/'], $options);
+    }
+
+    public function asUserAgent($value)
+    {
+        if ($value === null) {
+            return $this->nullDisplay;
+        }
+        $browser = new Browser($value);
+        return $browser->getPlatformIcon() . ' ' . $browser->getBrowserIcon() . ' ' . Html::icon('info', ['title' => $value]);
+    }
 }

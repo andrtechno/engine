@@ -488,22 +488,6 @@ class CMS
         return @round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), 2) . ' ' . (isset($unit[$i]) ? $unit[$i] : 'B');
     }
 
-    /**
-     * Get user agent
-     * @return string
-     */
-    public static function getagent()
-    {
-        if (getenv("HTTP_USER_AGENT") && strcasecmp(getenv("HTTP_USER_AGENT"), "unknown")) {
-            $agent = getenv("HTTP_USER_AGENT");
-        } elseif (!empty($_SERVER['HTTP_USER_AGENT']) && strcasecmp($_SERVER['HTTP_USER_AGENT'], "unknown")) {
-            $agent = $_SERVER['HTTP_USER_AGENT'];
-        } else {
-            $agent = "unknown";
-        }
-        return $agent;
-    }
-
     public static function isBot()
     {
         $bots = [
@@ -630,20 +614,29 @@ class CMS
      *
      * @param string $ip
      * @param int $type
-     * @param type $user
+     * @param \panix\mod\user\models\User $user
      * @return string or null
      */
     public static function ip($ip, $type = 1, $user = null)
     {
+        $options=[];
         if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
             if (self::getMemoryLimit() > self::MEMORY_LIMIT) {
-                $geoip = Yii::$app->geoip->ip($ip);
-                $title = Yii::t('app', 'COUNTRY') . ': ' . Yii::t('app/geoip_country', $geoip->country) . '/' . Yii::t('app/geoip_city', $geoip->city) . $geoip->timezone;
-                $image = Html::img('/uploads/language/' . strtolower($geoip->isoCode) . '.png', ['alt' => $ip, 'title' => $title]);
+                $geoIp = Yii::$app->geoip->ip($ip);
+                $image = '';
+                $title = Yii::t('app', 'COUNTRY') . ': ' . Yii::t('app/geoip_country', $geoIp->country) . '/' . Yii::t('app/geoip_city', $geoIp->city) . ' - '. $geoIp->timezone;
+                $options['title']=$title;
+                if ($geoIp->isoCode) {
+
+                    $options['alt']=$ip;
+                    $image = Html::img('/uploads/language/' . strtolower($geoIp->isoCode) . '.png', $options);
+                }
                 if ($type == 1) {
-                    $content = Html::a($image . ' ' . $ip, '#', ['onClick' => 'common.geoip("' . $ip . '")', 'title' => $title]);
+                    $options['onClick']='common.geoip("' . $ip . '")';
+                    $content = Html::a($image . ' ' . $ip, '#', $options);
                 } elseif ($type == 2 && $user) {
-                    $content = Html::a($image . ' ' . $user, '#', ['onClick' => 'common.geoip("' . $ip . '")', 'title' => $title]);
+                    $options['onClick']='common.geoip("' . $ip . '")';
+                    $content = Html::a($image . ' ' . $user, '#', $options);
                 } elseif ($type == 3) {
                     $content = $image . ' ' . $ip;
                 } else {

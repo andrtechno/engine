@@ -100,6 +100,11 @@ class Html extends \yii\helpers\Html
         return parent::error($model, $attribute, $options);
     }
 
+    /**
+     * @param $icon
+     * @param array $options
+     * @return string
+     */
     public static function icon($icon, $options = [])
     {
         if (isset($options['class'])) {
