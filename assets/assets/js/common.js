@@ -51,7 +51,7 @@ common.geoip = function (ip) {
 
     var geoSelector = $('#geo-dialog');
     $.ajax({
-        url: '/admin/app/ajax/geo/ip/' + ip,
+        url: common.url('/admin/app/ajax/geo?ip=' + ip),
         type: 'GET',
         dataType: 'html',
         beforeSend: function () {

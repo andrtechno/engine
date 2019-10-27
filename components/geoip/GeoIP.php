@@ -67,4 +67,5 @@ class GeoIP extends Component {
 
         return $this->result[$ip];
     }
+
 }

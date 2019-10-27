@@ -2,6 +2,8 @@
 
 namespace panix\engine\components\geoip;
 
+use Yii;
+
 /**
  * Class Result
  * @package lysenkobv\GeoIP
@@ -10,25 +12,35 @@ namespace panix\engine\components\geoip;
  * @property string|null country
  * @property Location location
  */
-class Result extends ResultBase {
+class Result extends ResultBase
+{
 
-    protected function getCity($data) {
+
+    public function getCity($data)
+    {
         $value = null;
-        if (isset($data['city']['names']['en'])) {
+        if (isset($data['city']['names'][Yii::$app->language])) {
+            $value = $data['city']['names'][Yii::$app->language];
+        } else {
             $value = $data['city']['names']['en'];
         }
         return $value;
     }
 
-    protected function getCountry($data) {
+
+    public function getCountry($data)
+    {
         $value = null;
-        if (isset($data['country']['names']['en'])) {
+        if (isset($data['country']['names'][Yii::$app->language])) {
+            $value = $data['country']['names'][Yii::$app->language];
+        } else {
             $value = $data['country']['names']['en'];
         }
         return $value;
     }
 
-    protected function getLocation($data) {
+    public function getLocation($data)
+    {
         $value = new Location();
         if (isset($data['location'])) {
             $lat = $data['location']['latitude'];
@@ -38,7 +50,8 @@ class Result extends ResultBase {
         return $value;
     }
 
-    protected function getIsoCode($data) {
+    public function getIsoCode($data)
+    {
         $value = null;
         if (isset($data['country']['iso_code'])) {
             $value = $data['country']['iso_code'];
@@ -46,7 +59,8 @@ class Result extends ResultBase {
         return $value;
     }
 
-    protected function getTimezone($data) {
+    public function getTimezone($data)
+    {
         $value = null;
         if (isset($data['location']['time_zone'])) {
             $value = $data['location']['time_zone'];
@@ -54,7 +68,8 @@ class Result extends ResultBase {
         return $value;
     }
 
-    public function isDetected() {
+    public function isDetected()
+    {
         return ($this->location->lat !== null && $this->location->lng !== null);
     }
 
