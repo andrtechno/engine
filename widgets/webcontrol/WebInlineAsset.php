@@ -4,6 +4,10 @@ namespace panix\engine\widgets\webcontrol;
 
 use panix\engine\web\AssetBundle;
 
+/**
+ * Class WebInlineAsset
+ * @package panix\engine\widgets\webcontrol
+ */
 class WebInlineAsset extends AssetBundle {
 
     public $sourcePath = __DIR__ . '/assets';
@@ -19,7 +23,6 @@ class WebInlineAsset extends AssetBundle {
         'yii\web\JqueryAsset',
         'panix\engine\assets\IconAsset',
         'panix\engine\assets\BootstrapNotifyAsset',
-        'panix\mod\admin\assets\AdminCountersAsset',
     ];
 
 }

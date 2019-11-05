@@ -5,14 +5,11 @@ use panix\engine\Html;
 ?>
 
 <div class="webpanel webpanel-shadow-bottom">
-    <nav class="webpanel-navbar">
+    <nav class="webpanel-navbar navbar-expand-lg">
 
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="navbar-toggler-icon"></span>
             </button>
             <a class="webpanel-logo" href="#">PIXELION</a>
         </div>
@@ -26,8 +23,8 @@ use panix\engine\Html;
                 <li class="active"><a href="#">About</a></li>
                 <li><a href="#">Contact</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                    <ul class="webpanel-dropdown-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                    <ul class="dropdown-menu webpanel-dropdown-menu">
                         <li><a href="#">Action</a></li>
                         <li><a href="#">Another action</a></li>
                         <li><a href="#">Something else here</a></li>
@@ -80,12 +77,12 @@ use panix\engine\Html;
                         </li>
                     <?php } ?>
                 <?php } ?>
-                <li class="dropdown"><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-target="#" class="dropdown-toggle" href="/testurl"><?= Yii::$app->user->getDisplayName(); ?> <span class="caret"></span></a>
-                    <ul class="webpanel-dropdown-menu">
-                        <li><?= Html::a(Yii::t('app', 'UPDATE', 0), array('/admin/users/default/update', 'id' => Yii::$app->user->id)) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'ADMIN_PANEL'), array('/admin/users/default/update', 'id' => Yii::$app->user->id)) ?></li>
+                <li class="dropdown"><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-target="#" class="dropdown-toggle" href="/testurl"><?= Yii::$app->user->getDisplayName(); ?></a>
+                    <ul class="dropdown-menu webpanel-dropdown-menu">
+                        <li><?= Html::a(Yii::t('app', 'UPDATE', 0), ['/admin/users/default/update', 'id' => Yii::$app->user->id]) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'ADMIN_PANEL'), ['/admin/users/default/update', 'id' => Yii::$app->user->id]) ?></li>
                         <li role="separator" class="divider"></li>
-                        <li><?= Html::a(Yii::t('app', 'LOGOUT'), array('/admin/auth/logout')) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'LOGOUT'), ['/admin/auth/logout']) ?></li>
 
 
                     </ul>

@@ -4,34 +4,38 @@ namespace panix\engine\web;
 
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\web\DbSession as Session;
 use panix\engine\CMS;
 
+/**
+ * Class DbSession
+ * @package panix\engine\web
+ */
 class DbSession extends Session
 {
 
     public $writeCallback = ['panix\engine\web\DbSession', 'writeFields'];
     public $sessionTable = '{{%session}}';
 
-
     public static function writeFields($session)
     {
 
-        //try {
+        try {
             $uid = (Yii::$app->user->getIdentity(false) == null) ? null : Yii::$app->user->getIdentity(false)->id;
-            $ip = $_SERVER['REMOTE_ADDR'];
+            $ip = Yii::$app->request->getRemoteIP();
             if (Yii::$app->user->getIsGuest()) {
                 $checkBot = CMS::isBot();
                 if ($checkBot['success']) {
-                    $uname = substr($checkBot['name'], 0, 25);
+                    $user_name = substr($checkBot['name'], 0, 25);
                     $user_type = 'SearchBot';
                 } else {
-                    $uname = $ip;
+                    $user_name = $ip;
                     $user_type = 'Guest';
                 }
             } else {
                 $user_type = 'User';
-                $uname = Yii::$app->user->username;
+                $user_name = Yii::$app->user->username;
             }
 
             return [
@@ -39,13 +43,14 @@ class DbSession extends Session
                 'ip' => $ip,
                 'expire_start' => time(),
                 'user_type' => $user_type,
-                'user_name' => $uname,
+                'user_name' => $user_name,
                 //'is_trusted' => $session->get('is_trusted', false),
             ];
 
-        //} catch (InvalidConfigException $excp) {
-        //    \Yii::info(print_r($excp));
-        //}
+        } catch (InvalidConfigException $e) {
+            echo 'session error panix\engine\web\DbSession';
+            \Yii::info(print_r($e));
+        }
     }
 
 }

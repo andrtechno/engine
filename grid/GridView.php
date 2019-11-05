@@ -3,10 +3,13 @@
 namespace panix\engine\grid;
 
 use Yii;
-use yii\grid\DataColumn;
 use panix\mod\admin\models\GridColumns;
-use panix\engine\Html;
 
+
+/**
+ * Class GridView
+ * @package panix\engine\grid
+ */
 class GridView extends \yii\grid\GridView
 {
 
