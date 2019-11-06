@@ -10,7 +10,7 @@ use panix\engine\bootstrap\ButtonDropdown;
 use yii\web\View;
 
 
-class CheckboxColumn extends \yii\grid\CheckboxColumn
+class CheckboxColumn111 extends \yii\grid\CheckboxColumn
 {
 
     public $headerOptions = ['style' => 'width: 70px;','class' => 'text-center'];
