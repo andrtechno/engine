@@ -9,6 +9,13 @@ use yii\grid\CheckboxColumn as BaseCheckboxColumn;
 use panix\engine\Html;
 use panix\engine\bootstrap\ButtonDropdown;
 
+/**
+ * Class CheckboxColumn
+ *
+ * @property array $customActions
+ *
+ * @package panix\engine\grid\columns
+ */
 class CheckboxColumn extends BaseCheckboxColumn
 {
 
@@ -37,40 +44,32 @@ class CheckboxColumn extends BaseCheckboxColumn
         parent::init();
 
         $this->grid->getView()->registerJs("
+            $(document).on('click','#{$this->grid->getId()} input[type=\"checkbox\"]',function(e) {
+            var keys = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
+                console.log(keys);
+            });
 
+            function runAction(that){
+                var keys = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
+                var url = $(that).attr('href');
 
-jQuery(document).on('click','#{$this->grid->getId()} input[type=\"checkbox\"]',function(e) {
-var keys = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
-    console.log(keys);
-});
+                if (confirm($(that).data('confirm'))) {
+                    console.log('LALAL',keys,that);
+                    $.ajax({
+                        url:url,
+                        type:'POST',
+                        data:{id:keys},
+                        success:function(data){
+                            console.log(data);
+                            $.pjax.reload({container:'#pjax-{$this->grid->getId()}'});
+                            //$('#{$this->grid->getId()}').yiiGridView('applyFilter');
+                        }
+                    });
+                }
 
-function runAction(that){
-var keys = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
-var url = $(that).attr('href');
-var question = $(that).data('question');
-var question = $(that).data('question');
-
-
-
-	if (confirm(question)) {
-        console.log('LALAL',keys,that);
-        $.ajax({
-            url:url,
-            type:'POST',
-            data:{id:keys},
-            success:function(data){
-                console.log(data);
-                $.pjax.reload({container:'#pjax-{$this->grid->getId()}'});
-                //$('#{$this->grid->getId()}').yiiGridView('applyFilter');
+                return false;
             }
-        });
-	}
-
-    return false;
-}
-
-
-", View::POS_END);
+    ", View::POS_END);
 
         //print_r($this->getCustomActions());die;
         $this->contentOptions = ['class' => 'text-center'];
@@ -119,7 +118,7 @@ var question = $(that).data('question');
                 'icon' => 'delete',
                 'options' => [
                     'class' => 'dropdown-item',
-                    'data-question' => Yii::t('app', 'CONFIRM'),
+                    'data-confirm' => Yii::t('app', 'CONFIRM'),
                 ]
             ]
         ];
@@ -133,8 +132,7 @@ var question = $(that).data('question');
     public function getDefaultActionOptions()
     {
         return [
-            //'data-token' => Yii::app()->request->csrfToken,
-            'data-question' => Yii::t('app', 'CONFIRM'),
+            'data-confirm' => Yii::t('app', 'CONFIRM'),
             'class' => 'dropdown-item',
             // 'model' => $this->dataProvider->modelClass,
             'onClick' => 'return runAction(this);'

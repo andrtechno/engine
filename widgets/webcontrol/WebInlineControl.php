@@ -2,36 +2,42 @@
 
 namespace panix\engine\widgets\webcontrol;
 
+use panix\engine\controllers\WebController;
 use Yii;
 use yii\web\View;
 use yii\base\BaseObject;
-use panix\engine\widgets\webcontrol\WebInlineAsset;
 
-class WebInlineControl extends BaseObject {
+/**
+ * Class WebInlineControl
+ * @package panix\engine\widgets\webcontrol
+ */
+class WebInlineControl extends BaseObject
+{
 
-    public function init() {
-        if (Yii::$app->user->can('admin') && !Yii::$app->request->isAjax && $this->checkAdminRequest()) {
+    public function init()
+    {
+        if (Yii::$app->user->can('admin') && !Yii::$app->request->isAjax && !Yii::$app->request->isPjax && $this->checkAdminRequest() && Yii::$app->controller instanceof WebController) {
             //Yii::setAlias('@bower', '@vendor/bower-asset');
             $view = Yii::$app->view;
             WebInlineAsset::register($view);
             $this->editmodeJs();
             Yii::$app->getUrlManager()->addRules([
                 'webcontrol/<action:[0-9a-zA-Z_\-]+>' => 'webcontrol/<action>'
-                    ], true);
+            ], true);
 
 
             $view->on(View::EVENT_BEGIN_BODY, [$this, 'renderToolbar']);
             Yii::$app->controllerMap['webcontrol'] = 'panix\engine\widgets\webcontrol\WebInlineController';
-
-
         }
     }
 
-    public function renderToolbar() {
+    public function renderToolbar()
+    {
         echo Yii::$app->view->render('@vendor/panix/engine/widgets/webcontrol/views/run');
     }
 
-    private function checkAdminRequest() {
+    private function checkAdminRequest()
+    {
         $path = Yii::$app->request->getPathInfo();
         if (empty($path))
             return true;
@@ -42,7 +48,8 @@ class WebInlineControl extends BaseObject {
         return true;
     }
 
-    private function editmodeJs() {
+    private function editmodeJs()
+    {
         \panix\ext\tinymce\TinyMceAsset::register(Yii::$app->view);
         Yii::$app->view->registerJs("
 function tinymce_ajax(obj){
