@@ -11,7 +11,7 @@ use yii\jui\Slider;
 class SliderColumn extends DataColumn
 {
 
-
+    public $prefix = '';
     public $min;
     public $max;
     public $headerOptions = ['style' => 'width:150px'];
@@ -60,7 +60,7 @@ class SliderColumn extends DataColumn
 
             if ($this->min !== $this->max) {
 
-                $html = '<span id="' . $id . '_value-min" class="float-left mt-3">' . $inputValueMin . '</span><span id="' . $id . '_value-max" class="float-right mt-3">' . $inputValueMax . '</span>';
+                $html = '<span class="float-left mt-3"><span id="' . $id . '_value-min">' . $inputValueMin . '</span> ' . $this->prefix . '</span><span class="float-right mt-3"><span id="' . $id . '_value-max">' . $inputValueMax . '</span> ' . $this->prefix . '</span>';
                 $html .= Slider::widget([
                     'clientOptions' => [
                         'range' => $this->range,
