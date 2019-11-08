@@ -3,10 +3,8 @@
 namespace panix\engine\behaviors\nestedsets\actions;
 
 use Yii;
-use yii\base\Action;
-use yii\base\InvalidConfigException;
-use yii\db\ActiveRecord;
-use yii\web\NotFoundHttpException;
+use yii\rest\Action;
+use yii\web\Response;
 
 /**
  * Class DeleteNodeAction
@@ -14,48 +12,37 @@ use yii\web\NotFoundHttpException;
  */
 class DeleteNodeAction extends Action
 {
-    /**
-     * Class to use to locate the supplied data ids
-     * @var string
-     */
-    public $modelClass;
-
-    /**
-     * @throws InvalidConfigException
-     */
-    public function init()
-    {
-        if (null == $this->modelClass) {
-            throw new InvalidConfigException('Param "modelClass" must be contain model name with namespace.');
-        }
-    }
+    public $successMessage;
 
     /**
      * Move a node (model) below the parent and in between left and right
      *
-     * @param integer $id the primaryKey of the moved node
+     * @param int $id the primaryKey of the moved node
      * @return array
-     * @throws NotFoundHttpException
      */
-    public function run($id)
+    public function run(int $id)
     {
-        /** @var \panix\engine\behaviors\nestedsets\NestedSetsBehavior|\yii\db\ActiveRecord $model */
-        $model = new $this->modelClass;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $json = [];
+        $json['success'] = false;
+        if (Yii::$app->request->isAjax) {
+            /** @var \panix\engine\behaviors\nestedsets\NestedSetsBehavior|\yii\db\ActiveRecord $model */
+            $model = $this->findModel($id);
 
-        /*
-         * Locate the supplied model, left, right and parent models
-         */
-        $pkAttribute = $model->getTableSchema()->primaryKey[0];
+            //Delete if not root node
+            if ($model && $model->id != 1) {
+                foreach (array_reverse($model->descendants()->all()) as $subCategory) {
+                    $json['objects'][] = $subCategory->id;
+                    /** @var \panix\engine\behaviors\nestedsets\NestedSetsBehavior|\yii\db\ActiveRecord $subCategory */
+                    $subCategory->deleteNode();
 
-        /** @var \panix\engine\behaviors\nestedsets\NestedSetsBehavior|\yii\db\ActiveRecord $model */
-        $model = $model::find()->where([$pkAttribute => $id])->one();
-
-        if ($model == null) {
-            throw new NotFoundHttpException('Node not found');
+                }
+                $json['objects'][] = $id;
+                $json['success'] = true;
+                $json['message'] = $this->successMessage;
+                $model->deleteNode();
+            }
         }
-
-       $model->deleteWithChildren();
-
-        return null;
+        return $json;
     }
 }

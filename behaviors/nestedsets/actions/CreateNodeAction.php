@@ -2,11 +2,10 @@
 
 namespace panix\engine\behaviors\nestedsets\actions;
 
+use panix\engine\CMS;
 use Yii;
-use yii\base\Action;
-use yii\base\InvalidConfigException;
-use yii\web\HttpException;
-
+use yii\web\Response;
+use yii\rest\Action;
 
 /**
  * Class CreateNodeAction
@@ -14,48 +13,41 @@ use yii\web\HttpException;
  */
 class CreateNodeAction extends Action
 {
-    /**
-     * Class to use to locate the supplied data ids
-     * @var string
-     */
-    public $modelClass;
+    public $message;
 
     /**
-     * Attribute for name in model
-     * @var string
-     */
-    public $nameAttribute = 'name';
-
-    /**
-     * @throws InvalidConfigException
-     */
-    public function init()
-    {
-        if (null == $this->modelClass) {
-            throw new InvalidConfigException('Param "modelClass" must be contain model name with namespace.');
-        }
-    }
-
-    /**
-     * @return null
-     * @throws HttpException
+     * @inheritdoc
      */
     public function run()
     {
-        $name = Yii::$app->request->post('name');
+        if (!$this->offMessage)
+            $this->offMessage = Yii::t('app', 'SWITCH_OFF');
 
-        /** @var \panix\engine\behaviors\nestedsets\NestedSetsBehavior|\yii\db\ActiveRecord $model */
-        $model = new $this->modelClass;
-        $model->{$this->nameAttribute} = $name;
+        if (!$this->onMessage)
+            $this->onMessage = Yii::t('app', 'SWITCH_ON');
 
-        $roots = $model::find()->roots()->all();
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $json = [];
+        $json['success'] = false;
+        if (Yii::$app->request->isAjax) {
+            /* @var $modelClass \yii\db\ActiveRecord */
 
-        if (isset($roots[0])) {
-            $model->appendTo($roots[0]);
+            $parent = $this->findModel(Yii::$app->request->get('parent_id'));
+
+            $modelClass->name = $_GET['text'];
+            $modelClass->slug = CMS::slug($modelClass->name);
+            if ($modelClass->validate()) {
+                $modelClass->appendTo($parent);
+                $message = $this->message;
+            } else {
+                $message = $modelClass->getError('slug');
+            }
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $json['message'] = $message;
         } else {
-            $model->moveAsRoot();
+            $json['message'] = 'error [1]';
         }
 
-        return null;
+        return $json;
     }
 }
