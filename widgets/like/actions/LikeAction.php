@@ -8,11 +8,25 @@ use Yii;
 use yii\base\Action;
 use yii\web\Response;
 
+/**
+ * Class LikeAction
+ *
+ * @property string $modelClass ActiveRecord model
+ * @property integer $object_id PrimaryKey model
+ *
+ * @package panix\engine\widgets\like\actions
+ */
 class LikeAction extends Action
 {
     private $modelClass;
+
     private $object_id;
 
+    /**
+     * @param string $type
+     * @param int $id
+     * @return array
+     */
     public function run($type, $id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -24,14 +38,15 @@ class LikeAction extends Action
 
             if ($this->modelClass) {
                 $value = ($type == 'up') ? 1 : 0;
+                $newLike = new Like();
+                $newLike->object_id = $this->object_id;
+                $newLike->user_id = Yii::$app->user->id;
+                $newLike->handler_hash = $this->modelClass;
+                $newLike->value = $value;
 
-                $newlike = new Like();
-                $newlike->object_id = $this->object_id;
-                $newlike->user_id = Yii::$app->user->id;
-                $newlike->handler_hash = $this->modelClass;
-                $newlike->value = $value;
-
+                /** @var Like $deleteQuery */
                 if ($value) {//like
+
                     $deleteQuery = $this->queryByValue(0)->one();
                     if ($deleteQuery) {
                         $deleteQuery->value = $value;
@@ -39,7 +54,7 @@ class LikeAction extends Action
                     } else {
                         $deleteQuery = $this->queryByValue($value)->one();
                         if (!$deleteQuery) {
-                            $newlike->save();
+                            $newLike->save();
                         } else {
                             $deleteQuery->delete();
                         }
@@ -52,7 +67,7 @@ class LikeAction extends Action
                     } else {
                         $deleteQuery = $this->queryByValue($value)->one();
                         if (!$deleteQuery) {
-                            $newlike->save();
+                            $newLike->save();
                         } else {
                             $deleteQuery->delete();
                         }

@@ -7,6 +7,7 @@ return [
     'PAGE_GEN' => 'Скорость загрузки страницы: <strong>{time}</strong> сек. Память: <strong>{memory}</strong>. Запросов к БД: <strong>{db_query}</strong> за <strong>{db_time}</strong> сек.',
     'IN' => 'в',
     'ALL' => 'Все',
+    'GUEST' => 'Гость',
     'TODAY_IN' => 'Сегодня в {time}',
     'YESTERDAY_IN' => 'Вчера в {time}',
     'GRID_SWITCH' => 'Скрыть/показать',

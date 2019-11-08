@@ -613,42 +613,31 @@ class CMS
     /**
      *
      * @param string $ip
-     * @param int $type
-     * @param \panix\mod\user\models\User $user
-     * @return string or null
+     * @return string|null
      */
-    public static function ip($ip, $type = 1, $user = null)
+    public static function ip($ip=null)
     {
-        $options=[];
+        if(!$ip)
+            $ip = Yii::$app->request->getRemoteIP();
+
+        $options = [];
+        $content = null;
         if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
             if (self::getMemoryLimit() > self::MEMORY_LIMIT) {
                 $geoIp = Yii::$app->geoip->ip($ip);
-                $image = '';
-                $title = Yii::t('app', 'COUNTRY') . ': ' . Yii::t('app/geoip_country', $geoIp->country) . '/' . Yii::t('app/geoip_city', $geoIp->city) . ' - '. $geoIp->timezone;
-                $options['title']=$title;
+                $title = Yii::t('app', 'COUNTRY') . ': ' . Yii::t('app/geoip_country', $geoIp->country) . '/' . Yii::t('app/geoip_city', $geoIp->city) . ' - ' . $geoIp->timezone;
+                $options['title'] = $title;
                 if ($geoIp->isoCode) {
-
-                    $options['alt']=$ip;
-                    $image = Html::img('/uploads/language/' . strtolower($geoIp->isoCode) . '.png', $options);
-                }
-                if ($type == 1) {
+                    $image = Html::img('/uploads/language/' . strtolower($geoIp->isoCode) . '.png', $options).' ';
+                    $options['alt'] = $ip;
                     $options['onClick']='common.geoip("' . $ip . '")';
-                    $content = Html::a($image . ' ' . $ip, '#', $options);
-                } elseif ($type == 2 && $user) {
-                    $options['onClick']='common.geoip("' . $ip . '")';
-                    $content = Html::a($image . ' ' . $user, '#', $options);
-                } elseif ($type == 3) {
-                    $content = $image . ' ' . $ip;
-                } else {
-                    $content = $image;
+                    return $image.Html::a( $ip, '#', $options);
                 }
-                return $content;
-            } else {
-                return $ip;
             }
         } else {
             return $ip . ' (IPv6)';
         }
+        return $ip;
     }
 
     /**

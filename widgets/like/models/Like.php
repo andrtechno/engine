@@ -6,6 +6,16 @@ use Yii;
 use panix\engine\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 
+/**
+ * Class Like
+ *
+ * @property integer $object_id
+ * @property string $handler_hash
+ * @property integer $created_at
+ * @property boolean $value
+ *
+ * @package panix\engine\widgets\like\models
+ */
 class Like extends ActiveRecord
 {
     /**
@@ -33,7 +43,6 @@ class Like extends ActiveRecord
             [['handler_hash'], 'trim'],
             [['handler_hash', 'object_id'], 'required'],
             [['handler_hash'], 'string', 'max' => 8],
-            ['model', 'safe']
         ];
     }
 
