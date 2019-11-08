@@ -20,12 +20,6 @@ class CreateNodeAction extends Action
      */
     public function run()
     {
-        if (!$this->offMessage)
-            $this->offMessage = Yii::t('app', 'SWITCH_OFF');
-
-        if (!$this->onMessage)
-            $this->onMessage = Yii::t('app', 'SWITCH_ON');
-
         Yii::$app->response->format = Response::FORMAT_JSON;
         $json = [];
         $json['success'] = false;

@@ -12,8 +12,7 @@ use yii\rest\Action;
  */
 class MoveNodeAction extends Action
 {
-    public $successMessage = 'Success';
-    public $errorMessage = 'Error';
+    public $successMessage;
 
     /**
      * @inheritdoc
@@ -27,7 +26,7 @@ class MoveNodeAction extends Action
 
             /* @var $modelClass \yii\db\ActiveRecord */
             $modelClass = $this->modelClass;
-            $node = $modelClass::findModel(Yii::$app->request->get('id'));
+            $node = $this->findModel(Yii::$app->request->get('id'));
             $target = $modelClass::findOne(Yii::$app->request->get('ref'));
 
             if(!method_exists($modelClass,'rebuildFullPath')){
@@ -64,8 +63,6 @@ class MoveNodeAction extends Action
 
             $json['success'] = true;
             $json['message'] = $this->successMessage;
-
-
         } else {
             $json['message'] = 'error [1]';
         }
