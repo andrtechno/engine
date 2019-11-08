@@ -9,6 +9,10 @@ use panix\engine\CMS;
 
 /**
  * Class RenameNodeAction
+ *
+ * @property string $successMessage Сообщение об успехе
+ * @property string $errorMessage
+ *
  * @package panix\engine\behaviors\nestedsets\actions
  */
 class RenameNodeAction extends Action
@@ -23,12 +27,11 @@ class RenameNodeAction extends Action
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-
         if (!$this->successMessage)
-            $this->successMessage = Yii::t('app', 'SUCCESS_UPDATE');
+            $this->successMessage = Yii::t('app', 'NODE_RENAME_SUCCESS');
 
         if (!$this->errorMessage)
-            $this->errorMessage = Yii::t('app', 'ERROR_UPDATE');
+            $this->errorMessage = Yii::t('app', 'NODE_RENAME_ERROR');
 
 
         $json = [];

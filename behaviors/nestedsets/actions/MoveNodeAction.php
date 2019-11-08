@@ -20,6 +20,11 @@ class MoveNodeAction extends Action
     public function run()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if (!$this->successMessage)
+            $this->successMessage = Yii::t('app', 'NODE_MOVE');
+
+
         $json = [];
         $json['success'] = false;
         if (Yii::$app->request->isAjax) {
