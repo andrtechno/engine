@@ -22,6 +22,16 @@ class CMS
     const MEMORY_LIMIT = 64; // Minimal memory_limit
 
     /**
+     * Конвертирует число, с 1 в 000001
+     *
+     * @return string
+     */
+    public static function idToNumber($number, $n = 6)
+    {
+        return sprintf("%0{$n}d", $number);
+    }
+
+    /**
      * Displays a variable.
      * This method achieves the similar functionality as var_dump and print_r
      * but is more robust when handling complex objects such as Yii controllers.
@@ -615,9 +625,9 @@ class CMS
      * @param string $ip
      * @return string|null
      */
-    public static function ip($ip=null)
+    public static function ip($ip = null)
     {
-        if(!$ip)
+        if (!$ip)
             $ip = Yii::$app->request->getRemoteIP();
 
         $options = [];
@@ -628,10 +638,10 @@ class CMS
                 $title = Yii::t('app', 'COUNTRY') . ': ' . Yii::t('app/geoip_country', $geoIp->country) . '/' . Yii::t('app/geoip_city', $geoIp->city) . ' - ' . $geoIp->timezone;
                 $options['title'] = $title;
                 if ($geoIp->isoCode) {
-                    $image = Html::img('/uploads/language/' . strtolower($geoIp->isoCode) . '.png', $options).' ';
+                    $image = Html::img('/uploads/language/' . strtolower($geoIp->isoCode) . '.png', $options) . ' ';
                     $options['alt'] = $ip;
-                    $options['onClick']='common.geoip("' . $ip . '")';
-                    return $image.Html::a( $ip, '#', $options);
+                    $options['onClick'] = 'common.geoip("' . $ip . '")';
+                    return $image . Html::a($ip, '#', $options);
                 }
             }
         } else {
