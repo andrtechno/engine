@@ -22,11 +22,13 @@ class CMS
     const MEMORY_LIMIT = 64; // Minimal memory_limit
 
     /**
-     * Конвертирует число, с 1 в 000001
+     * Конвертирует число "150" в "000150"
      *
+     * @param int $number
+     * @param int $n
      * @return string
      */
-    public static function idToNumber($number, $n = 6)
+    public static function idToNumber(int $number, $n = 10)
     {
         return sprintf("%0{$n}d", $number);
     }
