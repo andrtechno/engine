@@ -9,8 +9,8 @@ class FileSystem
 
     private $_file = false;
     private $_path = false;
-    private $denie_files = ["index.html", ".htaccess", '.svg'];
-    private $denie_folders = ['js', 'admin', 'svg'];
+    private $denyFiles = ['index.html', '.htaccess'];
+    private $denyFolders = ['js', 'admin', 'svg'];
 
     public function __construct($filename = false, $path = false)
     {
@@ -18,12 +18,6 @@ class FileSystem
             $this->_file = $filename;
         if ($path)
             $this->_path = rtrim((string)$path, '/');
-    }
-
-    static public function fs($filename = false, $path = false)
-    {
-        $obj = new FileSystem($filename, $path);
-        return $obj;
     }
 
     public function setName($name)
@@ -151,7 +145,7 @@ class FileSystem
             }
             if (is_dir($dir . DIRECTORY_SEPARATOR . $item)) {
                 if (!preg_match("/\./", $item)) {
-                    if (!in_array($item, $this->denie_folders)) {
+                    if (!in_array($item, $this->denyFolders)) {
                         $res[] = [
                             'text' => $item,
                             'children' => true,
@@ -161,7 +155,7 @@ class FileSystem
                     }
                 }
             } else {
-                if ($item != "." && $item != ".." && !in_array($item, $this->denie_files) && preg_match("/\./", $item)) {
+                if ($item != "." && $item != ".." && !in_array($item, $this->denyFiles) && preg_match("/\./", $item)) {
                     $res[] = [
                         'text' => $item,
                         'children' => false,
@@ -271,4 +265,36 @@ class FileSystem
         }
     }
 
+    public function create($id, $name, $mkdir = false)
+    {
+        $dir = $this->_path . DIRECTORY_SEPARATOR . $id;
+        if (preg_match('([^ a-zа-я-_0-9.]+)ui', $name) || !strlen($name)) {
+            throw new Exception('Invalid name: ' . $name);
+        }
+        if ($mkdir) {
+            mkdir($dir . DIRECTORY_SEPARATOR . $name);
+        } else {
+            file_put_contents($dir . DIRECTORY_SEPARATOR . $name, '');
+        }
+        return ['id' => $dir . DIRECTORY_SEPARATOR . $name];
+    }
+
+    public function rename($id, $name)
+    {
+        $dir = $id;
+        if (preg_match('([^ a-zа-я-_0-9.]+)ui', $name) || !strlen($name)) {
+            throw new Exception('Invalid name: ' . $name);
+        }
+        $new = explode(DIRECTORY_SEPARATOR, $dir);
+        array_pop($new);
+        array_push($new, $name);
+        $new = implode(DIRECTORY_SEPARATOR, $new);
+        if ($dir !== $new) {
+            if (is_file($new) || is_dir($new)) {
+                throw new Exception('Path already exists: ' . $new);
+            }
+            rename($dir, $new);
+        }
+        return ['id' => $new];
+    }
 }
