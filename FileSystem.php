@@ -2,8 +2,6 @@
 
 namespace panix\engine;
 
-use panix\engine\assets\codemirror\CodeMirrorPhpAsset;
-use yii\base\Component;
 use yii\base\Exception;
 
 class FileSystem
@@ -89,7 +87,7 @@ class FileSystem
     {
         $this->recursiveDelete($this->getFullName());
         $this->_file = false;
-        return ['status' => 'OK','file'=>$this->getFullName()];
+        return ['success' => true, 'file' => $this->getFullName()];
     }
 
     /*
@@ -152,13 +150,15 @@ class FileSystem
                 continue;
             }
             if (is_dir($dir . DIRECTORY_SEPARATOR . $item)) {
-                if (!in_array($item, $this->denie_folders)) {
-                    $res[] = [
-                        'text' => $item,
-                        'children' => true,
-                        'id' => $this->id($dir . DIRECTORY_SEPARATOR . $item),
-                        'icon' => 'icon-folder-open'
-                    ];
+                if (!preg_match("/\./", $item)) {
+                    if (!in_array($item, $this->denie_folders)) {
+                        $res[] = [
+                            'text' => $item,
+                            'children' => true,
+                            'id' => $this->id($dir . DIRECTORY_SEPARATOR . $item),
+                            'icon' => 'icon-folder-open'
+                        ];
+                    }
                 }
             } else {
                 if ($item != "." && $item != ".." && !in_array($item, $this->denie_files) && preg_match("/\./", $item)) {
@@ -186,6 +186,13 @@ class FileSystem
             ];
         }
         return $res;
+    }
+
+    public function write($content)
+    {
+        $fp = fopen($this->_path . DIRECTORY_SEPARATOR . $this->_file, 'w+');
+        fwrite($fp, $content);
+        fclose($fp);
     }
 
     public function data($id)
