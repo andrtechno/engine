@@ -28,7 +28,7 @@ class AdminController extends Controller
             'access' => [
                 'class' => AccessControl::class,
                 'allowActions' => [
-                   // 'index',
+                    // 'index',
                     // The actions listed here will be allowed to everyone including guests.
                 ]
             ],
@@ -102,6 +102,7 @@ class AdminController extends Controller
         }*/
 
         Yii::setAlias('@theme', Yii::getAlias("@app/web/themes/dashboard"));
+        Yii::setAlias('@web_theme', Yii::getAlias("@app/web/themes/" . Yii::$app->settings->get('app', 'theme')));
 
 
         parent::init();

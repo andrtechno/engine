@@ -89,6 +89,7 @@ class FileSystem
     {
         $this->recursiveDelete($this->getFullName());
         $this->_file = false;
+        return ['status' => 'OK','file'=>$this->getFullName()];
     }
 
     /*
@@ -208,8 +209,6 @@ class FileSystem
                 case 'json':
                 case 'css':
                 case 'scss':
-                    $dat['content'] = file_get_contents($dir);
-                    break;
                 case 'html':
                 case 'htm':
                 case 'xml':
@@ -220,6 +219,7 @@ class FileSystem
                 case 'log':
                 case 'py':
                 case 'rb':
+                case 'svg':
                 case 'php':
                     $dat['content'] = file_get_contents($dir);
                     break;

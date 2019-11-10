@@ -16,10 +16,11 @@ class CodeMirrorPhpAsset extends CodeMirrorBundle
         'mode/javascript/javascript.js',
         'mode/xml/xml.js',
         'mode/css/css.js',
-
+        'addon/selection/active-line.js'
     ];
 
     public $depends = [
         'panix\engine\assets\codemirror\CodeMirrorAsset',
+        'panix\engine\assets\codemirror\CodeMirrorSearchAsset',
     ];
 }

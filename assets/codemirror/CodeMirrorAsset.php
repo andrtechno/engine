@@ -15,7 +15,7 @@ class CodeMirrorAsset extends CodeMirrorBundle
 
     public $css = [
         'lib/codemirror.css',
-        'theme/dracula.css',
+        'theme/ambiance.css',
     ];
 
     /*public $depends = [
