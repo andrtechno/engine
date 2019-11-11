@@ -276,7 +276,7 @@ class FileSystem
         } else {
             file_put_contents($dir . DIRECTORY_SEPARATOR . $name, '');
         }
-        return ['id' => $dir . DIRECTORY_SEPARATOR . $name];
+        return ['id' => $dir . DIRECTORY_SEPARATOR . $name,'icon'=>'icon-folder-open'];
     }
 
     public function rename($id, $name)
@@ -295,6 +295,6 @@ class FileSystem
             }
             rename($dir, $new);
         }
-        return ['id' => $new];
+        return ['id' => $new,'icon'=>'icon-folder-open'];
     }
 }
