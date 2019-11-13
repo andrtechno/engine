@@ -30,13 +30,13 @@ class Migration extends \yii\db\Migration
      */
     public function loadColumns($gridId, $model, $columns = [])
     {
-        $cols=[];
+        $cols = [];
         foreach ($columns as $key => $column) {
-            $cols[$column]=['checked'=>1];
+            $cols[$column] = ['checked' => 1, 'ordern' => $key];
         }
 
         $this->batchInsert(GridColumns::tableName(), ['grid_id', 'modelClass', 'column_data'], [
-            [$gridId, '\\'.$model, Json::encode($cols)]
+            [$gridId, '\\' . $model, Json::encode($cols)]
         ]);
     }
 
