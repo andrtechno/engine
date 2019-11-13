@@ -185,9 +185,15 @@ class CMS
         return substr($string, 0, -$end_length) . "****";
     }
 
-    public static function slug($text)
+    /**
+     * @param string $text
+     * @param string $replacement
+     * @param bool $lowercase whether to return the string in lowercase or not. Defaults to `true`.
+     * @return string
+     */
+    public static function slug($text, $replacement = '-', $lowercase = true)
     {
-        return (extension_loaded('intl')) ? Inflector::slug($text) : $text;
+        return (extension_loaded('intl')) ? Inflector::slug($text, $replacement, $lowercase) : $text;
     }
 
     /**

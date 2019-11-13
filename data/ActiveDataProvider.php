@@ -20,7 +20,8 @@ class ActiveDataProvider extends BaseActiveDataProvider
             if ($settings->get($moduleId, 'pagenum')) {
                 $this->getPagination()->pageSize = $settings->get($moduleId, 'pagenum');
             } else {
-                $this->getPagination()->pageSize = $settings->get('app', 'pagenum');
+
+                //$this->getPagination()->pageSize = $settings->get('app', 'pagenum');
             }
         }
         parent::init();

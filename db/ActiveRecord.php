@@ -76,6 +76,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
 
         return $result;
     }
+
     public function getColumnSearchOLd($array = [])
     {
         $col = $this->gridColumns;
@@ -144,11 +145,13 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 //Текущий IP адресс, автора добавление
                 $this->ip_create = Yii::$app->request->getUserIP();
             }
-            if (isset($columns['user_id']) && !$this->user_id) {
-                $this->user_id = (Yii::$app->user->isGuest) ? NULL : Yii::$app->user->id;
-            }
-            if (isset($columns['user_agent'])) {
-                $this->user_agent = Yii::$app->request->userAgent;
+            if (!(Yii::$app instanceof \yii\console\Application)) {
+                if (isset($columns['user_id']) && !$this->user_id) {
+                    $this->user_id = (Yii::$app->user->isGuest) ? NULL : Yii::$app->user->id;
+                }
+                if (isset($columns['user_agent'])) {
+                    $this->user_agent = Yii::$app->request->userAgent;
+                }
             }
             if (isset($columns['ordern'])) {
                 if (!isset($this->ordern)) {
@@ -171,7 +174,15 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 $this->touch($updatedAt);
             }
         }
+
+        if (Yii::$app instanceof \yii\console\Application) {
+            echo "    > insert into " . get_class($this) . " ...";
+            $time = microtime(true);
+        }
         parent::afterSave($insert, $changedAttributes);
+        if (Yii::$app instanceof \yii\console\Application) {
+            echo ' done (time: ' . sprintf('%.3f', microtime(true) - $time) . "s)\n";
+        }
     }
 
     /**
