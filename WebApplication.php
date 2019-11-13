@@ -93,11 +93,17 @@ class WebApplication extends Application
         }
     }
 
-    public function getTranslationsFileMap($id)
+    /**
+     * @param string $id
+     * @param string $path
+     * @return array
+     */
+    public function getTranslationsFileMap($id, $path)
     {
         $lang = $this->language;
         $result = [];
-        $basePath = realpath(Yii::getAlias("@{$id}/messages/{$lang}"));
+        $basePath = realpath(Yii::getAlias("{$path}/{$lang}"));
+
         if (is_dir($basePath)) {
             $fileList = \yii\helpers\FileHelper::findFiles($basePath, [
                 'only' => ['*.php'],
@@ -114,11 +120,12 @@ class WebApplication extends Application
 
     public function registerTranslations($id)
     {
+        $path = '@' . $id . '/messages';
         $this->i18n->translations[$id . '/*'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             'sourceLanguage' => 'en-US',
-            'basePath' => '@' . $id . '/messages',
-            'fileMap' => $this->getTranslationsFileMap($id)
+            'basePath' => $path,
+            'fileMap' => $this->getTranslationsFileMap($id, $path)
         ];
     }
 

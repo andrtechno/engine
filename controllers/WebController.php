@@ -120,24 +120,9 @@ class WebController extends Controller
         return $assetsPaths[1];
     }
 
-    public function actionTest()
-    {
-        set_time_limit(10);
-        //  \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
-        //  include_once 'Sample_Header.php';
-        // Autoloader::register();
-
-
-        $pptReader = IOFactory::createReader('PowerPoint2007');
-        //$pptReader = IOFactory::createReader('PowerPoint97');
-        $oPHPPresentation = $pptReader->load(Yii::getAlias('@webroot/uploads') . '/test.pptx');
-
-        $oTree = new PhpPptTree($oPHPPresentation);
-
-        return $this->render('test', ['oTree' => $oTree]);
-
-    }
-
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
 
@@ -160,11 +145,11 @@ class WebController extends Controller
 
     public function actionNoJavascript()
     {
-        //TODO Пересмотреть данное решение для моб где нету вообще javascript
+        //TODO Пересмотреть данное решение для моб где нету вообще JavaScript
         $this->layout = 'error';
         return $this->render('no-javascript', [
             'name' => '',
-            'message' => 'На вашем устройстве отключен javascript. Для корректной работы сайта рекомендуем включить.'
+            'message' => Yii::t('app','NO_JAVASCRIPT')
         ]);
     }
 

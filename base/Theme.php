@@ -6,6 +6,7 @@ use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\base\Theme as BaseTheme;
 
 /**
  * Class Theme
@@ -14,7 +15,7 @@ use yii\helpers\Html;
  *
  * @package panix\engine\base
  */
-class Theme extends \yii\base\Theme
+class Theme extends BaseTheme
 {
 
     public $name = null;
