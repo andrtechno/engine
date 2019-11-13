@@ -2,9 +2,9 @@
 
 namespace panix\engine\grid;
 
+use panix\engine\CMS;
 use Yii;
-use panix\mod\admin\models\GridColumns;
-
+use yii\helpers\Json;
 
 /**
  * Class GridView
@@ -23,28 +23,37 @@ class GridView extends \yii\grid\GridView
 
     public function init()
     {
+//echo Json::decode('{"image":{"checked":"1","ordern":""},"name":{"checked":"1","ordern":""},"price":{"checked":"1","ordern":""},"categories":{"checked":"1","ordern":""},"commentsCount":{"ordern":""},"created_at":{"ordern":""},"updated_at":{"ordern":""},"razmer":{"ordern":""}');die;
+        $pagination = $this->dataProvider->getPagination();
         if (isset($this->dataProvider->query)) {
+
             $modelClass = $this->dataProvider->query->modelClass;
             $this->setId('grid-' . strtolower(basename($this->dataProvider->query->modelClass)));
             if ($this->enableColumns && method_exists($modelClass, 'getGridColumns')) {
                 $runModel = new $modelClass;
-                $model = GridColumns::find()->where([
-                    'modelClass' => DIRECTORY_SEPARATOR . $modelClass
-                ])->orderBy(['ordern' => SORT_ASC])->all();
-
-                $colms = array();
-                if (isset($model)) {
-                    foreach ($model as $k => $col) {
-                        $colms[$col->column_key] = $col->column_key;
-                    }
+                /** @var GridColumns $model */
+                $model = GridColumns::findOne(['grid_id' => $this->id]);
+                if (isset($model->pageSize)) {
+                    $pagination->pageSize = $model->pageSize;
                 }
+                $columns = [];
+                if (isset($model)) {
+                   // print_r($model->column_data);die;
+                    foreach ($model->column_data as $column => $column_data) {
+                        $order = (isset($column_data['ordern']) && $column_data['ordern']) ? $column_data['ordern'] : $column;
+                        if(isset($column_data['checked'])){
+                            $columns[$order] = $column;
+                        }
+
+                    }
+                    ksort($columns);
+                }
+
                 if (!$this->columns)
-                    $this->columns = $runModel->getColumnSearch($colms);
+                    $this->columns = $runModel->getColumnSearch($columns);
             }
         }
-
         parent::init();
-
         if (file_exists(Yii::getAlias($this->layoutPath) . '.' . Yii::$app->view->defaultExtension)) {
             if ($this->enableLayout) {
                 $this->layout = $this->render($this->layoutPath, $this->layoutOptions);

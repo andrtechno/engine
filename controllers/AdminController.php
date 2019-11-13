@@ -3,8 +3,11 @@
 namespace panix\engine\controllers;
 
 
+use panix\engine\CMS;
 use Yii;
 use yii\data\ArrayDataProvider;
+use yii\db\ActiveRecord;
+use yii\helpers\Json;
 use yii\web\HttpException;
 use yii\web\UnauthorizedHttpException;
 use yii\web\Controller;
@@ -117,19 +120,80 @@ class AdminController extends Controller
     public function actionEditColumns()
     {
         if (Yii::$app->request->isAjax) {
-            //Yii::app()->clientScript->registerCoreScript('jquery.ui');
-            // Yii::$app->clientScript->scriptMap = array(
-            //     'jquery.js' => false,
-            //     'jquery.ba-bbq.js' => false,
-            // );
+            $modelClass = str_replace('/', '\\', Yii::$app->request->post('model'));
+
+            $grid_id = Yii::$app->request->post('grid_id');
+            $getGrid = Yii::$app->request->post('GridColumns');
+            $pageSize = Yii::$app->request->post('pageSize');
+
+
+            $model = GridColumns::find()
+                ->where(['grid_id' => $grid_id])
+                ->one();
+
+            if (!$model)
+                $model = new GridColumns();
+
+            if ($getGrid) {
+                $model->grid_id = $grid_id;
+                $model->modelClass = $modelClass;
+                $model->column_data = Json::encode($getGrid);
+                $model->pageSize = $pageSize;
+                $model->save(false);
+            }
+
+            $data = [];
+
+            /** @var ActiveRecord $mClass */
+            $mClass = new $modelClass();
+            $columnsArray = $mClass->getGridColumns();
+
+            unset($columnsArray['DEFAULT_COLUMNS'], $columnsArray['DEFAULT_CONTROL']);
+            if (isset($columnsArray)) {
+                foreach ($columnsArray as $key => $column) {
+                    $isChecked = false;
+
+                    if (isset($column['header'])) {
+                        $name = $column['header'];
+                    } else {
+                        $name = $mClass->getAttributeLabel((isset($column['attribute'])) ? $column['attribute'] : $key);
+                    }
+                    if (isset($model->column_data[$key]['checked'])) {
+                        $isChecked = true;
+                    }
+                    $order = (isset($model->column_data[$key])) ? $model->column_data[$key]['ordern'] : '';
+                    $data[] = [
+                        'checkbox' => Html::checkbox('GridColumns[' . $key . '][checked]', $isChecked, ['checked' => $isChecked]),
+                        'name' => $name,
+                        'sort' => Html::textInput('GridColumns[' . $key . '][ordern]', $order, ['class' => 'form-control text-center'])
+                    ];
+                }
+            }
+
+            $provider = new ArrayDataProvider([
+                'allModels' => $data,
+                'pagination' => false
+            ]);
+            return $this->renderPartial('@panix/engine/views/_EditGridColumns', [
+                'modelClass' => $modelClass,
+                'provider' => $provider,
+                'grid_id' => $grid_id,
+            ]);
+        } else {
+            throw new UnauthorizedHttpException(401);
+        }
+    }
+
+    public function actionEditColumns_OLD()
+    {
+        if (Yii::$app->request->isAjax) {
             $modelClass = str_replace('/', '\\', Yii::$app->request->post('model'));
 
             $grid_id = Yii::$app->request->post('grid_id');
             $mod = Yii::$app->request->post('module');
             $getGrid = Yii::$app->request->post('GridColumns');
             $upMod = ucfirst($mod);
-            //Yii::import("mod.{$mod}.models.{$modelClass}");
-            // Yii::import("mod.{$mod}.{$upMod}Module");
+
             if ($getGrid) {
                 GridColumns::deleteAll(['grid_id' => $grid_id]);
                 if ($getGrid['check']) {
@@ -150,22 +214,14 @@ class AdminController extends Controller
                 }
             }
 
-            $data = array();
-            /* $cr = new CDbCriteria;
-             $cr->order = '`t`.`ordern` DESC';
-             $cr->condition = '`t`.`grid_id`=:grid';
-             $cr->params = array(
-                 ':grid' => $grid_id,
-             );
-             $model = GridColumns::model()->findAll($cr);*/
-
+            $data = [];
             $model = GridColumns::find()
                 ->where(['grid_id' => $grid_id])
                 ->orderBy(['ordern' => SORT_DESC])
                 ->all();
 
 
-            $m = array();
+            $m = [];
             foreach ($model as $r) {
                 $m[$r->column_key]['ordern'] = $r->ordern;
                 $m[$r->column_key]['key'] = $r->column_key;
@@ -191,9 +247,9 @@ class AdminController extends Controller
                     }
 
                     $data[] = array(
-                        'checkbox' => Html::checkbox('GridColumns[check][' . $key . ']', $isChecked, array('value' => $name)),
+                        'checkbox' => Html::checkbox('GridColumns[check][' . $key . ']', $isChecked, ['value' => $name]),
                         'name' => $name,
-                        'sort' => Html::textInput('GridColumns[ordern][' . $key . ']', $m[$key]['ordern'], array('class' => 'form-control text-center'))
+                        'sort' => Html::textInput('GridColumns[ordern][' . $key . ']', $m[$key]['ordern'], ['class' => 'form-control text-center'])
                     );
                 }
             }

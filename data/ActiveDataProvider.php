@@ -3,53 +3,28 @@
 namespace panix\engine\data;
 
 use Yii;
-use yii\base\InvalidArgumentException;
 use yii\data\ActiveDataProvider as BaseActiveDataProvider;
 
 class ActiveDataProvider extends BaseActiveDataProvider
 {
 
-    private $_pagination;
-
-    public function setPagination($value)
+    public function init()
     {
-        if (is_array($value)) {
-            $config = ['class' => Pagination::class];
-            if ($this->id !== null) {
-                $config['pageParam'] = $this->id . '-page';
-                $config['pageSizeParam'] = $this->id . '-per-page';
-            }
+        /* @var  \yii\base\Model $modelClass*/
+        $modelClass = $this->query->modelClass;
 
-            $this->_pagination = Yii::createObject(array_merge($config, $value));
-
-            $modelClass = $this->query->modelClass;
-            $mid = $modelClass::MODULE_ID;
-            $settings = Yii::$app->settings;
-            if (!isset($value['pageSize'])) {
-
-                $this->_pagination->pageSize = (int)($settings->get($mid, 'pagenum')) ? $settings->get($mid, 'pagenum') : $settings->get('app', 'pagenum');
+        $moduleId = $modelClass::MODULE_ID;
+        $settings = Yii::$app->settings;
+        if ($moduleId) {
+            if ($settings->get($moduleId, 'pagenum')) {
+                $this->getPagination()->pageSize = $settings->get($moduleId, 'pagenum');
             } else {
-
-                $this->_pagination->pageSize = $value['pageSize'];
+                $this->getPagination()->pageSize = $settings->get('app', 'pagenum');
             }
-
-            if (Yii::$app->request->get($this->_pagination->pageSizeParam)) {
-                $this->_pagination->setPageSize(Yii::$app->request->get($this->_pagination->pageSizeParam));
-            }
-
-        } elseif ($value instanceof Pagination || $value === false) {
-            $this->_pagination = $value;
-        } else {
-            throw new InvalidArgumentException('Only Pagination instance, configuration array or false is allowed.');
         }
-    }
+        parent::init();
 
-    public function getPagination()
-    {
-        if ($this->_pagination === null) {
-            $this->setPagination([]);
-        }
-        return $this->_pagination;
+
     }
 
 }

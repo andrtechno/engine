@@ -3,6 +3,7 @@
 namespace panix\engine\db;
 
 use panix\engine\behaviors\TranslateBehavior;
+use panix\engine\CMS;
 use panix\mod\shop\models\Manufacturer;
 use Yii;
 use yii\base\Exception;
@@ -10,6 +11,7 @@ use yii\behaviors\TimestampBehavior;
 use panix\engine\data\Pagination;
 use panix\engine\Html;
 use panix\engine\widgets\LinkPager;
+use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -55,10 +57,29 @@ class ActiveRecord extends \yii\db\ActiveRecord
         return $html;
     }
 
-    public function getColumnSearch($array = array())
+    public function getColumnSearch($array = [])
     {
         $col = $this->gridColumns;
-        $result = array();
+        $result = [];
+        if (isset($col['DEFAULT_COLUMNS'])) {
+            foreach ($col['DEFAULT_COLUMNS'] as $t) {
+                $result[] = $t;
+            }
+        }
+
+        foreach ($array as $column) {
+            $result[] = $col[$column];
+        }
+
+        if (isset($col['DEFAULT_CONTROL']))
+            $result[] = $col['DEFAULT_CONTROL'];
+
+        return $result;
+    }
+    public function getColumnSearchOLd($array = [])
+    {
+        $col = $this->gridColumns;
+        $result = [];
         if (isset($col['DEFAULT_COLUMNS'])) {
             foreach ($col['DEFAULT_COLUMNS'] as $t) {
                 $result[] = $t;
@@ -73,7 +94,6 @@ class ActiveRecord extends \yii\db\ActiveRecord
 
         return $result;
     }
-
 
     /**
      * @param $id

@@ -1,10 +1,20 @@
 <?php
 use panix\engine\Html;
 
-echo Html::beginForm('', 'post', array('id' => 'edit_grid_columns_form'));
+echo Html::beginForm('', 'post', ['id' => 'edit_grid_columns_form']);
 echo Html::hiddenInput('grid_id', $grid_id);
-echo Html::hiddenInput('module', $module);
 echo Html::hiddenInput('model', $modelClass);
+
+?>
+    <div class="form-group row">
+        <div class="col-sm-4 col-lg-3">
+            <?= Html::label('pageSize', 'pageSize', ['class' => 'col-form-label']); ?>
+        </div>
+        <div class="col-sm-8 col-lg-9">
+            <?= Html::textInput('pageSize', null, ['class' => 'form-control', 'id' => 'pageSize']); ?>
+        </div>
+    </div>
+<?php
 
 
 echo \panix\engine\grid\GridView::widget([
@@ -37,4 +47,4 @@ echo \panix\engine\grid\GridView::widget([
 ]);
 
 echo Html::endForm();
-?>
+

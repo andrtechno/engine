@@ -3,7 +3,8 @@
 namespace panix\engine\db;
 
 use panix\engine\components\Settings;
-use panix\mod\admin\models\GridColumns;
+use panix\engine\grid\GridColumns;
+use yii\helpers\Json;
 
 
 class Migration extends \yii\db\Migration
@@ -24,16 +25,19 @@ class Migration extends \yii\db\Migration
 
     /**
      * @param string $gridId
-     * @param $model
+     * @param string $model
      * @param array $columns
      */
     public function loadColumns($gridId, $model, $columns = [])
     {
+        $cols=[];
         foreach ($columns as $key => $column) {
-            $this->batchInsert(GridColumns::tableName(), ['grid_id', 'modelClass', 'column_key'], [
-                [$gridId, '\\'.$model, $column]
-            ]);
+            $cols[$column]=['checked'=>1];
         }
+
+        $this->batchInsert(GridColumns::tableName(), ['grid_id', 'modelClass', 'column_data'], [
+            [$gridId, '\\'.$model, Json::encode($cols)]
+        ]);
     }
 
     public function loadSettings()

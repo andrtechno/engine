@@ -114,8 +114,9 @@ class WebApplication extends Application
 
     public function registerTranslations($id)
     {
-        $this->i18n->translations[$id . '*'] = [
+        $this->i18n->translations[$id . '/*'] = [
             'class' => 'yii\i18n\PhpMessageSource',
+            'sourceLanguage' => 'en-US',
             'basePath' => '@' . $id . '/messages',
             'fileMap' => $this->getTranslationsFileMap($id)
         ];
