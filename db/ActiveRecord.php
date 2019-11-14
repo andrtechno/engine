@@ -3,16 +3,14 @@
 namespace panix\engine\db;
 
 use panix\engine\behaviors\TranslateBehavior;
-use panix\engine\CMS;
-use panix\mod\shop\models\Manufacturer;
 use Yii;
 use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
 use panix\engine\data\Pagination;
 use panix\engine\Html;
 use panix\engine\widgets\LinkPager;
-use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
+use yii\console\Application as ConsoleApplication;
 
 /**
  * Class ActiveRecord
@@ -40,6 +38,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
     const route = null;
     const MODULE_ID = null;
     public $translationClass;
+    private $_microtime;
     //  public $translationOptions;
 
     /**
@@ -137,6 +136,11 @@ class ActiveRecord extends \yii\db\ActiveRecord
      */
     public function beforeSave($insert)
     {
+        $logMessage = "    > " . ($this->getIsNewRecord() ? 'insert' : 'update') . " into " . get_class($this) . " ...";
+        $this->_microtime=microtime(true);
+        if (Yii::$app instanceof ConsoleApplication) {
+            echo $logMessage;
+        }
         $columns = $this->tableSchema->columns;
         //if (parent::beforeSave($insert)) {
         //create
@@ -145,7 +149,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 //Текущий IP адресс, автора добавление
                 $this->ip_create = Yii::$app->request->getUserIP();
             }
-            if (!(Yii::$app instanceof \yii\console\Application)) {
+            if (!(Yii::$app instanceof ConsoleApplication)) {
                 if (isset($columns['user_id']) && !$this->user_id) {
                     $this->user_id = (Yii::$app->user->isGuest) ? NULL : Yii::$app->user->id;
                 }
@@ -175,14 +179,23 @@ class ActiveRecord extends \yii\db\ActiveRecord
             }
         }
 
-        if (Yii::$app instanceof \yii\console\Application) {
-            echo "    > insert into " . get_class($this) . " ...";
-            $time = microtime(true);
-        }
         parent::afterSave($insert, $changedAttributes);
-        if (Yii::$app instanceof \yii\console\Application) {
-            echo ' done (time: ' . sprintf('%.3f', microtime(true) - $time) . "s)\n";
+        $logMessage = ' done (time: ' . sprintf('%.3f', microtime(true) - $this->_microtime) . "s)\n";
+        if (Yii::$app instanceof ConsoleApplication) {
+            echo ' done (time: ' . sprintf('%.3f', microtime(true) - $this->_microtime) . "s)\n";
         }
+
+        Yii::debug($logMessage, __CLASS__);
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function save($runValidation = true, $attributeNames = null)
+    {
+        Yii::debug('save', __CLASS__);
+        return parent::save($runValidation, $attributeNames);
     }
 
     /**
@@ -405,5 +418,6 @@ class ActiveRecord extends \yii\db\ActiveRecord
             )));
         }
     }
+
 
 }

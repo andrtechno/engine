@@ -10,6 +10,10 @@ use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\web\Response;
 
+/**
+ * Class WebController
+ * @package panix\engine\controllers
+ */
 class WebController extends Controller
 {
 
@@ -168,7 +172,7 @@ class WebController extends Controller
             $this->layout = "@app/web/themes/{$this->view->theme->name}/views/layouts/error";
 
             $this->pageName = Yii::t('app/error', $statusCode);
-            $this->view->title = $statusCode . ' ' . $this->pageName;
+            $this->view->title = $this->pageName;
             $this->breadcrumbs = [$statusCode];
             return $this->render('error', [
                 'exception' => $exception,
@@ -177,32 +181,6 @@ class WebController extends Controller
                 'name' => $name,
                 'message' => $message
             ]);
-        }
-    }
-
-
-    public function actionErrorjson()
-    {
-        /** @var $handler \yii\web\ErrorHandler */
-        /** @var $exception \yii\web\HttpException */
-        $handler = Yii::$app->errorHandler;
-        $exception = $handler->exception;
-
-        if ($exception !== null) {
-            $statusCode = $exception->statusCode;
-            $name = $exception->getName();
-            $message = $exception->getMessage();
-
-            // $this->layout = "@app/web/themes/{$this->view->theme->name}/views/layouts/error";
-
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return [
-                //'exception' => $exception,
-                //'handler' => $handler,
-                'statusCode' => $statusCode,
-                'name' => $name,
-                'message' => $message
-            ];
         }
     }
 
