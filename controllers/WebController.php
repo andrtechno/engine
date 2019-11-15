@@ -153,7 +153,7 @@ class WebController extends Controller
         $this->layout = 'error';
         return $this->render('no-javascript', [
             'name' => '',
-            'message' => Yii::t('app','NO_JAVASCRIPT')
+            'message' => Yii::t('app', 'NO_JAVASCRIPT')
         ]);
     }
 
@@ -172,6 +172,7 @@ class WebController extends Controller
             $this->layout = "@app/web/themes/{$this->view->theme->name}/views/layouts/error";
 
             $this->pageName = Yii::t('app/error', $statusCode);
+
             $this->view->title = $this->pageName;
             $this->breadcrumbs = [$statusCode];
             return $this->render('error', [
