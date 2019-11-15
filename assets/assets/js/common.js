@@ -1,3 +1,4 @@
+var common = window.common || {};
 common.notify_list = Array;
 common.getMsg = function (code) {
     return this.lang[this.language][code];
