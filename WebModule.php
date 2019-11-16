@@ -15,17 +15,13 @@ class WebModule extends Module
 {
 
     public $assetsUrl;
-    // protected $_icon;
     public $count = false;
-    // protected $info;
     public $routes = [];
-    //  public static $moduleID;
     public $modelClasses = [];
     protected $_models;
     public $icon;
     public $uploadPath;
     public $uploadAliasPath = null;
-
 
     public function behaviors2()
     {

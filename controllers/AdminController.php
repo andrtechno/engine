@@ -15,6 +15,14 @@ use panix\mod\rbac\filters\AccessControl;
 use panix\engine\grid\GridColumns;
 use panix\engine\Html;
 
+
+/**
+ * Class AdminController
+ *
+ * @property string $icon
+ *
+ * @package panix\engine\controllers
+ */
 class AdminController extends Controller
 {
 
