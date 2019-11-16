@@ -89,6 +89,9 @@ class AdminController extends Controller
         return parent::beforeAction($event);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
 
