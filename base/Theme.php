@@ -2,6 +2,7 @@
 
 namespace panix\engine\base;
 
+use panix\engine\CMS;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
@@ -53,7 +54,7 @@ class Theme extends BaseTheme
             '@app/modules' => "@app/web/themes/{$this->name}/modules",
             '@app/widgets' => "@app/web/themes/{$this->name}/widgets",
         ], $modulesPaths);
-
+//CMS::dump($this->pathMap);die;
         parent::init();
     }
 

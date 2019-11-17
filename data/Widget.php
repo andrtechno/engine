@@ -3,7 +3,7 @@
 namespace panix\engine\data;
 
 use Yii;
-use yii\helpers\VarDumper;
+use ReflectionClass;
 
 class Widget extends \yii\base\Widget
 {
@@ -11,16 +11,19 @@ class Widget extends \yii\base\Widget
     public $skin = 'default';
     public $assetsUrl;
     public $widget_id;
-
+    public $viewPath;
     public function init()
     {
         parent::init();
-        $reflectionClass = new \ReflectionClass(get_class($this));
+        $reflectionClass = new ReflectionClass(get_class($this));
         $this->widget_id = 'wgt_' . $reflectionClass->getShortName();
 
         Yii::$app->setAliases([
             '@' . $this->widget_id => realpath(dirname($reflectionClass->getFileName())),
         ]);
+
+
+
 
         $this->registerTranslations($this->widget_id);
 
@@ -79,6 +82,33 @@ class Widget extends \yii\base\Widget
     public function getName()
     {
         return basename(get_class($this));
+    }
+
+
+    public function getViewPath()
+    {
+        $class = new ReflectionClass($this);
+
+        $diename = dirname($class->getFileName());
+
+
+
+        if($this->viewPath){
+            return Yii::getAlias($this->viewPath);
+        }
+
+
+        $views = [
+           "@app/widgets/{$diename}",
+        ];
+
+        foreach ($views as $view) {
+            if (file_exists( Yii::getAlias($view))) {
+                Yii::debug('Layout load ' . $view, __METHOD__);
+                return $view;
+            }
+        }
+        return parent::getViewPath();
     }
 
 }
