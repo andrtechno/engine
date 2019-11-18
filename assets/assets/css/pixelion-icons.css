@@ -201,3 +201,5 @@
 .icon-viber:before {content:"\f177";}
 .icon-whatsapp-2:before {content:"\f178";}
 .icon-telegram-outline:before {content:"\f179";}
+.icon-logout:before,
+.icon-exit:before{content:"\f180";}
