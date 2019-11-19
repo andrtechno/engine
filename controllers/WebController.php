@@ -80,7 +80,10 @@ class WebController extends Controller
         return $this->render('index');
     }
 
-
+    /**
+     * @param null $text
+     * @throws NotFoundHttpException
+     */
     protected function error404($text = null)
     {
         if (!$text)
