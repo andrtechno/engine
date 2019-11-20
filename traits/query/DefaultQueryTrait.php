@@ -3,6 +3,8 @@
 namespace panix\engine\traits\query;
 
 
+use yii\db\Expression;
+
 trait DefaultQueryTrait
 {
 
@@ -31,7 +33,24 @@ trait DefaultQueryTrait
     {
         $modelClass = $this->modelClass;
         $tableName = $modelClass::tableName();
+        //$this->andWhere(['between', $tableName . '.' . $attribute, new Expression( 'UNIX_TIMESTAMP('.$start.')'), new Expression('UNIX_TIMESTAMP('.$end.')')]);
         $this->andWhere(['between', $tableName . '.' . $attribute, $start, $end]);
+        return $this;
+    }
+
+
+    /**
+     * @param integer $start
+     * @param integer $end
+     * @param string $attribute
+     * @return $this
+     */
+    public function int2between($start, $end, $attribute = 'created_at')
+    {
+        $modelClass = $this->modelClass;
+        $tableName = $modelClass::tableName();
+        $this->andWhere(['<=', $tableName . '.' . $attribute, $start]);
+        $this->andWhere(['>=', $tableName . '.' . $attribute, $end]);
         return $this;
     }
 
