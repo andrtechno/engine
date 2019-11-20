@@ -55,6 +55,18 @@ trait DefaultQueryTrait
     }
 
     /**
+     * @param string $attribute
+     * @return $this
+     */
+    public function isNotEmpty($attribute)
+    {
+        $modelClass = $this->modelClass;
+        $tableName = $modelClass::tableName();
+        $this->andWhere(['IS NOT', $tableName . '.' . $attribute, null]);
+        $this->andWhere(['!=', $tableName . '.' . $attribute, '']);
+        return $this;
+    }
+    /**
      * @param int $state
      * @return $this
      */
