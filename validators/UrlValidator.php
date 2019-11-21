@@ -41,7 +41,7 @@ class UrlValidator extends Validator
         if (isset($check)) {
             $this->addError($model, $attribute, $this->message);
         }
-
+        $model->{$this->attributeSlug} = mb_strtolower($model->{$this->attributeSlug});
         return null;
     }
 
