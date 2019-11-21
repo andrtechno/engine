@@ -7,12 +7,14 @@ use panix\engine\Html;
 use yii\web\View;
 use yii\helpers\Url;
 
-class Column extends \yii\grid\Column {
+class Column extends \yii\grid\Column
+{
 
     public $headerOptions = ['style' => 'width: 30px;'];
     public $url = null;
 
-    public function init() {
+    public function init()
+    {
 
         $this->url = Url::toRoute($this->url);
 
@@ -51,14 +53,16 @@ class Column extends \yii\grid\Column {
                     });
 
                 }
-            });", View::POS_READY, 'grid-sortable');
+            });", View::POS_READY, 'grid-sortable' . $id);
     }
 
-    protected function renderDataCellContent($model, $key, $index) {
+    protected function renderDataCellContent($model, $key, $index)
+    {
         return Html::tag('i', '', array('class' => 'icon-sort sortable-column-handler', 'style' => 'cursor: move;'));
     }
 
-    protected function renderHeaderCellContent() {
+    protected function renderHeaderCellContent()
+    {
         return Html::tag('i', '', array('class' => 'icon-sort'));
     }
 
