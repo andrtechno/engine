@@ -83,7 +83,7 @@ class UploadFileBehavior extends Behavior
 
     }
 
-    public function getImageUrl($attribute, $size = false, $options = array())
+    public function getImageUrl($attribute, $size = false, $options = [])
     {
 
         $options = ArrayHelper::merge($this->options, $options);
