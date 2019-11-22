@@ -11,9 +11,10 @@ class DeleteFileAction extends Action
 
     public function run()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $json = [];
         $json['status'] = 'error';
-        if (isset($_REQUEST)) {
+        if (isset($_REQUEST) && Yii::$app->request->isAjax) {
 
             /** @var $model \yii\db\ActiveRecord */
             $model = new $this->modelClass;
@@ -39,7 +40,7 @@ class DeleteFileAction extends Action
                 }
             }
         }
-        Yii::$app->response->format = Response::FORMAT_JSON;
+
         return $json;
     }
 

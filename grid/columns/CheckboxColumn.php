@@ -119,6 +119,7 @@ class CheckboxColumn extends BaseCheckboxColumn
                 'options' => [
                     'class' => 'dropdown-item',
                     'data-confirm' => Yii::t('app', 'CONFIRM'),
+                    'data-pjax' => 0
                 ]
             ]
         ];
