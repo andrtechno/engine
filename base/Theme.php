@@ -70,16 +70,16 @@ class Theme extends BaseTheme
             try {
                 $settings = (new \yii\db\Query())
                     ->from(static::tableName())
-                    ->orderBy('category')
+                    ->orderBy('theme')
                     ->all();
 
 
                 if (!empty($settings)) {
                     foreach ($settings as $row) {
-                        if (!isset($this->data[$row['category']]))
-                            $this->data[$row['category']] = [];
+                        if (!isset($this->data[$row['theme']]))
+                            $this->data[$row['theme']] = [];
 
-                        $this->data[$row['category']][$row['param']] = $row['value'];
+                        $this->data[$row['theme']][$row['param']] = $row['value'];
                     }
                 }
 
@@ -110,10 +110,10 @@ class Theme extends BaseTheme
     }
 
     /**
-     * @param $category string component unique id. e.g: contacts, shop, news
+     * @param $theme string component unique id. e.g: contacts, shop, news
      * @param array $data key-value array. e.g array('key'=>10)
      */
-    public function set($category, array $data)
+    public function set($theme, array $data)
     {
         $tableName = static::tableName();
         if (!empty($data)) {
@@ -121,15 +121,15 @@ class Theme extends BaseTheme
 
                 $value = (is_array($value)) ? Json::encode($value) : $value;
                 try {
-                    if ($this->get($category, $key) !== null) {
-                        Yii::$app->db->createCommand()->update($tableName, ['value' => $value], $tableName . ".category=:category AND {$tableName}.param=:param", [
-                            ':category' => $category,
+                    if ($this->get($theme, $key) !== null) {
+                        Yii::$app->db->createCommand()->update($tableName, ['value' => $value], $tableName . ".theme=:theme AND {$tableName}.param=:param", [
+                            ':theme' => $theme,
                             ':param' => $key
                         ])->execute();
                     } else {
 
                         Yii::$app->db->createCommand()->insert($tableName, [
-                            'category' => $category,
+                            'theme' => $theme,
                             'param' => $key,
                             'value' => $value
                         ])->execute();
@@ -140,9 +140,9 @@ class Theme extends BaseTheme
 
             }
 
-            if (!isset($this->data[$category]))
-                $this->data[$category] = [];
-            $this->data[$category] = array_merge($this->data[$category], $data);
+            if (!isset($this->data[$theme]))
+                $this->data[$theme] = [];
+            $this->data[$theme] = array_merge($this->data[$theme], $data);
 
 
             // Update cache
@@ -151,25 +151,25 @@ class Theme extends BaseTheme
     }
 
     /**
-     * @param $category string component unique id.
-     * @param null $key option key. If not provided all category settings will be returned as array.
+     * @param $theme string component unique id.
+     * @param null $key option key. If not provided all theme settings will be returned as array.
      * @param null|string $default default value if original does not exists
      * @return mixed
      */
-    public function get($category, $key = null, $default = null)
+    public function get($theme, $key = null, $default = null)
     {
-        if (!isset($this->data[$category]))
+        if (!isset($this->data[$theme]))
             return $default;
 
         if ($key === null) {
             $result = [];
-            foreach ($this->data[$category] as $key => $data) {
+            foreach ($this->data[$theme] as $key => $data) {
                 $result[$key] = (!empty($data) && CMS::isJson($data)) ? Json::decode($data) : $data;
             }
             return (object)$result;
         }
-        if (isset($this->data[$category][$key])) {
-            return CMS::isJson($this->data[$category][$key]) ? Json::decode($this->data[$category][$key]) : $this->data[$category][$key];
+        if (isset($this->data[$theme][$key])) {
+            return CMS::isJson($this->data[$theme][$key]) ? Json::decode($this->data[$theme][$key]) : $this->data[$theme][$key];
         } else {
             return $default;
         }
@@ -177,13 +177,13 @@ class Theme extends BaseTheme
 
     /**
      * Remove category from DB
-     * @param $category
+     * @param $theme
      */
-    public function clear($category)
+    public function clear($theme)
     {
-        Yii::$app->db->createCommand()->delete(static::tableName(), 'category=:category', [':category' => $category])->execute();
-        if (isset($this->data[$category]))
-            unset($this->data[$category]);
+        Yii::$app->db->createCommand()->delete(static::tableName(), 'theme=:theme', [':theme' => $theme])->execute();
+        if (isset($this->data[$theme]))
+            unset($this->data[$theme]);
 
         Yii::$app->cache->delete($this->cache_key);
     }
