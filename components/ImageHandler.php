@@ -4,6 +4,7 @@ namespace panix\engine\components;
 
 use yii\base\Component;
 use yii\base\Exception;
+use yii\base\InvalidArgumentException;
 use yii\web\Response;
 
 class ImageHandler extends Component
@@ -51,8 +52,6 @@ class ImageHandler extends Component
     const FLIP_HORIZONTAL = 1;
     const FLIP_VERTICAL = 2;
     const FLIP_BOTH = 3;
-
-    public $lib = 'Imagick';//test
 
     public function getImage()
     {
@@ -107,7 +106,7 @@ class ImageHandler extends Component
 
     private function loadImage($file)
     {
-        $result = array();
+        $result = [];
 
 
         if ($imageInfo = @getimagesize($file)) {
@@ -174,7 +173,6 @@ class ImageHandler extends Component
             $this->initImage();
             $this->fileName = $file;
 
-
             return $this;
         } else {
             return false;
@@ -236,32 +234,10 @@ class ImageHandler extends Component
         $this->checkLoaded();
 
 
-       /* if($this->lib == 'Imagick'){
-            $image = new \Imagick($this->image);
-
-            $image->setImageCompressionQuality($this->jpegQuality);
-
-            if ($toWidth && $toHeight) {
-                if ($toWidth && $toHeight) {
-                    $image->cropThumbnailImage($toWidth, $toHeight);
-                } elseif ($toHeight) {
-                    $image->thumbnailImage(0, $toHeight);
-                } elseif ($toWidth) {
-                    $image->thumbnailImage($toWidth, 0);
-                } else {
-                    throw new \Exception('Something wrong with this->module->parseSize($sizeString)');
-                }
-            }
-
-            $image->writeImage($this->image);
-        }*/
-
-
-
-        $this->maxHeight = (intval($toHeight) > $this->height) ? $this->height : $toHeight;
-         $this->maxWidth = (intval($toWidth) > $this->width) ? $this->width : $toWidth;
+        $this->maxHeight = ($toHeight > $this->height) ? $this->height : $toHeight;
+        $this->maxWidth = ($toWidth > $this->width) ? $this->width : $toWidth;
         //$this->maxHeight = intval($toHeight);
-       // $this->maxWidth = intval($toWidth);
+        // $this->maxWidth = intval($toWidth);
 
         // get the new dimensions...
         $this->calcImageSize($this->width, $this->height);
@@ -552,7 +528,7 @@ class ImageHandler extends Component
 
         if ($wImg = $this->loadImage($watermarkFile)) {
 
-            if (in_array($wImg['mimeType'], array('image/png', 'image/gif'))) {
+            if (in_array($wImg['mimeType'], ['image/png', 'image/gif'])) {
                 $posX = 0;
                 $posY = 0;
 
@@ -716,7 +692,7 @@ class ImageHandler extends Component
         return $this;
     }
 
-    public function text($text, $fontFile, $size = 12, $color = array(0, 0, 0), $corner = self::CORNER_LEFT_TOP, $offsetX = 0, $offsetY = 0, $angle = 0, $alpha = 0)
+    public function text($text, $fontFile, $size = 12, $color = [0, 0, 0], $corner = self::CORNER_LEFT_TOP, $offsetX = 0, $offsetY = 0, $angle = 0, $alpha = 0)
     {
         $this->checkLoaded();
 
@@ -802,7 +778,7 @@ class ImageHandler extends Component
         return $this;
     }
 
-    public function resizeCanvas($toWidth, $toHeight, $backgroundColor = array(255, 255, 255))
+    public function resizeCanvas($toWidth, $toHeight, $backgroundColor = [255, 255, 255])
     {
         $this->checkLoaded();
 
@@ -852,7 +828,7 @@ class ImageHandler extends Component
         return $this;
     }
 
-    public function show($inFormat = false)
+    public function show($inFormat = false, $jpegQuality = 100)
     {
         $this->checkLoaded();
 
@@ -867,7 +843,7 @@ class ImageHandler extends Component
                 break;
             case self::IMG_JPEG:
                 header('Content-type: image/jpeg');
-                imagejpeg($this->image, null, $this->jpegQuality);
+                imagejpeg($this->image, null, $jpegQuality);
                 break;
             case self::IMG_PNG:
                 header('Content-type: image/png');
@@ -975,11 +951,10 @@ class ImageHandler extends Component
         $newHeightPercentage = (100 * $this->maxHeight) / $height;
         $newWidth = ($width * $newHeightPercentage) / 100;
 
-        return array
-        (
+        return [
             'newWidth' => ceil($newWidth),
             'newHeight' => ceil($this->maxHeight)
-        );
+        ];
     }
 
 
@@ -995,11 +970,10 @@ class ImageHandler extends Component
         $newWidthPercentage = (100 * $this->maxWidth) / $width;
         $newHeight = ($height * $newWidthPercentage) / 100;
 
-        return array
-        (
+        return [
             'newWidth' => intval($this->maxWidth),
             'newHeight' => intval($newHeight)
-        );
+        ];
     }
 
     /**
@@ -1012,11 +986,10 @@ class ImageHandler extends Component
      */
     protected function calcImageSize($width, $height)
     {
-        $newSize = array
-        (
+        $newSize = [
             'newWidth' => $width,
             'newHeight' => $height
-        );
+        ];
 
         if ($this->maxWidth > 0) {
             $newSize = $this->calcWidth($width, $height);
