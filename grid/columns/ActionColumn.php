@@ -115,7 +115,7 @@ class ActionColumn extends DataColumn
         });
         ", View::POS_END, 'edit-columns_dialog');
 
-            echo \yii\jui\Dialog::widget([
+            echo \panix\engine\jui\Dialog::widget([
                 'id' => 'edit-columns_dialog',
                 'clientOptions' => [
                     'modal' => true,
