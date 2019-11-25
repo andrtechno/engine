@@ -44,23 +44,30 @@ class Theme extends BaseTheme
 
         Yii::debug('Loading ' . $this->name, __METHOD__);
 
-
-        $this->basePath = "@app/web/themes/{$this->name}";
-        $this->baseUrl = "@app/web/themes/{$this->name}";
+        if(!$this->basePath){
+            $this->basePath = "@app/web/themes/{$this->name}";
+        }else{
+            $this->basePath = $this->basePath."/{$this->name}";
+        }
+        if(!$this->baseUrl) {
+            $this->baseUrl = "@app/web/themes/{$this->name}";
+        }else{
+            $this->baseUrl = $this->baseUrl."/{$this->name}";
+        }
         if (!file_exists(Yii::getAlias($this->basePath))) {
             throw new InvalidConfigException("Error: theme \"{$this->name}\" not found!");
         }
 
         $modulesPaths = [];
         foreach (Yii::$app->getModules() as $id => $mod) {
-            $modulesPaths['@' . $id] = "@app/web/themes/{$this->name}/modules/{$id}";
+            $modulesPaths['@' . $id] = $this->basePath."/modules/{$id}";
             //$modulesPaths['@app/modules/' . $id] = "@frontend/themes/{$this->name}/modules/{$id}";
         }
 
         $this->pathMap = ArrayHelper::merge([
-            "@app/views" => "@app/web/themes/{$this->name}/views",
-            '@app/modules' => "@app/web/themes/{$this->name}/modules",
-            '@app/widgets' => "@app/web/themes/{$this->name}/widgets",
+            "@app/views" => $this->basePath."/views",
+            '@app/modules' => $this->basePath."/modules",
+            '@app/widgets' => $this->basePath."/widgets",
         ], $modulesPaths);
 
 

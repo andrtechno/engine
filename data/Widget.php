@@ -12,18 +12,18 @@ class Widget extends \yii\base\Widget
     public $assetsUrl;
     public $widget_id;
     public $viewPath;
+    protected $reflectionClass;
+
     public function init()
     {
+        $this->reflectionClass = new ReflectionClass($this);
         parent::init();
-        $reflectionClass = new ReflectionClass(get_class($this));
-        $this->widget_id = 'wgt_' . $reflectionClass->getShortName();
+
+        $this->widget_id = 'wgt_' . $this->getName();
 
         Yii::$app->setAliases([
-            '@' . $this->widget_id => realpath(dirname($reflectionClass->getFileName())),
+            '@' . $this->widget_id => realpath(dirname($this->reflectionClass->getFileName())),
         ]);
-
-
-
 
         $this->registerTranslations($this->widget_id);
 
@@ -31,25 +31,27 @@ class Widget extends \yii\base\Widget
             $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@{$this->widget_id}/assets"));
             $this->assetsUrl = $assetsPaths[1];
         }
+        $this->registerTranslations($this->widget_id);
     }
 
     public function getTranslationsFileMap($id)
     {
         $lang = Yii::$app->language;
         $result = [];
-        $basepath = realpath(Yii::getAlias("@{$id}/messages/{$lang}"));
-        if (file_exists($basepath)) {
-            if (is_dir($basepath)) {
-                $fileList = \yii\helpers\FileHelper::findFiles($basepath, [
-                    'only' => ['*.php'],
-                    'recursive' => false
-                ]);
-                foreach ($fileList as $path) {
-                    $result[$id . '/' . basename($path, '.php')] = basename($path);
+        if (file_exists(Yii::getAlias("@{$id}/messages/{$lang}"))) {
+            $basepath = realpath(Yii::getAlias("@{$id}/messages/{$lang}"));
+            if (file_exists($basepath)) {
+                if (is_dir($basepath)) {
+                    $fileList = \yii\helpers\FileHelper::findFiles($basepath, [
+                        'only' => ['*.php'],
+                        'recursive' => false
+                    ]);
+                    foreach ($fileList as $path) {
+                        $result[$id . '/' . basename($path, '.php')] = basename($path);
+                    }
                 }
             }
         }
-
         return $result;
     }
 
@@ -64,46 +66,39 @@ class Widget extends \yii\base\Widget
 
     public function getTitle()
     {
-        $name = $this->getName();
         if (file_exists(Yii::getAlias("@{$this->widget_id}/messages"))) {
-            return Yii::t("wgt_{$name}/default", 'TITLE');
+            return Yii::t("{$this->widget_id}/default", 'TITLE');
         } else {
-            return $name;
+            return $this->name;
         }
-
-
     }
 
     public function getConfig()
     {
-        return Yii::$app->settings->get('wgt_'.$this->getName());
+        return Yii::$app->settings->get($this->widget_id);
     }
 
     public function getName()
     {
-        return basename(get_class($this));
+        return $this->reflectionClass->getShortName();
     }
 
 
     public function getViewPath()
     {
         $class = new ReflectionClass($this);
-
         $diename = dirname($class->getFileName());
 
-
-
-        if($this->viewPath){
+        if ($this->viewPath) {
             return Yii::getAlias($this->viewPath);
         }
 
-
         $views = [
-           "@app/widgets/{$diename}",
+            "@app/widgets/{$diename}",
         ];
 
         foreach ($views as $view) {
-            if (file_exists( Yii::getAlias($view))) {
+            if (file_exists(Yii::getAlias($view))) {
                 Yii::debug('Layout load ' . $view, __METHOD__);
                 return $view;
             }
