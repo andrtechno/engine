@@ -11,6 +11,8 @@ use panix\engine\Html;
 use panix\engine\widgets\LinkPager;
 use yii\web\NotFoundHttpException;
 use yii\console\Application as ConsoleApplication;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * Class ActiveRecord
@@ -166,12 +168,22 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }
         return parent::beforeSave($insert);
     }
+    public function save2($runValidation = true, $attributeNames = null)
+    {
+
+
+
+
+        return false;
+    }
 
     /**
      * @inheritdoc
      */
     public function afterSave($insert, $changedAttributes)
     {
+
+
         if (isset($this->behaviors['timestamp'])) {
             $updatedAt = $this->behaviors['timestamp']->updatedAtAttribute;
             if (isset($this->{$updatedAt})) {
@@ -185,17 +197,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
             echo ' done (time: ' . sprintf('%.3f', microtime(true) - $this->_microtime) . "s)\n";
         }
 
-        Yii::debug($logMessage, __CLASS__);
-    }
-
-
-    /**
-     * @inheritdoc
-     */
-    public function save($runValidation = true, $attributeNames = null)
-    {
-        Yii::debug('save', __CLASS__);
-        return parent::save($runValidation, $attributeNames);
+        //Yii::debug($logMessage, __CLASS__);
     }
 
     /**
