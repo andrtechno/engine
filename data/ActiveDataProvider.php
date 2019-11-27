@@ -5,12 +5,16 @@ namespace panix\engine\data;
 use Yii;
 use yii\data\ActiveDataProvider as BaseActiveDataProvider;
 
+/**
+ * Class ActiveDataProvider
+ * @package panix\engine\data
+ */
 class ActiveDataProvider extends BaseActiveDataProvider
 {
 
     public function init()
     {
-        /* @var  \yii\base\Model $modelClass*/
+        /* @var \yii\base\Model $modelClass*/
         $modelClass = $this->query->modelClass;
 
         $moduleId = $modelClass::MODULE_ID;

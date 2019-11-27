@@ -11,7 +11,7 @@ echo Html::hiddenInput('model', $modelClass);
             <?= Html::label('pageSize', 'pageSize', ['class' => 'col-form-label']); ?>
         </div>
         <div class="col-sm-8 col-lg-9">
-            <?= Html::textInput('pageSize', null, ['class' => 'form-control', 'id' => 'pageSize']); ?>
+            <?= Html::textInput('pageSize', $pageSize, ['class' => 'form-control', 'id' => 'pageSize']); ?>
         </div>
     </div>
 <?php

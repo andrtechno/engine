@@ -99,7 +99,7 @@ class ActionColumn extends DataColumn
 
                 $.ajax({
                     type:'POST',
-                    url:'/admin/app/default/edit-columns',
+                    url:common.url('/admin/app/default/edit-columns'),
                     data:{
                         grid_id:'" . $this->grid->getId() . "',
                         model:'" . $classNamePath . "',
@@ -122,7 +122,7 @@ class ActionColumn extends DataColumn
                     'autoOpen' => false,
                     'draggable' => false,
                     'resizable' => false,
-                    'dialogClass' => 'test111111111',
+                    'dialogClass' => 'edit-columns_dialog',
                     'width' => '50%',
                     'title' => Yii::t('app/admin', 'EDIT_GRID_COLUMNS'),
                     'buttons' => [
@@ -130,22 +130,17 @@ class ActionColumn extends DataColumn
                             'text' => "Ok",
                             'class' => "ui-button",
                             'click' => new JsExpression("function(){
-                            var form = $('#edit_grid_columns_form').serialize();
-                            $.ajax({
-                                url:'/admin/app/default/edit-columns',
-                                type:'POST',
-                                data:form,
-                                success:function(){
-                               //$(\'#\'+grid.dialog_id).remove();
-                                //$.fn.yiiGridView.update(gridid);//,{url: window.location.href}
-                                //$(\'#dialog-overlay\').remove();
-                                // $.pjax({container: '#pjax-product'});
-                                $.pjax.defaults.timeout = false;
-                                 $.pjax.reload({container:'#pjax-" . $this->grid->id . "', async: false});
-                                 //$(\"#grid-product\").yiiGridView(\"applyFilter\");
-                                }
-                            });
-                        }")
+                                var form = $('#edit_grid_columns_form').serialize();
+                                $.ajax({
+                                    url:common.url('/admin/app/default/edit-columns'),
+                                    type:'POST',
+                                    data:form,
+                                    success:function(){
+                                        $('.edit-columns_dialog').remove();
+                                        $.pjax.reload('#pjax-" . $this->grid->id . "', {timeout: false});
+                                    }
+                                });
+                            }")
                         ]
                     ]
                 ]
