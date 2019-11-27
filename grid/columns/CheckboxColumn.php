@@ -53,19 +53,20 @@ class CheckboxColumn extends BaseCheckboxColumn
                 var keys = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
                 var url = $(that).attr('href');
 
-                if (confirm($(that).data('confirm'))) {
+                //if (confirm($(that).data('confirm'))) {
                     console.log('LALAL',keys,that);
                     $.ajax({
                         url:url,
                         type:'POST',
+                        dataType:'json',
                         data:{id:keys},
                         success:function(data){
                             console.log(data);
-                            $.pjax.reload({container:'#pjax-{$this->grid->getId()}'});
+                            $.pjax.reload('#pjax-{$this->grid->getId()}',{timeout:false});
                             //$('#{$this->grid->getId()}').yiiGridView('applyFilter');
                         }
                     });
-                }
+                //}
 
                 return false;
             }
@@ -135,8 +136,9 @@ class CheckboxColumn extends BaseCheckboxColumn
         return [
             'data-confirm' => Yii::t('app', 'CONFIRM'),
             'class' => 'dropdown-item',
+            'data-pjax' => 0,
             // 'model' => $this->dataProvider->modelClass,
-            'onClick' => 'return runAction(this);'
+            'onClick' => 'runAction(this); return false;'
             /*'onClick' => strtr('return $.fn.yiiGridView.runAction(":grid", this);', [
                     ':grid' => $this->grid->options['id']
                 ]

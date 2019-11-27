@@ -62,7 +62,7 @@ class ActionColumn extends DataColumn
                 'url' => '#',
                 'linkOptions' => [
                     'class' => 'dropdown-item',
-                    'data-pjax' => '0',
+                    'data-pjax' => 0,
                     //'onClick' => '$.pjax({container: "#pjax-'.$this->grid->id.'"})'
                     'onClick' => '$.pjax.reload("#pjax-' . $this->grid->id . '", {timeout : false});',
                 ]
@@ -177,7 +177,7 @@ class ActionColumn extends DataColumn
                             return Html::a(Html::icon($icon), Url::toRoute(['switch', 'id' => $model->primaryKey, 'value' => $switch_data]), [
                                 'title' => Yii::t('app', 'GRID_SWITCH'),
                                 'class' => 'btn ' . $this->btnSize . ' ' . $class . ' switch', //linkTarget
-                                'data-pjax' => '0',
+                                'data-pjax' => 0,
                             ]);
                         }
                     }
@@ -189,7 +189,7 @@ class ActionColumn extends DataColumn
                 return Html::a(Html::icon('search'), $url, [
                     'title' => Yii::t('yii', 'View'),
                     'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary',
-                    'data-pjax' => '0',
+                    'data-pjax' => 0,
                 ]);
             };
         }
@@ -208,7 +208,7 @@ class ActionColumn extends DataColumn
                     return Html::a(Html::icon('edit'), $url, [
                         'title' => Yii::t('yii', 'Update'),
                         'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary',
-                        'data-pjax' => '0',
+                        'data-pjax' => 0,
                     ]);
                 }
             };
@@ -229,6 +229,7 @@ class ActionColumn extends DataColumn
                         return Html::a(Html::icon('delete'), '#', [
                             'title' => Yii::t('yii', 'Delete'),
                             'aria-label' => Yii::t('yii', 'Delete'),
+                            'data-pjax' => '0',
                             'class' => 'btn ' . $this->btnSize . ' btn-outline-danger',
                             'onclick' => "
                                 if (confirm('" . Yii::t('app', 'DELETE_CONFIRM') . "')) {
@@ -251,7 +252,6 @@ class ActionColumn extends DataColumn
                         'title' => Yii::t('yii', 'Delete'),
                         'class' => 'btn ' . $this->btnSize . ' btn-secondary',
                         'data-confirm' => Yii::t('app', 'DELETE_ITEM'),
-                        'data-method' => 'post',
                         'data-pjax' => '0',
                     ]);
                 }
