@@ -3,6 +3,7 @@
 namespace panix\engine\db;
 
 use panix\engine\behaviors\TranslateBehavior;
+use panix\engine\controllers\AdminController;
 use Yii;
 use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
@@ -32,7 +33,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
     public $disallow_delete = [];
     public $disallow_switch = [];
     public $disallow_update = [];
-
+    public $tab_errors = []; // Todo test
     const route_update = 'update';
     const route_delete = 'delete';
     const route_switch = 'switch';
@@ -139,7 +140,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         $logMessage = "    > " . ($this->getIsNewRecord() ? 'insert' : 'update') . " into " . get_class($this) . " ...";
-        $this->_microtime=microtime(true);
+        $this->_microtime = microtime(true);
         if (Yii::$app instanceof ConsoleApplication) {
             echo $logMessage;
         }
@@ -168,10 +169,9 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }
         return parent::beforeSave($insert);
     }
+
     public function save2($runValidation = true, $attributeNames = null)
     {
-
-
 
 
         return false;
@@ -244,7 +244,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 $b['translate']['translationAttributes'] = $class::$translationAttributes;
             }
 
-            if (isset($columns['ordern'])) {
+            if (isset($columns['ordern']) && Yii::$app->controller instanceof AdminController) {
                 $b['sortable'] = [
                     'class' => \panix\engine\grid\sortable\Behavior::class,
                 ];
