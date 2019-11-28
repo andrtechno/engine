@@ -218,7 +218,7 @@ class UploadFileBehavior extends Behavior
         if (!file_exists($path)) {
             FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
         }
-
+        /** @var $img \panix\engine\components\ImageHandler */
 
         if (isset($file)) {
             if ($old_image && file_exists($path . $old_image))
@@ -233,9 +233,14 @@ class UploadFileBehavior extends Behavior
                 $newFileName = CMS::slug($fileInfo['filename']) . '-' . CMS::gen(10) . '.' . $file->extension;
             }
             if (in_array($file->extension, $this->extensions)) { //Загрузка для изображений
-                $img = Yii::$app->img;
-                $img->load($file->tempName);
-                $img->save($path . $newFileName);
+                $img = Yii::$app->img->load($file->tempName);
+
+                if ($img->getHeight() > Yii::$app->params['maxUploadImageSize']['height'] || $img->getWidth() > Yii::$app->params['maxUploadImageSize']['width']) {
+                    $img->resize(Yii::$app->params['maxUploadImageSize']['width'], Yii::$app->params['maxUploadImageSize']['height']);
+                }
+                if($img->save($path . $newFileName)){
+                    unlink($file->tempName);
+                }
             } else {
                 $file->saveAs($path . $newFileName);
             }
