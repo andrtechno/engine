@@ -6,7 +6,6 @@ use Yii;
 use yii\helpers\ArrayHelper;
 class Model extends \yii\base\Model {
 
-
     public function attributeLabels() {
         $class = (new \ReflectionClass(get_called_class()));
         $labels = [];
