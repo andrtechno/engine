@@ -25,7 +25,7 @@ class Widget extends \yii\base\Widget
             '@' . $this->widget_id => realpath(dirname($this->reflectionClass->getFileName())),
         ]);
 
-        $this->registerTranslations($this->widget_id);
+       // $this->registerTranslations($this->widget_id);
 
         if (file_exists(Yii::getAlias("@{$this->widget_id}/assets"))) {
             $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@{$this->widget_id}/assets"));
