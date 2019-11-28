@@ -80,7 +80,7 @@ class Dispatcher extends \yii\log\Dispatcher
             [
                 'class' => 'panix\engine\log\EmailTarget',
                 'levels' => ['error', 'warning'],
-                'enabled' => true,//YII_DEBUG,
+                'enabled' => false,//YII_DEBUG,
                 //'categories' => ['yii\base\*'],
                 'except' => [
                     'yii\web\HttpException:404',
