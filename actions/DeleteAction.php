@@ -18,7 +18,7 @@ class DeleteAction extends Action
             /** @var $model \yii\db\ActiveRecord */
             $model = new $this->modelClass;
             $entry = $model->find()->where(['id' => $_REQUEST['id']])->all();
-            print_r($entry);die;
+            //print_r($entry);die;
             if ($entry) {
                 foreach ($entry as $obj) {
                     if (!in_array($obj->primaryKey, $model->disallow_delete)) {
