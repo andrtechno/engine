@@ -221,7 +221,7 @@ class UploadFileBehavior extends Behavior
 
             $newFileName = CMS::slug($fileInfo['filename']).'.'.$file->extension;
             if(file_exists($path . $newFileName)){
-                $newFileName = CMS::gen(10).'.'.$file->extension;
+                $newFileName = $fileInfo['filename'].'-'.CMS::gen(10).'.'.$file->extension;
             }
             if (in_array($file->extension, $this->extensions)) { //Загрузка для изображений
                 $img = Yii::$app->img;
