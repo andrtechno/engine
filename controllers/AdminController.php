@@ -59,7 +59,7 @@ class AdminController extends Controller
     }
 
 
-    public function beforeAction($event)
+    public function beforeAction($action)
     {
         $this->jsMessages = [
             'error' => [
@@ -87,8 +87,9 @@ class AdminController extends Controller
             return Yii::$app->response->redirect(['/admin/auth']);
         }
 
-        return parent::beforeAction($event);
+        return parent::beforeAction($action);
     }
+
 
     /**
      * @inheritdoc
