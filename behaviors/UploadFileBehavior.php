@@ -40,7 +40,17 @@ class UploadFileBehavior extends Behavior
             ActiveRecord::EVENT_BEFORE_INSERT => 'afterSave',
             ActiveRecord::EVENT_BEFORE_UPDATE => 'afterSave',
             ActiveRecord::EVENT_AFTER_FIND => 'afterFind',
+            ActiveRecord::EVENT_AFTER_DELETE => 'afterDelete',
         ];
+    }
+
+    public function afterDelete()
+    {
+        foreach ($this->files as $attribute => $dir) {
+            if (isset($this->owner->{$attribute})) {
+                unlink(Yii::getAlias($dir) . DIRECTORY_SEPARATOR . $this->owner->{$attribute});
+            }
+        }
     }
 
     public function afterSave()
@@ -218,10 +228,9 @@ class UploadFileBehavior extends Behavior
             $fileInfo = pathinfo($file->name);
 
 
-
-            $newFileName = CMS::slug($fileInfo['filename']).'.'.$file->extension;
-            if(file_exists($path . $newFileName)){
-                $newFileName = CMS::slug($fileInfo['filename']).'-'.CMS::gen(10).'.'.$file->extension;
+            $newFileName = CMS::slug($fileInfo['filename']) . '.' . $file->extension;
+            if (file_exists($path . $newFileName)) {
+                $newFileName = CMS::slug($fileInfo['filename']) . '-' . CMS::gen(10) . '.' . $file->extension;
             }
             if (in_array($file->extension, $this->extensions)) { //Загрузка для изображений
                 $img = Yii::$app->img;
