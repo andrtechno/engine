@@ -3,24 +3,19 @@
 namespace panix\engine\controllers;
 
 use Yii;
-use yii\helpers\VarDumper;
-use yii\web\Controller;
 use panix\engine\CMS;
-use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
-use yii\web\Response;
+
 
 /**
  * Class WebController
  * @package panix\engine\controllers
  */
-class WebController extends Controller
+class WebController extends CommonController
 {
 
-    public $breadcrumbs, $jsMessages = [];
-    public $dataModel, $pageName;
-    public $dashboard = false;
-    public $icon;
+
+
 
     public function actions()
     {
@@ -78,46 +73,6 @@ class WebController extends Controller
         $this->layout = 'main';
         $this->view->title = Yii::t('yii', 'Home');
         return $this->render('index');
-    }
-
-    /**
-     * @param null $text
-     * @throws NotFoundHttpException
-     */
-    protected function error404($text = null)
-    {
-        if (!$text)
-            $text = Yii::t('app/error', '404');
-        throw new NotFoundHttpException($text);
-    }
-
-    public function beforeAction($action)
-    {
-        $this->jsMessages = [
-            'error' => [
-                '404' => Yii::t('app/error', '404')
-            ],
-            'cancel' => Yii::t('app', 'CANCEL'),
-            'send' => Yii::t('app', 'SEND'),
-            'delete' => Yii::t('app', 'DELETE'),
-            'save' => Yii::t('app', 'SAVE'),
-            'close' => Yii::t('app', 'CLOSE'),
-            //  'ok' => Yii::t('app', 'OK'),
-            'loading' => Yii::t('app', 'LOADING'),
-        ];
-        $languagePath = (Yii::$app->language != Yii::$app->languageManager->default->code) ? '/' . Yii::$app->language : '';
-        $this->view->registerJs('
-            var common = window.CMS_common || {};
-            common.language="' . Yii::$app->language . '";
-            common.language_default="' . Yii::$app->languageManager->default->code . '";
-            common.language_path="' . $languagePath . '";
-            common.token="' . Yii::$app->request->csrfToken . '";
-            common.isDashboard=false;
-            common.message=' . \yii\helpers\Json::encode($this->jsMessages) . ';', \yii\web\View::POS_HEAD, 'js-common');
-
-
-        //   echo VarDumper::dump(Yii::$app->urlManager->rules,10,true);die;
-        return parent::beforeAction($action);
     }
 
 
@@ -251,22 +206,6 @@ class WebController extends Controller
     }
 
 
-    /**
-     *
-     * @inheritdoc
-     *
-     * @param string $view
-     * @param array $params
-     * @param null $context
-     * @return string
-     */
-    public function render($view, $params = [], $context = null)
-    {
-        if (Yii::$app->request->isAjax) {
-            return $this->getView()->renderAjax($view, $params, $this);
-        } else {
-            return parent::render($view, $params);
-        }
-    }
+
 
 }
