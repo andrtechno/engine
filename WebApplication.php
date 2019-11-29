@@ -9,7 +9,7 @@ use panix\mod\admin\models\Modules;
 /**
  * Class WebApplication
  * @package panix\engine
- *
+ * @property array $counters
  * @property \panix\engine\components\Settings $settings The user component. This property is read-only.
  * @property ManagerLanguage $languageManager The user component. This property is read-only.
  * @property \panix\engine\db\Connection $db The database connection. This property is read-only.
@@ -19,6 +19,7 @@ class WebApplication extends Application
 {
 
     const version = '2.0.0-alpha';
+    public $counters = [];
 
     public function run()
     {
