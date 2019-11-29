@@ -42,16 +42,12 @@ class CommonController extends Controller
         ];
         $languagePath = (Yii::$app->language != Yii::$app->languageManager->default->code) ? '/' . Yii::$app->language : '';
         $this->view->registerJs('
-            var common = window.CMS_common || {};
-            common.language="' . Yii::$app->language . '";
-            common.language_default="' . Yii::$app->languageManager->default->code . '";
-            common.language_path="' . $languagePath . '";
-            common.isDashboard=' . $this->dashboard . ';
-            common.message=' . \yii\helpers\Json::encode($this->jsMessages) . ';', \yii\web\View::POS_HEAD, 'js-common');
-
-        if (Yii::$app->user->isGuest && get_class($this) !== 'panix\mod\admin\controllers\AuthController') {
-            return Yii::$app->response->redirect(['/admin/auth']);
-        }
+            var common = window.common || {};
+            common.language = "' . Yii::$app->language . '";
+            common.language_default = "' . Yii::$app->languageManager->default->code . '";
+            common.language_path = "' . $languagePath . '";
+            common.isDashboard = ' . boolval($this->dashboard) . ';
+            common.message = ' . \yii\helpers\Json::encode($this->jsMessages) . ';', \yii\web\View::POS_HEAD, 'js-common');
 
         return parent::beforeAction($action);
     }
