@@ -2,19 +2,18 @@
 
 namespace panix\engine\jui;
 
-use yii\jui\Dialog as BaseDialog;
+use panix\engine\Html;
+use yii\jui\Widget;
 
 /**
  * @inheritdoc
  */
-class Dialog extends BaseDialog
+class Dialog extends Widget
 {
-    /**
-     * @inheritdoc
-     */
     public function init()
     {
         parent::init();
+        echo Html::beginTag('div', $this->options) . "\n";
 
         //Fix for closing icon (x) not showing up in dialog
         $this->getView()->registerJs("
@@ -26,4 +25,12 @@ class Dialog extends BaseDialog
         );
     }
 
+    /**
+     * Renders the widget.
+     */
+    public function run()
+    {
+        echo Html::endTag('div') . "\n";
+        $this->registerWidget('dialog');
+    }
 }
