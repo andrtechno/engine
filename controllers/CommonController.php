@@ -16,7 +16,6 @@ use yii\web\Controller;
  * @property string $pageName
  * @property array $breadcrumbs
  * @property array $jsMessages
- * @property array $counters
  * @property boolean $dashboard
  *
  * @package panix\engine\controllers
@@ -26,7 +25,6 @@ class CommonController extends Controller
     public $icon, $dataModel, $pageName, $breadcrumbs;
     public $jsMessages = [];
     public $dashboard = false;
-    public $counters = [];
 
     public function beforeAction($action)
     {
