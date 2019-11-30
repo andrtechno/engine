@@ -70,7 +70,7 @@ class WebController extends CommonController
 
     public function actionIndex()
     {
-        $this->layout = 'main';
+        $this->layout = "main";
         $this->view->title = Yii::t('yii', 'Home');
         return $this->render('index');
     }
