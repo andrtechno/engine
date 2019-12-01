@@ -35,19 +35,20 @@ class AdminController extends CommonController
     /**
      * @param boolean $isNewRecord
      * @param array $post
+     * @param array $action
      * @return \yii\web\Response
      */
-    public function redirectPage($isNewRecord, $post)
+    public function redirectPage($isNewRecord, $post, $action = ['index'])
     {
+
         Yii::$app->session->setFlash('success', Yii::t('app', ($isNewRecord) ? 'SUCCESS_CREATE' : 'SUCCESS_UPDATE'));
         $redirect = (isset($post['redirect'])) ? $post['redirect'] : Yii::$app->request->url;
 
-
-       // $redirect = $this->redirect(($isNewRecord) ? ['/admin/shop/category/index'] : (['/admin/shop/category/index', 'id' => $model->id]);
-
-
+        if ($isNewRecord) {
+            return $this->redirect($action);
+        }
         if (!Yii::$app->request->isAjax)
-            return $this->redirect($redirect);
+            return Yii::$app->response->redirect($redirect);
     }
 
     public function getAssetUrl()
