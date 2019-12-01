@@ -26,7 +26,7 @@ class UploadFileBehavior extends Behavior
     public $extensions = ['jpg', 'jpeg', 'png', 'gif'];
     public $options = [];
     private $oldUploadFiles = [];
-
+    private $_files=[];
 
     public function attach($owner)
     {
@@ -55,13 +55,8 @@ class UploadFileBehavior extends Behavior
 
     public function afterSave()
     {
-       // var_dump($this->owner->image);die;
-       // die('upload');
         foreach ($this->files as $attribute => $dir) {
-            if (isset($this->owner->{$attribute})) {
-
-                $this->owner->{$attribute} = $this->uploadFile($attribute, $dir, (isset($this->oldUploadFiles[$attribute])) ? $this->oldUploadFiles[$attribute] : null);
-            }
+               $this->owner->{$attribute} = $this->uploadFile($attribute, $dir, (isset($this->oldUploadFiles[$attribute])) ? $this->oldUploadFiles[$attribute] : null);
         }
     }
 
@@ -136,13 +131,14 @@ class UploadFileBehavior extends Behavior
 
             $owner = $this->owner;
             $params = [];
-            $params[] = 'deleteFile';
+            $params[] = 'delete-file';
 
             if ($owner->getUpdateUrl())
                 $params['redirect'] = Url::to($owner->getUpdateUrl());
 
             //$params['attribute'] = $attribute;
             $params['key'] = $owner->getPrimaryKey();
+
 
             return Html::a(Html::icon('delete') . ' ' . Yii::t('app', 'DELETE'), $params, ['class' => 'btn btn-sm btn-outline-danger']);
         }
@@ -213,6 +209,47 @@ class UploadFileBehavior extends Behavior
      * @param null $old_image
      * @return mixed
      */
+    public function uploadFile2($attribute, $dir, $old_image = null)
+    {
+        $owner = $this->owner;
+        $path = Yii::getAlias($dir) . DIRECTORY_SEPARATOR;
+        if (!file_exists($path)) {
+            FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
+        }
+        /** @var $img \panix\engine\components\ImageHandler */
+
+        if (isset($file)) {
+            if ($old_image && file_exists($path . $old_image))
+                unlink($path . $old_image);
+
+
+            $fileInfo = pathinfo($file->name);
+
+
+            $newFileName = CMS::slug($fileInfo['filename']) . '.' . $file->extension;
+            if (file_exists($path . $newFileName)) {
+                $newFileName = CMS::slug($fileInfo['filename']) . '-' . CMS::gen(10) . '.' . $file->extension;
+            }
+            if (in_array($file->extension, $this->extensions)) { //Загрузка для изображений
+                $img = Yii::$app->img->load($file->tempName);
+
+                if ($img->getHeight() > Yii::$app->params['maxUploadImageSize']['height'] || $img->getWidth() > Yii::$app->params['maxUploadImageSize']['width']) {
+                    $img->resize(Yii::$app->params['maxUploadImageSize']['width'], Yii::$app->params['maxUploadImageSize']['height']);
+                }
+                if($img->save($path . $newFileName)){
+                    unlink($file->tempName);
+                }
+            } else {
+                $file->saveAs($path . $newFileName);
+            }
+            $owner->{$attribute} = (string)$newFileName;
+        } else {
+            $owner->{$attribute} = (string)$old_image;
+        }
+        return $owner->{$attribute};
+    }
+
+
     public function uploadFile($attribute, $dir, $old_image = null)
     {
         $owner = $this->owner;

@@ -41,6 +41,11 @@ class AdminController extends CommonController
     {
         Yii::$app->session->setFlash('success', Yii::t('app', ($isNewRecord) ? 'SUCCESS_CREATE' : 'SUCCESS_UPDATE'));
         $redirect = (isset($post['redirect'])) ? $post['redirect'] : Yii::$app->request->url;
+
+
+       // $redirect = $this->redirect(($isNewRecord) ? ['/admin/shop/category/index'] : (['/admin/shop/category/index', 'id' => $model->id]);
+
+
         if (!Yii::$app->request->isAjax)
             return $this->redirect($redirect);
     }
@@ -92,9 +97,6 @@ class AdminController extends CommonController
     {
         return $this->actionUpdate(false);
     }
-
-
-
 
 
 }

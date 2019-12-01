@@ -170,13 +170,6 @@ class ActiveRecord extends \yii\db\ActiveRecord
         return parent::beforeSave($insert);
     }
 
-    public function save2($runValidation = true, $attributeNames = null)
-    {
-
-
-        return false;
-    }
-
     /**
      * @inheritdoc
      */
@@ -196,6 +189,12 @@ class ActiveRecord extends \yii\db\ActiveRecord
         if (Yii::$app instanceof ConsoleApplication) {
             echo ' done (time: ' . sprintf('%.3f', microtime(true) - $this->_microtime) . "s)\n";
         }
+        if($insert){
+          //  Yii::$app->session->setFlash('success', Yii::t('app', 'SUCCESS_SAVE'));
+        }else{
+          //  Yii::$app->session->setFlash('success', Yii::t('app', 'SUCCESS_UPDATE'));
+        }
+
 
         //Yii::debug($logMessage, __CLASS__);
     }

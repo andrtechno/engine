@@ -3,18 +3,20 @@
 namespace panix\engine\actions;
 
 use Yii;
+use yii\db\Expression;
 use yii\web\Response;
 use yii\rest\Action;
 
 class DeleteFileAction extends Action
 {
+    public $saveMethod = 'save';
 
     public function run()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
+
         $json = [];
         $json['status'] = 'error';
-        if (isset($_REQUEST) && Yii::$app->request->isAjax) {
+        if (isset($_REQUEST)) {
 
             /** @var $model \yii\db\ActiveRecord */
             $model = new $this->modelClass;
@@ -27,15 +29,20 @@ class DeleteFileAction extends Action
                     foreach ($filesBehavior->files as $attribute => $path) {
                         $filePath = Yii::getAlias($path) . DIRECTORY_SEPARATOR . $obj->{$attribute};
                         if (file_exists($filePath)) {
-                           // echo $filePath;
+                            $obj->{$attribute} = new Expression('NULL');
                             unlink($filePath);
-                            $obj->{$attribute} = NULL;
-
                         }
                     }
-                    $obj->save();
-                    $json['status'] = 'success';
-                    $json['message'] = Yii::t('app', 'SUCCESS_RECORD_DELETE');
+
+                    $obj->{$this->saveMethod}();
+                    if (Yii::$app->request->isAjax) {
+                        Yii::$app->response->format = Response::FORMAT_JSON;
+                        $json['status'] = 'success';
+                        $json['message'] = Yii::t('app', 'SUCCESS_RECORD_DELETE');
+                    } else {
+                        return Yii::$app->response->redirect(Yii::$app->request->get('redirect'));
+                    }
+
 
                 }
             }
