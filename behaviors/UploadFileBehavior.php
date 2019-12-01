@@ -55,8 +55,11 @@ class UploadFileBehavior extends Behavior
 
     public function afterSave()
     {
+       // var_dump($this->owner->image);die;
+       // die('upload');
         foreach ($this->files as $attribute => $dir) {
             if (isset($this->owner->{$attribute})) {
+
                 $this->owner->{$attribute} = $this->uploadFile($attribute, $dir, (isset($this->oldUploadFiles[$attribute])) ? $this->oldUploadFiles[$attribute] : null);
             }
         }
