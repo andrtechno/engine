@@ -13,6 +13,8 @@ return [
     'YESTERDAY_IN' => 'Вчера в {time}',
     'GRID_SWITCH' => 'Скрыть/показать',
     'COPYRIGHT' => '&copy; 2013-{year} {by}',
+    'FROM_BY' => 'от {0}',
+    'TO_BY' => 'до {0}',
     'HOME' => 'Главная',
     'NODE_MOVE' => 'Запись успешно перемещена',
     'NODE_RENAME_SUCCESS' => 'Запись успешно переименована',
