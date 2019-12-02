@@ -16,8 +16,10 @@ class LikeWidget extends Widget
     public function init()
     {
         parent::init();
-        $this->hash = CMS::hash(get_class($this->model));
-        $this->setId(strtolower(basename(get_class($this->model))) . '-like-' . $this->model->primaryKey);
+
+        $reflection = (new \ReflectionClass($this->model));
+        $this->hash = CMS::hash($reflection->getShortName());
+        $this->setId(strtolower($reflection->getShortName()) . '-like-' . $this->model->primaryKey);
     }
 
     public function run()
