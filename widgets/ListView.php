@@ -11,12 +11,14 @@ class ListView extends \yii\widgets\ListView
 
     public function init()
     {
+        parent::init();
         if (!$this->emptyText)
             $this->emptyText = Yii::t('app', 'NO_INFO');
 
-        parent::init();
-        $this->pager = ArrayHelper::merge([
+        $this->pager = ArrayHelper::merge($this->pager, [
             'class' => LinkPager::class
-        ], $this->pager);
+        ]);
+
+
     }
 }

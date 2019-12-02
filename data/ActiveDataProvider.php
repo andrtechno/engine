@@ -14,8 +14,12 @@ class ActiveDataProvider extends BaseActiveDataProvider
 
     public function init()
     {
-        /* @var \yii\base\Model $modelClass*/
+        /* @var \yii\base\Model $modelClass */
         $modelClass = $this->query->modelClass;
+
+        $this->setPagination([
+            'class' => Pagination::class,
+        ]);
 
         $moduleId = $modelClass::MODULE_ID;
         $settings = Yii::$app->settings;

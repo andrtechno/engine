@@ -34,7 +34,12 @@ class LinkPager extends BasePager
     public $linkOptions = ['class' => 'page-link', 'tabindex' => "-1"];
 
     public $pageType = 'link';
+    public function init()
+    {
 
+        parent::init();
+
+    }
     protected function renderPageButton($label, $page, $class, $disabled, $active)
     {
         $options = $this->linkContainerOptions;
@@ -54,11 +59,11 @@ class LinkPager extends BasePager
         $linkOptions = $this->linkOptions;
         $linkOptions['data-page'] = $page;
 
-        if($this->pageType == 'link'){
+        if ($this->pageType == 'link') {
             return Html::tag($linkWrapTag, Html::a($label, $this->pagination->createUrl($page), $linkOptions), $options);
-        }else{
+        } else {
             //return Html::tag($linkWrapTag, Html::submitButton($label, ArrayHelper::merge(['value'=>$page+1,'name'=>'page'],$linkOptions)), $options);
-            return Html::submitButton($label, ArrayHelper::merge(['value'=>$page+1,'name'=>'page'],$options));
+            return Html::submitButton($label, ArrayHelper::merge(['value' => $page + 1, 'name' => 'page'], $options));
         }
 
 
