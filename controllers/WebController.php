@@ -2,9 +2,11 @@
 
 namespace panix\engine\controllers;
 
+use panix\engine\components\ImageHandler;
 use Yii;
 use panix\engine\CMS;
 use yii\filters\AccessControl;
+use yii\web\Response;
 
 
 /**
@@ -13,8 +15,6 @@ use yii\filters\AccessControl;
  */
 class WebController extends CommonController
 {
-
-
 
 
     public function actions()
@@ -206,6 +206,32 @@ class WebController extends CommonController
     }
 
 
+    public function actionFavicon($size)
+    {
+        $config = Yii::$app->settings->get('app');
+        if (isset($config->favicon)) {
+            echo $config->favicon;
+            die;
+            $request = Yii::$app->request;
+            Yii::$app->response->format = Response::FORMAT_RAW;
+            Yii::$app->response->headers->set('Content-Type', 'image/png');
+            $path = Yii::getAlias('@uploads') . DIRECTORY_SEPARATOR . 'favicon.png';
 
+            $size_allow = [16, 32, 57, 60, 72, 76, 96, 114, 120, 144, 152, 180];
+
+
+            if (!in_array($size, $size_allow)) {
+                $this->error404();
+            }
+            /** @var \panix\engine\components\ImageHandler $img */
+            $img = Yii::$app->img->load($path);
+            $img->resize($size, $size);
+            return $img->show();
+
+            //  die;
+        }
+
+
+    }
 
 }

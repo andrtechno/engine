@@ -2,9 +2,10 @@
 
 namespace panix\engine\traits\query;
 
-
-use yii\db\Expression;
-
+/**
+ * Trait DefaultQueryTrait
+ * @package panix\engine\traits\query
+ */
 trait DefaultQueryTrait
 {
 
