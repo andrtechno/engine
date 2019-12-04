@@ -1,7 +1,6 @@
 <?php
 
 namespace panix\engine\traits\query;
-use panix\engine\CMS;
 
 /**
  * Trait DefaultQueryTrait

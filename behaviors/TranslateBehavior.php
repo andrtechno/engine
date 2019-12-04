@@ -96,6 +96,7 @@ class TranslateBehavior extends Behavior
         $translation->setAttribute($this->translationLanguageAttribute, $lang->id);
         $translations[] = $translation;
         $this->owner->populateRelation($this->relation, $translations);
+
         return $translation;
     }
 
