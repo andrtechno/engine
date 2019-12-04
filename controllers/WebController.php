@@ -210,7 +210,7 @@ class WebController extends CommonController
         /** @var \panix\engine\components\ImageHandler $img */
         $size_allow = [16, 32, 57, 60, 72, 76, 96, 114, 120, 144, 152, 180];
         $config = Yii::$app->settings->get('app');
-        if (isset($config->favicon)) {
+        if ($size && isset($config->favicon)) {
 
             $response->format = Response::FORMAT_RAW;
 
