@@ -2,12 +2,10 @@
 
 namespace panix\engine\controllers;
 
-use panix\engine\components\ImageHandler;
 use Yii;
-use panix\engine\CMS;
 use yii\filters\AccessControl;
 use yii\web\Response;
-
+use panix\engine\CMS;
 
 /**
  * Class WebController
@@ -126,7 +124,6 @@ class WebController extends CommonController
             $statusCode = $exception->statusCode;
             $name = $exception->getName();
             $message = $exception->getMessage();
-
             $this->layout = "@app/web/themes/{$this->view->theme->name}/views/layouts/error";
 
             $this->pageName = Yii::t('app/error', $statusCode);
@@ -206,31 +203,35 @@ class WebController extends CommonController
     }
 
 
-    public function actionFavicon($size)
+    public function actionFavicon()
     {
+        $size = Yii::$app->request->get('size');
+        $response = Yii::$app->response;
+        /** @var \panix\engine\components\ImageHandler $img */
+        $size_allow = [16, 32, 57, 60, 72, 76, 96, 114, 120, 144, 152, 180];
         $config = Yii::$app->settings->get('app');
         if (isset($config->favicon)) {
-            echo $config->favicon;
-            die;
-            $request = Yii::$app->request;
-            Yii::$app->response->format = Response::FORMAT_RAW;
-            Yii::$app->response->headers->set('Content-Type', 'image/png');
-            $path = Yii::getAlias('@uploads') . DIRECTORY_SEPARATOR . 'favicon.png';
 
-            $size_allow = [16, 32, 57, 60, 72, 76, 96, 114, 120, 144, 152, 180];
+            $response->format = Response::FORMAT_RAW;
 
-
-            if (!in_array($size, $size_allow)) {
-                $this->error404();
+            $path = Yii::getAlias('@uploads') . DIRECTORY_SEPARATOR . $config->favicon;
+            if (file_exists($path)) {
+                $pathInfo = pathinfo($path);
+                if ($pathInfo['extension'] == 'ico') {
+                    $response->headers->set('Content-Type', 'image/x-icon');
+                   return file_get_contents($path);
+                } else {
+                    if (!in_array($size, $size_allow)) {
+                        $this->error404();
+                    }
+                    $response->headers->set('Content-Type', 'image/png');
+                    $img = Yii::$app->img->load($path);
+                    $img->resize($size, $size);
+                    return $img->show();
+                }
             }
-            /** @var \panix\engine\components\ImageHandler $img */
-            $img = Yii::$app->img->load($path);
-            $img->resize($size, $size);
-            return $img->show();
-
-            //  die;
         }
-
+        $this->error404();
 
     }
 

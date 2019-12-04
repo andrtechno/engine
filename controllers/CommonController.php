@@ -54,6 +54,7 @@ class CommonController extends Controller
 
     /**
      * @param string $message
+     * @param string|integer $status
      * @throws HttpException
      */
     public function error404($message = '', $status = 404)
