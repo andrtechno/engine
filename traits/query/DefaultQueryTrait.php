@@ -1,6 +1,7 @@
 <?php
 
 namespace panix\engine\traits\query;
+use panix\engine\CMS;
 
 /**
  * Trait DefaultQueryTrait
@@ -18,7 +19,7 @@ trait DefaultQueryTrait
         /** @var \yii\db\ActiveRecord $modelClass */
         $modelClass = $this->modelClass;
         $tableName = $modelClass::tableName();
-        if ($modelClass::getDb()->getSchema()->getTableSchema($tableName)->getColumn('ordern')) {
+        if (isset($modelClass::getTableSchema()->columns['ordern'])) {
             $this->addOrderBy(["{$tableName}.ordern" => SORT_DESC]);
         }
         parent::init();
@@ -76,7 +77,7 @@ trait DefaultQueryTrait
         /** @var \yii\db\ActiveRecord $modelClass */
         $modelClass = $this->modelClass;
         $tableName = $modelClass::tableName();
-        if ($modelClass::getDb()->getSchema()->getTableSchema($tableName)->getColumn('switch')) {
+        if (isset($modelClass::getTableSchema()->columns['switch'])) {
             $this->andWhere(["{$tableName}.switch" => $state]);
         }
         return $this;
@@ -92,7 +93,7 @@ trait DefaultQueryTrait
         /** @var \yii\db\ActiveRecord $modelClass */
         $modelClass = $this->modelClass;
         $tableName = $modelClass::tableName();
-        if ($modelClass::getDb()->getSchema()->getTableSchema($tableName)->getColumn('ordern')) {
+        if (isset($modelClass::getTableSchema()->columns['ordern'])) {
             $this->addOrderBy(["{$tableName}.ordern" => $sort]);
         }
         return $this;
