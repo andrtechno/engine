@@ -313,34 +313,6 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }
     }
 
-    public function isString($attribute)
-    {
-        if (Yii::$app->user->can('admin')) {
-            \panix\ext\tinymce\TinyMceInline::widget();
-            $shortName = (new \ReflectionClass($this))->getShortName();
-            $html = Html::beginForm($this->getUpdateUrl());
-            $html .= '<span id="' . $shortName . '[' . $attribute . ']" class="edit_mode_title">' . $this->$attribute . '</span>';
-            $html .= Html::endForm();
-            return $html;
-        } else {
-            return $this->$attribute;
-        }
-    }
-
-    public function isText($attribute)
-    {
-        if (Yii::$app->user->can('admin')) {
-            \panix\ext\tinymce\TinyMceInline::widget();
-            $shortName = (new \ReflectionClass($this))->getShortName();
-            $html = Html::beginForm($this->getUpdateUrl());
-            $html .= '<div id="' . $shortName . '[' . $attribute . ']" class="edit_mode_text">' . $this->$attribute . '</div>';
-            $html .= Html::endForm();
-            return $html;
-        } else {
-            return $this->pageBreak($attribute);
-        }
-    }
-
 
     public function getDeleteUrl()
     {
@@ -350,10 +322,10 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 'id' => $this->id
             ]);
         } else {
-            throw new Exception(Yii::t('app', 'NOTFOUND_CONST_AR', array(
+            throw new Exception(Yii::t('app', 'NOTFOUND_CONST_AR', [
                 'param' => 'route_delete',
                 'model' => get_class($this)
-            )));
+            ]));
         }
     }
 
@@ -365,10 +337,36 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 'id' => $this->id
             ]);
         } else {
-            throw new Exception(Yii::t('app', 'NOTFOUND_CONST_AR', array(
+            throw new Exception(Yii::t('app', 'NOTFOUND_CONST_AR', [
                 'param}' => 'route_update',
                 'model}' => get_class($this)
-            )));
+            ]));
+        }
+    }
+
+    public function isString($attribute)
+    {
+        if (Yii::$app->user->can('admin')) {
+            \panix\ext\tinymce\TinyMceInline::widget();
+            $html = Html::beginForm($this->getUpdateUrl());
+            $html .= '<span id="' . Html::getInputName($this, $attribute) . '" class="edit_mode_title">' . $this->$attribute . '</span>';
+            $html .= Html::endForm();
+            return $html;
+        } else {
+            return $this->$attribute;
+        }
+    }
+
+    public function isText($attribute)
+    {
+        if (Yii::$app->user->can('admin')) {
+            \panix\ext\tinymce\TinyMceInline::widget();
+            $html = Html::beginForm($this->getUpdateUrl());
+            $html .= '<div id="' . Html::getInputName($this, $attribute) . '" class="edit_mode_text">' . $this->$attribute . '</div>';
+            $html .= Html::endForm();
+            return $html;
+        } else {
+            return $this->pageBreak($attribute);
         }
     }
 
