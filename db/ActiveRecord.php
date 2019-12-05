@@ -189,10 +189,10 @@ class ActiveRecord extends \yii\db\ActiveRecord
         if (Yii::$app instanceof ConsoleApplication) {
             echo ' done (time: ' . sprintf('%.3f', microtime(true) - $this->_microtime) . "s)\n";
         }
-        if($insert){
-          //  Yii::$app->session->setFlash('success', Yii::t('app', 'SUCCESS_SAVE'));
-        }else{
-          //  Yii::$app->session->setFlash('success', Yii::t('app', 'SUCCESS_UPDATE'));
+        if ($insert) {
+            //  Yii::$app->session->setFlash('success', Yii::t('app', 'SUCCESS_SAVE'));
+        } else {
+            //  Yii::$app->session->setFlash('success', Yii::t('app', 'SUCCESS_UPDATE'));
         }
 
 
@@ -316,9 +316,11 @@ class ActiveRecord extends \yii\db\ActiveRecord
     public function isString($attribute)
     {
         if (Yii::$app->user->can('admin')) {
-            $html = '<form action="' . $this->getUpdateUrl() . '" method="POST">';
-            $html .= '<span id="' . basename(get_class($this)) . '[' . $attribute . ']" class="edit_mode_title">' . $this->$attribute . '</span>';
-            $html .= '</form>';
+            \panix\ext\tinymce\TinyMceInline::widget();
+            $shortName = (new \ReflectionClass($this))->getShortName();
+            $html = Html::beginForm($this->getUpdateUrl());
+            $html .= '<span id="' . $shortName . '[' . $attribute . ']" class="edit_mode_title">' . $this->$attribute . '</span>';
+            $html .= Html::endForm();
             return $html;
         } else {
             return $this->$attribute;
@@ -328,12 +330,14 @@ class ActiveRecord extends \yii\db\ActiveRecord
     public function isText($attribute)
     {
         if (Yii::$app->user->can('admin')) {
-            $html = '<form action="' . $this->getUpdateUrl() . '" method="POST">';
-            $html .= '<div id="' . basename(get_class($this)) . '[' . $attribute . ']" class="edit_mode_text">' . $this->$attribute . '</div>';
-            $html .= '</form>';
+            \panix\ext\tinymce\TinyMceInline::widget();
+            $shortName = (new \ReflectionClass($this))->getShortName();
+            $html = Html::beginForm($this->getUpdateUrl());
+            $html .= '<div id="' . $shortName . '[' . $attribute . ']" class="edit_mode_text">' . $this->$attribute . '</div>';
+            $html .= Html::endForm();
             return $html;
         } else {
-            return Html::text($this->$attribute);
+            return $this->pageBreak($attribute);
         }
     }
 
@@ -394,7 +398,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
                     'defaultPageSize' => 1,
                 ]),
             ]);;
-            return $content;
+            return Html::text($content);
         } else {
             return false;
         }
