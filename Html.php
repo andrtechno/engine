@@ -180,4 +180,20 @@ class Html extends \yii\helpers\Html
         return parent::a($text, $url, $options);
     }
 
+    /**
+     * Build url
+     *
+     * @param $url
+     * @param array $params
+     * @return string
+     */
+    public static function buildUrl($url, $params = [])
+    {
+        $url_parts = parse_url($url);
+        if (isset($url_parts['query'])) {
+            parse_str($url_parts['query'], $params);
+        }
+        $url_parts['query'] = http_build_query($params);
+        return $url_parts['scheme'] . '://' . $url_parts['host'] . $url_parts['path'] . '?' . $url_parts['query'];
+    }
 }
