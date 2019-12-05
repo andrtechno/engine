@@ -4,7 +4,7 @@ use panix\engine\Html;
 ?>
 
 <ul>
-    <?php if ($this->context->facebook && $url) { ?>
+    <?php if ($this->context->facebook) { ?>
         <li>
             <a class="share facebook"
                href="<?= Html::buildUrl('https://www.facebook.com/sharer/sharer.php', ['u' => $url]); ?>"
@@ -12,21 +12,21 @@ use panix\engine\Html;
                         class="icon-facebook"></i> Поделиться</a>
         </li>
     <?php } ?>
-    <?php if ($this->context->twitter && $name && $url) { ?>
+    <?php if ($this->context->twitter && $name) { ?>
         <li>
             <a class="share twitter"
                href="<?= Html::buildUrl('https://twitter.com/intent/tweet', ['text' => $name, 'url' => $url]); ?>"
                title="twitter"><i class="icon-twitter"></i> Твитнуть</a>
         </li>
     <?php } ?>
-    <?php if ($this->context->pinterest && $name && $url && $image) { ?>
+    <?php if ($this->context->pinterest && $name && $image) { ?>
         <li>
             <a class="share pinterest"
                href="<?= Html::buildUrl('https://pinterest.com/pin/create/button/', ['description' => $name, 'url' => $url, 'media' => $image]); ?>"
                title="pinterest"><i class="icon-pinterest"></i> pinterest</a>
         </li>
     <?php } ?>
-    <?php if ($this->context->linkedin && $name && $url) { ?>
+    <?php if ($this->context->linkedin && $name) { ?>
         <li>
             <a class="share linkedin"
                href="<?= Html::buildUrl('https://www.linkedin.com/shareArticle', ['title' => $name, 'url' => $url, 'media' => $image, 'mini' => 'true', 'summary' => $name, 'source' => '']); ?>"
