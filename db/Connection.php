@@ -2,9 +2,11 @@
 
 namespace panix\engine\db;
 
+
 use PDO;
 use Yii;
 use yii\helpers\FileHelper;
+use panix\engine\Html;
 
 /**
  * Class Connection
@@ -18,6 +20,7 @@ class Connection extends \yii\db\Connection
     private $_result = '';
     public $limitBackup;
     public $enable_limit = true;
+
 
     /**
      * @inheritdoc
