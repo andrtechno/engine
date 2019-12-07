@@ -165,43 +165,40 @@ class Connection extends \yii\db\Connection
     }
 
     /**
-     * import sql from a *.sql file
+     * Import scheme.sql file
      *
-     * @param string $mod
-     * @param string $fileName : with the path and the file name
+     * @param string $filePath
      * @return mixed
      */
-    public function import($mod, $fileName = 'scheme.sql')
+    public function import($filePath)
     {
 
-        $file = Yii::$app->getModule($mod)->basePath . DIRECTORY_SEPARATOR . 'migrations' . DIRECTORY_SEPARATOR . $fileName;
-        //if (file_exists($file)) {
-        //$this->pdo = Yii::app()->db->pdoInstance;
-        try {
-            if (file_exists($file)) {
-                $sqlStream = file_get_contents($file);
-                $sqlStream = rtrim($sqlStream);
-                $newStream = preg_replace_callback("/\((.*)\)/", create_function('$matches', 'return str_replace(";"," $$$ ",$matches[0]);'), $sqlStream);
-                $sqlArray = explode(";", $newStream);
-                foreach ($sqlArray as $value) {
-                    if (!empty($value)) {
-                        $value = str_replace("{prefix}", $this->tablePrefix, $value);
-                        $value = str_replace("{charset}", $this->charset, $value);
-                        $sql = str_replace(" $$$ ", ";", $value) . ";";
-                        $this->pdo->exec($sql);
+        $file = Yii::getAlias($filePath);
+        if (file_exists($file)) {
+            //$this->pdo = Yii::app()->db->pdoInstance;
+            try {
+                if (file_exists($file)) {
+                    $sqlStream = file_get_contents($file);
+                    $sqlStream = rtrim($sqlStream);
+                    $newStream = preg_replace_callback("/\((.*)\)/", create_function('$matches', 'return str_replace(";"," $$$ ",$matches[0]);'), $sqlStream);
+                    $sqlArray = explode(";", $newStream);
+                    foreach ($sqlArray as $value) {
+                        if (!empty($value)) {
+                            $value = str_replace("{prefix}", $this->tablePrefix, $value);
+                            $value = str_replace("{charset}", $this->charset, $value);
+                            $sql = str_replace(" $$$ ", ";", $value) . ";";
+                            $this->pdo->exec($sql);
+                        }
                     }
+                    //Yii::log('Success import db ' . $mod, 'info', 'install');
+                    return true;
                 }
-                //Yii::log('Success import db ' . $mod, 'info', 'install');
-                return true;
+            } catch (\PDOException $e) {
+                Yii::debug('Error install DB', 'info');
+                echo $e->getMessage();
+                exit;
             }
-        } catch (\PDOException $e) {
-            Yii::debug('Error install DB', 'info');
-            echo $e->getMessage();
-            exit;
         }
-        // } else {
-        //     throw new CException("no find {$fileName}");
-        // }
     }
 
 }
