@@ -21,10 +21,8 @@ class Dispatcher extends \yii\log\Dispatcher
     {
 
         $date = new \DateTime(date('Y-m-d', time()), new \DateTimeZone('Europe/Kiev'));
-        $date= $date->format('Y-m-d');
-        $logPath = '@runtime/logs/' . $date . '/'.Yii::$app->id;
-
-        parent::init();
+        $date = $date->format('Y-m-d');
+        $logPath = '@runtime/logs/' . $date . '/' . Yii::$app->id;
         $this->targets = [
             [
                 'class' => 'panix\engine\log\FileTarget',
@@ -90,6 +88,7 @@ class Dispatcher extends \yii\log\Dispatcher
                 ],
             ],
         ];
+        parent::init();
 
 
     }
