@@ -70,7 +70,6 @@ class Dispatcher extends \yii\log\Dispatcher
                 'class' => 'panix\engine\log\FileTarget',
                 'levels' => ['info'],
                 'categories' => ['yii\db\*'],
-                'enabled' => true,
                 'logFile' => $logPath . '/db_info.log',
                 'except' => [
                     'yii\db\Connection::open',
@@ -80,7 +79,6 @@ class Dispatcher extends \yii\log\Dispatcher
             [
                 'class' => 'panix\engine\log\EmailTarget',
                 'levels' => ['error', 'warning'],
-                'enabled' => false,//YII_DEBUG,
                 //'categories' => ['yii\base\*'],
                 'except' => [
                     'yii\web\HttpException:404',
