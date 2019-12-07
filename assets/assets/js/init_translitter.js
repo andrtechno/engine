@@ -19,7 +19,7 @@ function init_translitter(options) {
                 if (typeof xhr !== 'undefined')
                     xhr.abort();
                 xhr = $.ajax({
-                    url: '/admin/app/ajax/check-slug',
+                    url: common.url('/admin/app/ajax/check-slug'),
                     type: 'POST',
                     dataType: 'json',
                     data: {
@@ -35,7 +35,7 @@ function init_translitter(options) {
                             alias.parent().parent().addClass('has-error').removeClass('has-success');
                             $("#alias_result").html('<span class="badge badge-danger">' + data.message + '</span>').show();
                         } else {
-                            // alias.parent().parent().addClass('has-success').removeClass('has-error');
+                             alias.parent().parent().addClass('has-success').removeClass('has-error');
                             // $("#alias_result").html('<span class="badge badge-success">' + data.message + '</span>').show();
                         }
                     }
