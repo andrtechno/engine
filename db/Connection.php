@@ -172,7 +172,6 @@ class Connection extends \yii\db\Connection
      */
     public function import($filePath)
     {
-
         $file = Yii::getAlias($filePath);
         if (file_exists($file)) {
             //$this->pdo = Yii::app()->db->pdoInstance;
@@ -180,17 +179,14 @@ class Connection extends \yii\db\Connection
                 if (file_exists($file)) {
                     $sqlStream = file_get_contents($file);
                     $sqlStream = rtrim($sqlStream);
-                    $newStream = preg_replace_callback("/\((.*)\)/", create_function('$matches', 'return str_replace(";"," $$$ ",$matches[0]);'), $sqlStream);
-                    $sqlArray = explode(";", $newStream);
+                    $sqlArray = explode(";", $sqlStream);
                     foreach ($sqlArray as $value) {
                         if (!empty($value)) {
                             $value = str_replace("{prefix}", $this->tablePrefix, $value);
                             $value = str_replace("{charset}", $this->charset, $value);
-                            $sql = str_replace(" $$$ ", ";", $value) . ";";
-                            $this->pdo->exec($sql);
+                            $this->pdo->exec($value);
                         }
                     }
-                    //Yii::log('Success import db ' . $mod, 'info', 'install');
                     return true;
                 }
             } catch (\PDOException $e) {
@@ -198,6 +194,8 @@ class Connection extends \yii\db\Connection
                 echo $e->getMessage();
                 exit;
             }
+        }else{
+            die('error file '.$file);
         }
     }
 
