@@ -102,7 +102,7 @@ class WebController extends CommonController
         }
 
 
-        if (true) {
+        if (true && Yii::$app->id != 'console') {
 
             Yii::$app->catchAll = ['maintenance/index', 'message' => 'test text'];
         }
