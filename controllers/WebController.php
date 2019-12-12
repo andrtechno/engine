@@ -100,6 +100,13 @@ class WebController extends CommonController
             }
 
         }
+
+
+        if (true) {
+
+            Yii::$app->catchAll = ['maintenance/index', 'message' => 'test text'];
+        }
+
         parent::init();
     }
 

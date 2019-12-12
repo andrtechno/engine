@@ -139,15 +139,15 @@ class MaintenanceMode extends Component
      */
     public function init()
     {
-        Yii::setAlias('@maintenance', $this->commandPath);
-        if (!file_exists(Yii::getAlias('@maintenance'))) {
-            FileHelper::createDirectory(Yii::getAlias('@maintenance'));
-        }
+       // Yii::setAlias('@maintenance', $this->commandPath.'');
+        //if (!file_exists(Yii::getAlias('@maintenance'))) {
+            //FileHelper::createDirectory(Yii::getAlias('@maintenance'));
+        //}
         if (Yii::$app instanceof \yii\console\Application) {
             Yii::$app->controllerMap['maintenance'] = $this->consoleController;
         } else {
             if ($this->getIsEnabled()) {
-                $this->filtering();
+               // $this->filtering();
             }
         }
     }
@@ -163,6 +163,7 @@ class MaintenanceMode extends Component
         //$exists = file_exists($this->getStatusFilePath());
         //return $onlyConsole ? $exists : $this->enabled || $exists;
         return (bool)Yii::$app->settings->get('app', 'maintenance');
+       // return (bool) $this->enabled;
     }
 
     /**
@@ -265,7 +266,10 @@ class MaintenanceMode extends Component
         // Check URL's
         if ($this->urls) {
             if (is_array($this->urls)) {
-                $this->disable = $this->disable || in_array($app->getRequest()->getPathInfo(), $this->urls);
+
+                // return in_array($app->getRequest()->getPathInfo(), $this->urls);
+               $this->disable = $this->disable || in_array($app->getRequest()->getPathInfo(), $this->urls);
+
             } else {
                 throw new InvalidConfigException('Parameter "urls" should be an array.');
             }

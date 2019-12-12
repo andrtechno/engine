@@ -10,7 +10,7 @@ Asset::register($this);
 <html lang="<?= Yii::$app->language; ?>">
 <head>
     <meta charset="<?= \Yii::$app->charset; ?>">
-    <title><?= Html::encode(Yii::$app->name); ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <?php $this->head(); ?>
 </head>
 <body>

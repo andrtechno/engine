@@ -1,9 +1,4 @@
 <?php
-/**
- * @link https://github.com/brussens/yii2-maintenance-mode
- * @copyright Copyright (c) 2017 Brusensky Dmitry
- * @license http://opensource.org/licenses/MIT MIT
- */
 
 namespace panix\engine\maintenance;
 
@@ -30,5 +25,6 @@ class Asset extends AssetBundle
      */
     public $depends = [
         'yii\web\YiiAsset',
+        'yii\bootstrap4\BootstrapPluginAsset',
     ];
 }
