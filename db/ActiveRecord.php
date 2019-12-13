@@ -3,6 +3,7 @@
 namespace panix\engine\db;
 
 use panix\engine\behaviors\TranslateBehavior;
+use panix\engine\CMS;
 use panix\engine\controllers\AdminController;
 use Yii;
 use yii\base\Exception;
@@ -422,5 +423,8 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }
     }
 
+    public function getHash(){
+        return CMS::hash('\\'.get_class($this));
+    }
 
 }
