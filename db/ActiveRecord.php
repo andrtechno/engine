@@ -278,11 +278,11 @@ class ActiveRecord extends \yii\db\ActiveRecord
      */
     public function getNext()
     {
-        $next = static::getDb()->cache(function ($db) {
+        $next = static::getDb()->cache(function () {
             return static::find()
                 ->where(['<', 'id', $this->getPrimaryKey()])
                 ->orderBy(['id' => SORT_ASC]);
-        }, 0);
+        }, 3600);
         return $next;
     }
 
@@ -291,11 +291,11 @@ class ActiveRecord extends \yii\db\ActiveRecord
      */
     public function getPrev()
     {
-        $prev = static::getDb()->cache(function ($db) {
+        $prev = static::getDb()->cache(function () {
             return static::find()
                 ->where(['>', 'id', $this->getPrimaryKey()])
                 ->orderBy(['id' => SORT_DESC]);
-        }, 0);
+        }, 3600);
         return $prev;
     }
 
