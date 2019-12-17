@@ -423,8 +423,9 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }
     }
 
-    public function getHash(){
-        return CMS::hash('\\'.get_class($this));
+    public function getHash()
+    {
+        return CMS::hash('\\' . get_class($this));
     }
 
 }
