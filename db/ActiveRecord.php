@@ -274,9 +274,58 @@ class ActiveRecord extends \yii\db\ActiveRecord
     }
 
     /**
+     * @param $wheres
      * @return \yii\db\Query
      */
-    public function getNext()
+    public function getNext($wheres)
+    {
+        $db = static::getDb();
+
+        $prev = $db->cache(function ($db) use ($wheres) {
+
+            $q = static::find();
+            $subQuery = (new \yii\db\Query())->select('MIN(`id`)')
+                ->from(static::tableName() . ' next')
+                ->where(['>', 'next.id', $this->getPrimaryKey()]);
+
+            if ($wheres) {
+                $subQuery->andWhere($wheres);
+            }
+
+            return $q->where(['=', 'id', $subQuery]);
+
+        }, 3600);
+
+        return $prev;
+    }
+
+    /**
+     * @param $wheres
+     * @return \yii\db\Query
+     */
+    public function getPrev($wheres)
+    {
+        $db = static::getDb();
+
+        $prev = $db->cache(function ($db) use ($wheres) {
+
+            $q = static::find();
+            $subQuery = (new \yii\db\Query())->select('MAX(`id`)')
+                ->from(static::tableName() . ' prev')
+                ->where(['<', 'prev.id', $this->getPrimaryKey()]);
+
+            if ($wheres) {
+                $subQuery->andWhere($wheres);
+            }
+
+            return $q->where(['=', 'id', $subQuery]);
+
+        }, 3600);
+
+        return $prev;
+    }
+
+    public function getNext_old()
     {
         $next = static::getDb()->cache(function () {
             return static::find()
@@ -285,11 +334,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }, 3600);
         return $next;
     }
-
-    /**
-     * @return \yii\db\Query
-     */
-    public function getPrev()
+    public function getPrev_OLD()
     {
         $prev = static::getDb()->cache(function () {
             return static::find()
@@ -298,6 +343,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }, 3600);
         return $prev;
     }
+
 
     /**
      * @return string
