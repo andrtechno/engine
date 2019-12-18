@@ -2,22 +2,25 @@
 
 namespace panix\engine\widgets;
 
-use yii\helpers\Json;
-
+/**
+ * Class Pjax
+ * @package panix\engine\widgets
+ */
 class Pjax extends \yii\widgets\Pjax
 {
     public $timeout = false;
     public $dataProvider;
+
     public function init()
     {
-        if(!$this->id){
-            if($this->dataProvider){
-                $this->id = 'pjax-grid-' . strtolower(basename($this->dataProvider->query->modelClass));
-            }
-        }
 
+        if ($this->dataProvider) {
+            $this->id = 'pjax-grid-' . strtolower((new \ReflectionClass($this->dataProvider->query->modelClass))->getShortName());
+        }
         parent::init();
+
     }
+
     /*public function registerClientScript2()
     {
 
