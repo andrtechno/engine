@@ -342,8 +342,8 @@ class CMS
 
     /**
      *
-     * @param type $birth_date
-     * @return type
+     * @param string $birth_date
+     * @return string
      */
     public static function age($birth_date)
     {
@@ -382,10 +382,48 @@ class CMS
         return $a_str;
     }
 
+    public static function seconds2times($seconds)
+    {
+        $times = array();
+
+        // считать нули в значениях
+        $count_zero = false;
+
+        // количество секунд в году не учитывает високосный год
+        // поэтому функция считает что в году 365 дней
+        // секунд в минуте|часе|сутках|году
+        $periods = array(60, 3600, 86400, 31536000);
+
+        for ($i = 3; $i >= 0; $i--) {
+            $period = floor($seconds / $periods[$i]);
+            if (($period > 0) || ($period == 0 && $count_zero)) {
+                $times[$i + 1] = $period;
+                $seconds -= $period * $periods[$i];
+
+                $count_zero = true;
+            }
+        }
+
+        $times[0] = $seconds;
+        return $times;
+    }
+
+    public static function getDayHourMinut($sec)
+    {
+
+        $min = floor($sec / 60);
+        $hours = floor($sec / 3600);
+        echo $hours;
+        $seconds = $sec % 60;
+        $minutes = $min % 60;
+
+        return ' hours=' . $hours . ' minutes=' . $minutes . ' seconds=' . $seconds;
+    }
+
     /**
      * Display Time filter
-     * @param type $sec
-     * @return type
+     * @param integer $sec
+     * @return string
      */
     public static function display_time($sec)
     {
@@ -398,14 +436,16 @@ class CMS
     }
 
     /**
-     * Осталось
-     * @param int $time
+     * Прошло времени
+     *
+     * @param integer $time
      * @return string
      */
-    public static function timeLeft($time)
+    public static function time_passed($time)
     {
-        $t = intval($time - self::time());
-        return Yii::t('app', 'PURCHASED') . ": " . self::display_time($t);
+        $date = new \DateTime('now', new \DateTimeZone(CMS::timezone()));
+        $now = strtotime($date->format('Y-m-d H:i:s'));
+        return self::display_time($now - $time);
     }
 
     /**
@@ -619,7 +659,7 @@ class CMS
      */
     public static function userLink(\panix\mod\user\models\User $user)
     {
-        $html = Html::link($user->login . ' <b class="caret caret-up"></b>', '#', array('class' => 'btn btn-link dropdown-toggle', 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "false"));
+        $html = Html::a($user->login . ' <b class="caret caret-up"></b>', '#', array('class' => 'btn btn-link dropdown-toggle', 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "false"));
         return '<div style="position:relative;" class="btn-group">' . $html . '
             <ul class="dropdown-menu drop-up">
             <li><a href="' . Yii::$app->createUrl('/users/profile/view', array('user_id' => $user->id)) . '"><i class="icon-user"></i> ' . Yii::t('app', 'PROFILE') . '</a></li>
