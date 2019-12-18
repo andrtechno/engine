@@ -1,4 +1,5 @@
 <?php
+
 namespace panix\engine\behaviors\nestedsets;
 
 use yii\base\Behavior;
@@ -77,20 +78,22 @@ class NestedSetsQueryBehavior extends Behavior
     /**
      * @param int $root
      * @param null $level
+     * @param array $wheres
      * @return array
      */
-    public function dataTree($root = 0, $level = null)
+    public function dataTree($root = 0, $level = null, $wheres = null)
     {
-        $data = array_values($this->prepareData2($root, $level));
+        $data = array_values($this->prepareData2($root, $level, $wheres));
         return $this->makeData2($data);
     }
 
     /**
      * @param int $root
      * @param null $level
+     * @param array $wheres
      * @return array
      */
-    private function prepareData2($root = 0, $level = null)
+    private function prepareData2($root = 0, $level = null, $wheres = null)
     {
         $res = [];
         if (is_object($root)) {
@@ -104,7 +107,14 @@ class NestedSetsQueryBehavior extends Behavior
 
             if ($level) {
                 /** @var NestedSetsBehavior $root */
-                foreach ($root->children()->all() as $childRoot) {
+                $query = $root->children();
+                if ($wheres) {
+                    if (is_array($wheres)) {
+                        $query->andWhere($wheres);
+                    }
+                }
+                $result = $query->all();
+                foreach ($result as $childRoot) {
                     $aux = $this->prepareData2($childRoot, $level - 1);
 
                     if (isset($res[$root->{$root->idAttribute}]['children']) && !empty($aux)) {
@@ -117,8 +127,15 @@ class NestedSetsQueryBehavior extends Behavior
                 }
             } elseif (is_null($level)) {
                 /** @var NestedSetsBehavior $root */
-                foreach ($root->children()->all() as $childRoot) {
-                    $aux = $this->prepareData2($childRoot, null);
+                $query = $root->children();
+                if ($wheres) {
+                    if (is_array($wheres)) {
+                        $query->andWhere($wheres);
+                    }
+                }
+                $result = $query->all();
+                foreach ($result as $childRoot) {
+                    $aux = $this->prepareData2($childRoot, null, $wheres);
                     if (isset($res[$root->{$root->idAttribute}]['children']) && !empty($aux)) {
                         $res[$root->{$root->idAttribute}]['folder'] = true;
                         $res[$root->{$root->idAttribute}]['children'] += $aux;
@@ -132,11 +149,18 @@ class NestedSetsQueryBehavior extends Behavior
         } elseif (is_scalar($root)) {
 
             if ($root == 0) {
-                foreach ($this->roots()->all() as $rootItem) {
+                $query = $this->roots();
+                if ($wheres) {
+                    if (is_array($wheres)) {
+                        $query->andWhere($wheres);
+                    }
+                }
+                $result=$query->all();
+                foreach ($result as $rootItem) {
                     if ($level) {
-                        $res += $this->prepareData2($rootItem, $level - 1);
+                        $res += $this->prepareData2($rootItem, $level - 1,$wheres);
                     } elseif (is_null($level)) {
-                        $res += $this->prepareData2($rootItem, null);
+                        $res += $this->prepareData2($rootItem, null,$wheres);
                     }
                 }
             } else {
@@ -148,11 +172,21 @@ class NestedSetsQueryBehavior extends Behavior
                     ->one();
                 /** @var NestedSetsBehavior $root */
                 //New by panix
-                foreach ($root->children()->all() as $rootItem) {
+
+                $query = $root->children();
+                if ($wheres) {
+                    if (is_array($wheres)) {
+                        $query->andWhere($wheres);
+                    }
+                }
+                $result=$query->all();
+
+
+                foreach ($result as $rootItem) {
                     if ($level) {
-                        $res += $this->prepareData2($rootItem, $level - 1);
+                        $res += $this->prepareData2($rootItem, $level - 1,$wheres);
                     } elseif (is_null($level)) {
-                        $res += $this->prepareData2($rootItem, null);
+                        $res += $this->prepareData2($rootItem, null,$wheres);
                     }
                 }
                 unset($model);
