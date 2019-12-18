@@ -44,6 +44,7 @@ class DbSession extends Session
             $data = [];
             $data['user_id'] = $uid;
             $data['ip'] = $ip;
+            $data['user_agent'] = Yii::$app->request->getUserAgent();
             $data['user_type'] = $user_type;
             $data['user_name'] = $user_name;
             return $data;
