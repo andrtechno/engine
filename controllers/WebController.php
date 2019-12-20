@@ -3,6 +3,7 @@
 namespace panix\engine\controllers;
 
 use Yii;
+use yii\base\Exception;
 use yii\filters\AccessControl;
 use yii\web\Response;
 use panix\engine\CMS;
@@ -226,15 +227,16 @@ class WebController extends CommonController
                 $pathInfo = pathinfo($path);
                 if ($pathInfo['extension'] == 'ico') {
                     $response->headers->set('Content-Type', 'image/x-icon');
-                   return file_get_contents($path);
+                    return file_get_contents($path);
                 } else {
                     if (!in_array($size, $size_allow)) {
                         $this->error404();
                     }
-                    $response->headers->set('Content-Type', 'image/png');
+                    //$response->headers->add('Content-Type', 'image/png');
                     $img = Yii::$app->img->load($path);
                     $img->resize($size, $size);
-                    return $img->show();
+                    $img->show();
+                    die;
                 }
             }
         }
