@@ -34,6 +34,17 @@ class CMS
     }
 
     /**
+     * Проверка дубликатов в массиве
+     *
+     * @param $array
+     * @return bool
+     */
+    public static function hasDuplicates($array)
+    {
+        return count($array) !== count(array_unique($array));
+    }
+
+    /**
      * Displays a variable.
      * This method achieves the similar functionality as var_dump and print_r
      * but is more robust when handling complex objects such as Yii controllers.
