@@ -36,41 +36,51 @@ class CheckboxColumn extends BaseCheckboxColumn
     protected $_customActions;
 
     /**
+     * Registers the needed JavaScript.
+     * @since 2.0.8
+     */
+    public function registerClientScript()
+    {
+        parent::registerClientScript();
+        $this->grid->getView()->registerJs("
+            var grid_selections;
+            $(document).on('click','#{$this->grid->getId()} input[type=\"checkbox\"]',function(e) {
+                grid_selections = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
+                console.log('CHECKED',grid_selections);
+            });
+            function gridAction(that) {
+            
+                var keys = $('#grid-product').yiiGridView('getSelectedRows');
+                var url = $(that).attr('href');
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {id: grid_selections},
+                    success: function (data) {
+                        if(data.success){
+                            common.notify(data.message,'success');
+                            $.pjax.reload('#pjax-grid-product', {timeout: false});
+                        }else{
+                            common.notify(data.message,'error');
+                        }
+                    }
+                });
+                return false;
+            }
+            ",View::POS_END);
+    }
+
+    /**
      * @inheritdoc
-     * @throws \yii\base\InvalidConfigException if [[name]] is not set.
      */
     public function init()
     {
+
+
+
         parent::init();
 
-        $this->grid->getView()->registerJs("
-            $(document).on('click','#{$this->grid->getId()} input[type=\"checkbox\"]',function(e) {
-            var keys = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
-                console.log(keys);
-            });
-
-            function runAction(that){
-                var keys = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
-                var url = $(that).attr('href');
-
-                //if (confirm($(that).data('confirm'))) {
-                    console.log('LALAL',keys,that);
-                    $.ajax({
-                        url:url,
-                        type:'POST',
-                        dataType:'json',
-                        data:{id:keys},
-                        success:function(data){
-                            console.log(data);
-                            $.pjax.reload('#pjax-{$this->grid->getId()}',{timeout:false});
-                            //$('#{$this->grid->getId()}').yiiGridView('applyFilter');
-                        }
-                    });
-                //}
-
-                return false;
-            }
-    ", View::POS_END);
 
         //print_r($this->getCustomActions());die;
         $this->contentOptions = ['class' => 'text-center'];
@@ -119,7 +129,7 @@ class CheckboxColumn extends BaseCheckboxColumn
                 'icon' => 'delete',
                 'options' => [
                     'class' => 'dropdown-item',
-                    'data-confirm' => Yii::t('app', 'CONFIRM'),
+                    'data-confirm' => 0,
                     'data-pjax' => 0
                 ]
             ]
@@ -134,15 +144,10 @@ class CheckboxColumn extends BaseCheckboxColumn
     public function getDefaultActionOptions()
     {
         return [
-            'data-confirm' => Yii::t('app', 'CONFIRM'),
+            //'data-confirm' => Yii::t('app', 'CONFIRM'),
             'class' => 'dropdown-item',
-            'data-pjax' => 0,
-            // 'model' => $this->dataProvider->modelClass,
-            'onClick' => 'runAction(this); return false;'
-            /*'onClick' => strtr('return $.fn.yiiGridView.runAction(":grid", this);', [
-                    ':grid' => $this->grid->options['id']
-                ]
-            ),*/
+            //'data-pjax' => 0,
+            'onClick' => 'gridAction(this); return false;'
         ];
     }
 

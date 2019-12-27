@@ -11,11 +11,12 @@ class DeleteAction extends Action
 
     public function run()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $json = [];
-        $json['status'] = 'error';
-        if (Yii::$app->request->isPost && isset($_REQUEST['id'])) {
+        $json['success'] = false;
+        if (Yii::$app->request->isAjax || Yii::$app->request->isPost && isset($_REQUEST['id'])) {
 
-            /** @var $model \yii\db\ActiveRecord */
+            /** @var $model \panix\engine\db\ActiveRecord */
             $model = new $this->modelClass;
             $entry = $model->find()->where(['id' => $_REQUEST['id']])->all();
             //print_r($entry);die;
@@ -23,16 +24,17 @@ class DeleteAction extends Action
                 foreach ($entry as $obj) {
                     if (!in_array($obj->primaryKey, $model->disallow_delete)) {
                         $obj->delete();
-                        $json['status'] = 'success';
+                        $json['success'] = true;
                         $json['message'] = Yii::t('app', 'SUCCESS_RECORD_DELETE');
                     } else {
-                        $json['status'] = 'error';
                         $json['message'] = Yii::t('app', 'ERROR_RECORD_DELETE');
                     }
                 }
             }
+        }else{
+            $json['message'] = Yii::t('app', 'Forbidden');
         }
-        Yii::$app->response->format = Response::FORMAT_JSON;
+
         return $json;
     }
 
