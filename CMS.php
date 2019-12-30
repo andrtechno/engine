@@ -107,20 +107,20 @@ class CMS
         } elseif (preg_match('/([\+]38092)/i', $number, $match)) {
             return 'EOPLEnet Украина';
         } elseif (preg_match('/([\+]38094)/i', $number, $match)) {
-            return 'Интертелеком Украина';
+            return 'Intertelecom Ukraine';
         } else {
             return 'Unknown';
         }
     }
 
-    public static function processImage($size = false, $filename, $uploadAlias, $options = array())
+    public static function processImage($size = false, $filename, $uploadAlias, $options = [])
     {
         $dirName = basename($uploadAlias);
-        if (!$size) {
-            $thumbPath = Yii::getAlias("@app/web/assets/{$dirName}");
-        } else {
-            $thumbPath = Yii::getAlias("@app/web/assets/{$dirName}/{$size}");
+        $thumbPath = Yii::getAlias("@app/web/assets/{$dirName}");
+        if ($size) {
+            $thumbPath .= DIRECTORY_SEPARATOR . $size;
         }
+
 
         if (!file_exists($thumbPath)) {
             mkdir($thumbPath, 0775, true);
@@ -157,8 +157,6 @@ class CMS
                 $img->grayscale();
                 $img->text(Yii::t('app', 'FILE_NOT_FOUND'), Yii::getAlias('@vendor/panix/engine/assets/assets/fonts') . '/Exo2-Light.ttf', $img->getWidth() / 100 * 8, [114, 114, 114], $img::CORNER_CENTER_BOTTOM, 0, $img->getHeight() / 100 * 10, 0, 0);
             }
-            //  if (isset($options['mod'])) {
-            //if (in_array($options['mod'], explode(',', $configApp->attachment_wm_active))) {
             if (isset($options['watermark']) && $options['watermark']) {
                 $offsetX = isset($configApp->attachment_wm_offsetx) ? $configApp->attachment_wm_offsetx : 10;
                 $offsetY = isset($configApp->attachment_wm_offsety) ? $configApp->attachment_wm_offsety : 10;
@@ -166,8 +164,6 @@ class CMS
                 $path = !empty($configApp->attachment_wm_path) ? $configApp->attachment_wm_path : Yii::getAlias('@uploads') . '/watermark.png';
                 $img->watermark($path, $offsetX, $offsetY, $corner, false);
             }
-            // }
-            // }
 
             if ($size) {
                 $img->resize((!empty($sizes[0])) ? $sizes[0] : 0, (!empty($sizes[1])) ? $sizes[1] : 0);
