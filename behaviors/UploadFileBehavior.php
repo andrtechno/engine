@@ -62,12 +62,13 @@ class UploadFileBehavior extends Behavior
 
     public function beforeValidate()
     {
+        /** @var \panix\engine\db\ActiveRecord $owner */
         $owner = $this->owner;
         foreach ($this->files as $attribute => $dir) {
 
 
         }
-        if ($this->owner->{$this->attribute} instanceof UploadedFile) {
+        if ($owner->{$this->attribute} instanceof UploadedFile) {
             $this->file = $this->owner->{$this->attribute};
             return;
         }

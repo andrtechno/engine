@@ -144,11 +144,19 @@ class CMS
             die($thumbPath);
             //unlink($thumbPath);
         }
-		if(!file_exists($fullPath)){
-			$fullPath = Yii::getAlias('@uploads').DIRECTORY_SEPARATOR.'no-image.png';
-		}
-        if (YII_DEBUG || !file_exists($thumbPath)) {
+        $error = false;
+        if (!file_exists($fullPath)) {
+            $fullPath = Yii::getAlias('@uploads') . DIRECTORY_SEPARATOR . 'no-image.png';
+            $options['watermark'] = false;
+            $error = true;
+        }
+
+        if (!file_exists($thumbPath)) {
             $img->load($fullPath);
+            if ($error) {
+                $img->grayscale();
+                $img->text(Yii::t('app', 'FILE_NOT_FOUND'), Yii::getAlias('@vendor/panix/engine/assets/assets/fonts') . '/Exo2-Light.ttf', $img->getWidth() / 100 * 8, [114, 114, 114], $img::CORNER_CENTER_BOTTOM, 0, $img->getHeight() / 100 * 10, 0, 0);
+            }
             //  if (isset($options['mod'])) {
             //if (in_array($options['mod'], explode(',', $configApp->attachment_wm_active))) {
             if (isset($options['watermark']) && $options['watermark']) {
@@ -165,9 +173,7 @@ class CMS
                 $img->resize((!empty($sizes[0])) ? $sizes[0] : 0, (!empty($sizes[1])) ? $sizes[1] : 0);
             }
 
-//$img->thumb((!empty($sizes[0])) ? $sizes[0] : false, (!empty($sizes[1])) ? $sizes[1] : false,false);
             $img->save($thumbPath);
-
             //  $img->show();
         }
 
