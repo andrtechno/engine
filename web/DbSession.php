@@ -17,8 +17,6 @@ class DbSession extends Session
 {
 
     public $writeCallback = ['panix\engine\web\DbSession', 'writeFields'];
-    public $sessionTable = '{{%session}}';
-
 
     public static function writeFields($session)
     {

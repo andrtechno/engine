@@ -144,7 +144,9 @@ class CMS
             die($thumbPath);
             //unlink($thumbPath);
         }
-
+		if(!file_exists($fullPath)){
+			$fullPath = Yii::getAlias('@uploads').DIRECTORY_SEPARATOR.'no-image.png';
+		}
         if (YII_DEBUG || !file_exists($thumbPath)) {
             $img->load($fullPath);
             //  if (isset($options['mod'])) {
