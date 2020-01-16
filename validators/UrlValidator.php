@@ -47,6 +47,7 @@ class UrlValidator extends Validator
 
     public function clientValidateAttribute($model, $attribute, $view)
     {
+        /** @var \yii\web\View $view */
         ValidationAsset::register($view);
         $options = [
             'model' => get_class($model),
