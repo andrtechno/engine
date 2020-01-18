@@ -44,7 +44,7 @@ class SettingsModel extends Model
 
     public function submitButton()
     {
-        return Html::submitButton(Yii::t('app', 'SAVE'), ['class' => 'btn btn-success']);
+        return Html::submitButton(Yii::t('app/default', 'SAVE'), ['class' => 'btn btn-success']);
     }
 
     public function save()
@@ -55,11 +55,11 @@ class SettingsModel extends Model
     public function validate($attributeNames = null, $clearErrors = true)
     {
         if (parent::validate($attributeNames, $clearErrors)) {
-            Yii::$app->session->addFlash("success", Yii::t('app', 'SUCCESS_UPDATE'));
+            Yii::$app->session->addFlash("success", Yii::t('app/default', 'SUCCESS_UPDATE'));
             return true;
         } else {
             //print_r($this->getErrors());die;
-            Yii::$app->session->addFlash("error", Yii::t('app', 'ERROR_UPDATE'));
+            Yii::$app->session->addFlash("error", Yii::t('app/default', 'ERROR_UPDATE'));
             return false;
         }
     }
@@ -70,11 +70,11 @@ class SettingsModel extends Model
         //   $this->attributes = ArrayHelper::merge(Yii::$app->request->post($shortName), $this->attributes);
         if ($this->validate()) {
             Yii::$app->settings->set(static::$category, $this->attributes);
-            Yii::$app->session->setFlash("success", Yii::t('app', 'SUCCESS_UPDATE'));
+            Yii::$app->session->setFlash("success", Yii::t('app/default', 'SUCCESS_UPDATE'));
             return true;
         } else {
             //print_r($this->getErrors());die;
-            Yii::$app->session->setFlash("error", Yii::t('app', 'ERROR_UPDATE'));
+            Yii::$app->session->setFlash("error", Yii::t('app/default', 'ERROR_UPDATE'));
             return false;
         }
     }

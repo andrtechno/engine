@@ -33,13 +33,13 @@ class CommonController extends Controller
                 'error' => [
                     '404' => Yii::t('app/error', '404')
                 ],
-                'cancel' => Yii::t('app', 'CANCEL'),
-                'send' => Yii::t('app', 'SEND'),
-                'delete' => Yii::t('app', 'DELETE'),
-                'save' => Yii::t('app', 'SAVE'),
-                'close' => Yii::t('app', 'CLOSE'),
-                'ok' => Yii::t('app', 'OK'),
-                'loading' => Yii::t('app', 'LOADING'),
+                'cancel' => Yii::t('app/default', 'CANCEL'),
+                'send' => Yii::t('app/default', 'SEND'),
+                'delete' => Yii::t('app/default', 'DELETE'),
+                'save' => Yii::t('app/default', 'SAVE'),
+                'close' => Yii::t('app/default', 'CLOSE'),
+                'ok' => Yii::t('app/default', 'OK'),
+                'loading' => Yii::t('app/default', 'LOADING'),
             ];
             $languagePath = (Yii::$app->language != Yii::$app->languageManager->default->code) ? '/' . Yii::$app->language : '';
             $this->view->registerJs('

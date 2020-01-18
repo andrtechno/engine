@@ -32,7 +32,7 @@ class TagCloudForm extends WidgetFormModel {
                 'submit' => array(
                     'type' => 'submit',
                     'class' => 'btn btn-success',
-                    'label' => Yii::t('app', 'SAVE')
+                    'label' => Yii::t('app/default', 'SAVE')
                 )
             )
         );

@@ -117,7 +117,7 @@ class WebController extends CommonController
         $this->layout = 'error';
         return $this->render('no-javascript', [
             'name' => '',
-            'message' => Yii::t('app', 'NO_JAVASCRIPT')
+            'message' => Yii::t('app/default', 'NO_JAVASCRIPT')
         ]);
     }
 

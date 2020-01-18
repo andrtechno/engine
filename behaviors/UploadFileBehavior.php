@@ -141,7 +141,7 @@ class UploadFileBehavior extends Behavior
             $params['key'] = $owner->getPrimaryKey();
 
 
-            return Html::a(Html::icon('delete') . ' ' . Yii::t('app', 'DELETE'), $params, ['class' => 'btn btn-sm btn-outline-danger']);
+            return Html::a(Html::icon('delete') . ' ' . Yii::t('app/default', 'DELETE'), $params, ['class' => 'btn btn-sm btn-outline-danger']);
         }
     }
 

@@ -38,7 +38,7 @@ class DeleteFileAction extends Action
                     if (Yii::$app->request->isAjax) {
                         Yii::$app->response->format = Response::FORMAT_JSON;
                         $json['status'] = 'success';
-                        $json['message'] = Yii::t('app', 'SUCCESS_RECORD_DELETE');
+                        $json['message'] = Yii::t('app/default', 'SUCCESS_RECORD_DELETE');
                     } else {
                         return Yii::$app->response->redirect(Yii::$app->request->get('redirect'));
                     }

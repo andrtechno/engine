@@ -25,14 +25,14 @@ class DeleteAction extends Action
                     if (!in_array($obj->primaryKey, $model->disallow_delete)) {
                         $obj->delete();
                         $json['success'] = true;
-                        $json['message'] = Yii::t('app', 'SUCCESS_RECORD_DELETE');
+                        $json['message'] = Yii::t('app/default', 'SUCCESS_RECORD_DELETE');
                     } else {
-                        $json['message'] = Yii::t('app', 'ERROR_RECORD_DELETE');
+                        $json['message'] = Yii::t('app/default', 'ERROR_RECORD_DELETE');
                     }
                 }
             }
         }else{
-            $json['message'] = Yii::t('app', 'Forbidden');
+            $json['message'] = Yii::t('app/default', 'Forbidden');
         }
 
         return $json;

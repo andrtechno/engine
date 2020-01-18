@@ -5,7 +5,7 @@ use yii\widgets\DetailView;
 if ($data['havePet'][0]->answer == 1) {
     $catIndex = $dogIndex = $petIndex = 0;
 
-    echo Html::tag('div', \Yii::t('app', 'You have {n, plural, =1{# pet} other{# pets}}', [
+    echo Html::tag('div', \Yii::t('app/default', 'You have {n, plural, =1{# pet} other{# pets}}', [
         'n' => count($data['type'])
     ]));
 

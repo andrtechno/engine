@@ -22,7 +22,7 @@ class MoveNodeAction extends Action
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         if (!$this->successMessage)
-            $this->successMessage = Yii::t('app', 'NODE_MOVE');
+            $this->successMessage = Yii::t('app/default', 'NODE_MOVE');
 
 
         $json = [];

@@ -124,7 +124,7 @@ class CheckboxColumn extends BaseCheckboxColumn
     {
         $this->customActions = [
             [
-                'label' => Yii::t('app', 'DELETE'),
+                'label' => Yii::t('app/default', 'DELETE'),
                 'url' => ['delete'],
                 'icon' => 'delete',
                 'options' => [
@@ -144,7 +144,7 @@ class CheckboxColumn extends BaseCheckboxColumn
     public function getDefaultActionOptions()
     {
         return [
-            //'data-confirm' => Yii::t('app', 'CONFIRM'),
+            //'data-confirm' => Yii::t('app/default', 'CONFIRM'),
             'class' => 'dropdown-item',
             //'data-pjax' => 0,
             'onClick' => 'gridAction(this); return false;'

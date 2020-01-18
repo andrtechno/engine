@@ -11,7 +11,7 @@ class TagCloud extends Widget {
     public $alias = 'ext.blocks.tagcloud';
 
     public function getTitle() {
-        return Yii::t('app', 'Облако');
+        return Yii::t('app/default', 'Облако');
     }
 
     public function run() {

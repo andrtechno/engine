@@ -21,10 +21,10 @@ class SwitchNodeAction extends Action
     public function run()
     {
         if (!$this->offMessage)
-            $this->offMessage = Yii::t('app', 'SWITCH_OFF');
+            $this->offMessage = Yii::t('app/default', 'SWITCH_OFF');
 
         if (!$this->onMessage)
-            $this->onMessage = Yii::t('app', 'SWITCH_ON');
+            $this->onMessage = Yii::t('app/default', 'SWITCH_ON');
 
         Yii::$app->response->format = Response::FORMAT_JSON;
         $json = [];

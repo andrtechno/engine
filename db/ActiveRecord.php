@@ -44,6 +44,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
     public $translationClass;
     private $_microtime;
     //  public $translationOptions;
+    protected $_hash;
 
     /**
      * @param null|string $redirect
@@ -54,9 +55,9 @@ class ActiveRecord extends \yii\db\ActiveRecord
         $redirect = ($redirect) ? $redirect : \yii\helpers\Url::to(['index']);
 
         $html = '';
-        $html .= Html::submitButton(Yii::t('app', $this->isNewRecord ? 'CREATE' : 'SAVE'), ['class' => 'btn btn-success']);
+        $html .= Html::submitButton(Yii::t('app/default', $this->isNewRecord ? 'CREATE' : 'SAVE'), ['class' => 'btn btn-success']);
         if (!$this->isNewRecord)
-            $html .= Html::submitButton(Yii::t('app', $this->isNewRecord ? 'CREATE_RETURN' : 'SAVE_RETURN'), ['class' => 'btn btn-link', 'value' => $redirect, 'name' => 'redirect']);
+            $html .= Html::submitButton(Yii::t('app/default', $this->isNewRecord ? 'CREATE_RETURN' : 'SAVE_RETURN'), ['class' => 'btn btn-link', 'value' => $redirect, 'name' => 'redirect']);
         return $html;
     }
 
@@ -191,9 +192,9 @@ class ActiveRecord extends \yii\db\ActiveRecord
             echo ' done (time: ' . sprintf('%.3f', microtime(true) - $this->_microtime) . "s)\n";
         }
         if ($insert) {
-            //  Yii::$app->session->setFlash('success', Yii::t('app', 'SUCCESS_SAVE'));
+            //  Yii::$app->session->setFlash('success', Yii::t('app/default', 'SUCCESS_SAVE'));
         } else {
-            //  Yii::$app->session->setFlash('success', Yii::t('app', 'SUCCESS_UPDATE'));
+            //  Yii::$app->session->setFlash('success', Yii::t('app/default', 'SUCCESS_UPDATE'));
         }
 
 
@@ -354,7 +355,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
         if (static::route) {
             return Yii::$app->urlManager->createUrl(static::route . '/' . static::route_create);
         } else {
-            throw new Exception(Yii::t('app', 'NOTFOUND_CONST_AR', [
+            throw new Exception(Yii::t('app/default', 'NOTFOUND_CONST_AR', [
                 'param' => 'route_create',
             ]));
         }
@@ -369,7 +370,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 'id' => $this->id
             ]);
         } else {
-            throw new Exception(Yii::t('app', 'NOTFOUND_CONST_AR', [
+            throw new Exception(Yii::t('app/default', 'NOTFOUND_CONST_AR', [
                 'param' => 'route_delete',
                 'model' => get_class($this)
             ]));
@@ -384,7 +385,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 'id' => $this->id
             ]);
         } else {
-            throw new Exception(Yii::t('app', 'NOTFOUND_CONST_AR', [
+            throw new Exception(Yii::t('app/default', 'NOTFOUND_CONST_AR', [
                 'param}' => 'route_update',
                 'model}' => get_class($this)
             ]));
@@ -456,22 +457,28 @@ class ActiveRecord extends \yii\db\ActiveRecord
     public function getSwitchUrl()
     {
         if (static::route) {
-            return Yii::$app->urlManager->createUrl(static::route . '/' . static::route_switch, array(
+            return Yii::$app->urlManager->createUrl(static::route . '/' . static::route_switch, [
                 'model' => get_class($this),
                 'switch' => 0,
                 'id' => $this->id
-            ));
+            ]);
         } else {
-            throw new Exception(Yii::t('app', 'NOTFOUND_CONST_AR', array(
+            throw new Exception(Yii::t('app/default', 'NOTFOUND_CONST_AR', [
                 'param' => 'route_switch',
                 'model' => get_class($this)
-            )));
+            ]));
         }
     }
 
+
     public function getHash()
     {
-        return CMS::hash('\\' . get_class($this));
+        if (!$this->_hash) {
+            $this->_hash = CMS::hash('\\' . get_class($this));
+        } else {
+            $this->_hash = CMS::hash($this->hash);
+        }
+        return $this->_hash;
     }
 
 }

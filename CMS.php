@@ -155,7 +155,7 @@ class CMS
             $img->load($fullPath);
             if ($error) {
                 $img->grayscale();
-                $img->text(Yii::t('app', 'FILE_NOT_FOUND'), Yii::getAlias('@vendor/panix/engine/assets/assets/fonts') . '/Exo2-Light.ttf', $img->getWidth() / 100 * 8, [114, 114, 114], $img::CORNER_CENTER_BOTTOM, 0, $img->getHeight() / 100 * 10, 0, 0);
+                $img->text(Yii::t('app/default', 'FILE_NOT_FOUND'), Yii::getAlias('@vendor/panix/engine/assets/assets/fonts') . '/Exo2-Light.ttf', $img->getWidth() / 100 * 8, [114, 114, 114], $img::CORNER_CENTER_BOTTOM, 0, $img->getHeight() / 100 * 10, 0, 0);
             }
             if (isset($options['watermark']) && $options['watermark']) {
                 $offsetX = isset($configApp->attachment_wm_offsetx) ? $configApp->attachment_wm_offsetx : 10;
@@ -389,11 +389,11 @@ class CMS
         $t2 = $age % 100;
         $a_str = "";
         if ($t1 == 1)
-            $a_str = Yii::t('app', 'YEARS', 1);
+            $a_str = Yii::t('app/default', 'YEARS', 1);
         else if (($t1 >= 2) && ($t1 <= 4))
-            $a_str = Yii::t('app', 'YEARS', 2);
+            $a_str = Yii::t('app/default', 'YEARS', 2);
         if (($t1 >= 5) && ($t1 <= 9) || ($t1 == 0) || ($t2 >= 11) && ($t2 <= 19))
-            $a_str = Yii::t('app', 'YEARS', 0);
+            $a_str = Yii::t('app/default', 'YEARS', 0);
         return $a_str;
     }
 
@@ -446,7 +446,7 @@ class CMS
         $hours = floor($min / 60);
         $seconds = $sec % 60;
         $minutes = $min % 60;
-        $content = ($hours == 0) ? (($min == 0) ? $seconds . " " . Yii::t('app', 'SEC') . "." : $min . " " . Yii::t('app', 'MIN') . ". " . $seconds . " " . Yii::t('app', 'SEC') . ".") : $hours . " " . Yii::t('app', 'HOUR') . ". " . $minutes . " " . Yii::t('app', 'MIN') . ". " . $seconds . " " . Yii::t('app', 'SEC') . ".";
+        $content = ($hours == 0) ? (($min == 0) ? $seconds . " " . Yii::t('app/default', 'SEC') . "." : $min . " " . Yii::t('app/default', 'MIN') . ". " . $seconds . " " . Yii::t('app/default', 'SEC') . ".") : $hours . " " . Yii::t('app/default', 'HOUR') . ". " . $minutes . " " . Yii::t('app/default', 'MIN') . ". " . $seconds . " " . Yii::t('app/default', 'SEC') . ".";
         return $content;
     }
 
@@ -677,8 +677,8 @@ class CMS
         $html = Html::a($user->login . ' <b class="caret caret-up"></b>', '#', array('class' => 'btn btn-link dropdown-toggle', 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "false"));
         return '<div style="position:relative;" class="btn-group">' . $html . '
             <ul class="dropdown-menu drop-up">
-            <li><a href="' . Yii::$app->createUrl('/users/profile/view', array('user_id' => $user->id)) . '"><i class="icon-user"></i> ' . Yii::t('app', 'PROFILE') . '</a></li>
-            <li><a href="' . $user->getUpdateUrl() . '" target="_blank"><i class="icon-edit"></i> ' . Yii::t('app', 'UPDATE', 1) . '</a></li>
+            <li><a href="' . Yii::$app->createUrl('/users/profile/view', array('user_id' => $user->id)) . '"><i class="icon-user"></i> ' . Yii::t('app/default', 'PROFILE') . '</a></li>
+            <li><a href="' . $user->getUpdateUrl() . '" target="_blank"><i class="icon-edit"></i> ' . Yii::t('app/default', 'UPDATE', 1) . '</a></li>
             </ul>
             </div>';
     }
@@ -698,7 +698,7 @@ class CMS
         if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
             if (self::getMemoryLimit() > self::MEMORY_LIMIT) {
                 $geoIp = Yii::$app->geoip->ip($ip);
-                $title = Yii::t('app', 'COUNTRY') . ': ' . Yii::t('app/geoip_country', $geoIp->country) . '/' . Yii::t('app/geoip_city', $geoIp->city) . ' - ' . $geoIp->timezone;
+                $title = Yii::t('app/default', 'COUNTRY') . ': ' . Yii::t('app/geoip_country', $geoIp->country) . '/' . Yii::t('app/geoip_city', $geoIp->city) . ' - ' . $geoIp->timezone;
                 $options['title'] = $title;
                 if ($geoIp->isoCode) {
                     $image = Html::img('/uploads/language/' . strtolower($geoIp->isoCode) . '.png', $options) . ' ';

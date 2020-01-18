@@ -28,10 +28,10 @@ class RenameNodeAction extends Action
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         if (!$this->successMessage)
-            $this->successMessage = Yii::t('app', 'NODE_RENAME_SUCCESS');
+            $this->successMessage = Yii::t('app/default', 'NODE_RENAME_SUCCESS');
 
         if (!$this->errorMessage)
-            $this->errorMessage = Yii::t('app', 'NODE_RENAME_ERROR');
+            $this->errorMessage = Yii::t('app/default', 'NODE_RENAME_ERROR');
 
 
         $json = [];

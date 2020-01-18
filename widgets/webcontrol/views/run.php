@@ -50,7 +50,7 @@ use panix\engine\Html;
                         ?>
                         <?php
                         echo Html::a('<i class="icon-edit"></i>', $dataModel->getUpdateUrl(), array(
-                            'title' => Yii::t('app', 'UPDATE', 0),
+                            'title' => Yii::t('app/default', 'UPDATE', 0),
                             'target' => '_blank',
                             'data-toggle' => 'admin-tooltip',
                             'class' => 'webpanel-btn webpanel-btn-xs webpanel-btn-default'
@@ -79,10 +79,10 @@ use panix\engine\Html;
                 <?php } ?>
                 <li class="dropdown"><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-target="#" class="dropdown-toggle" href="/testurl"><?= Yii::$app->user->getDisplayName(); ?></a>
                     <ul class="dropdown-menu webpanel-dropdown-menu">
-                        <li><?= Html::a(Yii::t('app', 'UPDATE', 0), ['/admin/users/default/update', 'id' => Yii::$app->user->id]) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'ADMIN_PANEL'), ['/admin/users/default/update', 'id' => Yii::$app->user->id]) ?></li>
+                        <li><?= Html::a(Yii::t('app/default', 'UPDATE', 0), ['/admin/users/default/update', 'id' => Yii::$app->user->id]) ?></li>
+                        <li><?= Html::a(Yii::t('app/default', 'ADMIN_PANEL'), ['/admin/users/default/update', 'id' => Yii::$app->user->id]) ?></li>
                         <li role="separator" class="divider"></li>
-                        <li><?= Html::a(Yii::t('app', 'LOGOUT'), ['/admin/auth/logout']) ?></li>
+                        <li><?= Html::a(Yii::t('app/default', 'LOGOUT'), ['/admin/auth/logout']) ?></li>
 
 
                     </ul>

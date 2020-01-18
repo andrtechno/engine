@@ -41,7 +41,7 @@ class AdminController extends CommonController
     public function redirectPage($isNewRecord, $post, $action = ['index'])
     {
 
-        Yii::$app->session->setFlash('success', Yii::t('app', ($isNewRecord) ? 'SUCCESS_CREATE' : 'SUCCESS_UPDATE'));
+        Yii::$app->session->setFlash('success', Yii::t('app/default', ($isNewRecord) ? 'SUCCESS_CREATE' : 'SUCCESS_UPDATE'));
         $redirect = (isset($post['redirect'])) ? $post['redirect'] : Yii::$app->request->url;
 
         if ($isNewRecord) {
@@ -83,7 +83,7 @@ class AdminController extends CommonController
             && get_class($this) !== 'panix\mod\admin\controllers\AuthController'
             && get_class($this) !== 'panix\mod\admin\controllers\DefaultController'
         ) {
-            throw new ForbiddenHttpException(Yii::t('app', 'ACCESS_DENIED'));
+            throw new ForbiddenHttpException(Yii::t('app/default', 'ACCESS_DENIED'));
         }*/
 
         Yii::setAlias('@theme', Yii::getAlias("@app/web/themes/dashboard"));

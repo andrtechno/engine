@@ -17,7 +17,19 @@ class WebModule extends Module
     public $assetsUrl;
     public $count = false;
     public $routes = [];
+    /**
+     * @var array Model classes, e.g., ["User" => "app\modules\user\models\User"]
+     * Usage:
+     *   $user = Yii::$app->getModule("user")->model("User", $config);
+     *   (equivalent to)
+     *   $user = new \app\modules\user\models\User($config);
+     *
+     * The model classes here will be merged with/override the [[getDefaultModelClasses()|default ones]]
+     */
     public $modelClasses = [];
+    /**
+     * @var array Storage for models based on $modelClasses
+     */
     protected $_models;
     public $icon;
     public $uploadPath;
@@ -44,6 +56,25 @@ class WebModule extends Module
         return $list;
     }
 
+    /**
+     * Get object instance of model
+     *
+     * @param string $name
+     * @param array $config
+     * @return \yii\db\ActiveRecord
+     */
+    public function model($name, $config = [])
+    {
+        // return object if already created
+        if (!empty($this->_models[$name])) {
+            return $this->_models[$name];
+        }
+
+        // create model and return it
+        $className = $this->modelClasses[ucfirst($name)];
+        $this->_models[$name] = Yii::createObject(array_merge(["class" => $className], $config));
+        return $this->_models[$name];
+    }
 
     public function init()
     {
@@ -79,8 +110,6 @@ class WebModule extends Module
             $this->modelClasses = array_merge($this->getDefaultModelClasses(), $this->modelClasses);
         }
 
-
-        //Yii::configure($this, ['config'=>(array) Yii::$app->settings->get($this->id)]);
 
         parent::init();
     }

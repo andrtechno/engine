@@ -34,12 +34,12 @@ class SwitchAction extends Action
                             $json['success'] = true;
                             $json['url'] = '/' . Yii::$app->request->pathInfo . "?id={$_REQUEST['id']}&value={$sw}";
                             $json['value'] = $sw;
-                            $json['message'] = Yii::t('app', $message);
+                            $json['message'] = Yii::t('app/default', $message);
                         } else {
-                            $json['message'] = Yii::t('app', 'ERROR_RECORD_SWITCH');
+                            $json['message'] = Yii::t('app/default', 'ERROR_RECORD_SWITCH');
                         }
                     } else {
-                        $json['message'] = Yii::t('app', 'ERROR_RECORD_SWITCH');
+                        $json['message'] = Yii::t('app/default', 'ERROR_RECORD_SWITCH');
                     }
                 }
             } else {

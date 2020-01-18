@@ -22,7 +22,7 @@ class RemoveFileAction extends Action
             $fullPath = Yii::getAlias($this->path) . DIRECTORY_SEPARATOR . Yii::$app->request->get('file');
             if (file_exists($fullPath)) {
                 unlink($fullPath);
-                Yii::$app->session->addFlash('success', Yii::t('app', 'FILE_SUCCESS_DELETE'));
+                Yii::$app->session->addFlash('success', Yii::t('app/default', 'FILE_SUCCESS_DELETE'));
                 return Yii::$app->response->redirect($this->redirect);
             }
         }

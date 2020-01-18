@@ -145,12 +145,12 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function(e) {
     {
         $this->customActions = [
             [
-                'label' => Yii::t('app', 'DELETE'),
+                'label' => Yii::t('app/default', 'DELETE'),
                 'url' => ['delete'],
                 'icon' => 'delete',
                 'options' => [
                     'class' => 'dropdown-item',
-                    'data-confirm' => Yii::t('app', 'CONFIRM'),
+                    'data-confirm' => Yii::t('app/default', 'CONFIRM'),
                 ]
             ]
         ];
@@ -164,7 +164,7 @@ jQuery(document).on('click', '#{$id} input[name=\"$name\"]', function(e) {
     public function getDefaultActionOptions()
     {
         return [
-            'data-confirm' => Yii::t('app', 'CONFIRM'),
+            'data-confirm' => Yii::t('app/default', 'CONFIRM'),
             'class' => 'dropdown-item',
             // 'model' => $this->dataProvider->modelClass,
             'onClick' => strtr('return $.fn.yiiGridView.runAction(":grid", this);', [

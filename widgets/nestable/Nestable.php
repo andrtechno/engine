@@ -252,8 +252,8 @@ class Nestable extends Widget
     {
         $options = [
             'namePlaceholder' => $this->getPlaceholderForName(),
-            'deleteAlert' => Yii::t('app', 'The nobe will be removed together with the children. Are you sure?'),
-            'newNodeTitle' => Yii::t('app', 'Enter the new node name'),
+            'deleteAlert' => Yii::t('app/default', 'The nobe will be removed together with the children. Are you sure?'),
+            'newNodeTitle' => Yii::t('app/default', 'Enter the new node name'),
         ];
 
         $controller = Yii::$app->controller;
@@ -272,7 +272,7 @@ class Nestable extends Widget
      */
     public function getPlaceholderForName()
     {
-        return Yii::t('app', 'Node name');
+        return Yii::t('app/default', 'Node name');
     }
 
     /**
@@ -283,15 +283,15 @@ class Nestable extends Widget
         echo Html::beginTag('div', ['class' => "{$this->id}-nestable-menu"]);
 
         echo Html::beginTag('div', ['class' => 'btn-group']);
-        echo Html::button(Yii::t('app', 'Add node'), [
+        echo Html::button(Yii::t('app/default', 'Add node'), [
             'data-action' => 'create-item',
             'class' => 'btn btn-success'
         ]);
-        echo Html::button(Yii::t('app', 'Collapse all'), [
+        echo Html::button(Yii::t('app/default', 'Collapse all'), [
             'data-action' => 'collapse-all',
             'class' => 'btn btn-default'
         ]);
-        echo Html::button(Yii::t('app', 'Expand all'), [
+        echo Html::button(Yii::t('app/default', 'Expand all'), [
             'data-action' => 'expand-all',
             'class' => 'btn btn-default',
             'style' => 'display: none'
@@ -350,16 +350,16 @@ class Nestable extends Widget
         echo Html::input('text', null, $item['name'], ['class' => 'dd-input-name', 'placeholder' => $this->getPlaceholderForName()]);
 
         echo Html::beginTag('div', ['class' => 'btn-group']);
-        echo Html::button(Yii::t('app', 'Save'), [
+        echo Html::button(Yii::t('app/default', 'Save'), [
             'data-action' => 'save',
             'class' => 'btn btn-success btn-sm',
         ]);
-        echo Html::a(Yii::t('app', 'Advanced editing'), $item['update-url'], [
+        echo Html::a(Yii::t('app/default', 'Advanced editing'), $item['update-url'], [
             'data-action' => 'advanced-editing',
             'class' => 'btn btn-default btn-sm',
             'target' => '_blank'
         ]);
-        echo Html::button(Yii::t('app', 'Delete'), [
+        echo Html::button(Yii::t('app/default', 'Delete'), [
             'data-action' => 'delete',
             'class' => 'btn btn-danger btn-sm'
         ]);

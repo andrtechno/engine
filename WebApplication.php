@@ -47,7 +47,7 @@ class WebApplication extends Application
 
     public static function powered()
     {
-        return Yii::t('app', 'COPYRIGHT', [
+        return Yii::t('app/default', 'COPYRIGHT', [
             'year' => date('Y'),
             'by' => Html::a('PIXELION CMS', '//pixelion.com.ua')
         ]);
