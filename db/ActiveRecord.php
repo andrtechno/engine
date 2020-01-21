@@ -335,6 +335,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }, 3600);
         return $next;
     }
+
     public function getPrev_OLD()
     {
         $prev = static::getDb()->cache(function () {
@@ -470,15 +471,20 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }
     }
 
-
     public function getHash()
     {
         if (!$this->_hash) {
             $this->_hash = CMS::hash('\\' . get_class($this));
         } else {
-            $this->_hash = CMS::hash($this->hash);
+            $this->_hash = CMS::hash($this->_hash);
         }
         return $this->_hash;
+    }
+
+    public function setHash($value)
+    {
+
+        $this->_hash = $value;
     }
 
 }
