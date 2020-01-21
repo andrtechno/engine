@@ -471,19 +471,17 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }
     }
 
+
     public function getHash()
     {
         if (!$this->_hash) {
-            $this->_hash = CMS::hash('\\' . get_class($this));
-        } else {
-            $this->_hash = CMS::hash($this->_hash);
+            $this->_hash = '\\' . get_class($this);
         }
-        return $this->_hash;
+        return CMS::hash($this->_hash);
     }
 
     public function setHash($value)
     {
-
         $this->_hash = $value;
     }
 
