@@ -39,15 +39,16 @@ class ImageHandler extends Component
     const IMG_JPEG = 2;
     const IMG_PNG = 3;
 
-    const CORNER_LEFT_TOP = 1;
-    const CORNER_RIGHT_TOP = 2;
-    const CORNER_LEFT_BOTTOM = 3;
-    const CORNER_RIGHT_BOTTOM = 4;
-    const CORNER_CENTER = 5;
-    const CORNER_CENTER_TOP = 6;
-    const CORNER_CENTER_BOTTOM = 7;
-    const CORNER_LEFT_CENTER = 8;
-    const CORNER_RIGHT_CENTER = 9;
+    const POS_LEFT_TOP = 1;
+    const POS_RIGHT_TOP = 2;
+    const POS_LEFT_BOTTOM = 3;
+    const POS_RIGHT_BOTTOM = 4;
+    const POS_CENTER = 5;
+    const POS_CENTER_TOP = 6;
+    const POS_CENTER_BOTTOM = 7;
+    const POS_LEFT_CENTER = 8;
+    const POS_RIGHT_CENTER = 9;
+    const POS_REPEAT = 10;
 
     const FLIP_HORIZONTAL = 1;
     const FLIP_VERTICAL = 2;
@@ -521,7 +522,7 @@ class ImageHandler extends Component
         return $this;
     }
 
-    public function watermark($watermarkFile, $offsetX, $offsetY, $corner = self::CORNER_RIGHT_BOTTOM, $zoom = false)
+    public function watermark($watermarkFile, $offsetX, $offsetY, $corner = self::POS_RIGHT_BOTTOM, $zoom = false)
     {
 
         $this->checkLoaded();
@@ -548,50 +549,86 @@ class ImageHandler extends Component
                 }
 
                 switch ($corner) {
-                    case self::CORNER_LEFT_TOP:
+                    case self::POS_LEFT_TOP:
                         $posX = $offsetX;
                         $posY = $offsetY;
                         break;
-                    case self::CORNER_RIGHT_TOP:
+                    case self::POS_RIGHT_TOP:
                         $posX = $this->width - $watermarkWidth - $offsetX;
                         $posY = $offsetY;
                         break;
-                    case self::CORNER_LEFT_BOTTOM:
+                    case self::POS_LEFT_BOTTOM:
                         $posX = $offsetX;
                         $posY = $this->height - $watermarkHeight - $offsetY;
                         break;
-                    case self::CORNER_RIGHT_BOTTOM:
+                    case self::POS_RIGHT_BOTTOM:
                         $posX = $this->width - $watermarkWidth - $offsetX;
                         $posY = $this->height - $watermarkHeight - $offsetY;
                         break;
-                    case self::CORNER_CENTER:
+                    case self::POS_CENTER:
                         $posX = floor(($this->width - $watermarkWidth) / 2);
                         $posY = floor(($this->height - $watermarkHeight) / 2);
                         break;
-                    case self::CORNER_CENTER_TOP:
+                    case self::POS_CENTER_TOP:
                         $posX = floor(($this->width - $watermarkWidth) / 2);
                         $posY = $offsetY;
                         break;
-                    case self::CORNER_CENTER_BOTTOM:
+                    case self::POS_CENTER_BOTTOM:
                         $posX = floor(($this->width - $watermarkWidth) / 2);
                         $posY = $this->height - $watermarkHeight - $offsetY;
                         break;
-                    case self::CORNER_LEFT_CENTER:
+                    case self::POS_LEFT_CENTER:
                         $posX = $offsetX;
                         $posY = floor(($this->height - $watermarkHeight) / 2);
                         break;
-                    case self::CORNER_RIGHT_CENTER:
+                    case self::POS_RIGHT_CENTER:
                         $posX = $this->width - $watermarkWidth - $offsetX;
                         $posY = floor(($this->height - $watermarkHeight) / 2);
+                        break;
+                    case self::POS_REPEAT:
+                        $posX = 0;
+                        $posY = 0;
+                        while ($posY <= $this->getHeight()) {
+                            imagecopyresampled(
+                                $this->image,
+                                $wImg['image'],
+                                $posX,
+                                $posY,
+                                0,
+                                0,
+                                $watermarkWidth,
+                                $watermarkHeight,
+                                $wImg['width'],
+                                $wImg['height']
+                            );
+
+                            $posX += $watermarkWidth;
+                            if ($posX >= $this->getWidth()) {
+                                $posX = 0;
+                                $posY += $watermarkHeight;
+                            }
+                        }
+
                         break;
                     default:
                         throw new Exception('Invalid $corner value');
                 }
                 // $this->preserveTransparency($wImg['image']);
                 // $this->preserveAlpha();
-                imagecopyresampled(
-                    $this->image, $wImg['image'], $posX, $posY, 0, 0, $watermarkWidth, $watermarkHeight, $wImg['width'], $wImg['height']
-                );
+                if (self::POS_REPEAT != 10) {
+                    imagecopyresampled(
+                        $this->image,
+                        $wImg['image'],
+                        $posX,
+                        $posY,
+                        0,
+                        0,
+                        $watermarkWidth,
+                        $watermarkHeight,
+                        $wImg['width'],
+                        $wImg['height']
+                    );
+                }
 
                 imagedestroy($wImg['image']);
 
@@ -692,7 +729,7 @@ class ImageHandler extends Component
         return $this;
     }
 
-    public function text($text, $fontFile, $size = 12, $color = [0, 0, 0], $corner = self::CORNER_LEFT_TOP, $offsetX = 0, $offsetY = 0, $angle = 0, $alpha = 0)
+    public function text($text, $fontFile, $size = 12, $color = [0, 0, 0], $corner = self::POS_LEFT_TOP, $offsetX = 0, $offsetY = 0, $angle = 0, $alpha = 0)
     {
         $this->checkLoaded();
 
@@ -702,39 +739,39 @@ class ImageHandler extends Component
 
 
         switch ($corner) {
-            case self::CORNER_LEFT_TOP:
+            case self::POS_LEFT_TOP:
                 $posX = $offsetX;
                 $posY = $offsetY;
                 break;
-            case self::CORNER_RIGHT_TOP:
+            case self::POS_RIGHT_TOP:
                 $posX = $this->width - $textWidth - $offsetX;
                 $posY = $offsetY;
                 break;
-            case self::CORNER_LEFT_BOTTOM:
+            case self::POS_LEFT_BOTTOM:
                 $posX = $offsetX;
                 $posY = $this->height - $textHeight - $offsetY;
                 break;
-            case self::CORNER_RIGHT_BOTTOM:
+            case self::POS_RIGHT_BOTTOM:
                 $posX = $this->width - $textWidth - $offsetX;
                 $posY = $this->height - $textHeight - $offsetY;
                 break;
-            case self::CORNER_CENTER:
+            case self::POS_CENTER:
                 $posX = floor(($this->width - $textWidth) / 2);
                 $posY = floor(($this->height - $textHeight) / 2);
                 break;
-            case self::CORNER_CENTER_TOP:
+            case self::POS_CENTER_TOP:
                 $posX = floor(($this->width - $textWidth) / 2);
                 $posY = $offsetY;
                 break;
-            case self::CORNER_CENTER_BOTTOM:
+            case self::POS_CENTER_BOTTOM:
                 $posX = floor(($this->width - $textWidth) / 2);
                 $posY = $this->height - $textHeight - $offsetY;
                 break;
-            case self::CORNER_LEFT_CENTER:
+            case self::POS_LEFT_CENTER:
                 $posX = $offsetX;
                 $posY = floor(($this->height - $textHeight) / 2);
                 break;
-            case self::CORNER_RIGHT_CENTER:
+            case self::POS_RIGHT_CENTER:
                 $posX = $this->width - $textWidth - $offsetX;
                 $posY = floor(($this->height - $textHeight) / 2);
                 break;
