@@ -81,7 +81,7 @@ class TranslateBehavior extends Behavior
         if (!$lang)
             throw new InvalidConfigException('Language not found ' . $language);
 
-        /* @var ActiveRecord[] $translations */
+        /* @var ActiveRecord $translations[] */
         $translations = $this->owner->{$this->relation};
 
         foreach ($translations as $translation) {
@@ -137,6 +137,7 @@ class TranslateBehavior extends Behavior
     public function afterDelete()
     {
         foreach ($this->owner->{$this->relation} as $translation) {
+            /* @var ActiveRecord $translation */
             $translation::deleteAll(['object_id' => $this->owner->getPrimaryKey()]);
         }
         return true;
