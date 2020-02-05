@@ -15,6 +15,6 @@ class ListView extends \yii\widgets\ListView
         if (!$this->emptyText)
             $this->emptyText = Yii::t('app/default', 'NO_INFO');
 
-        $this->pager = ArrayHelper::merge(['class' => LinkPager::class], $this->pager);
+        $this->pager = ArrayHelper::merge(['class' => '\panix\engine\widgets\LinkPager'], $this->pager);
     }
 }

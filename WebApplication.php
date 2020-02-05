@@ -23,7 +23,6 @@ class WebApplication extends Application
 
     public function run()
     {
-        $this->name = $this->settings->get('app', 'sitename');
         $langManager = $this->languageManager;
         $this->language = (isset($langManager->default->code)) ? $langManager->default->code : $this->language;
         return parent::run();

@@ -81,7 +81,7 @@ class TranslateBehavior extends Behavior
         if (!$lang)
             throw new InvalidConfigException('Language not found ' . $language);
 
-        /* @var ActiveRecord $translations[] */
+        /* @var ActiveRecord $translations [] */
         $translations = $this->owner->{$this->relation};
 
         foreach ($translations as $translation) {
@@ -192,8 +192,10 @@ class TranslateBehavior extends Behavior
         } else {
             $api = new YandexTranslate();
             foreach ($this->translationAttributes as $attr) {
-                $data = $api->translate([Yii::$app->languageManager->default->code, $language->code], $this->owner->$attr);
-                $translate->{$attr} = (isset($data['text'])) ? $data['text'][0] : $this->owner->$attr;
+               // $data = $api->translate([Yii::$app->languageManager->default->code, $language->code], $this->owner->$attr);
+               // $translate->{$attr} = (isset($data['text'])) ? $data['text'][0] : $this->owner->$attr;
+                $translate->{$attr} = $this->owner->$attr;
+
             }
         }
 

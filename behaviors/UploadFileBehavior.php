@@ -26,7 +26,7 @@ class UploadFileBehavior extends Behavior
     public $extensions = ['jpg', 'jpeg', 'png', 'gif'];
     public $options = [];
     private $oldUploadFiles = [];
-    private $_files=[];
+    private $_files = [];
 
     public function attach($owner)
     {
@@ -56,7 +56,7 @@ class UploadFileBehavior extends Behavior
     public function afterSave()
     {
         foreach ($this->files as $attribute => $dir) {
-               $this->owner->{$attribute} = $this->uploadFile($attribute, $dir, (isset($this->oldUploadFiles[$attribute])) ? $this->oldUploadFiles[$attribute] : null);
+            $this->owner->{$attribute} = $this->uploadFile($attribute, $dir, (isset($this->oldUploadFiles[$attribute])) ? $this->oldUploadFiles[$attribute] : null);
         }
     }
 
@@ -92,7 +92,7 @@ class UploadFileBehavior extends Behavior
 
     }
 
-    public function getImageUrl($attribute, $size = false, $options = [])
+    public function getImageUrl($attribute, $size = false, $options = [], $returnBool = false)
     {
 
         $options = ArrayHelper::merge($this->options, $options);
@@ -100,9 +100,13 @@ class UploadFileBehavior extends Behavior
 
         $owner = $this->owner;
         if ($owner->{$attribute}) {
+
             return CMS::processImage($size, $owner->{$attribute}, $this->files[$attribute], $options);
         } else {
-            return $imgSource = CMS::placeholderUrl(['size' => $size]);
+            if (!$returnBool) {
+                return false;
+            }
+            return CMS::placeholderUrl(['size' => $size]);
         }
     }
 
@@ -237,7 +241,7 @@ class UploadFileBehavior extends Behavior
                 if ($img->getHeight() > Yii::$app->params['maxUploadImageSize']['height'] || $img->getWidth() > Yii::$app->params['maxUploadImageSize']['width']) {
                     $img->resize(Yii::$app->params['maxUploadImageSize']['width'], Yii::$app->params['maxUploadImageSize']['height']);
                 }
-                if($img->save($path . $newFileName)){
+                if ($img->save($path . $newFileName)) {
                     unlink($file->tempName);
                 }
             } else {
@@ -279,7 +283,7 @@ class UploadFileBehavior extends Behavior
                 if ($img->getHeight() > Yii::$app->params['maxUploadImageSize']['height'] || $img->getWidth() > Yii::$app->params['maxUploadImageSize']['width']) {
                     $img->resize(Yii::$app->params['maxUploadImageSize']['width'], Yii::$app->params['maxUploadImageSize']['height']);
                 }
-                if($img->save($path . $newFileName)){
+                if ($img->save($path . $newFileName)) {
                     unlink($file->tempName);
                 }
             } else {
