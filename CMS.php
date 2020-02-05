@@ -155,7 +155,7 @@ class CMS
             $img->load($fullPath);
             if ($error) {
                 $img->grayscale();
-                $img->text(Yii::t('app/default', 'FILE_NOT_FOUND'), Yii::getAlias('@vendor/panix/engine/assets/assets/fonts') . '/Exo2-Light.ttf', $img->getWidth() / 100 * 8, [114, 114, 114], $img::CORNER_CENTER_BOTTOM, 0, $img->getHeight() / 100 * 10, 0, 0);
+                $img->text(Yii::t('app/default', 'FILE_NOT_FOUND'), Yii::getAlias('@vendor/panix/engine/assets/assets/fonts') . '/Exo2-Light.ttf', $img->getWidth() / 100 * 8, [114, 114, 114], $img::POS_CENTER_BOTTOM, 0, $img->getHeight() / 100 * 10, 0, 0);
             }
             if (isset($options['watermark']) && $options['watermark']) {
                 $offsetX = isset($configApp->attachment_wm_offsetx) ? $configApp->attachment_wm_offsetx : 10;
