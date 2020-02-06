@@ -22,6 +22,9 @@ class DeleteNodeAction extends Action
      */
     public function run(int $id)
     {
+        if (!$this->successMessage)
+            $this->successMessage = Yii::t('app/default', 'SUCCESS_RECORD_DELETE');
+		
         Yii::$app->response->format = Response::FORMAT_JSON;
         $json = [];
         $json['success'] = false;

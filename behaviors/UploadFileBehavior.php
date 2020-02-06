@@ -47,11 +47,16 @@ class UploadFileBehavior extends Behavior
     public function afterDelete()
     {
         foreach ($this->files as $attribute => $dir) {
-            if (isset($this->owner->{$attribute})) {
-                unlink(Yii::getAlias($dir) . DIRECTORY_SEPARATOR . $this->owner->{$attribute});
+            $attribute = $this->owner->{$attribute};
+            if (isset($attribute) && !empty($attribute)) {
+                $path = Yii::getAlias($dir) . DIRECTORY_SEPARATOR . $attribute;
+                if (file_exists($path)) {
+                    unlink($path);
+                }
             }
         }
     }
+
 
     public function afterSave()
     {
