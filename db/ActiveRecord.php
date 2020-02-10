@@ -162,12 +162,12 @@ class ActiveRecord extends \yii\db\ActiveRecord
                     $this->user_agent = Yii::$app->request->userAgent;
                 }
             }
-            if (isset($columns['ordern'])) {
+            /*if (isset($columns['ordern'])) {
                 if (!isset($this->ordern)) {
                     $row = static::find()->select('max(ordern) as maxOrdern')->asArray()->one();
                     $this->ordern = $row['maxOrdern'] + 1;
                 }
-            }
+            }*/
         }
         return parent::beforeSave($insert);
     }
