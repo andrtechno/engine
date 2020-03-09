@@ -2,6 +2,7 @@
 
 namespace panix\engine\widgets;
 
+use panix\engine\CMS;
 use panix\engine\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\LinkPager as BasePager;
@@ -12,6 +13,7 @@ use yii\widgets\LinkPager as BasePager;
  */
 class LinkPager extends BasePager
 {
+
 
     public $options = ['class' => 'pagination'];
 
@@ -38,7 +40,7 @@ class LinkPager extends BasePager
 
     public function init()
     {
-
+        $this->maxButtonCount = CMS::isMobile() ? 5 : 10;
         parent::init();
 
     }
@@ -48,7 +50,7 @@ class LinkPager extends BasePager
         $options = $this->linkContainerOptions;
         $linkWrapTag = ArrayHelper::remove($options, 'tag', 'li');
         Html::addCssClass($options, empty($class) ? $this->pageCssClass : $class);
-
+        $options['id']='page-item-'.($page+1);
         if ($active) {
             Html::addCssClass($options, $this->activePageCssClass);
         }
@@ -60,7 +62,7 @@ class LinkPager extends BasePager
             return Html::tag($linkWrapTag, Html::tag($tag, $label, $disabledItemOptions), $options);
         }
         $linkOptions = $this->linkOptions;
-        $linkOptions['data-page'] = $page;
+        $linkOptions['data-page'] = $page + 1;
 
         if ($this->pageType == 'link') {
             return Html::tag($linkWrapTag, Html::a($label, $this->pagination->createUrl($page), $linkOptions), $options);

@@ -20,12 +20,11 @@ class Html extends \yii\helpers\Html
      */
     public static function viber($text, $number = '', $options = [])
     {
-        $number = CMS::phoneFormat($number);
         if (CMS::isMobile()) {
             return parent::a($text, 'viber://add?number=' . $number, $options);
         } else {
             $options['title'] = 'Должен быть устоновлен Viber для ПК';
-            return parent::a($text, 'viber://chat?number=+' . $number, $options);
+            return parent::a($text, 'viber://chat?number=' . $number, $options);
         }
     }
 
@@ -50,7 +49,6 @@ class Html extends \yii\helpers\Html
      */
     public static function whatsapp($text, $number = '', $options = [])
     {
-        $number = CMS::phoneFormat($number);
         return parent::a($text, 'whatsapp://send?phone=+' . $number, $options);
     }
 
@@ -63,7 +61,6 @@ class Html extends \yii\helpers\Html
      */
     public static function skypeCall($text, $number, $options = [])
     {
-        $number = CMS::phoneFormat($number);
         return parent::a($text, "skype:{$number}?call", $options);
     }
 
@@ -76,7 +73,6 @@ class Html extends \yii\helpers\Html
      */
     public static function skypeChat($text, $number, $options = [])
     {
-        $number = CMS::phoneFormat($number);
         return parent::a($text, "skype:{$number}?chat", $options);
     }
 
@@ -84,12 +80,11 @@ class Html extends \yii\helpers\Html
      * Telephone link
      * @param $phone
      * @param array $options
-     * @param null $replace
      * @return string
      */
-    public static function tel($phone, $options = [], $replace = null)
+    public static function tel($phone, $options = [])
     {
-        return parent::a(CMS::phone_number_format($phone, $replace), 'tel:' . CMS::phoneFormat($phone), $options);
+        return parent::a(CMS::phone_format($phone), 'tel:' . $phone, $options);
     }
 
     public static function error($model, $attribute, $options = [])

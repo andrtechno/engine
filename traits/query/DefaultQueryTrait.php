@@ -13,7 +13,7 @@ trait DefaultQueryTrait
     /**
      * Default scope
      */
-    public function init()
+    public function init222()
     {
         /** @var \yii\db\ActiveRecord $modelClass */
         $modelClass = $this->modelClass;

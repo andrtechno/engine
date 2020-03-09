@@ -3,6 +3,7 @@
 namespace panix\engine;
 
 use Yii;
+use panix\engine\console\Application as ConsoleApplication;
 
 class Mailer extends \yii\swiftmailer\Mailer
 {
@@ -11,7 +12,8 @@ class Mailer extends \yii\swiftmailer\Mailer
     {
         $config = Yii::$app->settings->get('app');
         if (isset($config)) {
-            $this->messageConfig['from'] = [$config->email => $config->sitename];
+            $host = (Yii::$app instanceof ConsoleApplication) ? "noHost" : Yii::$app->request->getHostName();
+            $this->messageConfig['from'] = ['no-reply@' . $host => $config->sitename];
             //$this->useFileTransport = true;
             if (isset($config->mailer_transport_smtp_enabled) && $config->mailer_transport_smtp_enabled) {
                 $transport['class'] = 'Swift_SmtpTransport';

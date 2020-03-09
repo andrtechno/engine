@@ -123,8 +123,10 @@ class WebController extends CommonController
 
     public function actionError()
     {
-        /** @var $handler \yii\web\ErrorHandler */
-        /** @var $exception \yii\web\HttpException */
+        /**
+         * @var $handler \yii\web\ErrorHandler
+         * @var $exception \yii\web\HttpException
+         */
         $handler = Yii::$app->errorHandler;
         $exception = $handler->exception;
 
@@ -137,7 +139,7 @@ class WebController extends CommonController
             $this->pageName = Yii::t('app/error', $statusCode);
 
             $this->view->title = $this->pageName;
-            $this->breadcrumbs = [$statusCode];
+            $this->breadcrumbs[] = $statusCode;
             return $this->render('error', [
                 'exception' => $exception,
                 'handler' => $handler,

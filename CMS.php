@@ -58,19 +58,19 @@ class CMS
     }
 
     /**
-     * @param string $number +380XXXXXXX
-     * @param null $replace
+     * @param string $phone +380XXXXXXX
      * @return string
      */
-    public static function phone_number_format($number, $replace = null)
+    public static function phone_format($phone)
     {
-        if (!$replace) {
-            $replace = '$1 ($2) $3-$4-$5';
+        $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+        $phoneNumber = $phoneUtil->parse($phone, 'UA');
+        $phone = $phoneUtil->format($phoneNumber, \libphonenumber\PhoneNumberFormat::NATIONAL);
+        if ($phoneUtil->getRegionCodeForNumber($phoneNumber) == 'UA') {
+            $pattern = "/^(\d{3})\s(\d{3})\s(\d{2})(\d{2})$/";
+            $phone = preg_replace($pattern, '($1) $2-$3-$4', $phone);
         }
-        $pattern = "/^([\+]38)(\d{3})(\d{3})(\d{2})(\d{2})$/";
-        $number = preg_replace($pattern, $replace, $number);
-        return $number;
-
+        return $phone;
     }
 
     public static function isMobile()
@@ -140,9 +140,9 @@ class CMS
         $configApp = Yii::$app->settings->get('app');
 
         //Уделение картинок с папки assets при разработке.
-        if (YII_DEBUG && file_exists($thumbPath . DIRECTORY_SEPARATOR . $filename)) {
-            die($thumbPath);
-            //unlink($thumbPath);
+        if (YII_DEBUG && file_exists($thumbPath)) {
+            //die($thumbPath);
+            unlink($thumbPath);
         }
         $error = false;
         if (!file_exists($fullPath)) {

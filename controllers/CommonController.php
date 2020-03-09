@@ -6,7 +6,7 @@ namespace panix\engine\controllers;
 use Yii;
 use yii\web\HttpException;
 use yii\web\Controller;
-
+use yii\widgets\ActiveForm;
 
 /**
  * Class CommonController
@@ -76,5 +76,13 @@ class CommonController extends Controller
             return parent::render($view, $params);
         }
     }
-
+    protected function performAjaxValidation($model)
+    {
+        if (Yii::$app->request->isAjax && $model->load(\Yii::$app->request->post())) {
+            //Yii::$app->response->format = Response::FORMAT_JSON;
+            //echo json_encode(ActiveForm::validate($model));
+            return $this->asJson(ActiveForm::validate($model));
+            //Yii::$app->end();
+        }
+    }
 }
