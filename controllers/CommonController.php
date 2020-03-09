@@ -76,6 +76,7 @@ class CommonController extends Controller
             return parent::render($view, $params);
         }
     }
+
     protected function performAjaxValidation($model)
     {
         if (Yii::$app->request->isAjax && $model->load(\Yii::$app->request->post())) {
