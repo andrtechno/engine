@@ -209,7 +209,7 @@ class WebController extends CommonController
 
         imagepng($image);
         imagedestroy($image);
-        Yii::$app->end();
+        die;
     }
 
 

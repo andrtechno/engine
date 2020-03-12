@@ -2,27 +2,25 @@
 
 namespace panix\engine\traits\query;
 
+use Yii;
+
 trait TranslateQueryTrait
 {
 
     /**
-     * @param int $id
+     * @param int|null $id
      * @return $this /yii/db/Query
      */
-    public function translate($id = 1)
+    public function translate($id = null)
     {
-        if ($id) {
-            $this->joinWith(['translations' => function ($query) use ($id) {
-                /**
-                 * @var \yii\db\Query $query
-                 * @var \yii\db\ActiveRecord $model
-                 * @var \yii\db\ActiveRecord $translateClass
-                 */
-                $model = (new $this->modelClass)->translationClass;
-                $translateClass = new $model;
-                $query->andWhere([$translateClass::tableName() . '.language_id' => $id]);
-            }]);
+        if (!$id) {
+            $id = Yii::$app->languageManager->active->id;
         }
+        $this->joinWith(['translations translate' => function ($query) use ($id) {
+            /** @var \yii\db\Query $query */
+            $query->andWhere(['translate.language_id' => $id]);
+        }]);
+
         return $this;
     }
 
