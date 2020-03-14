@@ -44,13 +44,29 @@ class CheckboxColumn extends BaseCheckboxColumn
         parent::registerClientScript();
         $this->grid->getView()->registerJs("
             var grid_selections;
-            $(document).on('click','#{$this->grid->getId()} input[type=\"checkbox\"]',function(e) {
+            
+            $(document).on('click','#{$this->grid->getId()} .select-on-check-all',function() {
+            
+                var checked=this.checked;
+                
+                $('input[name=\"selection[]\"]').each(function() {
+                    $('input[name=\"selection[]\"]:checkbox').prop('checked',checked);
+                });
+
+                grid_selections = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
+                console.log(grid_selections);
+            });
+
+            
+            $(document).on('click','#{$this->grid->getId()} input[name=\"selection[]\"]',function(e) {
                 grid_selections = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
                 console.log('CHECKED',grid_selections);
             });
+            
+            
             function gridAction(that) {
             
-                var keys = $('#grid-product').yiiGridView('getSelectedRows');
+                var keys = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
                 var url = $(that).attr('href');
                 $.ajax({
                     url: url,
@@ -60,7 +76,7 @@ class CheckboxColumn extends BaseCheckboxColumn
                     success: function (data) {
                         if(data.success){
                             common.notify(data.message,'success');
-                            $.pjax.reload('#pjax-grid-product', {timeout: false});
+                            $.pjax.reload('#pjax-{$this->grid->getId()}', {timeout: false});
                         }else{
                             common.notify(data.message,'error');
                         }
