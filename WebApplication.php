@@ -112,8 +112,6 @@ class WebApplication extends Application
             foreach ($fileList as $path) {
                 $result[$id . '/' . basename($path, '.php')] = basename($path);
             }
-        } else {
-            $result = [];
         }
         return $result;
     }
@@ -121,12 +119,12 @@ class WebApplication extends Application
     public function registerTranslations($id)
     {
         $path = '@' . $id . '/messages';
-        $this->i18n->translations[$id . '/*'] = [
+        $this->i18n->translations[$id . '/*'] = Yii::createObject([
             'class' => 'yii\i18n\PhpMessageSource',
             'sourceLanguage' => 'en-US',
             'basePath' => $path,
             'fileMap' => $this->getTranslationsFileMap($id, $path)
-        ];
+        ]);
     }
 
     /**

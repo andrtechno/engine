@@ -50,7 +50,7 @@ class ManagerLanguage extends Component
             $model = Languages::find()->published()->all();
             foreach ($model as $lang) {
                 /** @var Languages $lang */
-                $this->_languages[$lang->code] = $lang;
+                $this->_languages[$lang->slug] = $lang;
 
                 if ($lang->is_default === 1) {
                     $this->_default = $lang->code;
@@ -162,7 +162,7 @@ class ManagerLanguage extends Component
 
         //Yii::$app->setLanguage($model->locale); // locale
         Yii::$app->language = $model->code; // locale
-        $this->_active = $model->code;
+        $this->_active = $model->slug;
     }
 
     /**

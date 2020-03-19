@@ -2,6 +2,7 @@
 
 namespace panix\engine\behaviors;
 
+use panix\engine\CMS;
 use panix\mod\admin\components\YandexTranslate;
 use Yii;
 use yii\base\Behavior;
@@ -39,7 +40,7 @@ class TranslateBehavior extends Behavior
     public function events()
     {
         return [
-            ActiveRecord::EVENT_AFTER_VALIDATE => 'afterValidate',
+           // ActiveRecord::EVENT_AFTER_VALIDATE => 'afterValidate',
             ActiveRecord::EVENT_AFTER_INSERT => 'afterSave',
             ActiveRecord::EVENT_AFTER_UPDATE => 'afterSave',
             ActiveRecord::EVENT_AFTER_DELETE => 'afterDelete',
@@ -63,6 +64,7 @@ class TranslateBehavior extends Behavior
      */
     public function translate($language = null)
     {
+
         return $this->getTranslation($language);
     }
 
@@ -75,15 +77,15 @@ class TranslateBehavior extends Behavior
     public function getTranslation($language = null)
     {
         if ($language === null) {
-            $language = Yii::$app->language;
+            $language = Yii::$app->languageManager->active->slug;
         }
         $lang = Yii::$app->languageManager->getByCode($language);
         if (!$lang)
             throw new InvalidConfigException('Language not found ' . $language);
 
-        /* @var ActiveRecord $translations [] */
-        $translations = $this->owner->{$this->relation};
 
+        /* @var ActiveRecord[] $translations */
+        $translations = $this->owner->{$this->relation};
         foreach ($translations as $translation) {
             if ($translation->getAttribute($this->translationLanguageAttribute) === $lang->id) {
                 return $translation;
@@ -93,8 +95,41 @@ class TranslateBehavior extends Behavior
         $class = $this->owner->getRelation($this->relation)->modelClass;
         /* @var ActiveRecord $translation */
         $translation = new $class();
+
         $translation->setAttribute($this->translationLanguageAttribute, $lang->id);
         $translations[] = $translation;
+
+        $this->owner->populateRelation($this->relation, $translations);
+
+        return $translation;
+    }
+
+
+
+    public function getTranslation_($language = null)
+    {
+        if ($language === null) {
+            $language = Yii::$app->languageManager->active->slug;
+        }
+        $lang = Yii::$app->languageManager->getByCode($language);
+        if (!$lang)
+            throw new InvalidConfigException('Language not found ' . $language);
+
+        /* @var ActiveRecord[] $translations */
+        $translations = $this->owner->{$this->relation};
+        foreach ($translations as $translation) {
+            if ($translation->getAttribute($this->translationLanguageAttribute) === $lang->id) {
+                return $translation;
+            }
+        }
+        /* @var ActiveRecord $class */
+        $class = $this->owner->getRelation($this->relation)->modelClass;
+        /* @var ActiveRecord $translation */
+        $translation = new $class();
+
+        $translation->setAttribute($this->translationLanguageAttribute, $lang->id);
+        $translations[] = $translation;
+
         $this->owner->populateRelation($this->relation, $translations);
 
         return $translation;
@@ -109,7 +144,7 @@ class TranslateBehavior extends Behavior
     public function hasTranslation($language = null)
     {
         if ($language === null) {
-            $language = Yii::$app->language;
+            $language = Yii::$app->languageManager->active->slug;
         }
         $lang = Yii::$app->languageManager->getByCode($language);
         if (!$lang)
@@ -225,8 +260,10 @@ class TranslateBehavior extends Behavior
     public function __get($name)
     {
         $translation = $this->getTranslation();
+
         return $translation->getAttribute($name);
     }
+
 
     /**
      * @inheritdoc

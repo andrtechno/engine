@@ -90,7 +90,7 @@ class CheckboxColumn extends BaseCheckboxColumn
     /**
      * @inheritdoc
      */
-    public function init()
+    public function init2()
     {
 
 
@@ -170,15 +170,15 @@ class CheckboxColumn extends BaseCheckboxColumn
     /**
      * @inheritdoc
      */
-    protected function renderHeaderCellContent()
+    protected function renderHeaderCellContent2()
     {
         $name = rtrim($this->name, '[]') . '_all';
-        $id = $this->grid->options['id'];
+        /*$id = $this->grid->options['id'];
         $options = json_encode([
             'name' => $this->name,
             'multiple' => $this->multiple,
             'checkAll' => $name,
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);*/
 
 
         // $this->grid->view->registerJs("jQuery('#$id').yiiGridView('setSelectionColumn', $options);");
@@ -189,7 +189,20 @@ class CheckboxColumn extends BaseCheckboxColumn
             return Html::checkBox($name, false, ['class' => 'select-on-check-all']);
         }
     }
+    protected function getHeaderCheckBoxName2()
+    {
+        $name = $this->name;
+        if (substr_compare($name, '[]', -2, 2) === 0) {
+            $name = substr($name, 0, -2);
+        }
+        if (substr_compare($name, ']', -1, 1) === 0) {
+            $name = substr($name, 0, -1) . '_all]';
+        } else {
+            $name .= '_all';
+        }
 
+        return $name;
+    }
     /**
      * @inheritdoc
      */

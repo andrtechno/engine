@@ -19,7 +19,7 @@ class WebRequest extends Request {
             $langCode = $parts[0];
 
             // If language code is equal default - show 404 page
-            if ($langCode === Yii::$app->languageManager->default->code){
+            if ($langCode === Yii::$app->languageManager->default->slug){
                 throw new \yii\web\NotFoundHttpException(Yii::t('app/error', '404'));
             }
 
@@ -29,6 +29,7 @@ class WebRequest extends Request {
         //var_dump($this->baseUrl);die;
         $this->_pathInfo = $pathInfo;
         // Activate language by code
+
         Yii::$app->languageManager->setActive($langCode);
         return $this->_pathInfo;
     }
