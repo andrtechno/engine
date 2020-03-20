@@ -25,9 +25,12 @@ class CommonController extends Controller
     public $icon, $dataModel, $pageName, $breadcrumbs;
     public $jsMessages = [];
     public $dashboard = false;
+    public $enableStatistic=true;
+
 
     public function beforeAction($action)
     {
+
         if (!Yii::$app->request->isAjax && !Yii::$app->request->isPjax) {
             $this->jsMessages = [
                 'error' => [
