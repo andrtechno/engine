@@ -6,14 +6,14 @@ namespace panix\engine\web;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\Query;
-use yii\web\DbSession as Session;
+use yii\web\DbSession as BaseDbSession;
 use panix\engine\CMS;
 
 /**
  * Class DbSession
  * @package panix\engine\web
  */
-class DbSession extends Session
+class DbSession extends BaseDbSession
 {
 
     public $writeCallback = ['panix\engine\web\DbSession', 'writeFields'];

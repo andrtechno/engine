@@ -87,20 +87,17 @@ class Widget extends \yii\base\Widget
     public function getViewPath()
     {
         $class = new ReflectionClass($this);
-        $diename = dirname($class->getFileName());
-
-        if ($this->viewPath) {
-            return Yii::getAlias($this->viewPath);
-        }
+        $baseName = basename(dirname($class->getFileName()));
 
         $views = [
-            "@app/widgets/{$diename}",
+            "@theme/widgets/{$baseName}",
+            "@app/widgets/{$baseName}",
         ];
 
         foreach ($views as $view) {
             if (file_exists(Yii::getAlias($view))) {
-                Yii::debug('Layout load ' . $view, __METHOD__);
-                return $view;
+                Yii::debug('widget skin load ' . $view, __METHOD__);
+                return Yii::getAlias($view);
             }
         }
         return parent::getViewPath();

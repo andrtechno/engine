@@ -94,7 +94,7 @@ class WebController extends CommonController
         if ($this->enableStatistic) {
             if (Yii::$app->hasModule('stats') && !$this->dashboard && !Yii::$app->request->isAjax) {
                 if (isset(Yii::$app->stats)) {
-                    Yii::$app->stats->record();
+                   // Yii::$app->stats->record();
                 }
             }
 
