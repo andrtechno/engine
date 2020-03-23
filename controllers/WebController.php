@@ -91,14 +91,12 @@ class WebController extends CommonController
         $config = Yii::$app->settings->get('app');
         $timeZone = $config->timezone;
         Yii::$app->timeZone = $timeZone;
-        if ($this->enableStatistic) {
-            if (Yii::$app->hasModule('stats') && !$this->dashboard && !Yii::$app->request->isAjax) {
-                if (isset(Yii::$app->stats)) {
-                    Yii::$app->stats->record();
-                }
+        if ($this->enableStatistic && Yii::$app->hasModule('stats') && !$this->dashboard && !Yii::$app->request->isAjax && !Yii::$app->request->isPjax) {
+            if (isset(Yii::$app->stats)) {
+                Yii::$app->stats->record();
             }
-
         }
+
         Yii::setAlias('@theme', Yii::getAlias("@app/web/themes/{$config->theme}"));
 
         if (true && Yii::$app->id != 'console') {
@@ -213,7 +211,7 @@ class WebController extends CommonController
 
     public function actionFavicon()
     {
-        $this->enableStatistic=false;
+        $this->enableStatistic = false;
         $size = Yii::$app->request->get('size');
         $response = Yii::$app->response;
         /** @var \panix\engine\components\ImageHandler $img */
