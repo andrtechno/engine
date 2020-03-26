@@ -187,8 +187,8 @@
 .icon-calculator:before {content:"\f163";}
 .icon-cash-money:before {content:"\f164";}
 .icon-reply:before {content:"\f165";}
-.icon-water166:before {content:"\f166";}
-.icon-water167:before {content:"\f167";}
+.icon-cloud-rain:before {content:"\f166";}
+.icon-cloud-rain-heavy:before {content:"\f167";}
 .icon-sliders:before {content:"\f168";}
 .icon-megaphone:before {content:"\f169";}
 .icon-hand-up:before {content:"\f170";}
@@ -209,3 +209,13 @@
 .icon-star-outline:before {content:"\f185";}
 .icon-phone-outline:before {content:"\f186";}
 .icon-warning-outline:before {content:"\f187";}
+.icon-flash:before {content:"\f188";}
+.icon-flash-outline:before {content:"\f189";}
+.icon-sun:before {content:"\f190";}
+.icon-sun-outline-outline:before {content:"\f191";}
+.icon-moon:before {content:"\f192";}
+.icon-moon-outline-outline:before {content:"\f193";}
+.icon-moon-outline-outline:before {content:"\f194";}
+.icon-mobile:before {content:"\f195";}
+.icon-tablet:before {content:"\f196";}
+.icon-notification-outline:before {content:"\f197";}
