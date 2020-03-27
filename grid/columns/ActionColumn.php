@@ -85,9 +85,28 @@ class ActionColumn extends DataColumn
         $this->initDefaultButtons();
 
         parent::init();
-        // $this->registerScripts();
+
 
         $view = $this->grid->getView();
+
+
+        /*$view->registerJs("
+                            $(document).on('click','.delete',function(e){
+                                e.preventDefault();
+                                if (confirm('" . Yii::t('app/default', 'DELETE_CONFIRM') . "')) {
+                                    $.ajax($(this).attr('href'), {
+                                        type: 'POST',
+                                        dataType:'json',
+                                    }).done(function(data) {
+                                        $.pjax.reload({container: '#" . $this->grid->id . "'});
+                                            console.log(data);
+                                            common.notify(data.message,'success');
+                                            //$('#{$this->grid->id}').yiiGridView('applyFilter');
+                                    });
+                                }
+                                return false;
+                            });", View::POS_END, 'delete');*/
+
         if (isset(($this->grid->dataProvider)->query)) {
             $classNamePath = '/' . implode('/', explode('\\', ($this->grid->dataProvider)->query->modelClass));
 
@@ -115,6 +134,8 @@ class ActionColumn extends DataColumn
         });
         ", View::POS_END, 'edit-columns_dialog');
 
+
+
             echo \panix\engine\jui\Dialog::widget([
                 'id' => 'edit-columns_dialog',
                 'clientOptions' => [
@@ -137,7 +158,7 @@ class ActionColumn extends DataColumn
                                     data:form,
                                     success:function(){
                                         $('.edit-columns_dialog').remove();
-                                        $.pjax.reload('#pjax-" . $this->grid->id . "', {timeout: false});
+                                        //$.pjax.reload('#" . $this->grid->id . "', {timeout: false});
                                     }
                                 });
                             }")
@@ -221,21 +242,42 @@ class ActionColumn extends DataColumn
                   ]); */
                 if (isset($model->primaryKey)) {
                     if (!in_array($model->primaryKey, $model->disallow_delete)) {
-                        return Html::a(Html::icon('delete'), '#', [
+
+
+
+                        /*$this->grid->view->registerJs("
+                            $(document).on('click','.delete',function(e){
+                                e.preventDefault();
+                                if (confirm('" . Yii::t('app/default', 'DELETE_CONFIRM') . "')) {
+                                    $.ajax('$url', {
+                                        type: 'POST',
+                                        dataType:'json',
+                                    }).done(function(data) {
+                                        $.pjax.reload({container: '#" . $this->grid->id . "'});
+                                            console.log(data);
+                                            common.notify(data.message,'success');
+                                            //$('#{$this->grid->id}').yiiGridView('applyFilter');
+                                    });
+                                }
+                                //return false;
+                            });", View::POS_END, 'delete');*/
+
+
+                        return Html::a(Html::icon('delete'), $url, [
                             'title' => Yii::t('yii', 'Delete'),
                             'aria-label' => Yii::t('yii', 'Delete'),
                             'data-pjax' => '0',
-                            'class' => 'btn ' . $this->btnSize . ' btn-outline-danger',
+                            'class' => 'btn ' . $this->btnSize . ' btn-outline-danger delete',
                             'onclick' => "
                                 if (confirm('" . Yii::t('app/default', 'DELETE_CONFIRM') . "')) {
                                     $.ajax('$url', {
                                         type: 'POST',
                                         dataType:'json',
                                     }).done(function(data) {
-                                        //$.pjax.reload({container: '" . $this->pjax . "'});
+                                            $.pjax.reload({container: '#{$this->grid->id}'});
                                             console.log(data);
                                             common.notify(data.message,'success');
-                                            $('#{$this->grid->id}').yiiGridView('applyFilter');
+                                            //$('#{$this->grid->id}').yiiGridView('applyFilter');
                                     });
                                 }
                                 return false;
