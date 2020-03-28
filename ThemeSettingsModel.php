@@ -27,12 +27,17 @@ class ThemeSettingsModel extends SettingsModel
             static::$category = $this->module;
         }
 
-        $this->setAttributes((array)Yii::$app->view->theme->get(static::$category));
+        $this->setAttributes((array)Yii::$app->view->theme->get());
+    }
+
+    public function attributeLabels()
+    {
+        return [];
     }
 
     public function save()
     {
-        Yii::$app->view->theme->set(Yii::$app->settings->get('app','theme'), $this->attributes);
+        Yii::$app->view->theme->set(Yii::$app->settings->get('app', 'theme'), $this->attributes);
     }
 
 

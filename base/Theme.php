@@ -163,8 +163,12 @@ class Theme extends BaseTheme
      * @param null|string $default default value if original does not exists
      * @return mixed
      */
-    public function get($theme, $key = null, $default = null)
+    public function get($key = null, $theme=null, $default = null)
     {
+        if(!$theme){
+            $theme = Yii::$app->settings->get('app','theme');
+        }
+
         if (!isset($this->data[$theme]))
             return $default;
 
@@ -188,7 +192,7 @@ class Theme extends BaseTheme
      */
     public function clear($theme)
     {
-        Yii::$app->db->createCommand()->delete(static::tableName(), 'theme=:theme', [':theme' => $theme])->execute();
+            Yii::$app->db->createCommand()->delete(static::tableName(), 'theme=:theme', [':theme' => $theme])->execute();
         if (isset($this->data[$theme]))
             unset($this->data[$theme]);
 
