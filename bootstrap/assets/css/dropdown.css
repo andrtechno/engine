@@ -8,25 +8,13 @@
     right: auto;
     margin-left: -1px;
 }
-
-.dropdown-submenu > a:after {
-    display: block;
-    content: " ";
+.dropdown-submenu > a:after{
     float: right;
-    width: 0;
-    height: 0;
-    border-color: transparent;
-    border-style: solid;
-    border-width: 5px 0 5px 5px;
-    border-left-color: #cccccc;
+    display: block;
     margin-top: 5px;
-    margin-right: 0;
+    transform: rotate(-90deg);
 }
 
-.dropdown-submenu:hover > a:after,
-.dropdown-submenu.show > a:after {
-
-}
 .dropdown-submenu.show .dropdown-menu{
     display: block;
 }

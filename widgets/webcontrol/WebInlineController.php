@@ -4,7 +4,7 @@ namespace panix\engine\widgets\webcontrol;
 
 use Yii;
 use panix\engine\controllers\WebController;
-use panix\mod\admin\models\Notifications;
+use panix\mod\admin\models\Notification;
 use yii\web\Response;
 
 /**
@@ -27,7 +27,7 @@ class WebInlineController extends WebController
     {
 
 
-        $notifactions = Notifications::find()->read(0)->all();
+        $notifactions = Notification::find()->read(0)->all();
         $result = [];
         $result['count']['cart'] = 5;
         $result['count']['comments'] = 10;
@@ -47,7 +47,7 @@ class WebInlineController extends WebController
     {
 
         //$notifactions = Notifactions::find()->where(['id'=>$id])->one();
-        $notifactions = Notifications::findOne($id);
+        $notifactions = Notification::findOne($id);
         $notifactions->is_read = 1;
         $notifactions->save(false);
 

@@ -3,7 +3,7 @@
 namespace panix\engine\behaviors;
 
 use yii\base\Behavior;
-use panix\mod\admin\models\Notifications;
+use panix\mod\admin\models\Notification;
 
 class NotificationBehavior extends Behavior
 {
@@ -15,7 +15,7 @@ class NotificationBehavior extends Behavior
     public function attach($owner)
     {
         parent::attach($owner);
-        $notification = new Notifications;
+        $notification = new Notification;
         $notification->type = $this->type;
         $notification->text = $this->text;
         $notification->sound = $this->sound;
