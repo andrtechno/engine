@@ -19,7 +19,7 @@ use panix\engine\bootstrap\ButtonDropdown;
 class CheckboxColumn extends BaseCheckboxColumn
 {
 
-    public $headerOptions = ['style' => 'width: 70px;', 'class' => 'text-center'];
+    public $contentOptions = ['style' => 'width: 50px;', 'class' => 'text-center'];
     public $filterOptions = ['class' => 'text-center'];
     /**
      * @var string the name of the input checkbox input fields. This will be appended with `[]` to ensure it is an array.

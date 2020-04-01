@@ -91,12 +91,13 @@ class WebController extends CommonController
         $config = Yii::$app->settings->get('app');
         $timeZone = $config->timezone;
         Yii::$app->timeZone = $timeZone;
-        if ($this->enableStatistic && Yii::$app->hasModule('stats') && !$this->dashboard && !Yii::$app->request->isAjax && !Yii::$app->request->isPjax) {
-            if (isset(Yii::$app->stats)) {
-                Yii::$app->stats->record();
+        if (Yii::$app->id == 'web') {
+            if ($this->enableStatistic && Yii::$app->hasModule('stats') && !$this->dashboard && !Yii::$app->request->isAjax && !Yii::$app->request->isPjax) { // && !Yii::$app->request->isAjax && !Yii::$app->request->isPjax
+                if (isset(Yii::$app->stats)) {
+                    Yii::$app->stats->record();
+                }
             }
         }
-
         Yii::setAlias('@theme', Yii::getAlias("@app/web/themes/{$config->theme}"));
 
         if (true && Yii::$app->id != 'console') {

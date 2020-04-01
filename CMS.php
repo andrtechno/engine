@@ -100,7 +100,7 @@ class CMS
             return 'Киевстар';
         } elseif (preg_match('/([\+]38050|[\+]38066|[\+]38095|[\+]38099)/i', $number, $match)) {
             return 'Vodafone (МТС)';
-        } elseif (preg_match('/([\+]38063|[\+]38093)/i', $number, $match)) {
+        } elseif (preg_match('/([\+]38063|[\+]38093|[\+]38073)/i', $number, $match)) {
             return 'lifecell life:)';
         } elseif (preg_match('/([\+]38091)/i', $number, $match)) {
             return 'Utel Украина';

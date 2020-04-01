@@ -69,7 +69,7 @@
 .icon-vk:before {content:"\f045";}
 .icon-dropbox:before {content:"\f046";}
 .icon-facebook:before {content:"\f047";}
-.icon-google-plus:before {content:"\f048";} /*need delete, service google+ closed!*/
+.icon-user-card:before {content:"\f048";}
 .icon-instagram:before {content:"\f049";}
 .icon-youtube:before {content:"\f050";}
 .icon-youtube-play:before {content:"\f051";}
@@ -219,3 +219,9 @@
 .icon-mobile:before {content:"\f195";}
 .icon-tablet:before {content:"\f196";}
 .icon-notification-outline:before {content:"\f197";}
+.icon-quote-right:before {content:"\f198";}
+.icon-quote-left:before {content:"\f199";}
+.icon-crown:before {content:"\f200";}
+.icon-cup:before {content:"\f201";}
+.icon-soccer:before {content:"\f202";}
+.icon-soccer:before {content:"\f203";}
