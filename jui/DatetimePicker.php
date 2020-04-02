@@ -12,7 +12,6 @@ use yii\jui\DatePickerLanguageAsset;
 class DatetimePicker extends DatePicker
 {
 
-
     /**
      * time
      * datetime

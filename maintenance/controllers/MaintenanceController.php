@@ -66,4 +66,13 @@ class MaintenanceController extends Controller
             'message' => $message
         ]);
     }
+
+
+    public function actionBanned($message)
+    {
+        return $this->render('banned', [
+            'message' => $message,
+            'time'=> Yii::$app->user->banTime
+        ]);
+    }
 } 
