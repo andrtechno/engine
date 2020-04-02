@@ -72,4 +72,8 @@ class Migration extends \yii\db\Migration
         }
     }
 
+    public function phone($string = 25)
+    {
+        $this->string($string)->null();
+    }
 }

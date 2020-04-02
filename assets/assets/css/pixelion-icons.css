@@ -150,7 +150,7 @@
 .icon-external-link:before {content:"\f126";}
 .icon-laptop:before {content:"\f127";}
 .icon-resize:before {content:"\f128";}
-.icon-ban:before {content:"\f129";}
+.icon-cancel:before {content:"\f129";}
 .icon-bug:before {content:"\f130";}
 .icon-privat24:before {content:"\f131";}
 .icon-webmoney:before {content:"\f132";}
@@ -178,7 +178,7 @@
 .icon-twitter:before {content:"\f154";}
 .icon-skype:before {content:"\f155";}
 .icon-supplier:before {content:"\f156";}
-.icon-blocked:before {content:"\f157";}
+.icon-brush:before {content:"\f157";}
 .icon-loader:before {content:"\f158";}
 .icon-smile:before {content:"\f159";}
 .icon-contract:before {content:"\f160";}
@@ -224,4 +224,5 @@
 .icon-crown:before {content:"\f200";}
 .icon-cup:before {content:"\f201";}
 .icon-soccer:before {content:"\f202";}
-.icon-soccer:before {content:"\f203";}
+.icon-soccer2:before {content:"\f203";}
+.icon-google:before {content:"\f204";}
