@@ -88,7 +88,17 @@ class CMS
     {
         return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
     }
+    public static function vote_graphic($votes, $total)
+    {
 
+        // Yii::app()->clientScript->registerCssFile($this->getAssetsUrl() . '/css/rating.css');
+        $votes = (intval($votes)) ? $votes : 1;
+        $width = number_format($total / $votes, 2) * 17;
+        $result = substr($total / $votes, 0, 4);
+        $title = (intval($votes) && intval($total)) ? Yii::t('app/default', 'RATING_HIT', ['votes' => $votes, 'result' => $result]) : Yii::t('app/default', 'RATING_HIT', ['votes' => 0, 'result' => 0]);
+        $content = "<ul class=\"urating\" title=\"" . $title . "\"><li class=\"crating\" style=\"width: " . $width . "px;\"></li></ul>";
+        return $content;
+    }
     /**
      * @param string $number +380XXXXXXX
      * @return string

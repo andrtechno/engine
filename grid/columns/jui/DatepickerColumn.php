@@ -55,12 +55,16 @@ class DatepickerColumn extends DataColumn
     {
 
         if ($this->value === null) {
-            if ($model->{$this->attribute}) {
-                $html = Html::beginTag('span', ['class' => 'bootstrap-tooltip', 'title' => Yii::t('app/default', 'IN') . ' ' . Yii::$app->formatter->asTime($model->{$this->attribute})]);
-                $html .= Yii::$app->formatter->asDate($model->{$this->attribute});
-                $html .= Html::endTag('span');
-                return $html;
+            if (isset($model->{$this->attribute})) {
+                $attribute = $model->{$this->attribute};
+            } else {
+                $attribute = $model[$this->attribute];
             }
+            $html = Html::beginTag('span', ['class' => 'bootstrap-tooltip', 'title' => Yii::t('app/default', 'IN') . ' ' . Yii::$app->formatter->asTime($attribute)]);
+            $html .= Yii::$app->formatter->asDate($attribute);
+            $html .= Html::endTag('span');
+            return $html;
+
         } else {
             return parent::getDataCellValue($model, $key, $index);
         }

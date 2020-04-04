@@ -76,7 +76,7 @@ class Dispatcher extends \yii\log\Dispatcher
                 ],
 
             ],
-            [
+           /* [
                 'class' => 'panix\engine\log\EmailTarget',
                 'levels' => ['error', 'warning'],
                 //'categories' => ['yii\base\*'],
@@ -86,7 +86,7 @@ class Dispatcher extends \yii\log\Dispatcher
                     'yii\web\HttpException:400',
                     'yii\i18n\PhpMessageSource::loadMessages'
                 ],
-            ],
+            ],*/
         ];
         parent::init();
 

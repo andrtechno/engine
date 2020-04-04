@@ -1,10 +1,15 @@
 <?php
+
 namespace panix\engine\helpers;
 
-class TimeZoneHelper {
+use Yii;
 
-    public static function getTimeZoneData() {
-        $regions = array(
+class TimeZoneHelper
+{
+
+    public static function getTimeZoneData()
+    {
+        $regions = [
             'Africa' => \DateTimeZone::AFRICA,
             'America' => \DateTimeZone::AMERICA,
             'Antarctica' => \DateTimeZone::ANTARCTICA,
@@ -13,8 +18,8 @@ class TimeZoneHelper {
             'Europe' => \DateTimeZone::EUROPE,
             'Indian' => \DateTimeZone::INDIAN,
             'Pacific' => \DateTimeZone::PACIFIC
-        );
-        $result = array();
+        ];
+        $result = [];
         foreach ($regions as $mask) {
             $zones = \DateTimeZone::listIdentifiers($mask);
             $zones = self::prepareZones($zones);
@@ -39,22 +44,24 @@ class TimeZoneHelper {
 
     /**
      * @param type $zone Example "Europe/Kiev"
-     * @return string 
+     * @return string
      */
-    public static function getTimeZone($zone) {
+    public static function getTimeZone($zone)
+    {
         if (isset($zone)) {
             $time = new \DateTime(NULL, new \DateTimeZone($zone));
             $p = $time->format('P');
-            return Yii::t('default', 'CURRENT_TIMEZONE', array(
-                        '{zone}' => $zone,
-                        '{p}' => $p
-            ));
+            return Yii::t('app/default', 'CURRENT_TIMEZONE', [
+                '{zone}' => $zone,
+                '{p}' => $p
+            ]);
         }
         //print_r($zones);
     }
 
-    private static function prepareZones(array $timeZones) {
-        $list = array();
+    private static function prepareZones(array $timeZones)
+    {
+        $list = [];
         foreach ($timeZones as $zone) {
             $time = new \DateTime(NULL, new \DateTimeZone($zone));
             $p = $time->format('P');
@@ -63,18 +70,18 @@ class TimeZoneHelper {
             }
             $parts = explode('/', $zone);
 
-            $list[$time->format('P')][] = array(
+            $list[$time->format('P')][] = [
                 'time_zone' => $zone,
                 'continent' => isset($parts[0]) ? $parts[0] : '',
                 'city' => isset($parts[1]) ? $parts[1] : '',
                 'subcity' => isset($parts[2]) ? $parts[2] : '',
                 'p' => $p,
-            );
+            ];
         }
 
         ksort($list, SORT_NUMERIC);
 
-        $zones = array();
+        $zones = [];
         foreach ($list as $grouped) {
             $zones = array_merge($zones, $grouped);
         }

@@ -191,4 +191,11 @@ class Html extends \yii\helpers\Html
         $url_parts['query'] = http_build_query($params);
         return $url_parts['scheme'] . '://' . $url_parts['host'] . $url_parts['path'] . '?' . $url_parts['query'];
     }
+
+    /*
+    public static function clipboard($text)
+    {
+        $id = 'clipboard-' . md5($text);
+        return Html::script("common.clipboard('#{$id}');") . Html::tag('span', ['id' => $id, 'data-clipboard-text' => $text], $text);
+    }*/
 }

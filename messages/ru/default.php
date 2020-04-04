@@ -66,6 +66,7 @@ return [
     'COUNTRY' => 'Страна',
     'FILE_SUCCESS_DELETE' => 'Файл успешно удален.',
     'FILE_SUCCESS_UPLOAD' => 'Файл <strong>{file}</strong> успешно загружен.',
+    'FILE_ERROR_UPLOAD' => 'Не удалось загрузить файл.',
     'FILE_NOT_FOUND' => 'Файл не найден',
     'VERSION' => 'Версия',
     'AUTHOR' => 'Автор',
