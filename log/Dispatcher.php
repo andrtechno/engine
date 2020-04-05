@@ -47,13 +47,24 @@ class Dispatcher extends \yii\log\Dispatcher
                 'except' => [
                     'yii\db\Command::query',
                     'yii\db\Command::execute',
-                    'yii\db\Connection::open'
+                    'yii\db\Connection::open',
+                    'yii\swiftmailer\Mailer::sendMessage',
+                    'yii\mail\BaseMailer::send',
+                ],
+            ],
+            [
+                'class' => 'panix\engine\log\FileTarget',
+                'levels' => ['info'],
+                'logFile' => $logPath . '/mail.log',
+                'categories' => [
+                    'yii\mail\BaseMailer::send',
                 ],
             ],
             [
                 'class' => 'panix\engine\log\FileTarget',
                 'levels' => ['profile'],
                 'logFile' => $logPath . '/profile.log',
+
                 'except' => [
                     'yii\db\Command::query',
                     'yii\db\Command::execute',
@@ -73,10 +84,14 @@ class Dispatcher extends \yii\log\Dispatcher
                 'logFile' => $logPath . '/db_info.log',
                 'except' => [
                     'yii\db\Connection::open',
+                    'yii\web\Session::open',
+                    'yii\web\Session::close',
+                    'yii\web\Session::unfreeze',
+                    'yii\web\Session::freeze',
                 ],
 
             ],
-           /* [
+            [
                 'class' => 'panix\engine\log\EmailTarget',
                 'levels' => ['error', 'warning'],
                 //'categories' => ['yii\base\*'],
@@ -86,7 +101,7 @@ class Dispatcher extends \yii\log\Dispatcher
                     'yii\web\HttpException:400',
                     'yii\i18n\PhpMessageSource::loadMessages'
                 ],
-            ],*/
+            ],
         ];
         parent::init();
 
