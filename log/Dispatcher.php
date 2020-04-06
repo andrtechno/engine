@@ -32,6 +32,21 @@ class Dispatcher extends \yii\log\Dispatcher
             ],
             [
                 'class' => 'panix\engine\log\FileTarget',
+                'levels' => ['info'],
+                'categories' => ['yii\db\*'],
+                'logVars' => [],
+                'logFile' => $logPath . '/db_queries.log',
+                'except' => [
+                    'yii\db\Connection::open',
+                    'yii\web\Session::open',
+                    'yii\web\Session::close',
+                    'yii\web\Session::unfreeze',
+                    'yii\web\Session::freeze',
+                ],
+
+            ],
+            [
+                'class' => 'panix\engine\log\FileTarget',
                 'levels' => ['error'],
                 'logFile' => $logPath . '/error.log',
             ],
@@ -44,12 +59,15 @@ class Dispatcher extends \yii\log\Dispatcher
                 'class' => 'panix\engine\log\FileTarget',
                 'levels' => ['info'],
                 'logFile' => $logPath . '/info.log',
+                //'logVars' => [],
                 'except' => [
                     'yii\db\Command::query',
                     'yii\db\Command::execute',
                     'yii\db\Connection::open',
                     'yii\swiftmailer\Mailer::sendMessage',
                     'yii\mail\BaseMailer::send',
+                    'yii\httpclient\StreamTransport::send',
+                    'yii\web\Session::open'
                 ],
             ],
             [
@@ -59,38 +77,36 @@ class Dispatcher extends \yii\log\Dispatcher
                 'categories' => [
                     'yii\mail\BaseMailer::send',
                 ],
+
             ],
             [
                 'class' => 'panix\engine\log\FileTarget',
                 'levels' => ['profile'],
                 'logFile' => $logPath . '/profile.log',
-
                 'except' => [
                     'yii\db\Command::query',
                     'yii\db\Command::execute',
-                    'yii\db\Connection::open'
+                    'yii\db\Connection::open',
+                    'yii\httpclient\StreamTransport::send'
                 ],
             ],
+            [
+                'class' => 'panix\engine\log\FileTarget',
+                'levels' => ['info'],
+                'logFile' => $logPath . '/httpclient.log',
+                'categories' => [
+                    'yii\httpclient\StreamTransport::send',
+                ],
+            ],
+
+
             /*[
                 'class' => 'panix\engine\log\FileTarget',
                 'levels' => ['trace'],
                 'enabled' => false,
                 'logFile' => $logPath . '/trace.log',
             ],*/
-            [
-                'class' => 'panix\engine\log\FileTarget',
-                'levels' => ['info'],
-                'categories' => ['yii\db\*'],
-                'logFile' => $logPath . '/db_info.log',
-                'except' => [
-                    'yii\db\Connection::open',
-                    'yii\web\Session::open',
-                    'yii\web\Session::close',
-                    'yii\web\Session::unfreeze',
-                    'yii\web\Session::freeze',
-                ],
 
-            ],
             [
                 'class' => 'panix\engine\log\EmailTarget',
                 'levels' => ['error', 'warning'],

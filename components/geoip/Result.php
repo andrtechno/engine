@@ -2,7 +2,9 @@
 
 namespace panix\engine\components\geoip;
 
+use panix\engine\CMS;
 use Yii;
+use yii\base\BaseObject;
 
 /**
  * Class Result
@@ -12,62 +14,87 @@ use Yii;
  * @property string|null country
  * @property Location location
  */
-class Result extends ResultBase
+class Result extends BaseObject implements ResultInterface
 {
+    /**
+     * @var array
+     */
+    private $result = null;
+    /**
+     * @var array
+     */
+    private $_response = [];
 
 
-    public function getCity($data)
+    public function __construct($data,$config = [])
     {
-        $value = null;
-        if (isset($data['city']['names'][Yii::$app->language])) {
-            $value = $data['city']['names'][Yii::$app->language];
-        } else {
-            $value = $data['city']['names']['en'];
+        $this->_response = $data;
+        parent::__construct($config);
+
+    }
+
+    public function getCity()
+    {
+        if (isset($this->_response['city'])) {
+            $this->result = $this->_response['city'];
         }
-        return $value;
+        return $this->result;
+    }
+    public function getCountryCode()
+    {
+        if (isset($this->_response['countryCode'])) {
+            $this->result = $this->_response['countryCode'];
+        }
+        return $this->result;
+    }
+
+    public function getCountry()
+    {
+        if (isset($this->_response['country'])) {
+            $this->result = $this->_response['country'];
+        }
+        return $this->result;
+    }
+
+    public function getLocation()
+    {
+        if (isset($this->_response['lat']) && isset($this->_response['lon'])) {
+            $this->result = new Location($this->_response['lat'], $this->_response['lon']);
+        }
+        return $this->result;
     }
 
 
-    public function getCountry($data)
+    public function getTimezone()
     {
-        $value = null;
-        if (isset($data['country']['names'][Yii::$app->language])) {
-            $value = $data['country']['names'][Yii::$app->language];
-        } else {
-            $value = $data['country']['names']['en'];
+        if (isset($this->_response['timezone'])) {
+            $this->result = $this->_response['timezone'];
         }
-        return $value;
+        return $this->result;
+    }
+    public function getOrg()
+    {
+        if (isset($this->_response['org'])) {
+            return $this->_response['org'];
+        }
+       // return $this->result;
     }
 
-    public function getLocation($data)
-    {
-        $value = new Location();
-        if (isset($data['location'])) {
-            $lat = $data['location']['latitude'];
-            $lng = $data['location']['longitude'];
-            $value = new Location($lat, $lng);
-        }
-        return $value;
-    }
 
-    public function getIsoCode($data)
+    public function getRegion()
     {
-        $value = null;
-        if (isset($data['country']['iso_code'])) {
-            $value = $data['country']['iso_code'];
+        if (isset($this->_response['regionName'])) {
+            return $this->_response['regionName'];
         }
-        return $value;
+        //return $this->_region;
     }
-
-    public function getTimezone($data)
+    public function getRegionCode()
     {
-        $value = null;
-        if (isset($data['location']['time_zone'])) {
-            $value = $data['location']['time_zone'];
+        if (isset($this->_response['region'])) {
+            return $this->_response['region'];
         }
-        return $value;
+      //  return $this->result;
     }
-
     public function isDetected()
     {
         return ($this->location->lat !== null && $this->location->lng !== null);

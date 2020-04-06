@@ -3,44 +3,34 @@
 
 namespace panix\engine\components\geoip;
 
-use MaxMind\Db\Reader;
 use Yii;
 use yii\base\Component;
+use yii\httpclient\Client;
 use yii\web\Session;
 
 /**
  * Class GeoIP
  */
-class GeoIP extends Component {
+class GeoIP extends Component
+{
     /**
      * @var string
      */
-    public $dbPath;    
-    
-    /**
-     * @var Reader
-     */
-    private $reader;
-
-    /**
-     * @var array
-     */
-    private $result = [];
+    public $dbPath;
 
     /**
      * @var Session
      */
     private $session;
+    public $url;
 
     /**
      * @inheritDoc
      */
-    public function init() {
-        $db = $this->dbPath ?: Yii::getAlias('@vendor/panix/engine/components/geoip/maxmind-geolite2-database/city.mmdb');
-        
+    public function init()
+    {
         $this->session = Yii::$app->session;
-        $this->reader = new Reader($db);
-
+        $this->url = 'http://ip-api.com/json/%s?fields=status,message,continent,continentCode,country,countryCode,region,regionName,city,district,zip,lat,lon,timezone,currency,isp,org,as,asname,reverse,mobile,proxy,hosting,query&lang=' . Yii::$app->language;
         parent::init();
     }
 
@@ -48,24 +38,30 @@ class GeoIP extends Component {
      * @param string|null $ip
      * @return Result
      */
-    public function ip($ip = null) {
+    public function ip($ip = null)
+    {
         if ($ip === null) {
-            $ip = Yii::$app->request->getUserIP();
+            $ip = Yii::$app->request->getRemoteIP();
         }
 
-        if (!array_key_exists($ip, $this->result)) {
-            $key = self::class . ':' . $ip;
+       // return Yii::$app->cache->getOrSet('IP_CACHE_' . $ip, function () use ($ip) {
+            return new Result($this->connect($ip));
+        //}, 86400 * 30);
+    }
 
-            if ($this->session->offsetExists($key)) {
-                $this->result[$ip] = $this->session->get($key);
-            } else {
-                $result = $this->reader->get($ip);
-                $this->result[$ip] = new Result($result);
-                $this->session->set($key, $this->result[$ip]);
-            }
+
+    private function connect($ip)
+    {
+        $client = new Client(['baseUrl' => sprintf($this->url, $ip)]);
+        $response = $client->createRequest()
+            ->setFormat(Client::FORMAT_JSON)
+            //->addHeaders(['content-type' => 'application/json'])
+            ->send();
+
+        if ($response->isOk) {
+            return $response->data;
         }
-
-        return $this->result[$ip];
+        return false;
     }
 
 }

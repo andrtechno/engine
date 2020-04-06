@@ -51,14 +51,16 @@ common.geoip = function (ip) {
     // common.flashMessage = true;
 
     var geoSelector = $('#geo-dialog');
+    $('body').append('<div id=\"geo-dialog\"></div>');
     $.ajax({
         url: common.url('/admin/app/ajax/geo?ip=' + ip),
         type: 'GET',
         dataType: 'html',
         beforeSend: function () {
-            $('body').append('<div id=\"geo-dialog\"></div>');
+
         },
         success: function (result) {
+            console.log(geoSelector);
             geoSelector.dialog({
                 model: true,
                 responsive: true,

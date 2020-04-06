@@ -19,7 +19,7 @@ use yii\helpers\VarDumper;
  */
 class CMS
 {
-    const MEMORY_LIMIT = 64; // Minimal memory_limit
+    const MEMORY_LIMIT = 512; // Minimal memory_limit
 
     /**
      * Конвертирует число "150" в "000150"
@@ -88,6 +88,7 @@ class CMS
     {
         return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
     }
+
     public static function vote_graphic($votes, $total)
     {
 
@@ -99,6 +100,7 @@ class CMS
         $content = "<ul class=\"urating\" title=\"" . $title . "\"><li class=\"crating\" style=\"width: " . $width . "px;\"></li></ul>";
         return $content;
     }
+
     /**
      * @param string $number +380XXXXXXX
      * @return string
@@ -694,31 +696,44 @@ class CMS
     }
 
     /**
-     *
      * @param string $ip
+     * @param boolean $geo
      * @return string|null
      */
-    public static function ip($ip = null)
+    public static function ip($ip = null, $geo = true)
     {
         if (!$ip)
-            $ip = Yii::$app->request->getRemoteIP();
+            $ip = Yii::$app->request->getUserIP();
+
 
         $options = [];
         $content = null;
-        if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-            if (self::getMemoryLimit() > self::MEMORY_LIMIT) {
-                $geoIp = Yii::$app->geoip->ip($ip);
-                $title = Yii::t('app/default', 'COUNTRY') . ': ' . Yii::t('app/geoip_country', $geoIp->country) . '/' . Yii::t('app/geoip_city', $geoIp->city) . ' - ' . $geoIp->timezone;
-                $options['title'] = $title;
-                if ($geoIp->isoCode) {
-                    $image = Html::img('/uploads/language/' . strtolower($geoIp->isoCode) . '.png', $options) . ' ';
-                    $options['alt'] = $ip;
-                    $options['onClick'] = 'common.geoip("' . $ip . '")';
-                    return $image . Html::a($ip, '#', $options);
+        if ($geo && !in_array($ip, ['127.0.0.1'])) {
+            if (filter_var($ip, FILTER_VALIDATE_IP)) {
+                if (self::getMemoryLimit() > self::MEMORY_LIMIT) {
+                    $geoIp = Yii::$app->geoip->ip($ip);
+                    $title = Yii::t('app/default', 'COUNTRY') . ': ' . Yii::t('app/geoip_country', $geoIp->country) . '/' . Yii::t('app/geoip_city', $geoIp->city) . ' - ' . $geoIp->timezone;
+                    $options['title'] = $title;
+
+                    if ($geoIp->countryCode) {
+                        $image = Html::img('/uploads/language/' . strtolower($geoIp->countryCode) . '.png', $options) . ' ';
+                        $options['alt'] = $ip;
+                        $options['class'] = 'geo';
+                        $options['data-ip'] = $ip;
+                        $options['data-type'] = "ajax";
+                        //$options['data-fancybox'] = 'data-fancybox';
+                        $options['data-width'] = '300';
+                        $options['data-src'] = Url::to(['/admin/app/ajax/geo', 'ip' => $ip]);
+                        //$options['onClick'] = 'common.geoip("' . $ip . '")';
+
+                        //  data-fancybox  ="https://codepen.io/fancyapps/pen/oBgoqB.html" href="javascript:;"
+
+                        return $image . Html::a($ip, 'javascript:;', $options);
+                    }
                 }
+            } else {
+                return $ip . ' (err)';
             }
-        } else {
-            return $ip . ' (IPv6)';
         }
         return $ip;
     }
@@ -832,12 +847,13 @@ class CMS
     /**
      * Замена перевода строк на <br />
      *
-     * @param $subject
+     * @param string $subject
+     * @param string $to
      * @return mixed
      */
-    public static function slashNtoBR($subject)
+    public static function slashNto($subject, $to = '<br />')
     {
-        $replaced = preg_replace("/\r\n|\r|\n/", '<br />', $subject);
+        $replaced = preg_replace("/\r\n|\r|\n/", $to, $subject);
         return $replaced;
     }
 
