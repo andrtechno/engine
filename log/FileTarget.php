@@ -3,7 +3,10 @@
 namespace panix\engine\log;
 
 use Yii;
+use yii\helpers\VarDumper;
 use yii\log\FileTarget as BaseFileTarget;
+use yii\log\Logger;
+use yii\web\Request;
 use ZipArchive;
 
 /**
@@ -13,7 +16,7 @@ use ZipArchive;
 class FileTarget extends BaseFileTarget
 {
     public $logVars = [
-       // '_POST',
+        // '_POST',
         '_SERVER'
     ];
     public $maskVars = [
@@ -34,6 +37,7 @@ class FileTarget extends BaseFileTarget
         '_SERVER.SCRIPT_FILENAME',
         '_SERVER.PATHEXT',
         '_SERVER.COMSPEC',
+        '_SERVER.REQUEST_SCHEME',
         '_SERVER.SystemRoot',
         '_SERVER.CONTEXT_DOCUMENT_ROOT',
         '_SERVER.GATEWAY_INTERFACE',
@@ -61,9 +65,40 @@ class FileTarget extends BaseFileTarget
     {
 
         parent::init();
-        if(Yii::$app->request->isPjax || Yii::$app->request->isPjax){
+        if (Yii::$app->request->isPjax || Yii::$app->request->isPjax) {
             $this->setEnabled(false);
         }
+    }
+
+    public function formatMessage($message)
+    {
+        return '#>' . parent::formatMessage($message);
+    }
+
+    public function getMessagePrefix($message)
+    {
+        if ($this->prefix !== null) {
+            return call_user_func($this->prefix, $message);
+        }
+
+        if (Yii::$app === null) {
+            return '';
+        }
+
+        $request = Yii::$app->getRequest();
+        $ip = $request instanceof Request ? $request->getUserIP() : '-';
+
+        /* @var $user \yii\web\User */
+        $user = Yii::$app->has('user', true) ? Yii::$app->get('user') : null;
+        if ($user && ($identity = $user->getIdentity(false))) {
+            $userID = $identity->getId();
+            $userEmail = $user->getEmail();
+        } else {
+            $userID = '-';
+            $userEmail = '-';
+        }
+
+        return "[$ip][$userID][$userEmail]";
     }
 
     protected function rotateFiles()

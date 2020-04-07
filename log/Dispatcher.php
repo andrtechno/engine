@@ -45,16 +45,7 @@ class Dispatcher extends \yii\log\Dispatcher
                 ],
 
             ],
-            [
-                'class' => 'panix\engine\log\FileTarget',
-                'levels' => ['error'],
-                'logFile' => $logPath . '/error.log',
-            ],
-            [
-                'class' => 'panix\engine\log\FileTarget',
-                'levels' => ['warning'],
-                'logFile' => $logPath . '/warning.log',
-            ],
+
             [
                 'class' => 'panix\engine\log\FileTarget',
                 'levels' => ['info'],
@@ -67,12 +58,15 @@ class Dispatcher extends \yii\log\Dispatcher
                     'yii\swiftmailer\Mailer::sendMessage',
                     'yii\mail\BaseMailer::send',
                     'yii\httpclient\StreamTransport::send',
-                    'yii\web\Session::open'
+                    'yii\web\Session::open',
+                    'yii\web\Session::unfreeze',
+                    'yii\web\Session::freeze',
                 ],
             ],
             [
                 'class' => 'panix\engine\log\FileTarget',
                 'levels' => ['info'],
+                'logVars' => [],
                 'logFile' => $logPath . '/mail.log',
                 'categories' => [
                     'yii\mail\BaseMailer::send',
@@ -117,6 +111,16 @@ class Dispatcher extends \yii\log\Dispatcher
                     'yii\web\HttpException:400',
                     'yii\i18n\PhpMessageSource::loadMessages'
                 ],
+            ],
+            [
+                'class' => 'panix\engine\log\FileTarget',
+                'levels' => ['error'],
+                'logFile' => $logPath . '/error.log',
+            ],
+            [
+                'class' => 'panix\engine\log\FileTarget',
+                'levels' => ['warning'],
+                'logFile' => $logPath . '/warning.log',
             ],
         ];
         parent::init();
