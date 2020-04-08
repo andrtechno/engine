@@ -65,8 +65,10 @@ class FileTarget extends BaseFileTarget
     {
 
         parent::init();
-        if (Yii::$app->request->isPjax || Yii::$app->request->isPjax) {
-            $this->setEnabled(false);
+        if (Yii::$app->id != 'console') {
+            if (Yii::$app->request->isPjax || Yii::$app->request->isPjax) {
+                $this->setEnabled(false);
+            }
         }
     }
 
