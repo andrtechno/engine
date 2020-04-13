@@ -14,9 +14,9 @@ trait TranslateQueryTrait
     public function translate($id = null)
     {
         if (!$id) {
-            $id = Yii::$app->languageManager->active->id;
+            $id = Yii::$app->languageManager->active['id'];
         }
-        $this->joinWith(['translations translate' => function ($query) use ($id) {
+        $this->joinWith(['translations as translate' => function ($query) use ($id) {
             /** @var \yii\db\Query $query */
             $query->andWhere(['translate.language_id' => $id]);
         }]);

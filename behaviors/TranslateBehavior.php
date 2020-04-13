@@ -79,7 +79,12 @@ class TranslateBehavior extends Behavior
         if ($language === null) {
             $language = Yii::$app->languageManager->active->slug;
         }
-        $lang = Yii::$app->languageManager->getByCode($language);
+        if(Yii::$app instanceof \panix\engine\console\Application){
+            $lang = Yii::$app->languageManager->getByCode('ru');
+        }else{
+            $lang = Yii::$app->languageManager->getByCode($language);
+        }
+
         if (!$lang)
             throw new InvalidConfigException('Language not found ' . $language);
 

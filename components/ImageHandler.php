@@ -6,6 +6,7 @@ use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
 use yii\web\Response;
+use Yii;
 
 class ImageHandler extends Component
 {
@@ -880,6 +881,43 @@ class ImageHandler extends Component
                 break;
             case self::IMG_JPEG:
                 header('Content-type: image/jpeg');
+                imagejpeg($this->image, null, $jpegQuality);
+                break;
+            case self::IMG_PNG:
+                header('Content-type: image/png');
+                imagepng($this->image);
+                break;
+            default:
+                throw new Exception('Invalid image format for putput');
+        }
+
+        return $this;
+    }
+
+    public function show2($inFormat = false, $jpegQuality = 100)
+    {
+        $this->checkLoaded();
+
+        if (!$inFormat) {
+            $inFormat = $this->format;
+        }
+        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+
+        $headers = Yii::$app->response->headers;
+        $headers->add('Content-type', 'image/jpeg');
+        $headers->set('Content-type', 'image/jpeg');
+        switch ($inFormat) {
+            case self::IMG_GIF:
+                header('Content-type: image/gif');
+                imagegif($this->image);
+                break;
+            case self::IMG_JPEG:
+               // header('Content-type: image/jpeg');
+
+
+
+
+
                 imagejpeg($this->image, null, $jpegQuality);
                 break;
             case self::IMG_PNG:
