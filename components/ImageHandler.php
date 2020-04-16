@@ -238,7 +238,7 @@ class ImageHandler extends Component
 
         $this->maxHeight = ($toHeight > $this->height) ? $this->height : $toHeight;
         $this->maxWidth = ($toWidth > $this->width) ? $this->width : $toWidth;
-        //$this->maxHeight = intval($toHeight);
+       // $this->maxHeight = intval($toHeight);
         // $this->maxWidth = intval($toWidth);
 
         // get the new dimensions...
