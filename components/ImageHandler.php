@@ -616,7 +616,7 @@ class ImageHandler extends Component
                 }
                 // $this->preserveTransparency($wImg['image']);
                 // $this->preserveAlpha();
-                if (self::POS_REPEAT != 10) {
+
                     imagecopyresampled(
                         $this->image,
                         $wImg['image'],
@@ -629,7 +629,7 @@ class ImageHandler extends Component
                         $wImg['width'],
                         $wImg['height']
                     );
-                }
+
 
                 imagedestroy($wImg['image']);
 
