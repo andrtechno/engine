@@ -98,8 +98,8 @@ class WebController extends CommonController
                 }
             }
         }
-        Yii::setAlias('@theme', Yii::getAlias("@app/web/themes/{$config->theme}"));
-
+       // Yii::setAlias('@theme', Yii::getAlias("@app/web/themes/{$config->theme}"));
+        Yii::setAlias('@theme', Yii::$app->view->theme->basePath);
         if (true && Yii::$app->id != 'console') {
 
             Yii::$app->catchAll = ['maintenance/index', 'message' => 'test text'];
@@ -131,7 +131,7 @@ class WebController extends CommonController
             $statusCode = $exception->statusCode;
             $name = $exception->getName();
             $message = $exception->getMessage();
-            $this->layout = "@app/web/themes/{$this->view->theme->name}/views/layouts/error";
+            $this->layout = "@themes/views/layouts/error";
 
             $this->pageName = Yii::t('app/error', $statusCode);
 
