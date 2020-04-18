@@ -131,7 +131,7 @@ class WebController extends CommonController
             $statusCode = $exception->statusCode;
             $name = $exception->getName();
             $message = $exception->getMessage();
-            $this->layout = "@themes/views/layouts/error";
+            $this->layout = "@theme/views/layouts/error";
 
             $this->pageName = Yii::t('app/error', $statusCode);
 
