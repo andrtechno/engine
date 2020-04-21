@@ -178,7 +178,7 @@ class ActionColumn extends DataColumn
             $this->buttons['switch'] = function ($url, $model) {
                 /** @var $model ActiveRecord */
                 //unset($url,$key);
-                if (isset($model->primaryKey)) {
+                if (isset($model->primaryKey) && isset($model->disallow_switch)) {
                     if (!in_array($model->primaryKey, $model->disallow_switch)) {
                         if (isset($model->switch)) {
                             if ($model->switch) {
@@ -212,7 +212,7 @@ class ActionColumn extends DataColumn
         if (!isset($this->buttons['update'])) {
             $this->buttons['update'] = function ($url, $model) {
                 /** @var $model ActiveRecord */
-                if (isset($model->primaryKey)) {
+                if (isset($model->primaryKey) && isset($model->disallow_update)) {
                     if (!in_array($model->primaryKey, $model->disallow_update)) {
                         return Html::a(Html::icon('edit'), $url, [
                             'title' => Yii::t('yii', 'Update'),
@@ -240,7 +240,7 @@ class ActionColumn extends DataColumn
                   'data-method' => 'post',
                   'data-pjax' => '0',
                   ]); */
-                if (isset($model->primaryKey)) {
+                if (isset($model->primaryKey) && isset($model->disallow_delete)) {
                     if (!in_array($model->primaryKey, $model->disallow_delete)) {
 
 
