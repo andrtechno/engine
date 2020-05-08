@@ -180,7 +180,9 @@ class ImageHandler extends Component
             return false;
         }
     }
-
+    public function getFileName(){
+        return $this->fileName;
+    }
     public function reload()
     {
         $this->checkLoaded();
