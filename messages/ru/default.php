@@ -53,7 +53,7 @@ return [
     'CREATE_RETURN' => 'Добавить и выйти',
     'RENAME' => 'Переименовать',
     'VIEWS' => '{n, plural, =0{Просмотров нет} =1{# просмотр} one{# просмотров} few{# просмотра} many{# просмотров} other{# other}}',
-    'REVIEWS' => '{n, plural, =0{0 отзывов} =1{# отзыв} one{# отзывов} few{# отзыва} many{# отзывов} other{# other}}',
+    'REVIEWS' => '{n, plural, =0{0 отзывов} =1{# отзыв} one{# отзывов} few{# отзыва} many{# отзывов} other{отзывов нет}}',
     'YES' => 'Да',
     'NO' => 'Нет',
     'EMPTY_LIST' => '&mdash;',
