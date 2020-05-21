@@ -7,10 +7,10 @@ echo Html::hiddenInput('model', $modelClass);
 
 ?>
     <div class="form-group row">
-        <div class="col-sm-4 col-lg-3">
-            <?= Html::label('pageSize', 'pageSize', ['class' => 'col-form-label']); ?>
+        <div class="col-sm-4 col-lg-4">
+            <?= Html::label('Количество записей на странице', 'pageSize', ['class' => 'col-form-label']); ?>
         </div>
-        <div class="col-sm-8 col-lg-9">
+        <div class="col-sm-8 col-lg-8">
             <?= Html::textInput('pageSize', $pageSize, ['class' => 'form-control', 'id' => 'pageSize']); ?>
         </div>
     </div>
@@ -26,7 +26,8 @@ echo \panix\engine\grid\GridView::widget([
         [
             'attribute' => 'checkbox',
             'format' => 'raw',
-            'header' => '',
+            'header' => null,
+            'contentOptions' => ['class' => 'text-center', 'style' => 'width:60px'],
         ],
         [
             'attribute' => 'name',

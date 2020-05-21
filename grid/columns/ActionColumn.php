@@ -157,8 +157,8 @@ class ActionColumn extends DataColumn
                                     type:'POST',
                                     data:form,
                                     success:function(){
-                                        $('.edit-columns_dialog').remove();
-                                        //$.pjax.reload('#" . $this->grid->id . "', {timeout: false});
+                                        $('#edit-columns_dialog').dialog('close').remove()
+                                        $.pjax.reload('#" . $this->grid->id . "', {timeout: false});
                                     }
                                 });
                             }")

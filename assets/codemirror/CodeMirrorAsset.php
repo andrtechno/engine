@@ -10,15 +10,13 @@ class CodeMirrorAsset extends CodeMirrorBundle
 {
 
     public $js = [
-        'lib/codemirror.js'
+        'lib/codemirror.js',
+        'mode/htmlmixed/htmlmixed.js',
+        'mode/clike/clike.js',
+        'addon/selection/active-line.js'
     ];
 
     public $css = [
         'lib/codemirror.css',
-        'theme/ambiance.css',
     ];
-
-    /*public $depends = [
-        'yii\web\YiiAsset',
-    ];*/
 }
