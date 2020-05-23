@@ -18,19 +18,17 @@ class ActiveForm extends \yii\bootstrap4\ActiveForm
     public function init()
     {
         $this->fieldConfig = ArrayHelper::merge([
-            'template' => "<div class=\"col-sm-4 col-lg-2\">{label}</div>\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
+            'template' => "<div class=\"col-sm-4 col-md-4 col-lg-3 col-xl-2\">{label}</div>\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
             'horizontalCssClasses' => [
                 'label' => 'col-form-label',
                 'offset' => 'offset-sm-4 offset-lg-2',
-                'wrapper' => 'col-sm-8 col-lg-10',
+                'wrapper' => 'col-sm-8 col-md-8 col-lg-9 col-xl-10',
                 'error' => '',
                 'hint' => '',
             ],
         ], $this->fieldConfig);
         parent::init();
     }
-
-
 
     /**
      * @inheritdoc
