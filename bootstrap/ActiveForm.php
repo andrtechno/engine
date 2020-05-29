@@ -21,7 +21,7 @@ class ActiveForm extends \yii\bootstrap4\ActiveForm
             'template' => "<div class=\"col-sm-4 col-md-4 col-lg-3 col-xl-2\">{label}</div>\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
             'horizontalCssClasses' => [
                 'label' => 'col-form-label',
-                'offset' => 'offset-sm-4 offset-lg-3 offset-xl-4',
+                'offset' => 'offset-sm-4 offset-lg-3 offset-xl-2',
                 'wrapper' => 'col-sm-8 col-md-8 col-lg-9 col-xl-10',
                 'error' => '',
                 'hint' => '',
