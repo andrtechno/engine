@@ -108,17 +108,24 @@ class CMS
     public static function phoneOperator($number)
     {
 
-        if (preg_match('/([\+]38039|[\+]38067|[\+]38068|[\+]38096|[\+]38097|[\+]38098)/i', $number, $match)) {
+        if (preg_match('/([\+\380](39|67|68|96|97|98))/i', $number, $match)) {
             return 'Киевстар';
-        } elseif (preg_match('/([\+]38050|[\+]38066|[\+]38095|[\+]38099)/i', $number, $match)) {
+        } elseif (preg_match('/([\+\380](50|66|95|99))/i', $number, $match)) {
             return 'Vodafone (МТС)';
-        } elseif (preg_match('/([\+]38063|[\+]38093|[\+]38073)/i', $number, $match)) {
+
+        //} elseif (preg_match('/([\+\79](01|02|04|08|10|11|12|13|14|15|16|17|18|19|50|78|80|81|82|83|84|85|86|87|88|89))/i', $number, $match)) {
+        //    return 'МТС russian';
+
+        //} elseif (preg_match('/([\+\79](01|02))/i', $number, $match)) {
+       //     return 'МегаФона';
+
+        } elseif (preg_match('/([\+\380](63|93|73))/i', $number, $match)) {
             return 'lifecell';
-        } elseif (preg_match('/([\+]38091)/i', $number, $match)) {
+        } elseif (preg_match('/([\+\380](91))/i', $number, $match)) {
             return 'Utel Украина';
-        } elseif (preg_match('/([\+]38092)/i', $number, $match)) {
+        } elseif (preg_match('/([\+\380](92))/i', $number, $match)) {
             return 'EOPLEnet Украина';
-        } elseif (preg_match('/([\+]38094)/i', $number, $match)) {
+        } elseif (preg_match('/([\+\380](94))/i', $number, $match)) {
             return 'Intertelecom Ukraine';
         } else {
             return 'Unknown';
