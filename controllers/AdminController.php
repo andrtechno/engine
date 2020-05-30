@@ -93,11 +93,4 @@ class AdminController extends CommonController
         parent::init();
     }
 
-
-    public function actionCreate()
-    {
-        return $this->actionUpdate(false);
-    }
-
-
 }
