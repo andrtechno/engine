@@ -32,7 +32,7 @@ class ActionColumn extends DataColumn
     public function init()
     {
 
-        if(!$this->header)
+        if (!$this->header)
             $this->header = Yii::t('app/default', 'OPTIONS');
 
         // $this->btnSize = $config['grid_btn_icon_size'];
@@ -135,7 +135,6 @@ class ActionColumn extends DataColumn
         ", View::POS_END, 'edit-columns_dialog');
 
 
-
             echo \panix\engine\jui\Dialog::widget([
                 'id' => 'edit-columns_dialog',
                 'clientOptions' => [
@@ -174,31 +173,36 @@ class ActionColumn extends DataColumn
      */
     protected function initDefaultButtons()
     {
-        if (!isset($this->buttons['switch'])) {
-            $this->buttons['switch'] = function ($url, $model) {
-                /** @var $model ActiveRecord */
-                //unset($url,$key);
-                if (isset($model->primaryKey) && isset($model->disallow_switch)) {
-                    if (!in_array($model->primaryKey, $model->disallow_switch)) {
-                        if (isset($model->switch)) {
-                            if ($model->switch) {
-                                $icon = 'eye';
-                                $class = 'btn-outline-success';
-                            } else {
-                                $icon = 'eye-close';
-                                $class = 'btn-outline-secondary';
-                            }
+        $controller = Yii::$app->controller;
+        $module = $controller->module;
 
-                            $switch_data = $model->switch ? 0 : 1;
-                            return Html::a(Html::icon($icon), Url::toRoute(['switch', 'id' => $model->primaryKey, 'value' => $switch_data]), [
-                                'title' => Yii::t('app/default', 'GRID_SWITCH'),
-                                'class' => 'btn ' . $this->btnSize . ' ' . $class . ' switch', //linkTarget
-                                'data-pjax' => 0,
-                            ]);
+        if (!isset($this->buttons['switch'])) {
+            if (Yii::$app->user->can("/{$module->id}/admin/{$controller->id}/*") || Yii::$app->user->can("/{$module->id}/admin/{$controller->id}/switch")) {
+                $this->buttons['switch'] = function ($url, $model) {
+                    /** @var $model ActiveRecord */
+                    //unset($url,$key);
+                    if (isset($model->primaryKey) && isset($model->disallow_switch)) {
+                        if (!in_array($model->primaryKey, $model->disallow_switch)) {
+                            if (isset($model->switch)) {
+                                if ($model->switch) {
+                                    $icon = 'eye';
+                                    $class = 'btn-outline-success';
+                                } else {
+                                    $icon = 'eye-close';
+                                    $class = 'btn-outline-secondary';
+                                }
+
+                                $switch_data = $model->switch ? 0 : 1;
+                                return Html::a(Html::icon($icon), Url::toRoute(['switch', 'id' => $model->primaryKey, 'value' => $switch_data]), [
+                                    'title' => Yii::t('app/default', 'GRID_SWITCH'),
+                                    'class' => 'btn ' . $this->btnSize . ' ' . $class . ' switch', //linkTarget
+                                    'data-pjax' => 0,
+                                ]);
+                            }
                         }
                     }
-                }
-            };
+                };
+            }
         }
         if (!isset($this->buttons['view'])) {
             $this->buttons['view'] = function ($url) {
@@ -210,65 +214,67 @@ class ActionColumn extends DataColumn
             };
         }
         if (!isset($this->buttons['update'])) {
-            $this->buttons['update'] = function ($url, $model) {
-                /** @var $model ActiveRecord */
-                if (isset($model->primaryKey) && isset($model->disallow_update)) {
-                    if (!in_array($model->primaryKey, $model->disallow_update)) {
+            if (Yii::$app->user->can("/{$module->id}/admin/{$controller->id}/*") || Yii::$app->user->can("/{$module->id}/admin/{$controller->id}/update")) {
+                $this->buttons['update'] = function ($url, $model) {
+                    /** @var $model ActiveRecord */
+                    if (isset($model->primaryKey) && isset($model->disallow_update)) {
+                        if (!in_array($model->primaryKey, $model->disallow_update)) {
+                            return Html::a(Html::icon('edit'), $url, [
+                                'title' => Yii::t('yii', 'Update'),
+                                'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary',
+                                // 'data-pjax' => 0,
+                            ]);
+                        }
+                    } else {
                         return Html::a(Html::icon('edit'), $url, [
                             'title' => Yii::t('yii', 'Update'),
                             'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary',
-                           // 'data-pjax' => 0,
+                            'data-pjax' => 0,
                         ]);
                     }
-                } else {
-                    return Html::a(Html::icon('edit'), $url, [
-                        'title' => Yii::t('yii', 'Update'),
-                        'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary',
-                        'data-pjax' => 0,
-                    ]);
-                }
-            };
+                };
+            }
         }
 
         if (!isset($this->buttons['delete'])) {
-            $this->buttons['delete'] = function ($url, $model) {
-                /** @var $model ActiveRecord */
-                /* return Html::a('<i class="text-danger icon-delete"></i>', $url, [
-                  'title' => Yii::t('yii', 'Delete'),
-                  'class' => 'btn ' . $this->btnSize . ' btn-secondary',
-                  'data-confirm' => Yii::t('app/default', 'DELETE_ITEM'),
-                  'data-method' => 'post',
-                  'data-pjax' => '0',
-                  ]); */
-                if (isset($model->primaryKey) && isset($model->disallow_delete)) {
-                    if (!in_array($model->primaryKey, $model->disallow_delete)) {
+            if (Yii::$app->user->can("/{$module->id}/admin/{$controller->id}/*") || Yii::$app->user->can("/{$module->id}/admin/{$controller->id}/delete")) {
+                $this->buttons['delete'] = function ($url, $model) {
+                    /** @var $model ActiveRecord */
+                    /* return Html::a('<i class="text-danger icon-delete"></i>', $url, [
+                      'title' => Yii::t('yii', 'Delete'),
+                      'class' => 'btn ' . $this->btnSize . ' btn-secondary',
+                      'data-confirm' => Yii::t('app/default', 'DELETE_ITEM'),
+                      'data-method' => 'post',
+                      'data-pjax' => '0',
+                      ]); */
+                    if (isset($model->primaryKey) && isset($model->disallow_delete)) {
+                        if (!in_array($model->primaryKey, $model->disallow_delete)) {
 
 
+                            /*$this->grid->view->registerJs("
+                                $(document).on('click','.delete',function(e){
+                                    e.preventDefault();
+                                    if (confirm('" . Yii::t('app/default', 'DELETE_CONFIRM') . "')) {
+                                        $.ajax('$url', {
+                                            type: 'POST',
+                                            dataType:'json',
+                                        }).done(function(data) {
+                                            $.pjax.reload({container: '#" . $this->grid->id . "'});
+                                                console.log(data);
+                                                common.notify(data.message,'success');
+                                                //$('#{$this->grid->id}').yiiGridView('applyFilter');
+                                        });
+                                    }
+                                    //return false;
+                                });", View::POS_END, 'delete');*/
 
-                        /*$this->grid->view->registerJs("
-                            $(document).on('click','.delete',function(e){
-                                e.preventDefault();
-                                if (confirm('" . Yii::t('app/default', 'DELETE_CONFIRM') . "')) {
-                                    $.ajax('$url', {
-                                        type: 'POST',
-                                        dataType:'json',
-                                    }).done(function(data) {
-                                        $.pjax.reload({container: '#" . $this->grid->id . "'});
-                                            console.log(data);
-                                            common.notify(data.message,'success');
-                                            //$('#{$this->grid->id}').yiiGridView('applyFilter');
-                                    });
-                                }
-                                //return false;
-                            });", View::POS_END, 'delete');*/
 
-
-                        return Html::a(Html::icon('delete'), $url, [
-                            'title' => Yii::t('yii', 'Delete'),
-                            'aria-label' => Yii::t('yii', 'Delete'),
-                            'data-pjax' => '0',
-                            'class' => 'btn ' . $this->btnSize . ' btn-outline-danger delete',
-                            'onclick' => "
+                            return Html::a(Html::icon('delete'), $url, [
+                                'title' => Yii::t('yii', 'Delete'),
+                                'aria-label' => Yii::t('yii', 'Delete'),
+                                'data-pjax' => '0',
+                                'class' => 'btn ' . $this->btnSize . ' btn-outline-danger delete',
+                                'onclick' => "
                                 if (confirm('" . Yii::t('app/default', 'DELETE_CONFIRM') . "')) {
                                     $.ajax('$url', {
                                         type: 'POST',
@@ -282,17 +288,18 @@ class ActionColumn extends DataColumn
                                 }
                                 return false;
                             ",
+                            ]);
+                        }
+                    } else {
+                        return Html::a(Html::icon('delete'), $url, [
+                            'title' => Yii::t('yii', 'Delete'),
+                            'class' => 'btn ' . $this->btnSize . ' btn-secondary',
+                            'data-confirm' => Yii::t('app/default', 'DELETE_ITEM'),
+                            'data-pjax' => '0',
                         ]);
                     }
-                } else {
-                    return Html::a(Html::icon('delete'), $url, [
-                        'title' => Yii::t('yii', 'Delete'),
-                        'class' => 'btn ' . $this->btnSize . ' btn-secondary',
-                        'data-confirm' => Yii::t('app/default', 'DELETE_ITEM'),
-                        'data-pjax' => '0',
-                    ]);
-                }
-            };
+                };
+            }
         }
     }
 
