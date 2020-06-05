@@ -25,7 +25,7 @@ class ActionColumn extends DataColumn
     public $contentOptions = ['class' => 'text-center'];
     public $pjax;
     public $filter = true;
-
+	public $editColumnsUrl;
     /**
      * @inheritdoc
      */
@@ -35,6 +35,9 @@ class ActionColumn extends DataColumn
         if (!$this->header)
             $this->header = Yii::t('app/default', 'OPTIONS');
 
+		if(!$this->editColumnsUrl){
+			$this->editColumnsUrl = Url::to('/admin/app/default/edit-columns');
+		}
         // $this->btnSize = $config['grid_btn_icon_size'];
         // if (!$this->pjax) {
         //    $this->pjax = '#pjax-container';
@@ -45,7 +48,7 @@ class ActionColumn extends DataColumn
                 if (method_exists(($this->grid->dataProvider)->query->modelClass, 'getGridColumns')) {
                     $items[] = [
                         'label' => Html::icon('table') . ' ' . Yii::t('app/admin', 'EDIT_GRID_COLUMNS'),
-                        'url' => '#',
+                        'url' => $this->editColumnsUrl,
                         'linkOptions' => [
                             // 'data-target' => "#",
                             'class' => 'dropdown-item edit-columns',
@@ -118,7 +121,7 @@ class ActionColumn extends DataColumn
 
                 $.ajax({
                     type:'POST',
-                    url:common.url('/admin/app/default/edit-columns'),
+                    url:$(this).attr('href'),
                     data:{
                         grid_id:'" . $this->grid->getId() . "',
                         model:'" . $classNamePath . "',
@@ -129,6 +132,7 @@ class ActionColumn extends DataColumn
                         $('#edit-columns_dialog').dialog('open');
                     }
                 });
+				return false;
             });
                     
         });
@@ -152,7 +156,7 @@ class ActionColumn extends DataColumn
                             'click' => new JsExpression("function(){
                                 var form = $('#edit_grid_columns_form').serialize();
                                 $.ajax({
-                                    url:common.url('/admin/app/default/edit-columns'),
+                                    url:'" . $this->editColumnsUrl . "',
                                     type:'POST',
                                     data:form,
                                     success:function(){
