@@ -4,10 +4,6 @@ namespace panix\engine\grid\columns;
 
 use panix\engine\web\AssetBundle;
 
-/**
- * Class CheckboxColumnAsset
- * @package app\backend\themes\dashboard\assets
- */
 class CheckboxColumnAsset extends AssetBundle
 {
 
