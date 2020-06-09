@@ -55,7 +55,7 @@ class CheckboxColumn extends BaseCheckboxColumn
     {
 
         parent::init();
-				CheckboxColumnAsset::register($this->grid->getView());
+		CheckboxColumnAsset::register($this->grid->getView());
         $this->contentOptions = ['class' => 'text-center'];
         $this->grid->footerRowOptions = ['class' => 'text-center'];
         // $this->grid->filterRowOptions = ['class' => 'text-center'];
