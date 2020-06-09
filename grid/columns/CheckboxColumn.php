@@ -44,61 +44,18 @@ class CheckboxColumn extends BaseCheckboxColumn
         parent::registerClientScript();
         $this->grid->getView()->registerJs("
             var grid_selections;
-            
-            $(document).on('click','#{$this->grid->getId()} .select-on-check-all',function() {
-            
-                var checked=this.checked;
-                
-                $('input[name=\"selection[]\"]').each(function() {
-                    $('input[name=\"selection[]\"]:checkbox').prop('checked',checked);
-                });
-
-                grid_selections = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
-                console.log(grid_selections);
-            });
-
-            
-            $(document).on('click','#{$this->grid->getId()} input[name=\"selection[]\"]',function(e) {
-                grid_selections = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
-                console.log('CHECKED',grid_selections);
-            });
-            
-            
-            function gridAction(that) {
-            
-                var keys = $('#{$this->grid->getId()}').yiiGridView('getSelectedRows');
-                var url = $(that).attr('href');
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {id: grid_selections},
-                    success: function (data) {
-                        if(data.success){
-                            common.notify(data.message,'success');
-                            $.pjax.reload('#pjax-{$this->grid->getId()}', {timeout: false});
-                        }else{
-                            common.notify(data.message,'error');
-                        }
-                    }
-                });
-                return false;
-            }
-            ",View::POS_END);
+            var gridID = '{$this->grid->getId()}';
+		", View::POS_HEAD);
     }
 
     /**
      * @inheritdoc
      */
-    public function init2()
+    public function init()
     {
 
-
-
         parent::init();
-
-
-        //print_r($this->getCustomActions());die;
+				CheckboxColumnAsset::register($this->grid->getView());
         $this->contentOptions = ['class' => 'text-center'];
         $this->grid->footerRowOptions = ['class' => 'text-center'];
         // $this->grid->filterRowOptions = ['class' => 'text-center'];
@@ -106,7 +63,6 @@ class CheckboxColumn extends BaseCheckboxColumn
 
         $this->footer = ButtonDropdown::widget([
             'dropdownClass' => 'panix\engine\bootstrap\Dropdown4',
-
             'label' => Html::icon('menu'),
             'encodeLabel' => false,
             //'containerOptions' => ['class' => 'dropup hidden', 'id' => 'grid-actions'],
@@ -189,6 +145,7 @@ class CheckboxColumn extends BaseCheckboxColumn
             return Html::checkBox($name, false, ['class' => 'select-on-check-all']);
         }
     }
+
     protected function getHeaderCheckBoxName2()
     {
         $name = $this->name;
@@ -203,6 +160,7 @@ class CheckboxColumn extends BaseCheckboxColumn
 
         return $name;
     }
+
     /**
      * @inheritdoc
      */
