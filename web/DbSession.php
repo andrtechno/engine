@@ -23,9 +23,9 @@ class DbSession extends BaseDbSession
 
         try {
             $uid = (Yii::$app->user->getIdentity(false) == null) ? null : Yii::$app->user->getIdentity(false)->id;
-            $ip = Yii::$app->request->getRemoteIP();
+            $ip = (Yii::$app->id !== 'console')?Yii::$app->request->getRemoteIP():NULL;
             if (Yii::$app->user->getIsGuest()) {
-                $checkBot = CMS::isBot();
+                $checkBot = (Yii::$app->id !== 'console')?CMS::isBot():false;
                 if ($checkBot['success']) {
                     $user_name = substr($checkBot['name'], 0, 25);
                     $user_type = 'SearchBot';
@@ -42,7 +42,7 @@ class DbSession extends BaseDbSession
             $data = [];
             $data['user_id'] = $uid;
             $data['ip'] = $ip;
-            $data['user_agent'] = Yii::$app->request->getUserAgent();
+            $data['user_agent'] = (Yii::$app->id !== 'console')?Yii::$app->request->getUserAgent():null;
             $data['user_type'] = $user_type;
             $data['user_name'] = $user_name;
             return $data;
