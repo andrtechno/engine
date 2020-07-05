@@ -9943,22 +9943,22 @@ class Emoji
 
     public static function emoji_docomo_to_unified($text)
     {
-        return emoji_convert($text, 'docomo_to_unified');
+        return self::emoji_convert($text, 'docomo_to_unified');
     }
 
     public static function emoji_kddi_to_unified($text)
     {
-        return emoji_convert($text, 'kddi_to_unified');
+        return self::emoji_convert($text, 'kddi_to_unified');
     }
 
     public static function emoji_softbank_to_unified($text)
     {
-        return emoji_convert($text, 'softbank_to_unified');
+        return self::emoji_convert($text, 'softbank_to_unified');
     }
 
     public static function emoji_google_to_unified($text)
     {
-        return emoji_convert($text, 'google_to_unified');
+        return self::emoji_convert($text, 'google_to_unified');
     }
 
 
@@ -9968,22 +9968,22 @@ class Emoji
 
     public static function emoji_unified_to_docomo($text)
     {
-        return emoji_convert($text, 'unified_to_docomo');
+        return self::emoji_convert($text, 'unified_to_docomo');
     }
 
     public static function emoji_unified_to_kddi($text)
     {
-        return emoji_convert($text, 'unified_to_kddi');
+        return self::emoji_convert($text, 'unified_to_kddi');
     }
 
     public static function emoji_unified_to_softbank($text)
     {
-        return emoji_convert($text, 'unified_to_softbank');
+        return self::emoji_convert($text, 'unified_to_softbank');
     }
 
     public static function emoji_unified_to_google($text)
     {
-        return emoji_convert($text, 'unified_to_google');
+        return self::emoji_convert($text, 'unified_to_google');
     }
 
 
