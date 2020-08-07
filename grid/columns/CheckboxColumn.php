@@ -21,6 +21,7 @@ class CheckboxColumn extends BaseCheckboxColumn
 
     public $contentOptions = ['style' => 'width: 50px;', 'class' => 'text-center'];
     public $filterOptions = ['class' => 'text-center'];
+    public $headerOptions = ['style' => 'width: 50px;', 'class' => 'text-center'];
     /**
      * @var string the name of the input checkbox input fields. This will be appended with `[]` to ensure it is an array.
      */
