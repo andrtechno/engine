@@ -20,8 +20,8 @@ class CheckboxColumn extends BaseCheckboxColumn
 {
 
     public $contentOptions = ['style' => 'width: 50px;', 'class' => 'text-center'];
-    public $filterOptions = ['class' => 'text-center'];
     public $headerOptions = ['style' => 'width: 50px;', 'class' => 'text-center'];
+    public $filterOptions = ['class' => 'text-center'];
     /**
      * @var string the name of the input checkbox input fields. This will be appended with `[]` to ensure it is an array.
      */
@@ -100,14 +100,14 @@ class CheckboxColumn extends BaseCheckboxColumn
                 'label' => Yii::t('app/default', 'DELETE'),
                 'url' => ['delete'],
                 'icon' => 'delete',
-                'options' => [
-                    'class' => 'dropdown-item',
-                    'data-confirm' => 0,
+                'linkOptions' => [
+                    'class' => 'dropdown-item grid-action ',
+                    'data-confirm-info' => Yii::t('app/default', 'DELETE_CONFIRM'),
+                    //'data-method'=>'POST',
                     'data-pjax' => 0
                 ]
             ]
         ];
-
         return $this->_customActions;
     }
 
@@ -117,10 +117,11 @@ class CheckboxColumn extends BaseCheckboxColumn
     public function getDefaultActionOptions()
     {
         return [
-            //'data-confirm' => Yii::t('app/default', 'CONFIRM'),
+           // 'data-confirm' => Yii::t('app/default', 'CONFIRM'),
             'class' => 'dropdown-item',
+            //'data-method'=>'POST'
             //'data-pjax' => 0,
-            'onClick' => 'gridAction(this); return false;'
+           // 'onClick' => 'gridAction(this); return false;'
         ];
     }
 
