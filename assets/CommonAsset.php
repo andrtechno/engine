@@ -10,6 +10,7 @@ class CommonAsset extends AssetBundle
     public $sourcePath = __DIR__ . '/assets';
 
     public $js = [
+        'js/bootbox/bootbox.min.js',
         'js/common.js',
     ];
 
