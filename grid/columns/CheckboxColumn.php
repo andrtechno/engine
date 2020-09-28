@@ -26,7 +26,7 @@ class CheckboxColumn extends BaseCheckboxColumn
      * @var string the name of the input checkbox input fields. This will be appended with `[]` to ensure it is an array.
      */
     public $name = 'selection';
-
+    public $enableMenu = true;
 
     public $checkboxOptions = [];
 
@@ -58,10 +58,11 @@ class CheckboxColumn extends BaseCheckboxColumn
         parent::init();
 		CheckboxColumnAsset::register($this->grid->getView());
         $this->contentOptions = ['class' => 'text-center'];
-        $this->grid->footerRowOptions = ['class' => 'text-center'];
+
         // $this->grid->filterRowOptions = ['class' => 'text-center'];
 
-
+if($this->enableMenu){
+    $this->grid->footerRowOptions = ['class' => 'text-center'];
         $this->footer = ButtonDropdown::widget([
             'dropdownClass' => 'panix\engine\bootstrap\Dropdown4',
             'label' => Html::icon('menu'),
@@ -73,6 +74,7 @@ class CheckboxColumn extends BaseCheckboxColumn
                 'items' => $this->getCustomActions(),
             ],
         ]);
+}
 
     }
 
