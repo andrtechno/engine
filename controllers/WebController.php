@@ -136,7 +136,7 @@ class WebController extends CommonController
             $this->pageName = Yii::t('app/error', $statusCode);
 
             $this->view->title = $this->pageName;
-            $this->breadcrumbs[] = $statusCode;
+            $this->view->params['breadcrumbs'][] = $statusCode;
             return $this->render('error', [
                 'exception' => $exception,
                 'handler' => $handler,
