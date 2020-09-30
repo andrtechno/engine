@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
  */
 class CommonController extends Controller
 {
-    public $icon, $dataModel, $pageName, $breadcrumbs;
+    public $icon, $dataModel, $pageName;
     public $jsMessages = [];
     public $dashboard = false;
     public $enableStatistic=true;
