@@ -23,7 +23,7 @@ class Theme extends BaseTheme
     public $name = null;
     private $cache_key = 'cached_settings_theme';
     protected $data = [];
-
+    public $asset;
     public static function tableName()
     {
         return '{{%settings_theme}}';
@@ -42,6 +42,7 @@ class Theme extends BaseTheme
         }
 
 
+
         Yii::debug('Loading ' . $this->name, __METHOD__);
 
         if(!$this->basePath){
@@ -54,6 +55,8 @@ class Theme extends BaseTheme
         }else{
             $this->baseUrl = $this->baseUrl."/{$this->name}";
         }
+        $this->asset = Yii::$app->getAssetManager()->publish($this->basePath."/assets");
+
         if (!file_exists(Yii::getAlias($this->basePath))) {
             throw new InvalidConfigException("Error: theme \"{$this->name}\" not found!");
         }
