@@ -14,6 +14,9 @@ class Widget extends \yii\base\Widget
     public $viewPath;
     protected $reflectionClass;
 
+    static $widget_name;
+    static $widget_description;
+
     public function init()
     {
         $this->reflectionClass = new ReflectionClass($this);
