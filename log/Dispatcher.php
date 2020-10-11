@@ -10,7 +10,7 @@ use Yii;
  */
 class Dispatcher extends \yii\log\Dispatcher
 {
-
+    public $enableEmail = false;
     public $traceLevel = YII_DEBUG ? 3 : 0;
     public $flushInterval = 1000 * 10;
 
@@ -105,6 +105,7 @@ class Dispatcher extends \yii\log\Dispatcher
                 'class' => 'panix\engine\log\EmailTarget',
                 'levels' => ['error', 'warning'],
                 //'categories' => ['yii\base\*'],
+                'enabled' => $this->enableEmail,
                 'except' => [
                     'yii\web\HttpException:404',
                     'yii\web\HttpException:403',
