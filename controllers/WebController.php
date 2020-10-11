@@ -133,7 +133,7 @@ class WebController extends CommonController
             $message = $exception->getMessage();
             $this->layout = "@theme/views/layouts/error";
 
-            $this->pageName = Yii::t('app/error', $statusCode);
+            $this->pageName = ($message) ? $message : Yii::t('app/error', $statusCode);
 
             $this->view->title = $this->pageName;
             $this->view->params['breadcrumbs'][] = $statusCode;
@@ -142,7 +142,7 @@ class WebController extends CommonController
                 'handler' => $handler,
                 'statusCode' => $statusCode,
                 'name' => $name,
-                'message' => $message
+                'message' => $this->pageName
             ]);
         }
     }
