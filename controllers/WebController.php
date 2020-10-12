@@ -47,6 +47,9 @@ class WebController extends CommonController
             if (Yii::$app->request->get('utm_campaign'))
                 $data['utm_campaign'] = Yii::$app->request->get('utm_campaign');
 
+            if (Yii::$app->request->get('utm_content'))
+                $data['utm_content'] = Yii::$app->request->get('utm_content');
+
             Yii::$app->db->createCommand()->insert('{{%utm}}', $data)->execute();
         }
         return parent::beforeAction($action);
