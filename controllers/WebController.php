@@ -30,6 +30,28 @@ class WebController extends CommonController
         ];
     }
 
+    public function beforeAction($action)
+    {
+
+        if (!Yii::$app->request->isAjax && Yii::$app->request->referrer) {
+            $data = [];
+            if (Yii::$app->request->get('utm_source'))
+                $data['utm_source'] = Yii::$app->request->get('utm_source');
+
+            if (Yii::$app->request->get('utm_medium'))
+                $data['utm_medium'] = Yii::$app->request->get('utm_medium');
+
+            if (Yii::$app->request->get('utm_term'))
+                $data['utm_term'] = Yii::$app->request->get('utm_term');
+
+            if (Yii::$app->request->get('utm_campaign'))
+                $data['utm_campaign'] = Yii::$app->request->get('utm_campaign');
+
+            Yii::$app->db->createCommand()->insert('{{%utm}}', $data)->execute();
+        }
+        return parent::beforeAction($action);
+    }
+
     public function behaviors()
     {
         return [
@@ -98,7 +120,7 @@ class WebController extends CommonController
                 }
             }
         }
-       // Yii::setAlias('@theme', Yii::getAlias("@app/web/themes/{$config->theme}"));
+        // Yii::setAlias('@theme', Yii::getAlias("@app/web/themes/{$config->theme}"));
         Yii::setAlias('@theme', Yii::$app->view->theme->basePath);
         if (true && Yii::$app->id != 'console') {
 
