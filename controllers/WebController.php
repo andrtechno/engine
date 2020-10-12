@@ -34,15 +34,19 @@ class WebController extends CommonController
     public function beforeAction($action)
     {
 
-        if (!Yii::$app->request->isAjax && Yii::$app->request->referrer) {
+
+        if (Yii::$app->request->referrer) {
             $data = [];
             $utm_params = ['utm_source', 'utm_medium', 'utm_term', 'utm_campaign', 'utm_content'];
             foreach ($utm_params as $utm) {
                 if (Yii::$app->request->get($utm))
                     $data[$utm] = Html::encode(Yii::$app->request->get($utm));
             }
-            Yii::$app->db->createCommand()->insert('{{%utm}}', $data)->execute();
-        }
+            if($data){
+                $data['created_at']=time();
+                Yii::$app->db->createCommand()->insert('{{%utm}}', $data)->execute();
+            }
+      }
         return parent::beforeAction($action);
     }
 
