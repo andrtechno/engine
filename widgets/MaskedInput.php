@@ -15,7 +15,7 @@ class MaskedInput extends \yii\widgets\MaskedInput
         if (!$this->mask) {
             $this->mask = '+38 (999) 999-99-99';
         }
-        $this->options['data-cms-widget'] = mb_strtolower(\yii\helpers\Inflector::camelize(basename(__CLASS__)));
+        $this->options['data-cms-widget'] = mb_strtolower(basename(__CLASS__));
         parent::init();
     }
 
