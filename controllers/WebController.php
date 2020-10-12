@@ -5,6 +5,7 @@ namespace panix\engine\controllers;
 use Yii;
 use yii\base\Exception;
 use yii\filters\AccessControl;
+use yii\helpers\Html;
 use yii\web\Response;
 use panix\engine\CMS;
 
@@ -35,21 +36,11 @@ class WebController extends CommonController
 
         if (!Yii::$app->request->isAjax && Yii::$app->request->referrer) {
             $data = [];
-            if (Yii::$app->request->get('utm_source'))
-                $data['utm_source'] = Yii::$app->request->get('utm_source');
-
-            if (Yii::$app->request->get('utm_medium'))
-                $data['utm_medium'] = Yii::$app->request->get('utm_medium');
-
-            if (Yii::$app->request->get('utm_term'))
-                $data['utm_term'] = Yii::$app->request->get('utm_term');
-
-            if (Yii::$app->request->get('utm_campaign'))
-                $data['utm_campaign'] = Yii::$app->request->get('utm_campaign');
-
-            if (Yii::$app->request->get('utm_content'))
-                $data['utm_content'] = Yii::$app->request->get('utm_content');
-
+            $utm_params = ['utm_source', 'utm_medium', 'utm_term', 'utm_campaign', 'utm_content'];
+            foreach ($utm_params as $utm) {
+                if (Yii::$app->request->get($utm))
+                    $data[$utm] = Html::encode(Yii::$app->request->get($utm));
+            }
             Yii::$app->db->createCommand()->insert('{{%utm}}', $data)->execute();
         }
         return parent::beforeAction($action);
