@@ -496,7 +496,7 @@ class CMS
         if ($lang->default->code != $lang->active->code) {
             if (in_array($parts[1], $lang->getCodes())) {
                 unset($parts[1]);
-                $pathInfo = implode($parts, '/');
+                $pathInfo = implode('/',$parts);
 
                 if (empty($pathInfo)) {
                     $pathInfo = '/';

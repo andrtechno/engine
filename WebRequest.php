@@ -23,8 +23,12 @@ class WebRequest extends Request {
                 throw new \yii\web\NotFoundHttpException(Yii::t('app/error', '404'));
             }
 
+           // if(Yii::$app->languageManager->default->id == Yii::$app->languageManager->active->id){
+
+           // }
+            //CMS::dump($parts);die;
             unset($parts[0]);
-            $pathInfo = implode($parts, '/');
+            $pathInfo = implode( '/',$parts);
         }
         //var_dump($this->baseUrl);die;
         $this->_pathInfo = $pathInfo;
