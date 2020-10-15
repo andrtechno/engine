@@ -2,6 +2,7 @@
 
 namespace panix\engine\widgets;
 
+use Yii;
 use panix\engine\CMS;
 use panix\engine\Html;
 use yii\helpers\ArrayHelper;
@@ -50,7 +51,7 @@ class LinkPager extends BasePager
         $options = $this->linkContainerOptions;
         $linkWrapTag = ArrayHelper::remove($options, 'tag', 'li');
         Html::addCssClass($options, empty($class) ? $this->pageCssClass : $class);
-        $options['id']='page-item-'.($page+1);
+        $options['id'] = 'page-item-' . ($page + 1);
         if ($active) {
             Html::addCssClass($options, $this->activePageCssClass);
         }
@@ -83,13 +84,16 @@ class LinkPager extends BasePager
                 if (($page = $currentPage - 1) < 0) {
                     $page = 0;
                 }
-                if ($currentPage > 0) {
-                    $this->getView()->registerLinkTag([
-                        'rel' => 'prev',
-                        'type' => 'page',
-                        'href' => $this->pagination->createUrl($page)
-                    ]);
-                }
+               // if (!Yii::$app->request->isPjax || !Yii::$app->request->isAjax) {
+                    if ($currentPage > 0  && !(Yii::$app->request->isPjax || Yii::$app->request->isAjax)) {
+
+                        $this->getView()->registerLinkTag([
+                            'rel' => 'prev',
+                            'type' => 'page',
+                            'href' => $this->pagination->createUrl($page)
+                        ]);
+                    }
+                //}
             }
 
             // next meta
@@ -97,13 +101,15 @@ class LinkPager extends BasePager
                 if (($page = $currentPage + 1) >= $pageCount - 1) {
                     $page = $pageCount - 1;
                 }
-                if ($currentPage < $pageCount - 1) {
-                    $this->getView()->registerLinkTag([
-                        'rel' => 'next',
-                        'type' => 'page',
-                        'href' => $this->pagination->createUrl($page)
-                    ]);
-                }
+                //if (!Yii::$app->request->isPjax || !Yii::$app->request->isAjax) {
+                    if ($currentPage < $pageCount - 1 && !(Yii::$app->request->isPjax || Yii::$app->request->isAjax)) {
+                        $this->getView()->registerLinkTag([
+                            'rel' => 'next',
+                            'type' => 'page',
+                            'href' => $this->pagination->createUrl($page)
+                        ]);
+                    }
+               // }
             }
         }
         return parent::renderPageButtons();
