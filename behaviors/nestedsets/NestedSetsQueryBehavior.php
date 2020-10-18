@@ -97,7 +97,6 @@ class NestedSetsQueryBehavior extends Behavior
     {
         $res = [];
         if (is_object($root)) {
-
             $res[$root->{$root->idAttribute}]['key'] = $root->{$root->idAttribute};
             $res[$root->{$root->idAttribute}]['title'] = $root->{$root->titleAttribute};
             if (method_exists($root, 'getUrl'))
@@ -113,6 +112,7 @@ class NestedSetsQueryBehavior extends Behavior
                         $query->andWhere($wheres);
                     }
                 }
+
                 $result = $query->all();
                 foreach ($result as $childRoot) {
                     $aux = $this->prepareData2($childRoot, $level - 1);
@@ -127,6 +127,7 @@ class NestedSetsQueryBehavior extends Behavior
                 }
             } elseif (is_null($level)) {
                 /** @var NestedSetsBehavior $root */
+
                 $query = $root->children();
                 if ($wheres) {
                     if (is_array($wheres)) {
@@ -155,6 +156,7 @@ class NestedSetsQueryBehavior extends Behavior
                         $query->andWhere($wheres);
                     }
                 }
+
                 $result=$query->all();
                 foreach ($result as $rootItem) {
                     if ($level) {
@@ -203,11 +205,13 @@ class NestedSetsQueryBehavior extends Behavior
     {
         $tree = [];
         foreach ($data as $key => &$item) {
+
             if (isset($item['children'])) {
                 $item['children'] = array_values($item['children']);
                 $tree[$key] = $this->makeData2($item['children']);
             }
             $tree[$key] = $item;
+            //$tree['full'][$item['key']]=$item;
         }
         return $tree;
     }

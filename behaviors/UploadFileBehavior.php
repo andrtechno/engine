@@ -97,6 +97,13 @@ class UploadFileBehavior extends Behavior
 
     }
 
+    /**
+     * @param $attribute
+     * @param bool $size
+     * @param array $options
+     * @param bool $returnBool
+     * @return bool|string
+     */
     public function getImageUrl($attribute, $size = false, $options = [], $returnBool = false)
     {
 

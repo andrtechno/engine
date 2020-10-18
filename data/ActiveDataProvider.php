@@ -12,7 +12,7 @@ use yii\data\ActiveDataProvider as BaseActiveDataProvider;
 class ActiveDataProvider extends BaseActiveDataProvider
 {
 
-    public function init()
+    public function init2()
     {
         /* @var \yii\base\Model $modelClass */
         $modelClass = $this->query->modelClass;
