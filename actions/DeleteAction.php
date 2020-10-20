@@ -2,23 +2,31 @@
 
 namespace panix\engine\actions;
 
+use panix\engine\CMS;
 use Yii;
 use yii\web\Response;
 use yii\rest\Action;
 
 class DeleteAction extends Action
 {
+    public $primaryKey;
 
     public function run()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+        //$model = new $this->modelClass;
         $json = [];
         $json['success'] = false;
-        if (Yii::$app->request->isAjax || Yii::$app->request->isPost && isset($_REQUEST['id'])) {
+//Yii::$app->request->isAjax || Yii::$app->request->isPost &&
+        if (isset($_REQUEST['id'])) {
 
             /** @var $model \panix\engine\db\ActiveRecord */
             $model = new $this->modelClass;
-            $entry = $model->find()->where(['id' => $_REQUEST['id']])->all();
+            if (!$this->primaryKey) {
+                $this->primaryKey = $model->primaryKey()[0];
+            }
+
+            $entry = $model->find()->where([$this->primaryKey => $_REQUEST['id']])->all();
             //print_r($entry);die;
             if ($entry) {
                 foreach ($entry as $obj) {
@@ -31,8 +39,8 @@ class DeleteAction extends Action
                     }
                 }
             }
-        }else{
-            $json['message'] = Yii::t('app/default', 'Forbidden');
+        } else {
+            $json['message'] = Yii::t('app/error', 403);
         }
 
         return $json;

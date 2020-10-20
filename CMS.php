@@ -917,4 +917,10 @@ class CMS
         }
     }
 
+    public static function isGuid($guid){
+        if (preg_match('/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/', $guid)) {
+            return true;
+        }
+        return false;
+    }
 }
