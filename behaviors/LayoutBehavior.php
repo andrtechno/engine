@@ -36,11 +36,11 @@ class LayoutBehavior extends \yii\base\Behavior
         $controller = Yii::$app->controller;
         //if (!($controller instanceof WebController) || !($controller instanceof AdminController) || ($controller instanceof FilterController)) {
         if (!isset($controller->view)) {
-            Yii::debug('LayoutBehavior error [1]', __METHOD__);
+            //Yii::debug('LayoutBehavior error [1]', __METHOD__);
             return false;
         }
         if (!empty($controller->layout)) {
-            Yii::debug('LayoutBehavior error [2]', __METHOD__);
+            //Yii::debug('LayoutBehavior error [2]', __METHOD__);
             return false;
         }
         $layouts = [];
