@@ -37,9 +37,22 @@ class Dropdown extends \yii\bootstrap4\Dropdown
             if (!isset($item['label'])) {
                 throw new InvalidConfigException("The 'label' option is required.");
             }
+
+
+            $badgeOptions = ['class' => 'badge badge-success'];
+            if (isset($item['badgeOptions'])) {
+                $badgeOptions = array_merge($badgeOptions, $item['badgeOptions']);
+            }
+
+            $badge = '';
+            if (isset($item['badge'])) {
+                $badge = Html::tag('span', ArrayHelper::getValue($item, 'badge'), $badgeOptions);
+            }
+
+
             $encodeLabel = isset($item['encode']) ? $item['encode'] : $this->encodeLabels;
             $icon = isset($item['icon']) ? Html::icon($item['icon']) . ' ' : '';
-            $label = $encodeLabel ? Html::encode($item['label']) : $item['label'];
+            $label = $encodeLabel ? Html::encode($item['label']).$badge : $item['label'].$badge;
             $itemOptions = ArrayHelper::getValue($item, 'options', ['class' => 'nav-item']);
 
             $linkOptions = ArrayHelper::getValue($item, 'linkOptions', ['class' => 'nav-link']);

@@ -2,6 +2,7 @@
 
 namespace panix\engine\behaviors\nestedsets;
 
+use panix\engine\CMS;
 use yii\base\Behavior;
 use yii\helpers\Url;
 
@@ -81,10 +82,10 @@ class NestedSetsQueryBehavior extends Behavior
      * @param array $wheres
      * @return array
      */
-    public function dataTree($root = 0, $level = null, $wheres = null)
+    public function dataTree($root = 0, $level = null, $wheres = null, $key = false)
     {
         $data = array_values($this->prepareData2($root, $level, $wheres));
-        return $this->makeData2($data);
+        return $this->makeData2($data, $key);
     }
 
     /**
@@ -157,12 +158,12 @@ class NestedSetsQueryBehavior extends Behavior
                     }
                 }
 
-                $result=$query->all();
+                $result = $query->all();
                 foreach ($result as $rootItem) {
                     if ($level) {
-                        $res += $this->prepareData2($rootItem, $level - 1,$wheres);
+                        $res += $this->prepareData2($rootItem, $level - 1, $wheres);
                     } elseif (is_null($level)) {
-                        $res += $this->prepareData2($rootItem, null,$wheres);
+                        $res += $this->prepareData2($rootItem, null, $wheres);
                     }
                 }
             } else {
@@ -181,14 +182,14 @@ class NestedSetsQueryBehavior extends Behavior
                         $query->andWhere($wheres);
                     }
                 }
-                $result=$query->all();
+                $result = $query->all();
 
 
                 foreach ($result as $rootItem) {
                     if ($level) {
-                        $res += $this->prepareData2($rootItem, $level - 1,$wheres);
+                        $res += $this->prepareData2($rootItem, $level - 1, $wheres);
                     } elseif (is_null($level)) {
-                        $res += $this->prepareData2($rootItem, null,$wheres);
+                        $res += $this->prepareData2($rootItem, null, $wheres);
                     }
                 }
                 unset($model);
@@ -198,20 +199,21 @@ class NestedSetsQueryBehavior extends Behavior
     }
 
     /**
-     * @param $data
+     * @param array $data
+     * @param boolean $key
      * @return array
      */
-    public function makeData2(&$data)
+    public function makeData2(&$data, $keyPk = false)
     {
         $tree = [];
         foreach ($data as $key => &$item) {
-
+            $keyItem = ($keyPk) ? $item['key'] : $key;
             if (isset($item['children'])) {
-                $item['children'] = array_values($item['children']);
-                $tree[$key] = $this->makeData2($item['children']);
+                $item['children'] = ($keyPk) ? $item['children'] : array_values($item['children']);
+                $tree[$keyItem] = $this->makeData2($item['children'], $keyPk);
             }
-            $tree[$key] = $item;
-            //$tree['full'][$item['key']]=$item;
+
+            $tree[$keyItem] = $item;
         }
         return $tree;
     }
