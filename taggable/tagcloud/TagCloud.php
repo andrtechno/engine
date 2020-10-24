@@ -1,5 +1,5 @@
 <?php
-namespace panix\engine\widgets\tegcloud;
+namespace panix\engine\taggable\tegcloud;
 
 use panix\engine\data\Widget;
 use Yii;

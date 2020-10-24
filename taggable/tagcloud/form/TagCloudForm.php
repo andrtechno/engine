@@ -1,22 +1,28 @@
 <?php
 
-class TagCloudForm extends WidgetFormModel {
+namespace panix\engine\taggable\tegcloud\form;
+
+class TagCloudForm extends WidgetFormModel
+{
 
     public $maxTags;
 
-    public static function defaultSettings() {
+    public static function defaultSettings()
+    {
         return array(
             'maxTags' => 32
         );
     }
 
-    public function rules() {
+    public function rules()
+    {
         return array(
             array('maxTags', 'type')
         );
     }
 
-    public function getForm() {
+    public function getForm()
+    {
         return array(
             'attributes' => array(
                 'class' => 'form-horizontal',
