@@ -1,8 +1,10 @@
 <?php
+
 namespace panix\engine\taggable;
 
 use yii\helpers\Html;
 use yii\base\Widget;
+
 /**
  * TagWidget renders an HTML tag cloud or as an ordered/unordered list
  *
@@ -20,17 +22,17 @@ class TagWidget extends Widget
 {
     /**
      * @var array key=>value pairs of tags=>frequency. If multiple
-     * TaggingWidgets will use the same data on the same page, TaggingQuery can
+     * TagWidgets will use the same data on the same page, TaggingQuery can
      * be used to first generate the item list which can then be passed to
-     * TaggingWidget for display.
+     * TagWidget for display.
      */
     public $items;
     /**
-     * @var string smallest size to be assigned to a tag in the tag cloud
+     * @var integer smallest size to be assigned to a tag in the tag cloud
      */
     public $smallest = 14;
     /**
-     * @var string largest size to be assigned to a tag in the tag cloud
+     * @var integer largest size to be assigned to a tag in the tag cloud
      */
     public $largest = 22;
     /**
@@ -38,7 +40,7 @@ class TagWidget extends Widget
      */
     public $unit = 'px';
     /**
-     * @var string format of the returned tags. Options are 'cloud', 'ul', or
+     * @var string format of the returned tags. Options are 'cloud', 'inline', 'ul', or
      * 'ol'. Cloud will return a tag cloud with font-sizes adjusted according
      * to their count (frequency). 'ul' and 'ol' will return the appropriate
      * list that can be formatted as desired. If 'ol' is specified, a 'type'
@@ -46,7 +48,7 @@ class TagWidget extends Widget
      */
     public $format = 'cloud';
     /**
-     * @var string the route that will be used as a base onto which 'urlParam'
+     * @var array the route that will be used as a base onto which 'urlParam'
      * and the tag name will be appended.
      */
     public $url;
@@ -56,7 +58,7 @@ class TagWidget extends Widget
      */
     public $urlParam;
     /**
-     * @var string options that are to be assigned to the ul or ol in the tag
+     * @var array options that are to be assigned to the ul or ol in the tag
      * cloud or list.
      */
     public $listOptions = [];
@@ -64,21 +66,22 @@ class TagWidget extends Widget
      * @var array options that are to be assigned to each list item (li) in
      * the tag cloud or list.
      */
-    public $liOptions = [];
+    public $itemOptions = [];
     /**
      * @var array options that are to be assigned to each link (a) in the tag
      * cloud or list.
      */
     public $linkOptions = [];
     /**
-     * @var array the minimum frequency found for all tags which is used as the
+     * @var integer the minimum frequency found for all tags which is used as the
      * basis for increasing the font-size of more frequent tags.
      */
     private $_minCount;
     /**
-     * @var string the calculated difference in font when indicating tag frequency.
+     * @var integer the calculated difference in font when indicating tag frequency.
      */
     private $_fontStep = 1;
+
     /**
      * Renders the widget
      * @return string the rendering result of the widget.
@@ -87,6 +90,7 @@ class TagWidget extends Widget
     {
         return $this->renderItems();
     }
+
     /**
      * Renders widget items
      * @return string complete list of rendered items
@@ -100,35 +104,44 @@ class TagWidget extends Widget
         foreach ($this->items as $name => $count) {
             $items[] = $this->renderItem(Html::encode($name), $count);
         }
-        if ($this->format == 'cloud') {
-            Html::addCssClass($this->listOptions, 'tagging_cloud');
+
+        if ($this->format == 'inline') {
+            return implode(", ", $items);
         } else {
-            Html::addCssClass($this->listOptions, 'tagging_list');
+            Html::addCssClass($this->listOptions, ($this->format == 'cloud') ? 'tags_cloud' : 'tags_list');
+            $listType = ($this->format == 'ol') ? 'ol' : 'ul';
+            return Html::tag($listType, implode("\n", $items), $this->listOptions);
         }
-        $listType = ($this->format == 'ol') ? 'ol' : 'ul';
-        return Html::tag($listType, implode("\n", $items), $this->listOptions);
     }
+
     /**
      * Renders a widget's item
      * @param string $name the item name to be displayed
-     * @param string $count the count or frequency of the item to be displayed
+     * @param integer $count the count or frequency of the item to be displayed
      * @return string a single item within the complete list
      */
     public function renderItem($name, $count)
     {
         $fontSize = ($this->smallest + (($count - $this->_minCount) * $this->_fontStep));
-        if (!empty($this->url)) {
-            $url = array_merge($this->url, [$this->urlParam => $name]);
+
+        if ($this->format == 'cloud') {
+            Html::addCssStyle($this->itemOptions, 'font-size:' . $fontSize . $this->unit);
         }
         if ($this->format == 'cloud') {
-            Html::addCssStyle($this->liOptions, 'font-size:' . $fontSize . $this->unit);
+            Html::addCssStyle($this->linkOptions, 'font-size:' . $fontSize . $this->unit);
         }
+
+        $itemTag = ($this->format == 'inline') ? 'span' : 'li';
         if (!empty($this->url)) {
-            return Html::tag('li', Html::a($name, $url, $this->linkOptions), $this->liOptions);
+            $url = array_merge($this->url, [$this->urlParam => $name]);
+            return Html::tag($itemTag, Html::a($name, $url, $this->linkOptions), $this->itemOptions);
         } else {
-            return Html::tag('li', $name, $this->liOptions);
+            return Html::tag($itemTag, $name, $this->itemOptions);
         }
+
+
     }
+
     /**
      * Determine the step size for font increases
      * @return float|int size of individual font step for increasingly frequent items

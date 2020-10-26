@@ -41,7 +41,9 @@ class LinkPager extends BasePager
 
     public function init()
     {
-        $this->maxButtonCount = CMS::isMobile() ? 5 : 10;
+        if(!$this->maxButtonCount)
+            $this->maxButtonCount = CMS::isMobile() ? 5 : 10;
+		
         parent::init();
 
     }
