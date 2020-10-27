@@ -43,4 +43,5 @@ class Formatter extends \yii\i18n\Formatter
         $browser = new Browser($value);
         return $browser->getPlatformIcon() . ' ' . $browser->getBrowserIcon() . ' ' . Html::icon('info', ['title' => $value]);
     }
+
 }

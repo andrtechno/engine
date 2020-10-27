@@ -13,7 +13,7 @@ use yii\web\Response;
 class DeleteNodeAction extends Action
 {
     public $successMessage;
-
+    public $disallowIds = [];
     /**
      * Move a node (model) below the parent and in between left and right
      *
@@ -24,28 +24,32 @@ class DeleteNodeAction extends Action
     {
         if (!$this->successMessage)
             $this->successMessage = Yii::t('app/default', 'SUCCESS_RECORD_DELETE');
-		
+
         Yii::$app->response->format = Response::FORMAT_JSON;
         $json = [];
+
         $json['success'] = false;
         if (Yii::$app->request->isAjax) {
             /** @var \panix\engine\behaviors\nestedsets\NestedSetsBehavior|\yii\db\ActiveRecord $model */
             $model = $this->findModel($id);
-
             //Delete if not root node
-            if ($model && $model->id != 1) {
-                foreach (array_reverse($model->descendants()->all()) as $subCategory) {
-                    $json['objects'][] = $subCategory->id;
-                    /** @var \panix\engine\behaviors\nestedsets\NestedSetsBehavior|\yii\db\ActiveRecord $subCategory */
-                    $subCategory->deleteNode();
+            if ($model) {
+                if (!in_array($model->id, $this->disallowIds)) {
+                    foreach (array_reverse($model->descendants()->all()) as $subCategory) {
+                        $json['objects'][] = $subCategory->id;
+                        /** @var \panix\engine\behaviors\nestedsets\NestedSetsBehavior|\yii\db\ActiveRecord $subCategory */
+                        $subCategory->deleteNode();
 
+                    }
+                    $json['objects'][] = $id;
+                    $json['success'] = true;
+                    $json['message'] = $this->successMessage;
+                    $model->deleteNode();
+                } else {
+                    $json['message'] = 'Запрешено удаление данного объекта';
                 }
-                $json['objects'][] = $id;
-                $json['success'] = true;
-                $json['message'] = $this->successMessage;
-                $model->deleteNode();
             }
+            return $json;
         }
-        return $json;
     }
 }

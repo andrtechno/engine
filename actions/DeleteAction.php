@@ -25,7 +25,6 @@ class DeleteAction extends Action
             if (!$this->primaryKey) {
                 $this->primaryKey = $model->primaryKey()[0];
             }
-
             $entry = $model->find()->where([$this->primaryKey => $_REQUEST['id']])->all();
             //print_r($entry);die;
             if ($entry) {
