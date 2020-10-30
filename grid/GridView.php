@@ -28,7 +28,7 @@ class GridView extends \yii\grid\GridView
         if (isset($this->dataProvider->query)) {
 
             $modelClass = $this->dataProvider->query->modelClass;
-            if(!$this->id)
+            //if(!$this->id)
                 $this->setId('grid-' . strtolower((new \ReflectionClass($modelClass))->getShortName()));
             
             if ($this->enableColumns && method_exists($modelClass, 'getGridColumns')) {
