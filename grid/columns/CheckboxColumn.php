@@ -56,25 +56,25 @@ class CheckboxColumn extends BaseCheckboxColumn
     {
 
         parent::init();
-		CheckboxColumnAsset::register($this->grid->getView());
+        CheckboxColumnAsset::register($this->grid->getView());
         $this->contentOptions = ['class' => 'text-center'];
 
         // $this->grid->filterRowOptions = ['class' => 'text-center'];
 
-if($this->enableMenu){
-    $this->grid->footerRowOptions = ['class' => 'text-center'];
-        $this->footer = ButtonDropdown::widget([
-            'dropdownClass' => 'panix\engine\bootstrap\Dropdown4',
-            'label' => Html::icon('menu'),
-            'encodeLabel' => false,
-            //'containerOptions' => ['class' => 'dropup hidden', 'id' => 'grid-actions'],
-            'buttonOptions' => ['class' => 'btn-sm btn-secondary'],
-            'dropdown' => [
-                'encodeLabels' => false,
-                'items' => $this->getCustomActions(),
-            ],
-        ]);
-}
+        if ($this->enableMenu) {
+            $this->grid->footerRowOptions = ['class' => 'text-center'];
+            $this->footer = ButtonDropdown::widget([
+                'dropdownClass' => 'panix\engine\bootstrap\Dropdown4',
+                'label' => Html::icon('menu'),
+                'encodeLabel' => false,
+                //'containerOptions' => ['class' => 'dropup hidden', 'id' => 'grid-actions'],
+                'buttonOptions' => ['class' => 'btn-sm btn-secondary'],
+                'dropdown' => [
+                    'encodeLabels' => false,
+                    'items' => $this->getCustomActions(),
+                ],
+            ]);
+        }
 
     }
 
@@ -119,11 +119,11 @@ if($this->enableMenu){
     public function getDefaultActionOptions()
     {
         return [
-           // 'data-confirm' => Yii::t('app/default', 'CONFIRM'),
+            // 'data-confirm' => Yii::t('app/default', 'CONFIRM'),
             'class' => 'dropdown-item',
             //'data-method'=>'POST'
             //'data-pjax' => 0,
-           // 'onClick' => 'gridAction(this); return false;'
+            // 'onClick' => 'gridAction(this); return false;'
         ];
     }
 

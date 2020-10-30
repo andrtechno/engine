@@ -2,6 +2,7 @@
 
 namespace panix\engine\validators;
 
+use panix\engine\CMS;
 use Yii;
 use yii\helpers\Html;
 use yii\validators\Validator;
@@ -12,6 +13,7 @@ class UrlValidator extends Validator
 
     public $attributeSlug = 'slug';
     public $attributeCompare = 'title';
+    public $replacement = '-';
 
     public function init()
     {
@@ -41,7 +43,7 @@ class UrlValidator extends Validator
         if (isset($check)) {
             $this->addError($model, $attribute, $this->message);
         }
-        $model->{$this->attributeSlug} = mb_strtolower($model->{$this->attributeSlug});
+        $model->{$this->attributeSlug} = CMS::slug($model->{$this->attributeSlug}, $this->replacement);//mb_strtolower($model->{$this->attributeSlug});
         return null;
     }
 
@@ -52,6 +54,7 @@ class UrlValidator extends Validator
         $options = [
             'model' => get_class($model),
             'pk' => $model->primaryKey,
+            'replacement' => $this->replacement,
             'usexhr' => true,
             'successMessage' => $this->message,
             'AttributeSlug' => $attribute,
@@ -59,7 +62,9 @@ class UrlValidator extends Validator
             'attributeCompareId' => Html::getInputId($model, $this->attributeCompare),
         ];
         if (Yii::$app->language == Yii::$app->languageManager->default->code) {
-            $view->registerJs("init_translitter(" . json_encode($options, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ");");
+            $view->registerJs("
+
+            init_translitter(" . json_encode($options, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ");");
         }
         return null;
     }

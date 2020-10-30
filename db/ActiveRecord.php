@@ -72,7 +72,8 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }
 
         foreach ($array as $column) {
-            $result[] = $col[$column];
+            if(isset($col[$column]))
+                $result[] = $col[$column];
         }
 
         if (isset($col['DEFAULT_CONTROL']))

@@ -5,11 +5,19 @@ function init_translitter(options) {
     //if (translate_object_url == 0) {
     $('#' + options.attributeCompareId).keyup(function (event) {
         var title = $.trim($(this).val());
+        var that = $(this);
+      //  .replace(reg, ru2en.ru2en[a])
+        var value = ru2en.translit(title.toLowerCase());
+        if(options.replacement !== '-'){
+            console.log(options.replacement);
+            value.replace('/-/g', options.replacement);
+        }
+       // console.log(value);
         if (options.usexhr) {
-            alias.val(ru2en.translit(title.toLowerCase())).addClass('loading');
+            alias.val(value).addClass('loading');
             // alias.parent().append('<div id="alias_result"></div>');
         } else {
-            alias.val(ru2en.translit(title.toLowerCase()));
+            alias.val(value);
 
         }
 
@@ -43,7 +51,7 @@ function init_translitter(options) {
             }
         }
     });
-    // }
+
 }
 
 
