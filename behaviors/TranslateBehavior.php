@@ -40,7 +40,7 @@ class TranslateBehavior extends Behavior
     public function events()
     {
         return [
-           // ActiveRecord::EVENT_AFTER_VALIDATE => 'afterValidate',
+            // ActiveRecord::EVENT_AFTER_VALIDATE => 'afterValidate',
             ActiveRecord::EVENT_AFTER_INSERT => 'afterSave',
             ActiveRecord::EVENT_AFTER_UPDATE => 'afterSave',
             ActiveRecord::EVENT_AFTER_DELETE => 'afterDelete',
@@ -79,9 +79,9 @@ class TranslateBehavior extends Behavior
         if ($language === null) {
             $language = Yii::$app->languageManager->active->slug;
         }
-        if(Yii::$app instanceof \panix\engine\console\Application){
+        if (Yii::$app instanceof \panix\engine\console\Application) {
             $lang = Yii::$app->languageManager->getByCode('ru');
-        }else{
+        } else {
             $lang = Yii::$app->languageManager->getByCode($language);
         }
 
@@ -108,7 +108,6 @@ class TranslateBehavior extends Behavior
 
         return $translation;
     }
-
 
 
     public function getTranslation_($language = null)
@@ -195,13 +194,13 @@ class TranslateBehavior extends Behavior
 
         foreach ($this->owner->{$this->relation} as $translation) {
             if ($translation->isNewRecord) {
+
+
                 $this->insertTranslations();
+
             } else {
                 $this->owner->link($this->relation, $translation);
             }
-            // var_dump($translation->isNewRecord);die;
-
-
         }
     }
 
@@ -211,10 +210,14 @@ class TranslateBehavior extends Behavior
      */
     public function insertTranslations()
     {
-        foreach (Yii::$app->languageManager->languages as $lang)
+        foreach (Yii::$app->languageManager->languages as $lang) {
             $this->createTranslation($lang);
+        }
     }
 
+    /**
+     * @param $language
+     */
     public function createTranslation($language)
     {
         $languageId = $language->id;
@@ -232,15 +235,16 @@ class TranslateBehavior extends Behavior
         } else {
             $api = new YandexTranslate();
             foreach ($this->translationAttributes as $attr) {
-               // $data = $api->translate([Yii::$app->languageManager->default->code, $language->code], $this->owner->$attr);
-               // $translate->{$attr} = (isset($data['text'])) ? $data['text'][0] : $this->owner->$attr;
+                // $data = $api->translate([Yii::$app->languageManager->default->code, $language->code], $this->owner->$attr);
+                // $translate->{$attr} = (isset($data['text'])) ? $data['text'][0] : $this->owner->$attr;
                 $translate->{$attr} = $this->owner->$attr;
 
             }
         }
-
-
-        return $translate->save(false);
+        $find = $className::find()->where(['object_id' => $this->owner->getPrimaryKey(), 'language_id' => $languageId])->count();
+        if (!$find) {
+            $translate->save(false);
+        }
     }
 
     /**

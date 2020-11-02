@@ -12,6 +12,7 @@ class NotificationBehavior extends Behavior
     public $text;
     public $sound = null;
     public $url = null;
+
     public function attach($owner)
     {
         parent::attach($owner);
