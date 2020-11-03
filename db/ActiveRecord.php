@@ -155,7 +155,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
         $logMessage = "    > " . ($this->getIsNewRecord() ? 'insert' : 'update') . " into " . get_class($this) . " ...";
         $this->_microtime = microtime(true);
         if (Yii::$app instanceof ConsoleApplication) {
-            echo $logMessage;
+          //  echo $logMessage;
         }
         $columns = $this->tableSchema->columns;
         //if (parent::beforeSave($insert)) {
@@ -199,9 +199,9 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }
 
         parent::afterSave($insert, $changedAttributes);
-        $logMessage = ' done (time: ' . sprintf('%.3f', microtime(true) - $this->_microtime) . "s)\n";
+       // $logMessage = ' done (time: ' . sprintf('%.3f', microtime(true) - $this->_microtime) . "s)\n";
         if (Yii::$app instanceof ConsoleApplication) {
-            echo ' done (time: ' . sprintf('%.3f', microtime(true) - $this->_microtime) . "s)\n";
+        //    echo ' done (time: ' . sprintf('%.3f', microtime(true) - $this->_microtime) . "s)\n";
         }
         if ($insert) {
             //  Yii::$app->session->setFlash('success', Yii::t('app/default', 'SUCCESS_SAVE'));
