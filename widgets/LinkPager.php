@@ -37,15 +37,15 @@ class LinkPager extends BasePager
     public $linkOptions = ['class' => 'page-link', 'tabindex' => "-1"];
 
     public $pageType = 'link';
-    public $mata = true;
+    public $firstPageLabel = true;
+    public $lastPageLabel = true;
 
     public function init()
     {
-        if(!$this->maxButtonCount)
+        if (!$this->maxButtonCount)
             $this->maxButtonCount = CMS::isMobile() ? 5 : 10;
-		
-        parent::init();
 
+        parent::init();
     }
 
     protected function renderPageButton($label, $page, $class, $disabled, $active)
@@ -68,53 +68,13 @@ class LinkPager extends BasePager
         $linkOptions['data-page'] = $page + 1;
 
         if ($this->pageType == 'link') {
-            return Html::tag($linkWrapTag, Html::a($label, $this->pagination->createUrl($page), $linkOptions), $options);
+            return Html::tag($linkWrapTag, Html::a('' . $label, $this->pagination->createUrl($page), $linkOptions), $options);
         } else {
             //return Html::tag($linkWrapTag, Html::submitButton($label, ArrayHelper::merge(['value'=>$page+1,'name'=>'page'],$linkOptions)), $options);
             return Html::submitButton($label, ArrayHelper::merge(['value' => $page + 1, 'name' => 'page'], $options));
         }
     }
 
-    protected function renderPageButtons()
-    {
-        if ($this->mata) {
-            $pageCount = $this->pagination->getPageCount();
-            $currentPage = $this->pagination->getPage();
 
-            // prev meta
-            if ($this->prevPageLabel !== false) {
-                if (($page = $currentPage - 1) < 0) {
-                    $page = 0;
-                }
-               // if (!Yii::$app->request->isPjax || !Yii::$app->request->isAjax) {
-                    if ($currentPage > 0  && !(Yii::$app->request->isPjax || Yii::$app->request->isAjax)) {
-
-                        $this->getView()->registerLinkTag([
-                            'rel' => 'prev',
-                            'type' => 'page',
-                            'href' => $this->pagination->createUrl($page)
-                        ]);
-                    }
-                //}
-            }
-
-            // next meta
-            if ($this->nextPageLabel !== false) {
-                if (($page = $currentPage + 1) >= $pageCount - 1) {
-                    $page = $pageCount - 1;
-                }
-                //if (!Yii::$app->request->isPjax || !Yii::$app->request->isAjax) {
-                    if ($currentPage < $pageCount - 1 && !(Yii::$app->request->isPjax || Yii::$app->request->isAjax)) {
-                        $this->getView()->registerLinkTag([
-                            'rel' => 'next',
-                            'type' => 'page',
-                            'href' => $this->pagination->createUrl($page)
-                        ]);
-                    }
-               // }
-            }
-        }
-        return parent::renderPageButtons();
-    }
 
 }
