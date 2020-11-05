@@ -199,7 +199,7 @@ class ActionColumn extends DataColumn
                                 $switch_data = $model->switch ? 0 : 1;
                                 return Html::a(Html::icon($icon), Url::toRoute(['switch', 'id' => $model->primaryKey, 'value' => $switch_data]), [
                                     'title' => Yii::t('app/default', 'GRID_SWITCH'),
-                                    'class' => 'btn ' . $this->btnSize . ' ' . $class . ' switch', //linkTarget
+                                    'class' => 'd-flex align-items-center btn ' . $this->btnSize . ' ' . $class . ' switch', //linkTarget
                                     'data-pjax' => 0,
                                 ]);
                             }
@@ -212,7 +212,7 @@ class ActionColumn extends DataColumn
             $this->buttons['view'] = function ($url) {
                 return Html::a(Html::icon('search'), $url, [
                     'title' => Yii::t('yii', 'View'),
-                    'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary',
+                    'class' => 'd-flex align-items-center btn ' . $this->btnSize . ' btn-outline-secondary',
                     'data-pjax' => 0,
                 ]);
             };
@@ -225,14 +225,14 @@ class ActionColumn extends DataColumn
                         if (!in_array($model->primaryKey, $model->disallow_update)) {
                             return Html::a(Html::icon('edit'), $url, [
                                 'title' => Yii::t('yii', 'Update'),
-                                'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary',
+                                'class' => 'd-flex align-items-center btn ' . $this->btnSize . ' btn-outline-secondary',
                                 // 'data-pjax' => 0,
                             ]);
                         }
                     } else {
                         return Html::a(Html::icon('edit'), $url, [
                             'title' => Yii::t('yii', 'Update'),
-                            'class' => 'btn ' . $this->btnSize . ' btn-outline-secondary',
+                            'class' => 'd-flex align-items-center btn ' . $this->btnSize . ' btn-outline-secondary',
                             'data-pjax' => 0,
                         ]);
                     }
@@ -300,7 +300,7 @@ class ActionColumn extends DataColumn
                     } else {
                         return Html::a(Html::icon('delete'), $url, [
                             'title' => Yii::t('yii', 'Delete'),
-                            'class' => 'btn ' . $this->btnSize . ' btn-secondary',
+                            'class' => 'd-flex align-items-center btn ' . $this->btnSize . ' btn-secondary',
                             'data-method' => 'POST',
                             'data-confirm' => Yii::t('app/default', 'DELETE_ITEM'),
                             'data-pjax' => '0',

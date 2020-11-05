@@ -113,11 +113,11 @@ class CMS
         } elseif (preg_match('/([\+\380](50|66|95|99))/i', $number, $match)) {
             return 'Vodafone (МТС)';
 
-        //} elseif (preg_match('/([\+\79](01|02|04|08|10|11|12|13|14|15|16|17|18|19|50|78|80|81|82|83|84|85|86|87|88|89))/i', $number, $match)) {
-        //    return 'МТС russian';
+            //} elseif (preg_match('/([\+\79](01|02|04|08|10|11|12|13|14|15|16|17|18|19|50|78|80|81|82|83|84|85|86|87|88|89))/i', $number, $match)) {
+            //    return 'МТС russian';
 
-        //} elseif (preg_match('/([\+\79](01|02))/i', $number, $match)) {
-       //     return 'МегаФона';
+            //} elseif (preg_match('/([\+\79](01|02))/i', $number, $match)) {
+            //     return 'МегаФона';
 
         } elseif (preg_match('/([\+\380](63|93|73))/i', $number, $match)) {
             return 'lifecell';
@@ -496,7 +496,7 @@ class CMS
         if ($lang->default->code != $lang->active->code) {
             if (in_array($parts[1], $lang->getCodes())) {
                 unset($parts[1]);
-                $pathInfo = implode('/',$parts);
+                $pathInfo = implode('/', $parts);
 
                 if (empty($pathInfo)) {
                     $pathInfo = '/';
@@ -748,9 +748,10 @@ class CMS
     /**
      * @param integer|null $timestamp
      * @param bool $time Show time
+     * @param string $timeZone Europe/Kiev
      * @return string
      */
-    public static function date(int $timestamp = null, $time = true)
+    public static function date(int $timestamp = null, $time = true, $timeZone = null)
     {
         if (!$timestamp) {
             $timestamp = time();
@@ -758,12 +759,18 @@ class CMS
 
         if (extension_loaded('intl')) {
             $fn = ($time) ? 'asDatetime' : 'asDate';
+            if ($timeZone) {
+                Yii::$app->formatter->timeZone = $timeZone;
+            }
             return Yii::$app->formatter->{$fn}($timestamp);
 
         } else {
             $timestamp = date('Y-m-d H:i:s', $timestamp);
             $fn = ($time) ? 'datetimeFormat' : 'dateFormat';
-            $date = new \DateTime($timestamp, new \DateTimeZone(self::timezone()));
+            if (!$timeZone) {
+                $timeZone = self::timezone();
+            }
+            $date = new \DateTime($timestamp, new \DateTimeZone($timeZone));
             return $date->format(str_replace('php:', '', Yii::$app->formatter->{$fn}));
         }
 
@@ -917,7 +924,8 @@ class CMS
         }
     }
 
-    public static function isGuid($guid){
+    public static function isGuid($guid)
+    {
         if (preg_match('/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/', $guid)) {
             return true;
         }
