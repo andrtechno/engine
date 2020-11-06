@@ -3,8 +3,10 @@
 namespace panix\engine\controllers;
 
 
+use panix\engine\CMS;
 use Yii;
 use panix\mod\rbac\filters\AccessControl;
+use yii\web\HttpException;
 
 
 /**
