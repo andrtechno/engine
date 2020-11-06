@@ -23,14 +23,14 @@ class GridView extends \yii\grid\GridView
 
     public function init()
     {
-//echo Json::decode('{"image":{"checked":"1","ordern":""},"name":{"checked":"1","ordern":""},"price":{"checked":"1","ordern":""},"categories":{"checked":"1","ordern":""},"commentsCount":{"ordern":""},"created_at":{"ordern":""},"updated_at":{"ordern":""},"razmer":{"ordern":""}');die;
+
         $pagination = $this->dataProvider->getPagination();
         if (isset($this->dataProvider->query)) {
 
             $modelClass = $this->dataProvider->query->modelClass;
-            if(!$this->id)
-                $this->setId('grid-' . strtolower((new \ReflectionClass($modelClass))->getShortName()));
             
+            static::$autoIdPrefix = 'grid-' . strtolower((new \ReflectionClass($modelClass))->getShortName());
+
             if ($this->enableColumns && method_exists($modelClass, 'getGridColumns')) {
                 $runModel = new $modelClass;
                 /** @var GridColumns $model */
