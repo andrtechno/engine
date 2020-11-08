@@ -33,9 +33,32 @@ class Dispatcher extends \yii\log\Dispatcher
             [
                 'class' => 'panix\engine\log\FileTarget',
                 'levels' => ['info'],
-                'categories' => ['yii\db\*'],
+                'enabled' => YII_DEBUG,
+                'categories' => [
+                    'yii\db\Command::execute'
+                ],
                 'logVars' => [],
-                'logFile' => $logPath . '/db_queries.log',
+                'logFile' => $logPath . '/db_execute.log',
+
+                'except' => [
+                    'yii\db\Connection::open',
+                    'yii\web\Session::open',
+                    'yii\web\Session::close',
+                    'yii\web\Session::unfreeze',
+                    'yii\web\Session::freeze',
+                ],
+
+            ],
+            [
+                'class' => 'panix\engine\log\FileTarget',
+                'levels' => ['info'],
+                'enabled' => YII_DEBUG,
+                'categories' => [
+                    'yii\db\Command::query',
+                ],
+                'logVars' => [],
+                'logFile' => $logPath . '/db_query.log',
+
                 'except' => [
                     'yii\db\Connection::open',
                     'yii\web\Session::open',
@@ -49,6 +72,7 @@ class Dispatcher extends \yii\log\Dispatcher
             [
                 'class' => 'panix\engine\log\FileTarget',
                 'levels' => ['info'],
+                'enabled' => YII_DEBUG,
                 'logFile' => $logPath . '/info.log',
                 //'logVars' => [],
                 'except' => [
@@ -76,6 +100,7 @@ class Dispatcher extends \yii\log\Dispatcher
             [
                 'class' => 'panix\engine\log\FileTarget',
                 'levels' => ['profile'],
+                'enabled' => YII_DEBUG,
                 'logFile' => $logPath . '/profile.log',
                 'except' => [
                     'yii\db\Command::query',
@@ -87,6 +112,7 @@ class Dispatcher extends \yii\log\Dispatcher
             [
                 'class' => 'panix\engine\log\FileTarget',
                 'levels' => ['info'],
+                'enabled' => YII_DEBUG,
                 'logFile' => $logPath . '/httpclient.log',
                 'categories' => [
                     'yii\httpclient\StreamTransport::send',

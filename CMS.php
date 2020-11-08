@@ -3,6 +3,7 @@
 namespace panix\engine;
 
 use Yii;
+use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 use yii\helpers\Url;
@@ -63,6 +64,7 @@ class CMS
      */
     public static function phone_format($phone)
     {
+
         $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
         $phoneNumber = $phoneUtil->parse($phone, 'UA');
         $phone = $phoneUtil->format($phoneNumber, \libphonenumber\PhoneNumberFormat::NATIONAL);
@@ -71,6 +73,7 @@ class CMS
             $phone = preg_replace($pattern, '($1) $2-$3-$4', $phone);
         }
         return $phone;
+
     }
 
     public static function isMobile()
