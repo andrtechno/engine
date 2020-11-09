@@ -255,32 +255,52 @@ class ActionColumn extends DataColumn
                         if (!in_array($model->primaryKey, $model->disallow_delete)) {
 
 
-                            /*$this->grid->view->registerJs("
+                            $this->grid->view->registerJs("
                                 $(document).on('click','.delete',function(e){
-                                    e.preventDefault();
-                                    if (confirm('" . Yii::t('app/default', 'DELETE_CONFIRM') . "')) {
-                                        $.ajax('$url', {
-                                            type: 'POST',
-                                            dataType:'json',
-                                        }).done(function(data) {
-                                            $.pjax.reload({container: '#" . $this->grid->id . "'});
-                                                console.log(data);
-                                                common.notify(data.message,'success');
-                                                //$('#{$this->grid->id}').yiiGridView('applyFilter');
-                                        });
-                                    }
-                                    //return false;
-                                });", View::POS_END, 'delete');*/
+                                var that = $(this);
+                                e.preventDefault();
+
+            yii.confirm = function(message, ok, cancel) {
+                bootbox.confirm({
+                    message:message,
+                    buttons: {
+                        confirm: {
+                            label: '<i class=\"icon-check\"></i>  '+common.message.ok,
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: '<i class=\"icon-cancel\"></i>  '+common.message.cancel,
+                            className: 'btn-outline-secondary'
+                        }
+                    },
+                    callback:function(result) {
+                        if (result) { 
+                            $.ajax(that.attr('href'), {
+                                type: 'POST',
+                                dataType:'json',
+                            }).done(function(data) {
+                                $.pjax.reload({container: '#" . $this->grid->id . "'});
+                                common.notify(data.message,'success');
+                            });
+                        } else {
+                            !cancel || cancel();
+                        }
+                    }
+                });
+            }
+                              return false;
+                                });", View::POS_END, 'delete');
 
 
-                            return Html::a(Html::icon('delete'), $url, [
+                            return Html::a(Html::icon('delete'), $url.'ssss', [
                                 'title' => Yii::t('yii', 'Delete'),
                                 'aria-label' => Yii::t('yii', 'Delete'),
                                 'data-pjax' => '0',
                                 'data-method' => 'POST',
                                 'data-confirm' => Yii::t('app/default', 'DELETE_CONFIRM'),
                                 'class' => 'btn ' . $this->btnSize . ' btn-outline-danger delete',
-                                'onclick' => "
+                            'onclick'=>'return false;'
+                            /*    'onclick' => "
 
                                 if (confirm('" . Yii::t('app/default', 'DELETE_CONFIRM') . "')) {
                                     $.ajax('$url', {
@@ -294,7 +314,7 @@ class ActionColumn extends DataColumn
                                     });
                                 }
                                 return false;
-                            ",
+                            ",*/
                             ]);
                         }
                     } else {

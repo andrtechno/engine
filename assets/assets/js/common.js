@@ -284,10 +284,12 @@ yii.confirm = function (message, ok, cancel) {
             message: message,
             buttons: {
                 confirm: {
-                    label: "OK"
+                    label: common.message.ok,
+                    className: 'btn-success'
                 },
                 cancel: {
-                    label: "Cancel"
+                    label: common.message.cancel,
+                    className: 'btn-outline-secondary'
                 }
             },
             callback: function (confirmed) {
@@ -302,4 +304,4 @@ yii.confirm = function (message, ok, cancel) {
     // confirm will always return false on the first call
     // to cancel click handler
     return false;
-}
+};
