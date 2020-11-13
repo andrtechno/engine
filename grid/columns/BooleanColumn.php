@@ -21,8 +21,8 @@ class BooleanColumn extends \yii\grid\DataColumn {
         if ($this->format == 'html') {
             $this->value = function($model) {
                 $text = ($model->{$this->attribute}) ? Yii::t('app/default', 'YES') : Yii::t('app/default', 'NO');
-                $class = ($model->{$this->attribute}) ? 'success' : 'default';
-                return Html::tag('span', $text, ['class' => 'label label-' . $class]);
+                $class = ($model->{$this->attribute}) ? 'success' : 'secondary';
+                return Html::tag('span', $text, ['class' => 'badge badge-' . $class]);
             };
         }
         parent::init();
