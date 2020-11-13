@@ -116,7 +116,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
         } else {
             if (!$id)
                 return new static();
-            throw new NotFoundHttpException($message ? $message : Yii::t('app/error', 404));
+            throw new NotFoundHttpException($message ? $message : Yii::t('app/error', '404'));
         }
     }
 

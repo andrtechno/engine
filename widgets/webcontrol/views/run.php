@@ -80,7 +80,7 @@ use panix\engine\Html;
                 <li class="dropdown"><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-target="#" class="dropdown-toggle" href="/testurl"><?= Yii::$app->user->getDisplayName(); ?></a>
                     <ul class="dropdown-menu webpanel-dropdown-menu">
                         <li><?= Html::a(Yii::t('app/default', 'UPDATE', 0), ['/admin/users/default/update', 'id' => Yii::$app->user->id]) ?></li>
-                        <li><?= Html::a(Yii::t('app/default', 'ADMIN_PANEL'), ['/admin/users/default/update', 'id' => Yii::$app->user->id]) ?></li>
+                        <li><?= Html::a(Yii::t('app/admin', 'ADMIN_PANEL'), ['/admin/users/default/update', 'id' => Yii::$app->user->id]) ?></li>
                         <li role="separator" class="divider"></li>
                         <li><?= Html::a(Yii::t('app/default', 'LOGOUT'), ['/admin/auth/logout']) ?></li>
 

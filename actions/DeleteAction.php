@@ -39,7 +39,7 @@ class DeleteAction extends Action
                 }
             }
         } else {
-            $json['message'] = Yii::t('app/error', 403);
+            $json['message'] = Yii::t('app/error', '403');
         }
 
         return $json;

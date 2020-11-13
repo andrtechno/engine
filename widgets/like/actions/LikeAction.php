@@ -100,7 +100,7 @@ class LikeAction extends Action
             $response['dislikeCount'] = CMS::counterUnit((int)$this->queryCount(0)->count());
             $response['ratio'] = $response['likeCount'] - $response['dislikeCount'];
         } else {
-            $response['message'] = Yii::t('app/error', 401);
+            $response['message'] = Yii::t('app/error', '401');
         }
         return $response;
     }

@@ -68,6 +68,7 @@ class WebApplication extends Application
                     '@' . $id => realpath(dirname($reflectionClass->getFileName())),
                 ]);
                 $this->registerTranslations($id);
+
             }
         }
         $modulesList = array_filter(glob(Yii::getAlias('@app/modules/*')), 'is_dir');
@@ -112,6 +113,7 @@ class WebApplication extends Application
             ]);
             foreach ($fileList as $path) {
                 $result[$id . '/' . basename($path, '.php')] = basename($path);
+                // $result[basename($path, '.php')] = basename($path);
             }
         }
         return $result;
