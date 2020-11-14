@@ -3,30 +3,34 @@
 namespace panix\engine\validators;
 
 use panix\engine\CMS;
-use Yii;
-use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\validators\EmailValidator;
 use yii\validators\PunycodeAsset;
-use yii\validators\Validator;
 use panix\engine\assets\ValidationAsset;
 use yii\web\JsExpression;
 
 class EmailListValidator extends EmailValidator
 {
 
+    /**
+     * @var string
+     */
+    public $separator = ',';
+    private $errors = [];
 
     /**
      * @inheritdoc
      */
     public function validateAttribute($model, $attribute)
     {
-        $emails = explode(',', $model->$attribute);
+        $emails = explode($this->separator, $model->$attribute);
         foreach ($emails as $email) {
-            if (!$this->validate($email))
+            $result = $this->validateValue($email);
+            if (!empty($result)) {
                 $this->addError($model, $attribute, $this->formatMessage($this->message, [
                     'attribute' => $email,
                 ]));
+            }
         }
     }
 
@@ -39,14 +43,18 @@ class EmailListValidator extends EmailValidator
         if ($this->enableIDN) {
             PunycodeAsset::register($view);
         }
-        $emails = explode(',', $model->$attribute);
+        //$options = [];
+        $js = '';
+        $emails = explode($this->separator, $model->$attribute);
         foreach ($emails as $email) {
-            if (!$this->validate($email)) {
+            if ($this->validateValue($email)) {
                 $options = $this->getClientOptions($model, $email);
-                return 'yii.validation.email(value, messages, ' . Json::htmlEncode($options) . ');';
+                $js .= 'yii.validation.email(value, messages, ' . Json::htmlEncode($options) . ');' . PHP_EOL;
             }
         }
 
+        // return $js;
+        return null;
     }
 
     /**
@@ -55,18 +63,10 @@ class EmailListValidator extends EmailValidator
     public function getClientOptions($model, $attribute)
     {
         $options = [
-            'pattern' => new JsExpression($this->pattern),
-            'fullPattern' => new JsExpression($this->fullPattern),
-            'allowName' => $this->allowName,
-            'message' => $this->formatMessage($this->message . 'zz', [
+            'message' => $this->formatMessage($this->message, [
                 'attribute' => $attribute,
             ]),
-            'enableIDN' => (bool)$this->enableIDN,
         ];
-        if ($this->skipOnEmpty) {
-            $options['skipOnEmpty'] = 1;
-        }
-
-        return $options;
+        return array_merge(parent::getClientOptions($model, $attribute),$options);
     }
 }

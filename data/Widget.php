@@ -10,31 +10,31 @@ class Widget extends \yii\base\Widget
 
     public $skin = 'default';
     public $assetsUrl;
-    public $widget_id;
+   // public $widget_id;
     public $viewPath;
     protected $reflectionClass;
 
     static $widget_name;
     static $widget_description;
-
+    static $widget_id;
     public function init()
     {
         $this->reflectionClass = new ReflectionClass($this);
         parent::init();
 
-        $this->widget_id = 'wgt_' . $this->getName();
-
+        static::$widget_id = 'wgt_' . $this->getName();
+        $wid = static::$widget_id;
         Yii::$app->setAliases([
-            '@' . $this->widget_id => realpath(dirname($this->reflectionClass->getFileName())),
+            '@' . $wid => realpath(dirname($this->reflectionClass->getFileName())),
         ]);
 
        // $this->registerTranslations($this->widget_id);
 
-        if (file_exists(Yii::getAlias("@{$this->widget_id}/assets"))) {
-            $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@{$this->widget_id}/assets"));
+        if (file_exists(Yii::getAlias("@{$wid}/assets"))) {
+            $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@{$wid}/assets"));
             $this->assetsUrl = $assetsPaths[1];
         }
-        $this->registerTranslations($this->widget_id);
+        $this->registerTranslations($wid);
     }
 
     public function getTranslationsFileMap($id)
@@ -57,7 +57,10 @@ class Widget extends \yii\base\Widget
         }
         return $result;
     }
-
+    public static function t($category, $message, $params = [], $language = null)
+    {
+        return Yii::t(static::$widget_id.'/' . $category, $message, $params, $language);
+    }
     public function registerTranslations($id)
     {
         Yii::$app->i18n->translations[$id . '/*'] = [
@@ -69,8 +72,9 @@ class Widget extends \yii\base\Widget
 
     public function getTitle()
     {
-        if (file_exists(Yii::getAlias("@{$this->widget_id}/messages"))) {
-            return Yii::t("{$this->widget_id}/default", 'TITLE');
+        $wid = static::$widget_id;
+        if (file_exists(Yii::getAlias("@{$wid}/messages"))) {
+            return Yii::t("{$wid}/default", 'TITLE');
         } else {
             return $this->name;
         }
@@ -78,7 +82,7 @@ class Widget extends \yii\base\Widget
 
     public function getConfig()
     {
-        return Yii::$app->settings->get($this->widget_id);
+        return Yii::$app->settings->get(static::$widget_id);
     }
 
     public function getName()
