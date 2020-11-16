@@ -278,7 +278,7 @@
 
     //style += 'background-size:' + scaledWidth + 'px ' + scaledHeight + 'px;';
     //return '<span class="emoji-outer emoji-sizer" style="'+style+'"><span class="emoji-inner emoji'+className+'"></span></span>';
-    return '<img src="' + blankGifPath + '" class="emoji-outer emoji-sizer emoji-inner emoji'+className+'" style="'+ style + '" alt="' + util.htmlEntities(name) + '">';
+    return '<img src="' + blankGifPath + '" class="emoji emoji'+className+'" style="'+ style + '" alt="' + util.htmlEntities(name) + '">';
   };
   
   

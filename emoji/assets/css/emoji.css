@@ -1,12 +1,8 @@
-span.emoji {
+.emoji {
 	background: url(../images/sheet_apple_16.png);
-	display: -moz-inline-box;
-	display: inline-block;
 	text-indent: -9999px;
 	vertical-align: baseline;
-	display: -moz-inline-box;
 	display: inline-block;
-	*display: inline;
 	height: 16px;
 	width: 16px;
 
