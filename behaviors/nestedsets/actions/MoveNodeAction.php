@@ -2,9 +2,11 @@
 
 namespace panix\engine\behaviors\nestedsets\actions;
 
+
 use Yii;
 use yii\web\Response;
 use yii\rest\Action;
+use panix\engine\behaviors\nestedsets\NestedSetsBehavior;
 
 /**
  * Class MoveNodeAction
@@ -28,8 +30,11 @@ class MoveNodeAction extends Action
         $json = [];
         $json['success'] = false;
         if (Yii::$app->request->isAjax) {
-
-            /* @var $modelClass \yii\db\ActiveRecord */
+            /**
+             * @var $modelClass \yii\db\ActiveRecord
+             * @var $node NestedSetsBehavior|\yii\db\ActiveRecord
+             * @var $target NestedSetsBehavior|\yii\db\ActiveRecord
+             */
             $modelClass = $this->modelClass;
             $node = $this->findModel(Yii::$app->request->get('id'));
             $target = $modelClass::findOne(Yii::$app->request->get('ref'));
@@ -39,28 +44,13 @@ class MoveNodeAction extends Action
             }
             $pos = (int)Yii::$app->request->get('position');
 
-            if ($pos == 1) {
+            if ($pos > 0) {
                 $childs = $target->children()->all();
-                if (isset($childs[$pos - 1]) && $childs[$pos - 1]['id'] != $node->id) {
-                    // die('moveAfter');
+                if (isset($childs[$pos - 1]) && $childs[$pos - 1]['id'] != $node->id)
                     $node->moveAfter($childs[$pos - 1]);
-                }
-            } elseif ($pos == 2) {
-                $childs = $target->children()
-                    //->orderBy(['lft'=>SORT_DESC])
-                    ->all();
-                // echo count($childs);die;
-                // if (isset($childs[$pos - 1]) && $childs[$pos - 1]['id'] != $node->id) {
-                // die('moveAfter');
-
-
-                if (isset($childs[$pos - 1]) && $childs[$pos - 1]['id'] != $node->id) {
-                    $node->moveAfter($childs[$pos - 1]);
-                }
-
-            } else {
+            } else
                 $node->moveAsFirst($target);
-            }
+
 
             $node->rebuildFullPath();
             $node->saveNode(false);
