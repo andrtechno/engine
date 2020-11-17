@@ -49,13 +49,13 @@ class LayoutBehavior extends \yii\base\Behavior
 
 
         if (isset($controller->module)) {
-            $layouts[] = "@app/web/themes/{$theme}/modules/{$controller->module->id}/views/layouts/{$controller->id}_{$controller->action->id}";
+            $layouts[] = "@app/web/themes/{$theme}/modules/{$controller->module->id}/views/layouts/{$controller->id}-{$controller->action->id}";
             $layouts[] = "@app/web/themes/{$theme}/modules/{$controller->module->id}/views/layouts/{$controller->id}";
             $layouts[] = "@app/web/themes/{$theme}/modules/{$controller->module->id}/views/layouts/default";
             $layouts[] = "@app/web/themes/{$theme}/views/layouts/default";
 
-            $layouts[] = "@app/modules/{$controller->module->id}/views/layouts/{$controller->module->id}_{$controller->id}_{$controller->action->id}";
-            $layouts[] = "@app/modules/{$controller->module->id}/views/layouts/{$controller->module->id}_{$controller->id}";
+            $layouts[] = "@app/modules/{$controller->module->id}/views/layouts/{$controller->module->id}-{$controller->id}-{$controller->action->id}";
+            $layouts[] = "@app/modules/{$controller->module->id}/views/layouts/{$controller->module->id}-{$controller->id}";
             $layouts[] = "@app/modules/{$controller->module->id}/views/layouts/{$controller->module->id}";
             $layouts[] = "@app/modules/{$controller->module->id}/views/layouts/main";
         }
