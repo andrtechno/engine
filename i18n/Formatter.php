@@ -17,7 +17,7 @@ class Formatter extends \yii\i18n\Formatter
     public function init()
     {
         $this->timeZone = CMS::timezone();
-        $this->locale = 'ru-RU';
+        $this->locale = \Yii::$app->language;
         $this->dateFormat = 'php:d M Y';
         $this->timeFormat = 'php:H:i';
         $this->datetimeFormat = 'php:d M Y в H:i';

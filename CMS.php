@@ -280,7 +280,7 @@ class CMS
 
     public static function placeholderUrl($params = [])
     {
-        $url = ['/placeholder'];
+        $url = ['/site/placeholder'];
         if (!isset($params['text'])) {
             $params['text'] = 'f138';
         }
