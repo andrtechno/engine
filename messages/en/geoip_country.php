@@ -241,7 +241,7 @@ return [
     "Yemen" => "Yemen",
     "Mayotte" => "Mayotte",
     "Serbia" => "Serbia",
-    "South Africa" ​​=> "South Africa",
+    "South Africa"=>"South Africa",
     "Zambia" => "Zambia",
     "Montenegro" => "Montenegro",
     "Zimbabwe" => "Zimbabwe",
