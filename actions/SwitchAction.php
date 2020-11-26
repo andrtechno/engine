@@ -32,7 +32,7 @@ class SwitchAction extends Action
                             $message = ($obj->switch) ? 'SUCCESS_RECORD_ON' : 'SUCCESS_RECORD_OFF';
                             $sw = ($obj->switch) ? 0 : 1;
                             $json['success'] = true;
-                            $json['url'] = '/' . Yii::$app->request->pathInfo . "?id={$_REQUEST['id']}&value={$sw}";
+                            $json['url'] = Yii::$app->request->baseUrl . '/' . Yii::$app->request->pathInfo . "?id={$_REQUEST['id']}&value={$sw}";
                             $json['value'] = $sw;
                             $json['message'] = Yii::t('app/default', $message);
                         } else {
