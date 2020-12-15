@@ -1,6 +1,7 @@
 <?php
 
 namespace panix\engine\widgets;
+
 use yii\helpers\Json;
 
 /**
@@ -16,12 +17,14 @@ class Pjax extends \yii\widgets\Pjax
     {
 
         if ($this->dataProvider) {
-            $this->id = 'pjax-grid-' . strtolower((new \ReflectionClass($this->dataProvider->query->modelClass))->getShortName());
+            if (!isset($this->options['id'])) {
+                $this->options['id'] = $this->getId();
+                $this->id = 'pjax-grid-' . strtolower((new \ReflectionClass($this->dataProvider->query->modelClass))->getShortName());
+            }
         }
         parent::init();
 
     }
-
 
 
     public function registerClientScript()

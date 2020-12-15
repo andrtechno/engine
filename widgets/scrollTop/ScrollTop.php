@@ -99,8 +99,6 @@ class ScrollTop extends Widget
 ", \yii\web\View::POS_END, 'topBottomScroll-js');
 
         $this->getView()->registerCss(' 
-    .hide {display:none;}
-    
     #scroll-to{
         position: fixed;
         bottom: 50px;
@@ -111,8 +109,8 @@ class ScrollTop extends Widget
     }
 
     #scroll-to .scroll-to {
-        width: 42px;
-        height: 42px;
+        width: 44px;
+        height: 44px;
         position:relative;
     }
     #scroll-to .scroll-to.top:before{
