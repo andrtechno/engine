@@ -23,21 +23,34 @@ class CMS
     const MEMORY_LIMIT = 512; // Minimal memory_limit
 
 
-    public static function return_bytes($val) {
-        $val = trim($val);
-        $last = strtolower($val[strlen($val)-1]);
-        switch($last) {
-            // Модификатор 'G' доступен с PHP 5.1.0
-            case 'g':
-                $val *= 1024;
-            case 'm':
-                $val *= 1024;
-            case 'k':
-                $val *= 1024;
+    public static function convertPHPSizeToBytes($size)
+    {
+        //
+        $suffix = strtoupper(substr($size, -1));
+        if (!in_array($suffix, ['P', 'T', 'G', 'M', 'K'])) {
+            return (int)$size;
         }
-
-        return $val;
+        $value = substr($size, 0, -1);
+        switch ($suffix) {
+            case 'P':
+                $value *= 1024;
+            // Fallthrough intended
+            case 'T':
+                $value *= 1024;
+            // Fallthrough intended
+            case 'G':
+                $value *= 1024;
+            // Fallthrough intended
+            case 'M':
+                $value *= 1024;
+            // Fallthrough intended
+            case 'K':
+                $value *= 1024;
+                break;
+        }
+        return (int)$value;
     }
+
     /**
      * Конвертирует число "150" в "000150"
      *
