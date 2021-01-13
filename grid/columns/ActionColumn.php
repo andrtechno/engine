@@ -181,7 +181,7 @@ class ActionColumn extends DataColumn
         $module = $controller->module;
 
         if (!isset($this->buttons['switch'])) {
-            if (Yii::$app->user->can("/{$module->id}/admin/{$controller->id}/*") || Yii::$app->user->can("/{$module->id}/admin/{$controller->id}/switch")) {
+            if (Yii::$app->user->can("/{$module->id}/{$controller->id}/*") || Yii::$app->user->can("/{$module->id}/{$controller->id}/switch")) {
                 $this->buttons['switch'] = function ($url, $model) {
                     /** @var $model ActiveRecord */
                     //unset($url,$key);
@@ -218,7 +218,7 @@ class ActionColumn extends DataColumn
             };
         }
         if (!isset($this->buttons['update'])) {
-            if (Yii::$app->user->can("/{$module->id}/admin/{$controller->id}/*") || Yii::$app->user->can("/{$module->id}/admin/{$controller->id}/update")) {
+            if (Yii::$app->user->can("/{$module->id}/{$controller->id}/*") || Yii::$app->user->can("/{$module->id}/{$controller->id}/update")) {
                 $this->buttons['update'] = function ($url, $model) {
                     /** @var $model ActiveRecord */
                     if (isset($model->primaryKey) && isset($model->disallow_update)) {
@@ -241,7 +241,7 @@ class ActionColumn extends DataColumn
         }
 
         if (!isset($this->buttons['delete'])) {
-            if (Yii::$app->user->can("/{$module->id}/admin/{$controller->id}/*") || Yii::$app->user->can("/{$module->id}/admin/{$controller->id}/delete")) {
+            if (Yii::$app->user->can("/{$module->id}/{$controller->id}/*") || Yii::$app->user->can("/{$module->id}/{$controller->id}/delete")) {
                 $this->buttons['delete'] = function ($url, $model) {
                     /** @var $model ActiveRecord */
                     /* return Html::a('<i class="text-danger icon-delete"></i>', $url, [
