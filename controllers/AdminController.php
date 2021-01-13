@@ -64,7 +64,7 @@ class AdminController extends CommonController
         if (Yii::$app->user->isGuest && get_class($this) !== 'panix\mod\admin\controllers\AuthController') {
             return Yii::$app->response->redirect(['/admin/auth']);
         }
-        if (!Yii::$app->user->isGuest && !Yii::$app->user->can('admin')) {
+        if (!Yii::$app->user->isGuest && !Yii::$app->user->can('admin') && !Yii::$app->user->can('/admin/*')) {
             return Yii::$app->response->redirect(['/site/index']);
         }
         return parent::beforeAction($action);
