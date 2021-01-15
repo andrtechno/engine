@@ -25,7 +25,9 @@ class ActionColumn extends DataColumn
     public $contentOptions = ['class' => 'text-center'];
     public $pjax;
     public $filter = true;
-	public $editColumnsUrl;
+    public $editColumnsUrl;
+    public $enableEditColumns = true;
+
     /**
      * @inheritdoc
      */
@@ -35,17 +37,18 @@ class ActionColumn extends DataColumn
         if (!$this->header)
             $this->header = Yii::t('app/default', 'OPTIONS');
 
-		if(!$this->editColumnsUrl){
-			$this->editColumnsUrl = Url::to('/admin/app/default/edit-columns');
-		}
+        if (!$this->editColumnsUrl) {
+            $this->editColumnsUrl = Url::to('/admin/app/default/edit-columns');
+        }
         // $this->btnSize = $config['grid_btn_icon_size'];
         // if (!$this->pjax) {
         //    $this->pjax = '#pjax-container';
         //}
 
         if ($this->filter) {
-            if (isset(($this->grid->dataProvider)->query)) {
+            if (isset(($this->grid->dataProvider)->query) && $this->enableEditColumns) {
                 if (method_exists(($this->grid->dataProvider)->query->modelClass, 'getGridColumns')) {
+
                     $items[] = [
                         'label' => Html::icon('table') . ' ' . Yii::t('app/admin', 'EDIT_GRID_COLUMNS'),
                         'url' => $this->editColumnsUrl,
@@ -58,6 +61,7 @@ class ActionColumn extends DataColumn
                             // 'data-pjax-id' => 'pjax-' . strtolower(basename($this->grid->dataProvider->query->modelClass)),
                         ]
                     ];
+
                 }
             }
             $items[] = [
@@ -226,7 +230,7 @@ class ActionColumn extends DataColumn
                             return Html::a(Html::icon('edit'), $url, [
                                 'title' => Yii::t('yii', 'Update'),
                                 'class' => 'd-flex align-items-center btn ' . $this->btnSize . ' btn-outline-secondary',
-                                 'data-pjax' => 0,
+                                'data-pjax' => 0,
                             ]);
                         }
                     } else {
@@ -292,29 +296,29 @@ class ActionColumn extends DataColumn
                                 });", View::POS_END, 'delete');
 
 
-                            return Html::a(Html::icon('delete'), $url.'ssss', [
+                            return Html::a(Html::icon('delete'), $url . 'ssss', [
                                 'title' => Yii::t('yii', 'Delete'),
                                 'aria-label' => Yii::t('yii', 'Delete'),
                                 'data-pjax' => '0',
                                 'data-method' => 'POST',
                                 'data-confirm' => Yii::t('app/default', 'DELETE_CONFIRM'),
                                 'class' => 'btn ' . $this->btnSize . ' btn-outline-danger delete',
-                            'onclick'=>'return false;'
-                            /*    'onclick' => "
+                                'onclick' => 'return false;'
+                                /*    'onclick' => "
 
-                                if (confirm('" . Yii::t('app/default', 'DELETE_CONFIRM') . "')) {
-                                    $.ajax('$url', {
-                                        type: 'POST',
-                                        dataType:'json',
-                                    }).done(function(data) {
-                                            $.pjax.reload({container: '#{$this->grid->id}'});
-                                            console.log(data);
-                                            common.notify(data.message,'success');
-                                            //$('#{$this->grid->id}').yiiGridView('applyFilter');
-                                    });
-                                }
-                                return false;
-                            ",*/
+                                    if (confirm('" . Yii::t('app/default', 'DELETE_CONFIRM') . "')) {
+                                        $.ajax('$url', {
+                                            type: 'POST',
+                                            dataType:'json',
+                                        }).done(function(data) {
+                                                $.pjax.reload({container: '#{$this->grid->id}'});
+                                                console.log(data);
+                                                common.notify(data.message,'success');
+                                                //$('#{$this->grid->id}').yiiGridView('applyFilter');
+                                        });
+                                    }
+                                    return false;
+                                ",*/
                             ]);
                         }
                     } else {
