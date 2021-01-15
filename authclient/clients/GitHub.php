@@ -3,12 +3,12 @@
 namespace panix\engine\authclient\clients;
 
 use Yii;
-
+use yii\authclient\clients\GitHub as BaseGitHub;
 /**
  * Class Github
  * @package panix\engine\authclient\clients
  */
-class Github extends \yii\authclient\clients\Github
+class GitHub extends BaseGitHub
 {
 
     /**
