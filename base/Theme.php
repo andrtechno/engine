@@ -3,6 +3,7 @@
 namespace panix\engine\base;
 
 use panix\engine\CMS;
+use panix\engine\console\controllers\ConsoleController;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
@@ -32,9 +33,11 @@ class Theme extends BaseTheme
     public function init()
     {
         Yii::debug('init', __METHOD__);
-        if (preg_match("/admin/", Yii::$app->request->getUrl())) {
-            //if (preg_match("/^\/\admin/", Yii::$app->request->getUrl())) {
-            $this->name = 'dashboard';
+        if(!(Yii::$app instanceof ConsoleController)) {
+            if (preg_match("/admin/", Yii::$app->request->getUrl())) {
+                //if (preg_match("/^\/\admin/", Yii::$app->request->getUrl())) {
+                $this->name = 'dashboard';
+            }
         }
         if ($this->name == null) {
             Yii::debug('Loading null', __METHOD__);
