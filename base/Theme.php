@@ -33,7 +33,7 @@ class Theme extends BaseTheme
     public function init()
     {
         Yii::debug('init', __METHOD__);
-        if(!(Yii::$app instanceof ConsoleController)) {
+        if(method_exists(Yii::$app->request,'getUrl')) {
             if (preg_match("/admin/", Yii::$app->request->getUrl())) {
                 //if (preg_match("/^\/\admin/", Yii::$app->request->getUrl())) {
                 $this->name = 'dashboard';
