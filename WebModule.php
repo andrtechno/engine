@@ -34,6 +34,7 @@ class WebModule extends Module
     public $icon;
     public $uploadPath;
     public $uploadAliasPath = null;
+    public $composer;
 
     public function behaviors2()
     {
@@ -100,6 +101,12 @@ class WebModule extends Module
                 $this->controllerNamespace = $reflector->getNamespaceName() . "\\commands";
             }
         }
+
+        if (file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'composer.json')) {
+            $this->composer = json_decode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'composer.json'), true);
+        }
+
+
         //$this->registerTranslations();
 
         $this->uploadAliasPath = "@app/web/uploads/content/{$this->id}";
