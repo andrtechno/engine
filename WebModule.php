@@ -102,8 +102,8 @@ class WebModule extends Module
             }
         }
 
-        if (file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'composer.json')) {
-            $this->composer = json_decode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'composer.json'), true);
+        if (file_exists(Yii::getAlias("@{$this->id}") . DIRECTORY_SEPARATOR . 'composer.json')) {
+            $this->composer = json_decode(file_get_contents(Yii::getAlias("@{$this->id}") . DIRECTORY_SEPARATOR . 'composer.json'), true);
         }
 
 
