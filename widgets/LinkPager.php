@@ -42,7 +42,7 @@ class LinkPager extends BasePager
 
     public function init()
     {
-        if (!$this->maxButtonCount)
+        if ($this->maxButtonCount != 10)
             $this->maxButtonCount = CMS::isMobile() ? 5 : 10;
 
         parent::init();
@@ -74,7 +74,6 @@ class LinkPager extends BasePager
             return Html::submitButton($label, ArrayHelper::merge(['value' => $page + 1, 'name' => 'page'], $options));
         }
     }
-
 
 
 }
