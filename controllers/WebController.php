@@ -42,11 +42,11 @@ class WebController extends CommonController
                 if (Yii::$app->request->get($utm))
                     $data[$utm] = Html::encode(Yii::$app->request->get($utm));
             }
-            if($data){
-                $data['created_at']=time();
+            if ($data) {
+                $data['created_at'] = time();
                 Yii::$app->db->createCommand()->insert('{{%utm}}', $data)->execute();
             }
-      }
+        }
         return parent::beforeAction($action);
     }
 
