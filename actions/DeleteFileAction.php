@@ -2,6 +2,7 @@
 
 namespace panix\engine\actions;
 
+use panix\engine\CMS;
 use Yii;
 use yii\db\Expression;
 use yii\web\Response;
@@ -27,14 +28,13 @@ class DeleteFileAction extends Action
                     /** @var $obj \yii\db\ActiveRecord */
                     $filesBehavior = $obj->getBehavior('uploadFile');
 
-
                     $filePath = Yii::getAlias($filesBehavior->files[$attribute]) . DIRECTORY_SEPARATOR . $obj->{$attribute};
                     if (file_exists($filePath)) {
                         $obj->{$attribute} = NULL;
                         unlink($filePath);
                     }
-
                     unset($filesBehavior->files[$attribute]);
+
                     $obj->{$this->saveMethod}(false);
 
                     if (Yii::$app->request->isAjax) {
@@ -42,7 +42,7 @@ class DeleteFileAction extends Action
                         $json['status'] = 'success';
                         $json['message'] = Yii::t('app/default', 'SUCCESS_RECORD_DELETE');
                     } else {
-                     return Yii::$app->response->redirect(Yii::$app->request->get('redirect'));
+                        return Yii::$app->response->redirect(Yii::$app->request->get('redirect'));
                     }
                 }
             }
