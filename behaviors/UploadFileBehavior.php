@@ -19,13 +19,15 @@ use yii\web\UploadedFile;
  * @package panix\engine\behaviors
  * @property $files array [attribute => path]
  * @property $oldUploadFiles array
+ * @property $extensions array
+ * @property $options array
  */
 class UploadFileBehavior extends Behavior
 {
 
 
     public $files = [];
-    public $extensions = ['jpg', 'jpeg', 'png', 'gif'];
+    public $extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
     public $options = [];
     private $oldUploadFiles = [];
     private $_files = [];

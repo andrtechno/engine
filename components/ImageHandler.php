@@ -2,6 +2,7 @@
 
 namespace panix\engine\components;
 
+use panix\engine\CMS;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
@@ -39,6 +40,7 @@ class ImageHandler extends Component
     const IMG_GIF = 1;
     const IMG_JPEG = 2;
     const IMG_PNG = 3;
+    const IMG_WEBP = 18;
 
     const POS_LEFT_TOP = 1;
     const POS_RIGHT_TOP = 2;
@@ -117,6 +119,7 @@ class ImageHandler extends Component
 
             $result['mimeType'] = $imageInfo['mime'];
 
+           // CMS::dump($imageInfo[2]);die;
             switch ($result['format'] = $imageInfo[2]) {
                 case self::IMG_GIF:
                     if ($result['image'] = imagecreatefromgif($file)) {
@@ -137,6 +140,13 @@ class ImageHandler extends Component
                         return $result;
                     } else {
                         throw new Exception('Invalid image png format');
+                    }
+                    break;
+                case self::IMG_WEBP:
+                    if ($result['image'] = imagecreatefromwebp($file)) {
+                        return $result;
+                    } else {
+                        throw new Exception('Invalid image webp format');
                     }
                     break;
                 default:
@@ -302,7 +312,7 @@ class ImageHandler extends Component
      * @param int $width
      * @param int $height
      * @param string $quadrant T, B, C, L, R
-     * @return GdThumb
+     * @return $this
      */
     public function adaptiveResizeQuadrant($width, $height, $quadrant = 'C')
     {
@@ -889,6 +899,10 @@ class ImageHandler extends Component
                 header('Content-type: image/png');
                 imagepng($this->image);
                 break;
+            case self::IMG_WEBP:
+                header('Content-type: image/webp');
+                imagewebp($this->image, null, $jpegQuality);
+                break;
             default:
                 throw new Exception('Invalid image format for putput');
         }
@@ -959,6 +973,11 @@ class ImageHandler extends Component
             case self::IMG_PNG:
                 if (!imagepng($this->image, $file)) {
                     throw new Exception('Can\'t save png file');
+                }
+                break;
+            case self::IMG_WEBP:
+                if (!imagepng($this->image, $file)) {
+                    throw new Exception('Can\'t save webp file');
                 }
                 break;
             default:
