@@ -17,6 +17,8 @@ use yii\web\UploadedFile;
 /**
  * Class UploadFileBehavior
  * @package panix\engine\behaviors
+ * @property $files array [attribute => path]
+ * @property $oldUploadFiles array
  */
 class UploadFileBehavior extends Behavior
 {

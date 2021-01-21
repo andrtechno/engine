@@ -2,6 +2,7 @@
 
 namespace panix\engine\actions;
 
+use panix\engine\behaviors\UploadFileBehavior;
 use panix\engine\CMS;
 use Yii;
 use yii\db\Expression;
@@ -25,7 +26,10 @@ class DeleteFileAction extends Action
             $entry = $model->find()->where(['id' => $_REQUEST['key']])->all();
             if ($entry) {
                 foreach ($entry as $obj) {
-                    /** @var $obj \yii\db\ActiveRecord */
+                    /**
+                     * @var $obj \yii\db\ActiveRecord
+                     * @var $filesBehavior UploadFileBehavior
+                     */
                     $filesBehavior = $obj->getBehavior('uploadFile');
 
                     if (isset($filesBehavior->files[$attribute])) {
