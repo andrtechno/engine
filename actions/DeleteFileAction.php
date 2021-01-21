@@ -28,15 +28,16 @@ class DeleteFileAction extends Action
                     /** @var $obj \yii\db\ActiveRecord */
                     $filesBehavior = $obj->getBehavior('uploadFile');
 
-                    $filePath = Yii::getAlias($filesBehavior->files[$attribute]) . DIRECTORY_SEPARATOR . $obj->{$attribute};
-                    if (file_exists($filePath)) {
-                        $obj->{$attribute} = NULL;
-                        unlink($filePath);
+                    if (isset($filesBehavior->files[$attribute])) {
+                        $filePath = Yii::getAlias($filesBehavior->files[$attribute]) . DIRECTORY_SEPARATOR . $obj->{$attribute};
+                        if (file_exists($filePath)) {
+                            $obj->{$attribute} = NULL;
+                            unlink($filePath);
+                        }
+                        unset($filesBehavior->files[$attribute]);
+
+                        $obj->{$this->saveMethod}(false);
                     }
-                    unset($filesBehavior->files[$attribute]);
-
-                    $obj->{$this->saveMethod}(false);
-
                     if (Yii::$app->request->isAjax) {
                         Yii::$app->response->format = Response::FORMAT_JSON;
                         $json['status'] = 'success';
