@@ -202,7 +202,7 @@ class CMS
             $error = true;
         }
 
-        if (!file_exists($thumbPath)) {
+        if (!file_exists($thumbPath) && file_exists($fullPath)) {
             $img->load($fullPath);
             if ($error) {
                 $img->grayscale();
