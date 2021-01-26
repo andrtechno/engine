@@ -153,7 +153,7 @@ class Settings extends Component
      */
     public function delete($category, $key)
     {
-        Yii::$app->db->createCommand()->delete(static::tableName(), ['category' => $category, 'key' => $key])->execute();
+        Yii::$app->db->createCommand()->delete(static::tableName(), ['category' => $category, 'param' => $key])->execute();
         if (isset($this->data[$category][$key]))
             unset($this->data[$category][$key]);
 
