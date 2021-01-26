@@ -1,6 +1,6 @@
 <?php
 
-namespace panix\mod\csv\components;
+namespace panix\engine\queue;
 
 use Yii;
 use yii\queue\RetryableJobInterface;
@@ -29,6 +29,7 @@ class SendEmail extends BaseObject implements RetryableJobInterface
             ->setSubject($this->subject)
             ->send();
 
+        echo 'email sending!'.PHP_EOL;
 
         return true;
     }
