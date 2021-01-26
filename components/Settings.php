@@ -63,7 +63,7 @@ class Settings extends Component
     }
 
     /**
-     * @param $category string component unique id. e.g: contacts, shop, news
+     * @param string $category component unique id. e.g: contacts, shop, news
      * @param array $data key-value array. e.g array('key'=>10)
      */
     public function set($category, array $data)
@@ -107,7 +107,7 @@ class Settings extends Component
     }
 
     /**
-     * @param $category string component unique id.
+     * @param string $category component unique id.
      * @param null $key option key. If not provided all category settings will be returned as array.
      * @param null|string $default default value if original does not exists
      * @return mixed
@@ -133,13 +133,29 @@ class Settings extends Component
 
     /**
      * Remove category from DB
-     * @param $category
+     * @param string $category
+     * @throws \yii\db\Exception
      */
     public function clear($category)
     {
         Yii::$app->db->createCommand()->delete(static::tableName(), 'category=:category', [':category' => $category])->execute();
         if (isset($this->data[$category]))
             unset($this->data[$category]);
+
+        Yii::$app->cache->delete($this->cache_key);
+    }
+
+    /**
+     * Remove category & key from DB
+     * @param string $category
+     * @param string $key
+     * @throws \yii\db\Exception
+     */
+    public function delete($category, $key)
+    {
+        Yii::$app->db->createCommand()->delete(static::tableName(), ['category' => $category, 'key' => $key])->execute();
+        if (isset($this->data[$category][$key]))
+            unset($this->data[$category][$key]);
 
         Yii::$app->cache->delete($this->cache_key);
     }
