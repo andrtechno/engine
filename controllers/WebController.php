@@ -238,7 +238,7 @@ class WebController extends CommonController
         /** @var \panix\engine\components\ImageHandler $img */
         $size_allow = [16, 32, 57, 60, 72, 76, 96, 114, 120, 144, 152, 180];
         $config = Yii::$app->settings->get('app');
-        if ($size && isset($config->favicon)) {
+        if (isset($config->favicon)) {
 
             $response->format = Response::FORMAT_RAW;
 
@@ -249,7 +249,8 @@ class WebController extends CommonController
                     $response->headers->set('Content-Type', 'image/x-icon');
                     return file_get_contents($path);
                 } else {
-                    if (!in_array($size, $size_allow)) {
+
+                    if ($size && !in_array($size, $size_allow)) {
                         $this->error404();
                     }
                     //$response->headers->add('Content-Type', 'image/png');
