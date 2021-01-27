@@ -10,10 +10,9 @@ use panix\mod\admin\models\Modules;
  * Class WebApplication
  * @package panix\engine
  * @property array $counters
- * @property \panix\engine\components\Settings $settings The user component. This property is read-only.
- * @property ManagerLanguage $languageManager The user component. This property is read-only.
+ * @property-read \panix\engine\components\Settings $settings The user component. This property is read-only.
+ * @property-read ManagerLanguage $languageManager The user component. This property is read-only.
  * @property \panix\engine\db\Connection $db The database connection. This property is read-only.
- *
  */
 class WebApplication extends Application
 {
@@ -132,7 +131,8 @@ class WebApplication extends Application
 
     /**
      * Returns the settings component.
-     * @return \panix\engine\components\Settings the settings component.
+     * @return \panix\engine\components\Settings|object the settings component.
+     * @throws \yii\base\InvalidConfigException
      */
     public function getSettings()
     {
@@ -141,7 +141,8 @@ class WebApplication extends Application
 
     /**
      * Returns the languageManager component.
-     * @return ManagerLanguage the languageManager component.
+     * @return ManagerLanguage|object the languageManager component.
+     * @throws \yii\base\InvalidConfigException
      */
     public function getLanguageManager()
     {

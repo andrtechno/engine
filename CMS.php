@@ -847,6 +847,15 @@ class CMS
         }, $text);
     }
 
+    public static function getYouTubeImg($url, $thumb = 'default')
+    {
+        if (!in_array($thumb, [1, 2, 3, 'default', 'maxresdefault', 'hqdefault', 'mqdefault'])) {
+            throw new Exception('error video thumb');
+        }
+        $id = self::parse_yturl($url);
+        return "http://i3.ytimg.com/vi/{$id}/{$thumb}.jpg";
+    }
+
     /**
      * Youtube parse url
      *
