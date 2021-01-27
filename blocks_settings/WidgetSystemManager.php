@@ -3,6 +3,7 @@
 namespace panix\engine\blocks_settings;
 
 use Yii;
+use yii\base\Exception;
 use yii\helpers\FileHelper;
 use yii\base\Component;
 
@@ -12,7 +13,11 @@ class WidgetSystemManager extends Component
     public function getSystemClass($alias)
     {
 
-        $reflect = new \ReflectionClass($alias);
+        if (class_exists($alias)) {
+            $reflect = new \ReflectionClass($alias);
+        } else {
+            return false;
+        }
 
 
         $namespace = $reflect->getNamespaceName() . '\\form';
