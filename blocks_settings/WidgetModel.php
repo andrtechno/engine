@@ -83,7 +83,8 @@ class WidgetModel extends Model
     public function saveSettings($obj, $postData)
     {
         $reflect = new \ReflectionClass($this);
-        $this->setSettings(basename($obj), $postData[$reflect->getShortName()]);
+        $reflect_object = new \ReflectionClass($obj);
+        $this->setSettings($reflect_object->getShortName(), $postData[$reflect->getShortName()]);
     }
 
     public function setSettings($obj, $data)
