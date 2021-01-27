@@ -9,7 +9,7 @@ namespace panix\engine\traits\query;
 trait DefaultQueryTrait
 {
 
-    public $defaultSort = false;
+  //  public $defaultSort = false;
 
     /**
      * Default scope
@@ -17,13 +17,13 @@ trait DefaultQueryTrait
     public function init()
     {
         /** @var \yii\db\ActiveRecord $modelClass */
-        if ($this->defaultSort) {
+        //if ($this->defaultSort) {
             $modelClass = $this->modelClass;
             $tableName = $modelClass::tableName();
             if (isset($modelClass::getTableSchema()->columns['ordern'])) {
                 $this->addOrderBy(["{$tableName}.ordern" => SORT_DESC]);
             }
-        }
+      //  }
         parent::init();
     }
 
