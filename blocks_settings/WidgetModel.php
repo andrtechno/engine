@@ -9,6 +9,7 @@ class WidgetModel extends Model
 {
 
     protected $widget_id;
+    public $setting_key;
     public function attributeLabels()
     {
         $class = (new \ReflectionClass(get_called_class()));
@@ -24,7 +25,7 @@ class WidgetModel extends Model
     {
         $reflectionClass = new \ReflectionClass(get_class($this));
         $this->widget_id = 'wgt_' . $reflectionClass->getShortName();
-
+        $this->setting_key=$reflectionClass->getShortName();
         Yii::$app->setAliases([
             '@' . $this->widget_id => realpath(dirname(dirname($reflectionClass->getFileName()))),
         ]);
@@ -72,8 +73,8 @@ class WidgetModel extends Model
 
     public function getConfigurationFormHtml($obj)
     {
-
-        $this->attributes = (array) $this->getSettings($obj);
+        $reflect = new \ReflectionClass($obj);
+        $this->attributes = (array) $this->getSettings($reflect->getShortName());
         $ref = new \ReflectionClass($this);
 
         Yii::setAlias('@viewPath', dirname(dirname($ref->getFileName())) . DIRECTORY_SEPARATOR . 'views');

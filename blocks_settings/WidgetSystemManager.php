@@ -2,6 +2,7 @@
 
 namespace panix\engine\blocks_settings;
 
+use panix\engine\CMS;
 use Yii;
 use yii\base\Exception;
 use yii\helpers\FileHelper;
@@ -18,8 +19,10 @@ class WidgetSystemManager extends Component
         } else {
             return false;
         }
-
-
+//echo $alias;
+        $widget= new $alias;
+        $form = $widget::$form;
+//CMS::dump($widget::$form);die;
         $namespace = $reflect->getNamespaceName() . '\\form';
         $fpath = dirname($reflect->getFileName()) . DIRECTORY_SEPARATOR . 'form';
 
@@ -30,12 +33,16 @@ class WidgetSystemManager extends Component
                 'recursive' => false
             ]);
 
-            foreach ($test as $formpath) {
-                $test = basename($formpath, '.php');
-                $classNamespace = $namespace . '\\' . $test;
+          //  foreach ($test as $formPath) {
+                //$inc = include_once $formPath;
+               // CMS::dump($reflect);die;
+                //$test = basename($formPath, '.php');
+                //$reflect = new \ReflectionClass($test);
 
-                return new $classNamespace;
-            }
+               // $classNamespace = $namespace . '\\' . $test;
+
+                return new $form;
+          //  }
         } else {
 
             if (Yii::$app->request->isAjax)
