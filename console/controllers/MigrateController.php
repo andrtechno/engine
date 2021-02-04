@@ -22,15 +22,20 @@ class MigrateController extends BaseMigrateController
 
     public function beforeAction($action)
     {
-        $list = [];
+        $ns = [];
+        $paths = [];
         foreach (Yii::$app->getModules() as $mod => $params) {
             $module = Yii::$app->getModule($mod);
             $class = new \ReflectionClass($module);
-            //if (in_array($mod, ['contacts'])) {
-                $list[] = $class->getNamespaceName() . '\\migrations';
-            //}
+            $ns[] = "{$class->getNamespaceName()}\\migrations";
+            $paths[] = "@{$mod}/migrations";
+
         }
-        $this->migrationNamespaces = ArrayHelper::merge($this->migrationNamespaces,$list);
+
+       // $this->migrationNamespaces = ArrayHelper::merge($this->migrationNamespaces, $ns);
+
+        $this->migrationPath=ArrayHelper::merge($this->migrationPath, $paths);
+     //  print_r($this->migrationNamespaces);die;
         return parent::beforeAction($action);
 
     }

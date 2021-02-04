@@ -932,7 +932,10 @@ class CMS
         return $gen;
     }
 
-
+    /**
+     * @param int|float $n
+     * @return bool|string
+     */
     public static function counterUnit($n)
     {
         // first strip any formatting;
@@ -965,6 +968,10 @@ class CMS
         }
     }
 
+    /**
+     * @param string $guid
+     * @return bool
+     */
     public static function isGuid($guid)
     {
         if (preg_match('/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/', $guid)) {
