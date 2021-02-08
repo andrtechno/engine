@@ -19,10 +19,12 @@ class GridView extends \yii\grid\GridView
     public $enableColumns = true;
     public $layoutPath = '@theme/views/layouts/_grid_layout';
     public $filterErrorOptions = ['class' => 'badge badge-danger'];
-    public $pager = ['class' => 'panix\engine\widgets\LinkPager'];
 
     public function init()
     {
+        if(!isset($this->pager['class'])){
+            $this->pager['class']='panix\engine\widgets\LinkPager';
+        }
 
         $pagination = $this->dataProvider->getPagination();
         if (isset($this->dataProvider->query)) {
