@@ -3,6 +3,7 @@
 namespace panix\engine;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\web\Application;
 use panix\mod\admin\models\Modules;
 
@@ -121,12 +122,13 @@ class WebApplication extends Application
     public function registerTranslations($id)
     {
         $path = '@' . $id . '/messages';
-        $this->i18n->translations[$id . '/*'] = Yii::createObject([
+        $translations[$id . '/*'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             'sourceLanguage' => 'en-US',
             'basePath' => $path,
             'fileMap' => $this->getTranslationsFileMap($id, $path)
-        ]);
+        ];
+        $this->i18n->translations = ArrayHelper::merge($translations,$this->i18n->translations);
     }
 
     /**
