@@ -296,7 +296,7 @@ class ActionColumn extends DataColumn
                                 });", View::POS_END, 'delete');
 
 
-                            return Html::a(Html::icon('delete'), $url . 'ssss', [
+                            return Html::a(Html::icon('delete'), $url, [
                                 'title' => Yii::t('yii', 'Delete'),
                                 'aria-label' => Yii::t('yii', 'Delete'),
                                 'data-pjax' => '0',
