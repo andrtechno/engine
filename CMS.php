@@ -197,7 +197,7 @@ class CMS
         }
         $error = false;
         if (!file_exists($fullPath)) {
-            $fullPath = Yii::getAlias('@uploads') . DIRECTORY_SEPARATOR . 'no-image.png';
+            $fullPath = Yii::getAlias('@uploads') . DIRECTORY_SEPARATOR . 'no-image.jpg';
             $options['watermark'] = false;
             $error = true;
         }

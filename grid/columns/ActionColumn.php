@@ -255,6 +255,7 @@ class ActionColumn extends DataColumn
                       'data-method' => 'post',
                       'data-pjax' => '0',
                       ]); */
+
                     if (isset($model->primaryKey) && isset($model->disallow_delete)) {
                         if (!in_array($model->primaryKey, $model->disallow_delete)) {
 
