@@ -187,22 +187,23 @@ class CMS
         $sizes = explode('x', $size);
 
 
-        $img = Yii::$app->img;
+
         $configApp = Yii::$app->settings->get('app');
 
         //Уделение картинок с папки assets при разработке.
-        if (YII_DEBUG && file_exists($thumbPath)) {
+        //if (YII_DEBUG && file_exists($thumbPath)) {
             //die($thumbPath);
-            unlink($thumbPath);
-        }
+        //    unlink($thumbPath);
+        //}
         $error = false;
-        if (!file_exists($fullPath)) {
+        if (!file_exists($fullPath) && !file_exists($thumbPath)) {
             $fullPath = Yii::getAlias('@uploads') . DIRECTORY_SEPARATOR . 'no-image.jpg';
             $options['watermark'] = false;
             $error = true;
         }
 
         if (!file_exists($thumbPath) && file_exists($fullPath)) {
+            $img = Yii::$app->img;
             $img->load($fullPath);
             if ($error) {
                 $img->grayscale();

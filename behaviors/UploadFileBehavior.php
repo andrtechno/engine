@@ -116,15 +116,15 @@ class UploadFileBehavior extends Behavior
 
 
         $owner = $this->owner;
-        if ($owner->{$attribute}) {
+        //if ($owner->{$attribute}) {
 
             return CMS::processImage($size, $owner->{$attribute}, $this->files[$attribute], $options);
-        } else {
-            if (!$returnBool) {
-                return false;
-            }
-            return CMS::placeholderUrl(['size' => $size]);
-        }
+       // } else {
+       //     if (!$returnBool) {
+       //         return false;
+       //     }
+        //    return CMS::placeholderUrl(['size' => $size]);
+     //   }
     }
 
 
