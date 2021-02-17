@@ -15,6 +15,59 @@ use ML\JsonLD\JsonLD;
  */
 class JsonLDHelper extends BaseObject
 {
+
+
+    public static function addProduct($model)
+    {
+        $reviewsQuery = $model->getReviews()->status(1);
+        $reviewsCount = $reviewsQuery->roots()->count();
+
+
+        if ($model->availability == 1) { //Есть в наличии
+            $availability = "https://schema.org/InStock";
+        } elseif ($model->availability == 3) { //Нет в наличии
+            $availability = "https://schema.org/OutOfStock";
+        } elseif ($model->availability == 2) { //предзаказ
+            $availability = "https://schema.org/PreOrder";
+        }
+
+
+
+
+        $doc["@type"] = 'Product';
+        $doc["http://schema.org/sku"] = $model->sku;
+        //"http://schema.org/description" => "Post Title",
+        $doc["http://schema.org/name"] = $model->name;
+        if($model->manufacturer_id){
+            if($model->manufacturer){
+                $doc["http://schema.org/brand"] = (object)[
+                    "@type" => "Brand",
+                    "http://schema.org/name" => $model->manufacturer->name
+                ];
+            }
+        }
+        foreach ($model->getImages() as $image){
+            $doc["http://schema.org/image"][] = Url::to($image->getUrlToOrigin(),true);
+        }
+        $doc["http://schema.org/aggregateRating"] = (object)[
+            "@type" => "AggregateRating",
+            "http://schema.org/ratingValue" => $model->ratingScore,
+            "http://schema.org/reviewCount" => (int)$reviewsCount
+        ];
+        $doc["http://schema.org/offers"] = (object)[
+            "@type" => "http://schema.org/Offer",
+            "http://schema.org/availability" => $availability,
+            "http://schema.org/price" => round($model->getFrontPrice(), 2),
+            "http://schema.org/priceCurrency" => Yii::$app->currency->main['iso'],
+
+            //"offerCount": "5", //Количество предложений по товару. (disabel price param)
+            //"lowPrice": "119.99",
+            //"highPrice": "199.99",
+        ];
+        JsonLDHelper::add($doc);
+    }
+
+
     /**
      * Adds BreadcrumbList schema.org markup based on the application view `breadcrumbs` parameter
      */
