@@ -439,21 +439,23 @@ class ActiveRecord extends \yii\db\ActiveRecord
     public function pageBreak($attribute = false)
     {
         if ($attribute) {
-            $pageVar = intval(Yii::$app->request->get('page'));
+            $pageVar = intval(Yii::$app->request->get('page_break'));
             $pageBreak = explode("<!-- pagebreak -->", $this->{$attribute});
             $pageCount = count($pageBreak);
 
             $pageVar = ($pageVar == "" || $pageVar < 1) ? 1 : $pageVar;
             if ($pageVar > $pageCount)
                 $pageVar = $pageCount;
-            $arrayelement = (int)$pageVar;
-            $arrayelement--;
+            $arrayElement = (int)$pageVar;
+            $arrayElement--;
 
-            $content = $pageBreak[$arrayelement];
+            $content = $pageBreak[$arrayElement];
             $content .= LinkPager::widget([
+                'linkOptions' => ['class' => 'page-link', 'tabindex' => "-1", 'data-pjax' => "1"],
                 'pagination' => new Pagination([
                     'totalCount' => $pageCount,
                     'pageSize' => 1,
+                    'pageParam'=>'page_break',
                     'defaultPageSize' => 1,
                 ]),
             ]);;
