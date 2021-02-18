@@ -21,7 +21,7 @@ class Html extends \yii\helpers\Html
     public static function viber($text, $number = '', $options = [])
     {
         if (CMS::isMobile()) {
-            return parent::a($text, 'viber://add?number=' . $number, $options);
+            return parent::a($text, 'viber://add?number=' . str_replace('+', '', $number), $options);
         } else {
             $options['title'] = 'Должен быть устоновлен Viber для ПК';
             return parent::a($text, 'viber://chat?number=' . $number, $options);
