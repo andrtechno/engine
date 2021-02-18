@@ -119,7 +119,10 @@ class WebController extends CommonController
             }
         }
         // Yii::setAlias('@theme', Yii::getAlias("@app/web/themes/{$config->theme}"));
-        Yii::setAlias('@theme', Yii::$app->view->theme->basePath);
+        if (Yii::$app->id != 'console') {
+            Yii::setAlias('@theme', Yii::$app->view->theme->basePath);
+        }
+
         if (true && Yii::$app->id != 'console') {
 
             Yii::$app->catchAll = ['maintenance/index', 'message' => 'test text'];
