@@ -36,7 +36,7 @@ class JsonLDHelper extends BaseObject
 
         $doc["@type"] = 'Product';
         $doc["http://schema.org/sku"] = $model->sku;
-        $doc["http://schema.org/description"] = $model->description;
+        $doc["http://schema.org/description"] = $model->full_description;
         $doc["http://schema.org/name"] = $model->name;
         if($model->manufacturer_id){
             if($model->manufacturer){
