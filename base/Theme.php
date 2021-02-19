@@ -6,6 +6,7 @@ use panix\engine\CMS;
 use panix\engine\console\controllers\ConsoleController;
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\console\Application;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\base\Theme as BaseTheme;
@@ -25,6 +26,7 @@ class Theme extends BaseTheme
     private $cache_key = 'cached_settings_theme';
     protected $data = [];
     public $asset;
+
     public static function tableName()
     {
         return '{{%settings_theme}}';
@@ -32,79 +34,78 @@ class Theme extends BaseTheme
 
     public function init()
     {
-        Yii::debug('init', __METHOD__);
+        if (!(Yii::$app instanceof Application)) {
+            Yii::debug('init', __METHOD__);
 
-        //method_exists for console use
-        if(method_exists(Yii::$app->request,'getUrl')) {
-            if (preg_match("/admin/", Yii::$app->request->getUrl())) {
-                //if (preg_match("/^\/\admin/", Yii::$app->request->getUrl())) {
-                $this->name = 'dashboard';
-            }
-        }
-        if ($this->name == null) {
-            Yii::debug('Loading null', __METHOD__);
-            $this->name = Yii::$app->settings->get('app', 'theme');
-        }
-
-
-
-        Yii::debug('Loading ' . $this->name, __METHOD__);
-
-        if(!$this->basePath){
-            $this->basePath = "@app/web/themes/{$this->name}";
-        }else{
-            $this->basePath = $this->basePath."/{$this->name}";
-        }
-        if(!$this->baseUrl) {
-            $this->baseUrl = "@app/web/themes/{$this->name}";
-        }else{
-            $this->baseUrl = $this->baseUrl."/{$this->name}";
-        }
-        $this->asset = Yii::$app->getAssetManager()->publish($this->basePath."/assets");
-
-        if (!file_exists(Yii::getAlias($this->basePath))) {
-            throw new InvalidConfigException("Error: theme \"{$this->name}\" not found!");
-        }
-
-        $modulesPaths = [];
-        foreach (Yii::$app->getModules() as $id => $mod) {
-            $modulesPaths['@' . $id] = $this->basePath."/modules/{$id}";
-            //$modulesPaths['@app/modules/' . $id] = "@frontend/themes/{$this->name}/modules/{$id}";
-        }
-
-        $this->pathMap = ArrayHelper::merge([
-            "@app/views" => $this->basePath."/views",
-            '@app/modules' => $this->basePath."/modules",
-            '@app/widgets' => $this->basePath."/widgets",
-        ], $modulesPaths);
-
-
-        $this->data = Yii::$app->cache->get($this->cache_key);
-
-        if (!$this->data) {
-            try {
-                $settings = (new \yii\db\Query())
-                    ->from(static::tableName())
-                    ->orderBy('theme')
-                    ->all();
-
-
-                if (!empty($settings)) {
-                    foreach ($settings as $row) {
-                        if (!isset($this->data[$row['theme']]))
-                            $this->data[$row['theme']] = [];
-
-                        $this->data[$row['theme']][$row['param']] = $row['value'];
-                    }
+            //method_exists for console use
+            if (method_exists(Yii::$app->request, 'getUrl')) {
+                if (preg_match("/admin/", Yii::$app->request->getUrl())) {
+                    //if (preg_match("/^\/\admin/", Yii::$app->request->getUrl())) {
+                    $this->name = 'dashboard';
                 }
+            }
+            if ($this->name == null) {
+                Yii::debug('Loading null', __METHOD__);
+                $this->name = Yii::$app->settings->get('app', 'theme');
+            }
 
-                Yii::$app->cache->set($this->cache_key, $this->data);
-            } catch (\yii\db\Exception $e) {
 
+            Yii::debug('Loading ' . $this->name, __METHOD__);
+
+            if (!$this->basePath) {
+                $this->basePath = "@app/web/themes/{$this->name}";
+            } else {
+                $this->basePath = $this->basePath . "/{$this->name}";
+            }
+            if (!$this->baseUrl) {
+                $this->baseUrl = "@app/web/themes/{$this->name}";
+            } else {
+                $this->baseUrl = $this->baseUrl . "/{$this->name}";
+            }
+            $this->asset = Yii::$app->getAssetManager()->publish($this->basePath . "/assets");
+
+            if (!file_exists(Yii::getAlias($this->basePath))) {
+                throw new InvalidConfigException("Error: theme \"{$this->name}\" not found!");
+            }
+
+            $modulesPaths = [];
+            foreach (Yii::$app->getModules() as $id => $mod) {
+                $modulesPaths['@' . $id] = $this->basePath . "/modules/{$id}";
+                //$modulesPaths['@app/modules/' . $id] = "@frontend/themes/{$this->name}/modules/{$id}";
+            }
+
+            $this->pathMap = ArrayHelper::merge([
+                "@app/views" => $this->basePath . "/views",
+                '@app/modules' => $this->basePath . "/modules",
+                '@app/widgets' => $this->basePath . "/widgets",
+            ], $modulesPaths);
+
+
+            $this->data = Yii::$app->cache->get($this->cache_key);
+
+            if (!$this->data) {
+                try {
+                    $settings = (new \yii\db\Query())
+                        ->from(static::tableName())
+                        ->orderBy('theme')
+                        ->all();
+
+
+                    if (!empty($settings)) {
+                        foreach ($settings as $row) {
+                            if (!isset($this->data[$row['theme']]))
+                                $this->data[$row['theme']] = [];
+
+                            $this->data[$row['theme']][$row['param']] = $row['value'];
+                        }
+                    }
+
+                    Yii::$app->cache->set($this->cache_key, $this->data);
+                } catch (\yii\db\Exception $e) {
+
+                }
             }
         }
-
-
         parent::init();
     }
 
@@ -171,10 +172,10 @@ class Theme extends BaseTheme
      * @param null|string $default default value if original does not exists
      * @return mixed
      */
-    public function get($key = null, $theme=null, $default = null)
+    public function get($key = null, $theme = null, $default = null)
     {
-        if(!$theme){
-            $theme = Yii::$app->settings->get('app','theme');
+        if (!$theme) {
+            $theme = Yii::$app->settings->get('app', 'theme');
         }
 
         if (!isset($this->data[$theme]))
@@ -200,7 +201,7 @@ class Theme extends BaseTheme
      */
     public function clear($theme)
     {
-            Yii::$app->db->createCommand()->delete(static::tableName(), 'theme=:theme', [':theme' => $theme])->execute();
+        Yii::$app->db->createCommand()->delete(static::tableName(), 'theme=:theme', [':theme' => $theme])->execute();
         if (isset($this->data[$theme]))
             unset($this->data[$theme]);
 
