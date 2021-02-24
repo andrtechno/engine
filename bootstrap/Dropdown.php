@@ -59,17 +59,12 @@ class Dropdown extends \yii\bootstrap4\Dropdown
             $linkOptions['tabindex'] = '-1';
             $url = array_key_exists('url', $item) ? $item['url'] : null;
 
-
-
             if (empty($item['items'])) {
-                if ($url === null) {
-                    $content = $label;
-                    Html::addCssClass($itemOptions, 'dropdown-header');
-                } else {
+                if ($url) {
                     $content = Html::a($icon . $label, $url, $linkOptions);
+                    $lines[] = Html::tag('li', $content, $itemOptions);
                 }
             } else {
-
                 Html::addCssClass($linkOptions, 'dropdown-toggle');
                 $linkOptions['data-toggle'] = 'dropdown';
                 $submenuOptions = $options;
@@ -78,11 +73,9 @@ class Dropdown extends \yii\bootstrap4\Dropdown
                 $content = Html::a($icon . $label, $url === null ? '#' : $url, $linkOptions)
                     . $this->renderItems($item['items'], $submenuOptions);
                 Html::addCssClass($itemOptions, 'dropdown dropdown-submenu');
+                $lines[] = Html::tag('li', $content, $itemOptions);
             }
-
-            $lines[] = Html::tag('li', $content, $itemOptions);
         }
-
 
         return Html::tag('ul', implode("\n", $lines), $options);
     }
