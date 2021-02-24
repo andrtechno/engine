@@ -153,7 +153,7 @@ class ImageHandler extends Component
                     throw new Exception('Not supported image format');
             }
         } else {
-            throw new Exception('Invalid image file');
+            throw new Exception('Invalid image file: '.$file);
         }
     }
 
