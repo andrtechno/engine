@@ -94,12 +94,14 @@ class CMS
     public static function phone_format($phone)
     {
 
-        $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
-        $phoneNumber = $phoneUtil->parse($phone, 'UA');
-        $phone = $phoneUtil->format($phoneNumber, \libphonenumber\PhoneNumberFormat::NATIONAL);
-        if ($phoneUtil->getRegionCodeForNumber($phoneNumber) == 'UA') {
-            $pattern = "/^(\d{3})\s(\d{3})\s(\d{2})(\d{2})$/";
-            $phone = preg_replace($pattern, '($1) $2-$3-$4', $phone);
+        if ($phone) {
+            $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+            $phoneNumber = $phoneUtil->parse($phone, 'UA');
+            $phone = $phoneUtil->format($phoneNumber, \libphonenumber\PhoneNumberFormat::NATIONAL);
+            if ($phoneUtil->getRegionCodeForNumber($phoneNumber) == 'UA') {
+                $pattern = "/^(\d{3})\s(\d{3})\s(\d{2})(\d{2})$/";
+                $phone = preg_replace($pattern, '($1) $2-$3-$4', $phone);
+            }
         }
         return $phone;
 
@@ -187,12 +189,11 @@ class CMS
         $sizes = explode('x', $size);
 
 
-
         $configApp = Yii::$app->settings->get('app');
 
         //Уделение картинок с папки assets при разработке.
         //if (YII_DEBUG && file_exists($thumbPath)) {
-            //die($thumbPath);
+        //die($thumbPath);
         //    unlink($thumbPath);
         //}
         $error = false;
