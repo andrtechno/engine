@@ -34,24 +34,21 @@ class Theme extends BaseTheme
 
     public function init()
     {
+
+        //method_exists for console use
+        if (method_exists(Yii::$app->request, 'getUrl')) {
+            if (preg_match("/admin/", Yii::$app->request->getUrl())) {
+                //if (preg_match("/^\/\admin/", Yii::$app->request->getUrl())) {
+                $this->name = 'dashboard';
+            }
+        }
+        if ($this->name == null) {
+            $this->name = Yii::$app->settings->get('app', 'theme');
+        }
+        if (!$this->name) {
+            $this->basePath = '@app/views';
+        }
         if (!(Yii::$app instanceof Application)) {
-            Yii::debug('init', __METHOD__);
-
-            //method_exists for console use
-            if (method_exists(Yii::$app->request, 'getUrl')) {
-                if (preg_match("/admin/", Yii::$app->request->getUrl())) {
-                    //if (preg_match("/^\/\admin/", Yii::$app->request->getUrl())) {
-                    $this->name = 'dashboard';
-                }
-            }
-            if ($this->name == null) {
-                Yii::debug('Loading null', __METHOD__);
-                $this->name = Yii::$app->settings->get('app', 'theme');
-            }
-
-
-            Yii::debug('Loading ' . $this->name, __METHOD__);
-
             if (!$this->basePath) {
                 $this->basePath = "@app/web/themes/{$this->name}";
             } else {

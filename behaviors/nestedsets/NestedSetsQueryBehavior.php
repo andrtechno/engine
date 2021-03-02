@@ -104,7 +104,9 @@ class NestedSetsQueryBehavior extends Behavior
                 $res[$root->{$root->idAttribute}]['url'] = Url::to($root->getUrl());
             if (isset($root->switch))
                 $res[$root->{$root->idAttribute}]['switch'] = $root->switch;
+
             $res[$root->{$root->idAttribute}]['model'] = $root;
+			
             if ($level) {
                 /** @var NestedSetsBehavior $root */
                 $query = $root->children();
