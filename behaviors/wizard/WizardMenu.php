@@ -10,13 +10,14 @@
 
 namespace panix\engine\behaviors\wizard;
 
+use panix\engine\bootstrap\Nav;
 use yii\widgets\Menu;
 
 /**
  * WizardMenu class.
  * Creates a menu from the wizard steps.
  */
-class WizardMenu extends Menu
+class WizardMenu extends \yii\bootstrap4\Nav
 {
     /**
      * @var string The CSS class for the current step

@@ -10,6 +10,7 @@
 
 namespace panix\engine\behaviors\wizard;
 
+use panix\engine\CMS;
 use Yii;
 use yii\base\Behavior;
 use yii\base\InvalidConfigException;
@@ -37,18 +38,18 @@ use yii\helpers\Inflector;
 class WizardBehavior extends Behavior
 {
     const BRANCH_DESELECT = 0;
-    const BRANCH_SELECT   = 1;
-    const BRANCH_SKIP     = -1;
+    const BRANCH_SELECT = 1;
+    const BRANCH_SKIP = -1;
 
-    const EVENT_AFTER_WIZARD  = 'afterWizard';
+    const EVENT_AFTER_WIZARD = 'afterWizard';
     const EVENT_BEFORE_WIZARD = 'beforeWizard';
-    const EVENT_INVALID_STEP  = 'invalidStep';
-    const EVENT_WIZARD_STEP   = 'wizardStep';
-    const EVENT_STEP_EXPIRED  = 'stepExpired';
+    const EVENT_INVALID_STEP = 'invalidStep';
+    const EVENT_WIZARD_STEP = 'wizardStep';
+    const EVENT_STEP_EXPIRED = 'stepExpired';
 
     const DIRECTION_BACKWARD = -1;
-    const DIRECTION_REPEAT   = 0;
-    const DIRECTION_FORWARD  = 1;
+    const DIRECTION_REPEAT = 0;
+    const DIRECTION_FORWARD = 1;
 
     const HTTP_STATUS_CODE = 302;
 
@@ -164,12 +165,12 @@ class WizardBehavior extends Behavior
             $owner->on($name, $handler);
         }
 
-        $this->_session     = Yii::$app->getSession();
-        $this->_branchKey   = $this->sessionKey.'.branches';
-        $this->_indexKey    = $this->sessionKey.'.index';
-        $this->_stepDataKey = $this->sessionKey.'.stepData';
-        $this->_stepsKey    = $this->sessionKey.'.steps';
-        $this->_timeoutKey  = $this->sessionKey.'.timeout';
+        $this->_session = Yii::$app->getSession();
+        $this->_branchKey = $this->sessionKey . '.branches';
+        $this->_indexKey = $this->sessionKey . '.index';
+        $this->_stepDataKey = $this->sessionKey . '.stepData';
+        $this->_stepsKey = $this->sessionKey . '.steps';
+        $this->_timeoutKey = $this->sessionKey . '.timeout';
     }
 
     /**
@@ -182,8 +183,8 @@ class WizardBehavior extends Behavior
     protected function start()
     {
         if ($this->beforeWizard()) {
-            $this->_session[$this->_branchKey]   = new \ArrayObject;
-            $this->_session[$this->_indexKey]    = 0;
+            $this->_session[$this->_branchKey] = new \ArrayObject;
+            $this->_session[$this->_indexKey] = 0;
             $this->_session[$this->_stepDataKey] = new \ArrayObject;
 
             $this->parseSteps();
@@ -206,8 +207,8 @@ class WizardBehavior extends Behavior
     protected function end($step)
     {
         $event = new WizardEvent([
-            'sender'   => $this,
-            'step'     => $step,
+            'sender' => $this,
+            'step' => $step,
             'stepData' => (empty($step) ? null : $this->read())
         ]);
         $this->owner->trigger(self::EVENT_AFTER_WIZARD, $event);
@@ -218,15 +219,21 @@ class WizardBehavior extends Behavior
 
         return $event->data;
     }
+
     /** @var string Internal step tracking. */
     private $_currentStep;
-    public function getCurrentStepIndex() {
-        return $this->getStepIndex($this->_currentStep) + 1;
+
+    public function getCurrentStepIndex()
+    {
+
+        return array_search($this->_currentStep, $this->_stepsConfig) + 1;
     }
 
-    public function getCurrentStep() {
+    public function getCurrentStep()
+    {
         return $this->_currentStep;
     }
+
     /**
      * Process the given step.
      * This method is called for each step from the controller action using the
@@ -270,10 +277,10 @@ class WizardBehavior extends Behavior
             $this->_currentStep = $step;
             // Raise a `processStep` event
             $event = new StepEvent([
-                'n'      => $this->_session[$this->_indexKey],
+                'n' => $this->_session[$this->_indexKey],
                 'sender' => $this,
-                'step'   => $step,
-                't'      => (isset($this->_session[$this->_stepDataKey][$step])
+                'step' => $step,
+                't' => (isset($this->_session[$this->_stepDataKey][$step])
                     ? count($this->_session[$this->_stepDataKey][$step])
                     : 0
                 )
@@ -314,7 +321,7 @@ class WizardBehavior extends Behavior
         } else {
             $event = new WizardEvent([
                 'sender' => $this,
-                'step'   => $step
+                'step' => $step
             ]);
             $this->owner->trigger(self::EVENT_INVALID_STEP, $event);
 
@@ -341,8 +348,8 @@ class WizardBehavior extends Behavior
         if (sizeof($data) !== 3 || !is_array($data[0]) || !is_array($data[1]) || !(is_integer($data[2]) || is_null($data[2]))) {
             return false;
         }
-        $this->_session[$this->_stepDataKey]   = $data[0];
-        $this->_session[$this->_branchKey]  = $data[1];
+        $this->_session[$this->_stepDataKey] = $data[0];
+        $this->_session[$this->_branchKey] = $data[1];
         $this->_session[$this->_timeoutKey] = $data[2];
         return true;
     }
@@ -388,7 +395,7 @@ class WizardBehavior extends Behavior
      */
     public function getStepCount()
     {
-        return count($this->_session[$this->_stepsKey]);
+        return (isset($this->_session[$this->_stepsKey]))?count($this->_session[$this->_stepsKey]):0;
     }
 
     /**
@@ -480,7 +487,7 @@ class WizardBehavior extends Behavior
         } elseif ($event->nextStep === self::DIRECTION_REPEAT) {
             $nextStep = $event->step;
             $this->_session[$this->_indexKey] =
-            $this->_session[$this->_indexKey] + 1;
+                $this->_session[$this->_indexKey] + 1;
         } elseif ($event->nextStep === self::DIRECTION_BACKWARD) {
             if ($this->_session[$this->_indexKey] > 0) { // there are earlier repeated steps
                 $nextStep = $event->step;
@@ -492,8 +499,8 @@ class WizardBehavior extends Behavior
 
                 $nextStep = $steps[($index === 0 ? 0 : $index - 1)];
                 $this->_session[$this->_indexKey] = count(
-                    $this->_session[$this->_stepDataKey][$nextStep]
-                ) - 1;
+                        $this->_session[$this->_stepDataKey][$nextStep]
+                    ) - 1;
             }
         } elseif ($this->autoAdvance) {
             $nextStep = $this->expectedStep();
@@ -506,10 +513,10 @@ class WizardBehavior extends Behavior
                 : $steps[$index]
             );
             $this->_session[$this->_indexKey] = (
-                $nextStep !== null && isset($this->_session[$this->_stepDataKey][$nextStep])
+            $nextStep !== null && isset($this->_session[$this->_stepDataKey][$nextStep])
                 ? count(
-                    $this->_session[$this->_stepDataKey][$nextStep]
-                )
+                $this->_session[$this->_stepDataKey][$nextStep]
+            )
                 : 0
             );
         }
@@ -526,7 +533,7 @@ class WizardBehavior extends Behavior
             $this->_session[$this->_timeoutKey] = time() + $this->timeout;
         }
 
-        $this->owner->redirect(array_merge(['/'.$this->owner->route], $params), self::HTTP_STATUS_CODE);
+        $this->owner->redirect(array_merge(['/' . $this->owner->route], $params), self::HTTP_STATUS_CODE);
     }
 
     /**
@@ -544,7 +551,8 @@ class WizardBehavior extends Behavior
      *
      * @return boolean TRUE if the wizard has completed, FALSE if not
      */
-    protected function hasCompleted() {
+    protected function hasCompleted()
+    {
         return !(bool)$this->expectedStep();
     }
 
@@ -604,11 +612,11 @@ class WizardBehavior extends Behavior
         $expectedStep = $this->expectedStep(); // NULL if wizard finished
 
         if ($index == 0 || ($index >= 0 && ($this->forwardOnly
-            ? $expectedStep !== null &&
-                $index === array_search($expectedStep, $steps)
-            : $expectedStep === null ||
-                $index <= array_search($expectedStep, $steps)
-        )) || $this->hasCompleted()) {
+                    ? $expectedStep !== null &&
+                    $index === array_search($expectedStep, $steps)
+                    : $expectedStep === null ||
+                    $index <= array_search($expectedStep, $steps)
+                )) || $this->hasCompleted()) {
             return true;
         }
         return false;
@@ -660,10 +668,10 @@ class WizardBehavior extends Behavior
                     );
 
                     if ($branchDirective === self::BRANCH_SELECT || (
-                        empty($branch) &&
-                        $this->defaultBranch &&
-                        $branchDirective !== self::BRANCH_SKIP
-                    )) {
+                            empty($branch) &&
+                            $this->defaultBranch &&
+                            $branchDirective !== self::BRANCH_SKIP
+                        )) {
                         $branch = $branchName;
                     }
                 }
@@ -719,8 +727,8 @@ class WizardBehavior extends Behavior
     protected function stepExpired($step)
     {
         $event = new WizardEvent([
-            'sender'   => $this,
-            'step'     => $step,
+            'sender' => $this,
+            'step' => $step,
             'stepData' => $this->read($step)
         ]);
         $this->owner->trigger(self::EVENT_STEP_EXPIRED, $event);
