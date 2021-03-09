@@ -96,9 +96,14 @@ class WebModule extends Module
 
         }
         if (Yii::$app->id == 'console') {
+
             $reflector = new \ReflectionClass($this);
+
+           // echo dirname($reflector->getFileName()) . DIRECTORY_SEPARATOR . 'commands'.PHP_EOL;
+
             if (file_exists(dirname($reflector->getFileName()) . DIRECTORY_SEPARATOR . 'commands')) {
                 $this->controllerNamespace = $reflector->getNamespaceName() . "\\commands";
+              //  echo $reflector->getNamespaceName() . "\\commands".PHP_EOL;
             }
         }
 

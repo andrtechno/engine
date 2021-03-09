@@ -19,7 +19,7 @@ class GridView extends \yii\grid\GridView
     public $enableColumns = true;
     public $layoutPath = '@theme/views/layouts/_grid_layout';
     public $filterErrorOptions = ['class' => 'badge badge-danger'];
-
+   // public $dataColumns;
     public function init()
     {
         if(!isset($this->pager['class'])){

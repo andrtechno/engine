@@ -18,7 +18,8 @@ class SliderColumn extends DataColumn
     public $max;
     public $headerOptions = ['style' => 'width:150px'];
     public $range = true;
-    public $minCallback,$maxCallback;
+    public $minCallback, $maxCallback;
+
     public function init()
     {
         if (is_null($this->min) || is_null($this->max))
@@ -108,7 +109,7 @@ class SliderColumn extends DataColumn
                         $("#' . $id . '_value-min").text(ui.values[0]);
                         $("#' . $id . '_value-max").text(ui.values[1]);
 			        }',
-                    'stop' => 'function(event, ui){
+                        'stop' => 'function(event, ui){
                         $("#' . $this->grid->id . '").yiiGridView("applyFilter");
                     }'
                     ],

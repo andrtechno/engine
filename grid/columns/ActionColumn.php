@@ -44,7 +44,7 @@ class ActionColumn extends DataColumn
         // if (!$this->pjax) {
         //    $this->pjax = '#pjax-container';
         //}
-
+$gid = $this->grid->id;
         if ($this->filter) {
             if (isset(($this->grid->dataProvider)->query) && $this->enableEditColumns) {
                 if (method_exists(($this->grid->dataProvider)->query->modelClass, 'getGridColumns')) {
@@ -56,7 +56,7 @@ class ActionColumn extends DataColumn
                             // 'data-target' => "#",
                             'class' => 'dropdown-item edit-columns',
                             'data-pjax' => '0',
-                            // 'data-grid-id' => $this->grid->id,
+                            'data-grid-id' => $this->grid->id,
                             // 'data-model' => (isset($this->grid->dataProvider->query))?$this->grid->dataProvider->query->modelClass:'s',
                             // 'data-pjax-id' => 'pjax-' . strtolower(basename($this->grid->dataProvider->query->modelClass)),
                         ]
@@ -127,7 +127,7 @@ class ActionColumn extends DataColumn
                     type:'POST',
                     url:$(this).attr('href'),
                     data:{
-                        grid_id:'" . $this->grid->getId() . "',
+                        grid_id:$(this).data('grid-id'),
                         model:'" . $classNamePath . "',
                     },
                     success:function(data){
