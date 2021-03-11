@@ -32,33 +32,55 @@ class JsonLDHelper extends BaseObject
         }
 
 
-
-
         $doc["@type"] = 'Product';
         $doc["http://schema.org/sku"] = $model->sku;
         $doc["http://schema.org/description"] = $model->full_description;
         $doc["http://schema.org/name"] = $model->name;
-        if($model->manufacturer_id){
-            if($model->manufacturer){
+        if ($model->manufacturer_id) {
+            if ($model->manufacturer) {
                 $doc["http://schema.org/brand"] = (object)[
                     "@type" => "Brand",
                     "http://schema.org/name" => $model->manufacturer->name
                 ];
             }
         }
-        foreach ($model->getImages() as $image){
-            $doc["http://schema.org/image"][] = Url::to($image->getUrlToOrigin(),true);
+        foreach ($model->getImages() as $image) {
+            $doc["http://schema.org/image"][] = Url::to($image->getUrlToOrigin(), true);
         }
         $doc["http://schema.org/aggregateRating"] = (object)[
             "@type" => "AggregateRating",
             "http://schema.org/ratingValue" => $model->ratingScore,
             "http://schema.org/reviewCount" => (int)$reviewsCount
         ];
+
+
+        //"itemCondition": "https://schema.org/NewCondition",
+        //"availability": "https://schema.org/InStock",
+        $priceSpecification[] = (object)[
+
+            "@type" => "http://schema.org/UnitPriceSpecification",
+            "http://schema.org/priceCategory" => "https://schema.org/ListPrice",
+            "http://schema.org/price" => (string)Yii::$app->currency->convert($model->price, $model->currency_id),
+            "http://schema.org/priceCurrency" => Yii::$app->currency->main['iso']
+        ];
+
+
+        if ($model->hasDiscount) {
+            $priceSpecification[] = (object)[
+                "@type" => "http://schema.org/UnitPriceSpecification",
+                "http://schema.org/priceCategory" => "https://schema.org/SalePrice",
+                "http://schema.org/price" => (string)Yii::$app->currency->convert($model->discountPrice, $model->currency_id),
+                "http://schema.org/priceCurrency" => Yii::$app->currency->main['iso'],
+            ];
+        }
+
         $doc["http://schema.org/offers"] = (object)[
             "@type" => "http://schema.org/Offer",
+            "http://schema.org/itemCondition"=> "https://schema.org/NewCondition",
             "http://schema.org/availability" => $availability,
-            "http://schema.org/price" => round($model->getFrontPrice(), 2),
-            "http://schema.org/priceCurrency" => Yii::$app->currency->main['iso'],
+            "http://schema.org/priceSpecification" => $priceSpecification
+            //"http://schema.org/price" => (string)$model->getFrontPrice(),
+            //"http://schema.org/priceCurrency" => Yii::$app->currency->main['iso'],
 
             //"offerCount": "5", //Количество предложений по товару. (disabel price param)
             //"lowPrice": "119.99",
