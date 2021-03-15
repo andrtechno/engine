@@ -76,7 +76,7 @@ class JsonLDHelper extends BaseObject
 
         $doc["http://schema.org/offers"] = (object)[
             "@type" => "http://schema.org/Offer",
-            "http://schema.org/itemCondition"=> "https://schema.org/NewCondition",
+            "http://schema.org/itemCondition" => "https://schema.org/NewCondition",
             "http://schema.org/availability" => $availability,
             "http://schema.org/priceSpecification" => $priceSpecification
             //"http://schema.org/price" => (string)$model->getFrontPrice(),
