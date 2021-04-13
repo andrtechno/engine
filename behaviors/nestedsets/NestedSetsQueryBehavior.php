@@ -2,9 +2,10 @@
 
 namespace panix\engine\behaviors\nestedsets;
 
-use panix\engine\CMS;
 use yii\base\Behavior;
+use yii\caching\DbDependency;
 use yii\helpers\Url;
+use Yii;
 
 /**
  * @author Wanderson Bragança <wanderson.wbc@gmail.com>
@@ -16,6 +17,7 @@ class NestedSetsQueryBehavior extends Behavior
      * @var \yii\db\ActiveQuery the owner of this behavior.
      */
     public $owner;
+
 
     /**
      * Gets root node(s).
@@ -84,8 +86,14 @@ class NestedSetsQueryBehavior extends Behavior
      */
     public function dataTree($root = 0, $level = null, $wheres = null, $key = false)
     {
-        $data = array_values($this->prepareData2($root, $level, $wheres));
-        return $this->makeData2($data, $key);
+        $tableName = $this->owner->modelClass::tableName();
+        $lang = Yii::$app->language;
+        return Yii::$app->cache->getOrSet("dataTree_{$lang}_{$tableName}", function () use ($root, $level, $wheres, $key,$tableName) {
+            $data = array_values($this->prepareData2($root, $level, $wheres));
+            return $this->makeData2($data, $key);
+
+        },88888,new DbDependency(['sql' => "SELECT MAX(updated_at) FROM {$tableName}"]));
+
     }
 
     /**
@@ -94,7 +102,7 @@ class NestedSetsQueryBehavior extends Behavior
      * @param array $wheres
      * @return array
      */
-    private function prepareData2($root = 0, $level = null, $wheres = null)
+    public function prepareData2($root = 0, $level = null, $wheres = null)
     {
         $res = [];
         if (is_object($root)) {
@@ -105,8 +113,8 @@ class NestedSetsQueryBehavior extends Behavior
             if (isset($root->switch))
                 $res[$root->{$root->idAttribute}]['switch'] = $root->switch;
 
-            $res[$root->{$root->idAttribute}]['model'] = $root;
-			
+            //  $res[$root->{$root->idAttribute}]['model'] = $root;
+
             if ($level) {
                 /** @var NestedSetsBehavior $root */
                 $query = $root->children();
