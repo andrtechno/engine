@@ -2,7 +2,6 @@
 
 namespace panix\engine\controllers;
 
-
 use Yii;
 use yii\web\HttpException;
 use yii\web\Controller;
@@ -45,13 +44,14 @@ class CommonController extends Controller
                 'loading' => Yii::t('app/default', 'LOADING'),
             ];
             $languagePath = (Yii::$app->language != Yii::$app->languageManager->default->code) ? '/' . Yii::$app->language : '';
+
             $this->view->registerJs('
             var common = window.common || {};
             common.language = "' . Yii::$app->language . '";
             common.language_default = "' . Yii::$app->languageManager->default->code . '";
             common.language_path = "' . $languagePath . '";
             common.isDashboard = "' . $this->dashboard . '";
-            common.message = ' . \yii\helpers\Json::encode($this->jsMessages) . ';', \yii\web\View::POS_HEAD, 'js-common');
+            common.message = ' . \yii\helpers\Json::encode($this->jsMessages) . ';', \yii\web\View::POS_HEAD, 'js-common2');
         }
         return parent::beforeAction($action);
     }
