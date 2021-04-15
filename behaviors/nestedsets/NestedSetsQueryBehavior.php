@@ -88,11 +88,14 @@ class NestedSetsQueryBehavior extends Behavior
     {
         $tableName = $this->owner->modelClass::tableName();
         $lang = Yii::$app->language;
-        return Yii::$app->cache->getOrSet("dataTree_{$root}_{$lang}_{$tableName}", function () use ($root, $level, $wheres, $key,$tableName) {
+
+        $cacheKeyParamsHash = md5(serialize([$root, $level, $wheres, $key]));
+
+        return Yii::$app->cache->getOrSet("dataTree_{$lang}_{$tableName}" . $cacheKeyParamsHash, function () use ($root, $level, $wheres, $key, $tableName) {
             $data = array_values($this->prepareData2($root, $level, $wheres));
             return $this->makeData2($data, $key);
 
-        },88888,new DbDependency(['sql' => "SELECT MAX(updated_at) FROM {$tableName}"]));
+        }, Yii::$app->db->queryCacheDuration, new DbDependency(['sql' => "SELECT MAX(updated_at) FROM {$tableName}"]));
 
     }
 
