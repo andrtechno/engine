@@ -88,7 +88,7 @@ class NestedSetsQueryBehavior extends Behavior
     {
         $tableName = $this->owner->modelClass::tableName();
         $lang = Yii::$app->language;
-        return Yii::$app->cache->getOrSet("dataTree_{$lang}_{$tableName}", function () use ($root, $level, $wheres, $key,$tableName) {
+        return Yii::$app->cache->getOrSet("dataTree_{$root}_{$lang}_{$tableName}", function () use ($root, $level, $wheres, $key,$tableName) {
             $data = array_values($this->prepareData2($root, $level, $wheres));
             return $this->makeData2($data, $key);
 
