@@ -23,6 +23,11 @@ class Migration extends \yii\db\Migration
         parent::init();
     }
 
+    public function enum(array $array = [])
+    {
+        return "ENUM('" . implode("','", $array) . "')";
+    }
+
     /**
      * @param string $gridId
      * @param string $model
@@ -70,6 +75,17 @@ class Migration extends \yii\db\Migration
         foreach ($indexes as $index) {
             $this->createIndex($index, $this->tableName, $index, false);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createIndex($name, $table, $columns, $unique = false)
+    {
+        if ($this->db->driverName === 'pgsql') {
+            $name = str_replace(['"', '`'], ['', ''], $this->db->quoteSql($table)) . '_' . $name;
+        }
+        parent::createIndex($name, $table, $columns, $unique);
     }
 
     public function phone($string = 25)
