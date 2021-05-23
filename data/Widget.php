@@ -10,34 +10,39 @@ class Widget extends \yii\base\Widget
 
     public $skin = 'default';
     public $assetsUrl;
-   // public $widget_id;
+    // public $widget_id;
     public $viewPath;
     protected $reflectionClass;
 
     static $widget_name;
     static $widget_description;
     static $widget_id;
+
     public function init()
     {
-        $this->reflectionClass = new ReflectionClass($this);
         parent::init();
 
-        static::$widget_id = 'wgt_' . $this->getName();
+        self::registerI18n();
         $wid = static::$widget_id;
-        Yii::$app->setAliases([
-            '@' . $wid => realpath(dirname($this->reflectionClass->getFileName())),
-        ]);
-
-       // $this->registerTranslations($this->widget_id);
 
         if (file_exists(Yii::getAlias("@{$wid}/assets"))) {
             $assetsPaths = Yii::$app->getAssetManager()->publish(Yii::getAlias("@{$wid}/assets"));
             $this->assetsUrl = $assetsPaths[1];
         }
-        $this->registerTranslations($wid);
     }
 
-    public function getTranslationsFileMap($id)
+    public static function registerI18n()
+    {
+
+        $reflectionClass = new ReflectionClass(static::class);
+        static::$widget_id = 'wgt_' . $reflectionClass->getShortName();
+        Yii::$app->setAliases([
+            '@' . static::$widget_id => realpath(dirname($reflectionClass->getFileName())),
+        ]);
+        self::registerTranslations(static::$widget_id);
+    }
+
+    public static function getTranslationsFileMap($id)
     {
         $lang = Yii::$app->language;
         $result = [];
@@ -57,16 +62,19 @@ class Widget extends \yii\base\Widget
         }
         return $result;
     }
+
     public static function t($category, $message, $params = [], $language = null)
     {
-        return Yii::t(static::$widget_id.'/' . $category, $message, $params, $language);
+        return Yii::t(static::$widget_id . '/' . $category, $message, $params, $language);
     }
-    public function registerTranslations($id)
+
+    private static function registerTranslations($id)
     {
+
         Yii::$app->i18n->translations[$id . '/*'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             'basePath' => '@' . $id . '/messages',
-            'fileMap' => $this->getTranslationsFileMap($id)
+            'fileMap' => self::getTranslationsFileMap($id)
         ];
     }
 
