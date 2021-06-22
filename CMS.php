@@ -93,18 +93,18 @@ class CMS
      */
     public static function phone_format($phone)
     {
-
         if ($phone) {
             $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
             $phoneNumber = $phoneUtil->parse($phone, 'UA');
-            $phone = $phoneUtil->format($phoneNumber, \libphonenumber\PhoneNumberFormat::NATIONAL);
+            $phone2 = $phoneUtil->format($phoneNumber, \libphonenumber\PhoneNumberFormat::NATIONAL);
             if ($phoneUtil->getRegionCodeForNumber($phoneNumber) == 'UA') {
-                $pattern = "/^(\d{3})\s(\d{3})\s(\d{2})(\d{2})$/";
-                $phone = preg_replace($pattern, '($1) $2-$3-$4', $phone);
+                $pattern = "/^(\+?\d{2})(\d{3})(\d{3})(\d{2})(\d{2})$/";
+                $phone = preg_replace($pattern, '($2) $3-$4-$5', $phone);
+            } else {
+                $phone = $phone2;
             }
         }
         return $phone;
-
     }
 
     public static function isMobile()

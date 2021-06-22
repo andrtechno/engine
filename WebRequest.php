@@ -10,9 +10,10 @@ class WebRequest extends Request {
     private $_pathInfo;
 
     public function getPathInfo() {
-        $langCode = null;
+        $langCode =Yii::$app->language;
         $pathInfo = parent::getPathInfo();
         $parts = explode('/', $pathInfo);
+
         if (in_array($parts[0], Yii::$app->languageManager->getCodes())) {
             // Valid language code detected.
             // Remove it from url path to make route work and activate lang
@@ -32,8 +33,8 @@ class WebRequest extends Request {
         }
         //var_dump($this->baseUrl);die;
         $this->_pathInfo = $pathInfo;
-        // Activate language by code
 
+        // Activate language by code
         Yii::$app->languageManager->setActive($langCode);
         return $this->_pathInfo;
     }
