@@ -47,10 +47,12 @@ class ActiveField extends \yii\bootstrap4\ActiveField
     public function tinyMce($options = [])
     {
         $clientOptions = ArrayHelper::remove($options, 'clientOptions', []);
+        $clientEvents = ArrayHelper::remove($options, 'clientEvents', []);
         if (class_exists('panix\\ext\\tinymce\\TinyMce')) {
             return parent::widget(\panix\ext\tinymce\TinyMce::class, [
                 'options' => $options,
-                'clientOptions' => $clientOptions
+                'clientOptions' => $clientOptions,
+                'clientEvents' => $clientEvents
             ]);
         } else {
             return parent::textarea($options);
