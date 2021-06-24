@@ -18,22 +18,18 @@ class Col extends BootstrapWidget
 
 
     /** @var string column offset */
-    public $xl_offset = false;
-    public $lg_offset = false;
-    public $md_offset = false;
-    public $sm_offset = false;
+    public $offset = false;
+    public $offset_sm = false;
+    public $offset_md = false;
+    public $offset_lg = false;
+    public $offset_xl = false;
 
-    /** @var string column pull */
-    public $xl_pull = false;
-    public $lg_pull = false;
-    public $md_pull = 12;
-    public $sm_pull = false;
-
-    /** @var string column push */
-    public $xl_push = false;
-    public $lg_push = false;
-    public $md_push = 12;
-    public $sm_push = false;
+    /** @var string column order */
+    public $order = false;
+    public $order_sm = false;
+    public $order_md = false;
+    public $order_lg = false;
+    public $order_xl = false;
 
     /**
      * init widget
@@ -49,29 +45,27 @@ class Col extends BootstrapWidget
      */
     protected function getCssClass()
     {
-        $this->lg ? Html::addCssClass($this->options, 'col-lg-' . $this->lg) : null;
-        $this->md ? Html::addCssClass($this->options, 'col-md-' . $this->md) : null;
         $this->sm ? Html::addCssClass($this->options, 'col-sm-' . $this->sm) : null;
+        $this->md ? Html::addCssClass($this->options, 'col-md-' . $this->md) : null;
+        $this->lg ? Html::addCssClass($this->options, 'col-lg-' . $this->lg) : null;
         $this->xl ? Html::addCssClass($this->options, 'col-xl-' . $this->xl) : null;
 
         if (!$this->lg && !$this->md && !$this->sm && !$this->xl) {
             Html::addCssClass($this->options, 'col');
         }
 
-        $this->lg_offset ? Html::addCssClass($this->options, 'col-lg-offset-' . $this->lg_offset) : null;
-        $this->md_offset ? Html::addCssClass($this->options, 'col-md-offset-' . $this->md_offset) : null;
-        $this->sm_offset ? Html::addCssClass($this->options, 'col-sm-offset-' . $this->sm_offset) : null;
-        $this->xl_offset ? Html::addCssClass($this->options, 'col-xl-offset-' . $this->xl_offset) : null;
+        $this->offset ? Html::addCssClass($this->options, 'offset-' . $this->offset) : null;
+        $this->offset_sm ? Html::addCssClass($this->options, 'offset-sm-' . $this->offset_sm) : null;
+        $this->offset_md ? Html::addCssClass($this->options, 'offset-md-' . $this->offset_md) : null;
+        $this->offset_lg ? Html::addCssClass($this->options, 'offset-lg-' . $this->offset_lg) : null;
+        $this->offset_xl ? Html::addCssClass($this->options, 'offset-xl-' . $this->offset_xl) : null;
 
-        $this->lg_pull ? Html::addCssClass($this->options, 'col-lg-pull-' . $this->lg_pull) : null;
-        $this->md_pull ? Html::addCssClass($this->options, 'col-md-pull-' . $this->md_pull) : null;
-        $this->sm_pull ? Html::addCssClass($this->options, 'col-sm-pull-' . $this->sm_pull) : null;
-        $this->xl_pull ? Html::addCssClass($this->options, 'col-xl-pull-' . $this->xl_pull) : null;
 
-        $this->lg_push ? Html::addCssClass($this->options, 'col-lg-push-' . $this->lg_push) : null;
-        $this->md_push ? Html::addCssClass($this->options, 'col-md-push-' . $this->md_push) : null;
-        $this->sm_push ? Html::addCssClass($this->options, 'col-sm-push-' . $this->sm_push) : null;
-        $this->xl_push ? Html::addCssClass($this->options, 'col-xl-push-' . $this->xl_push) : null;
+        $this->order ? Html::addCssClass($this->options, 'order-' . $this->order) : null;
+        $this->order_sm ? Html::addCssClass($this->options, 'order-sm-' . $this->order_sm) : null;
+        $this->order_md ? Html::addCssClass($this->options, 'order-md-' . $this->order_md) : null;
+        $this->order_lg ? Html::addCssClass($this->options, 'order-lg-' . $this->order_lg) : null;
+        $this->order_xl ? Html::addCssClass($this->options, 'order-xl-' . $this->order_xl) : null;
 
 
         $this->xclass ? Html::addCssClass($this->options, $this->xclass) : null;
