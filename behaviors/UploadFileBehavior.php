@@ -212,7 +212,7 @@ class UploadFileBehavior extends Behavior
 
     public function getFilePath($attribute)
     {
-        return "/uploads/" . basename($this->files[$attribute]) . "/" . $this->owner->{$attribute};
+        return str_replace('@','/',$this->files[$attribute]). "/" . $this->owner->{$attribute};
     }
 
     public function getFileAbsolutePath($attribute)
