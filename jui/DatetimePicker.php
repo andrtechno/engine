@@ -23,6 +23,8 @@ class DatetimePicker extends DatePicker
     public $timeFormat = 'hh:HH:ss';
     public $dateFormat = 'yyyy-MM-dd';
 
+    public $timezone = 'UTC';
+
     public $timeOnlyTitle = 'Choose Time';
     public $timeText = '';
     public $hourText = 'Час';
@@ -99,8 +101,11 @@ class DatetimePicker extends DatePicker
         if ($value !== null && $value !== '') {
             // format value according to dateFormat
             try {
+                Yii::$app->formatter->timeZone = $this->timezone;
                 if($this->mode == 'time'){
                     $value = Yii::$app->formatter->asTime($value, $this->timeFormat);
+                }elseif($this->mode == 'datetime'){
+                    $value = Yii::$app->formatter->asDatetime($value, $this->dateFormat.' '.$this->timeFormat);
                 }else{
                     $value = Yii::$app->formatter->asDate($value, $this->dateFormat);
                 }
