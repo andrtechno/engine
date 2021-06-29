@@ -16,9 +16,9 @@ return [
     '304' => 'Not modified.',
     '307' => 'Temporary redirect.',
     '400' => 'Bad request.',
-    '403' => 'Access is denied.',
+    '403' => 'Unfortunately for you access is denied, you do not have permission to access this information. Please go to the main page of the site.',
     /**/
-    '404' => 'Page not found.',
+    '404' => 'Something went wrong and this page did not open. Do not despair, just go to the main page, it works 100%',
     '404.0' => '(None) - File or directory not found.',
     '404.1' => 'The website is not available on the requested port.',
     '404.2' => 'Web service extension blocking policy prevents this request.',
@@ -42,7 +42,7 @@ return [
     '401.5' => 'Authorization failed by ISAPI / CGI application.',
     '401.7' => 'Access denied by the URL authorization policy on the web server.',
     /**/
-    '500' => 'Внутренняя Ошибка Сервера.',
+    '500' => 'A server error has occurred, please go to the main page of the site to continue working.',
     '500.12' => 'Application is busy reloading on the web server.',
     '500.13' => 'The web server is too busy.',
     '500.15' => 'Direct requests to Global.asa are not allowed.',
@@ -52,9 +52,9 @@ return [
     '500.100' => 'Internal ASP error.',
     '501' => 'Header values indicate configuration that is not implemented.',
     '502' => 'The web server received an invalid response acting as a gateway or proxy.',
-    '502.1' => 'Тайм-аут приложения CGI.',
+    '502.1' => 'Application timeout CGI.',
     '502.2' => 'Error in CGI application.',
     '503' => 'Service is unavailable. This error code only applies to IIS 6.0.',
-    '504' => 'Gateway timeout.',
+    '504' => 'After a long wait, we have not received a response from the server, so we suggest going to the main page of the site',
     '505' => 'HTTP version not supported.',
 ];

@@ -38,5 +38,24 @@ class WebRequest extends Request {
         Yii::$app->languageManager->setActive($langCode);
         return $this->_pathInfo;
     }
+	
+    /**
+     * @inheritDoc
+     */
+    public function resolve()
+    {
+        $result = Yii::$app->getUrlManager()->parseRequest($this);
+        if ($result !== false) {
+            list($route, $params) = $result;
+            if ($this->queryParams === null) {
+                $_GET = $params + $_GET; // preserve numeric keys
+            } else {
+                $this->queryParams = $params + $this->queryParams;
+            }
 
+            return [$route, $this->getQueryParams()];
+        }
+
+        throw new NotFoundHttpException(Yii::t('app/error', 404));
+    }
 }
