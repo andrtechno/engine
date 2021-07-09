@@ -9,6 +9,7 @@ use yii\base\Behavior;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\db\ActiveRecord;
+use yii\validators\Validator;
 
 /**
  * TranslateBehavior
@@ -40,7 +41,7 @@ class TranslateBehavior extends Behavior
     public function events()
     {
         return [
-            // ActiveRecord::EVENT_AFTER_VALIDATE => 'afterValidate',
+
             ActiveRecord::EVENT_AFTER_INSERT => 'afterSave',
             ActiveRecord::EVENT_AFTER_UPDATE => 'afterSave',
             ActiveRecord::EVENT_AFTER_DELETE => 'afterDelete',
@@ -77,7 +78,7 @@ class TranslateBehavior extends Behavior
     public function getTranslation($language = null)
     {
         if ($language === null) {
-            $language = Yii::$app->languageManager->active->slug;
+            $language = Yii::$app->languageManager->active->code;
         }
         if (Yii::$app instanceof \panix\engine\console\Application) {
             $lang = Yii::$app->languageManager->getByCode('ru');
@@ -168,6 +169,7 @@ class TranslateBehavior extends Behavior
      */
     public function afterValidate()
     {
+        CMS::dump($this->owner->rules());die;
         if (!Model::validateMultiple($this->owner->{$this->relation})) {
             $this->owner->addError($this->relation);
         }

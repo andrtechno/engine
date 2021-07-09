@@ -10,8 +10,10 @@ use ML\JsonLD\JsonLD;
 
 /**
  * Helper class for registering structured data markup in JSON-LD format
- *
- * @author Alexander Stepanov <student_vmk@mail.ru>
+ * add in you head
+ * \panix\engine\JsonLDHelper::addBreadcrumbList();
+ * \panix\engine\JsonLDHelper::addOrganization([...]);
+ * \panix\engine\JsonLDHelper::registerScripts();
  */
 class JsonLDHelper extends BaseObject
 {
@@ -86,7 +88,7 @@ class JsonLDHelper extends BaseObject
             //"lowPrice": "119.99",
             //"highPrice": "199.99",
         ];
-        JsonLDHelper::add($doc);
+        self::add($doc);
     }
 
 
@@ -130,7 +132,79 @@ class JsonLDHelper extends BaseObject
             "http://schema.org/itemListElement" => $breadcrumbList
         ];
 
-        JsonLDHelper::add($doc);
+        self::add($doc);
+    }
+
+    /**
+     * Organization
+     *
+     * @param array $options
+     *
+     * @param array $address Address List 'address'=>[['addressLocality' => '','postalCode' => '','streetAddress' => ''],[...]]
+     */
+    public static function addOrganization(array $options = [])
+    {
+
+        if (isset($options['address']) && is_array($options['address'])) {
+            $addressList = [];
+            foreach ($options['address'] as $address) {
+                if (isset($address['addressLocality'], $address['postalCode'], $address['streetAddress'])) {
+                    $addressList[] = (object)[
+                        "@type" => "http://schema.org/PostalAddress",
+                        "http://schema.org/addressLocality" => $address['addressLocality'],
+                        "http://schema.org/postalCode" => $address['postalCode'],
+                        "http://schema.org/streetAddress" => $address['streetAddress'],
+                    ];
+
+                }
+            }
+
+            $doc["http://schema.org/address"] = $addressList;
+        }
+
+        if (isset($options['contactPoint']) && is_array($options['contactPoint'])) {
+            $contactPointList = [];
+            foreach ($options['contactPoint'] as $contact_key => $contact) {
+                $item = [];
+
+                $item["@type"] = "http://schema.org/ContactPoint";
+                if (isset($contact['phone']))
+                    $item["http://schema.org/telephone"] = $contact['phone'];
+
+                if (isset($contact['contactType']))
+                    $item["http://schema.org/contactType"] = $contact['contactType'];
+
+                if (isset($contact['contactOption']))
+                    $item["http://schema.org/contactOption"] = $contact['contactOption'];
+
+                if (isset($contact['contactOption']))
+                    $item["http://schema.org/contactOption"] = $contact['contactOption'];
+
+                if (isset($contact['areaServed']))
+                    $item["http://schema.org/areaServed"] = $contact['areaServed'];
+
+                if (isset($contact['availableLanguage']))
+                    $item["http://schema.org/availableLanguage"] = $contact['availableLanguage'];
+
+
+                $contactPointList[] = (object)$item;
+
+            }
+
+            $doc["http://schema.org/contactPoint"] = $contactPointList;
+        }
+
+
+        $doc["@type"] = "http://schema.org/Organization";
+        if (isset($options['name']))
+            $doc["http://schema.org/name"] = $options['name'];
+        if (isset($options['email']))
+            $doc["http://schema.org/email"] = $options['email'];
+        if (isset($options['phone']))
+            $doc["http://schema.org/telephone"] = $options['phone'];
+
+
+        self::add((object)$doc);
     }
 
     /**

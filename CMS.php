@@ -189,6 +189,10 @@ class CMS
         $sizes = explode('x', $size);
 
 
+        if(!is_file($fullPath)){
+            return false;
+        }
+
         $configApp = Yii::$app->settings->get('app');
 
         //Уделение картинок с папки assets при разработке.
@@ -204,27 +208,37 @@ class CMS
         }
 
         if (!file_exists($thumbPath) && file_exists($fullPath)) {
-            $img = Yii::$app->img;
-            $img->load($fullPath);
-            if ($error) {
-                $img->grayscale();
-                $img->text(Yii::t('app/default', 'FILE_NOT_FOUND'), Yii::getAlias('@vendor/panix/engine/assets/assets/fonts') . '/Exo2-Light.ttf', $img->getWidth() / 100 * 8, [114, 114, 114], $img::POS_CENTER_BOTTOM, 0, $img->getHeight() / 100 * 10, 0, 0);
-            }
-            if (isset($options['watermark']) && $options['watermark']) {
-                $offsetX = isset($configApp->attachment_wm_offsetx) ? $configApp->attachment_wm_offsetx : 10;
-                $offsetY = isset($configApp->attachment_wm_offsety) ? $configApp->attachment_wm_offsety : 10;
-                $corner = isset($configApp->attachment_wm_corner) ? $configApp->attachment_wm_corner : 4;
-                $path = !empty($configApp->attachment_wm_path) ? $configApp->attachment_wm_path : Yii::getAlias('@uploads') . '/watermark.png';
-                $img->watermark($path, $offsetX, $offsetY, $corner, false);
-            }
+            $fileInfo = pathinfo($fullPath);
+            if (!in_array($fileInfo['extension'], ['svg'])) {
+                $img = Yii::$app->img;
+                $img->load($fullPath);
+                if ($error) {
+                    $img->grayscale();
+                    $img->text(Yii::t('app/default', 'FILE_NOT_FOUND'), Yii::getAlias('@vendor/panix/engine/assets/assets/fonts') . '/Exo2-Light.ttf', $img->getWidth() / 100 * 8, [114, 114, 114], $img::POS_CENTER_BOTTOM, 0, $img->getHeight() / 100 * 10, 0, 0);
+                }
+                if (isset($options['watermark']) && $options['watermark']) {
+                    $offsetX = isset($configApp->attachment_wm_offsetx) ? $configApp->attachment_wm_offsetx : 10;
+                    $offsetY = isset($configApp->attachment_wm_offsety) ? $configApp->attachment_wm_offsety : 10;
+                    $corner = isset($configApp->attachment_wm_corner) ? $configApp->attachment_wm_corner : 4;
+                    $path = !empty($configApp->attachment_wm_path) ? $configApp->attachment_wm_path : Yii::getAlias('@uploads') . '/watermark.png';
+                    $img->watermark($path, $offsetX, $offsetY, $corner, false);
+                }
 
-            if ($size) {
-                $img->resize((!empty($sizes[0])) ? $sizes[0] : 0, (!empty($sizes[1])) ? $sizes[1] : 0);
-            }
+                if ($size) {
+                    $img->resize((!empty($sizes[0])) ? $sizes[0] : 0, (!empty($sizes[1])) ? $sizes[1] : 0);
+                }
 
-            $img->save($thumbPath);
+                $img->save($thumbPath);
+            } else {
+                if (!file_exists($thumbPath) && !is_file($thumbPath)) {
+                    copy($fullPath, $thumbPath);
+                }
+                $size = false;
+            }
             //  $img->show();
         }
+
+
 
         if (!$size) {
             return "/assets/{$dirName}/" . $filename;
