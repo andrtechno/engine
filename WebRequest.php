@@ -4,6 +4,7 @@ namespace panix\engine;
 
 use Yii;
 use yii\web\Request;
+use yii\web\NotFoundHttpException;
 
 class WebRequest extends Request {
 
@@ -21,7 +22,7 @@ class WebRequest extends Request {
 
             // If language code is equal default - show 404 page
             if ($langCode === Yii::$app->languageManager->default->slug){
-                throw new \yii\web\NotFoundHttpException(Yii::t('app/error', '404'));
+                throw new NotFoundHttpException(Yii::t('app/error', '404'));
             }
 
            // if(Yii::$app->languageManager->default->id == Yii::$app->languageManager->active->id){
