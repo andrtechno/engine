@@ -10,6 +10,17 @@ use yii\rest\Action;
 class DeleteAction extends Action
 {
     public $primaryKey;
+    public $successMassage;
+    public $errorMassage;
+
+    public function init()
+    {
+        parent::init();
+        if (!$this->successMassage)
+            $this->successMassage = Yii::t('app/default', 'SUCCESS_RECORD_DELETE');
+        if (!$this->errorMassage)
+            $this->errorMassage = Yii::t('app/default', 'ERROR_RECORD_DELETE');
+    }
 
     public function run()
     {
@@ -32,9 +43,9 @@ class DeleteAction extends Action
                     if (!in_array($obj->primaryKey, $model->disallow_delete)) {
                         $obj->delete();
                         $json['success'] = true;
-                        $json['message'] = Yii::t('app/default', 'SUCCESS_RECORD_DELETE');
+                        $json['message'] = $this->successMassage;
                     } else {
-                        $json['message'] = Yii::t('app/default', 'ERROR_RECORD_DELETE');
+                        $json['message'] = $this->errorMassage;
                     }
                 }
             }
