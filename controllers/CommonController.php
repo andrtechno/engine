@@ -46,6 +46,8 @@ class CommonController extends Controller
             $languagePath = (Yii::$app->language != Yii::$app->languageManager->default->code) ? '/' . Yii::$app->language : '';
 
             $this->view->registerJs('
+            console.debugging = ' . YII_DEBUG . ';
+            
             var common = window.common || {};
             common.language = "' . Yii::$app->language . '";
             common.language_default = "' . Yii::$app->languageManager->default->code . '";
