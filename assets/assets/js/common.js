@@ -307,3 +307,25 @@ yii.confirm = function (message, ok, cancel) {
     // to cancel click handler
     return false;
 };
+common.logger = function (name) {
+    return {
+        debug: function () {
+            if (!console.debugging) return;
+            var mainArguments = Array.prototype.slice.call(arguments);
+            mainArguments.unshift("["+name+"]");
+            console.log.apply(this, mainArguments);
+        },
+        warn: function () {
+            if (!console.debugging) return;
+            var mainArguments = Array.prototype.slice.call(arguments);
+            mainArguments.unshift("["+name+"]");
+            console.warn.apply(this, mainArguments);
+        },
+        error: function () {
+            if (!console.debugging) return;
+            var mainArguments = Array.prototype.slice.call(arguments);
+            mainArguments.unshift("["+name+"]");
+            console.error.apply(this, mainArguments);
+        },
+    };
+}
