@@ -7,6 +7,9 @@ use yii\helpers\ArrayHelper;
 
 trait ActiveFieldTrait
 {
+
+
+
     /**
      * Render tinyMce widget. If not found return textarea
      * @param array $options
@@ -17,6 +20,39 @@ trait ActiveFieldTrait
     {
         $clientOptions = ArrayHelper::remove($options, 'clientOptions', []);
         $clientEvents = ArrayHelper::remove($options, 'clientEvents', []);
+        if (class_exists('panix\\ext\\tinymce\\TinyMce')) {
+            return parent::widget(\panix\ext\tinymce\TinyMce::class, [
+                'options' => $options,
+                'clientOptions' => $clientOptions,
+                'clientEvents' => $clientEvents
+            ]);
+        } else {
+            return parent::textarea($options);
+        }
+    }
+
+    /**
+     * Render tinyMce widget. If not found return textarea
+     * @param array $options
+     * @return panix\engine\widgets\ActiveField
+     * @throws \Exception
+     */
+    public function tinyMceShort($options = [])
+    {
+        $clientOptions = ArrayHelper::remove($options, 'clientOptions', []);
+        $clientEvents = ArrayHelper::remove($options, 'clientEvents', []);
+
+
+        $clientOptions['contextmenu'] = "link image";
+        $clientOptions['plugins'] = [
+            "textcolor stickytoolbar autoresize image template advlist autolink lists link print preview anchor",
+            "searchreplace",
+            "paste moxiemanager"
+        ];
+        $clientOptions['toolbar'] = "forecolor backcolor | undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | template code";
+        $clientOptions['menubar'] = false;
+        $clientOptions['statusbar'] = false;
+
         if (class_exists('panix\\ext\\tinymce\\TinyMce')) {
             return parent::widget(\panix\ext\tinymce\TinyMce::class, [
                 'options' => $options,
