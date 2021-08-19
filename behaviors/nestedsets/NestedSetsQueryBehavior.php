@@ -109,8 +109,10 @@ class NestedSetsQueryBehavior extends Behavior
     {
         $res = [];
         if (is_object($root)) {
+            /** @var $root \yii\db\ActiveRecord */
             $res[$root->{$root->idAttribute}]['key'] = $root->{$root->idAttribute};
             $res[$root->{$root->idAttribute}]['title'] = $root->{$root->titleAttribute};
+            $res[$root->{$root->idAttribute}]['attributes']=$root->attributes;
             if (method_exists($root, 'getUrl'))
                 $res[$root->{$root->idAttribute}]['url'] = Url::to($root->getUrl());
             if (isset($root->switch))
