@@ -14,6 +14,7 @@ class ClipboardAsset extends AssetBundle
     public $sourcePath = __DIR__ . '/assets';
 
     public $js = [
+        'js/clipboard/cb.js',
         'js/clipboard/clipboard.min.js',
     ];
     public $depends = [
