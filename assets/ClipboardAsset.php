@@ -17,8 +17,5 @@ class ClipboardAsset extends AssetBundle
         'js/clipboard/cb.js',
         'js/clipboard/clipboard.min.js',
     ];
-    public $depends = [
-        'yii\web\JqueryAsset',
-    ];
 
 }
