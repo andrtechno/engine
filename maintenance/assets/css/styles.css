@@ -5,38 +5,32 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box
 }
+
 body {
     text-align: center;
     font: 20px Helvetica, sans-serif;
-    color: #333
-}
-h1 {
-    font-size: 50px
-}
-footer {
-    position: absolute;
-    height: 60px;
-    bottom: 0;
-    left: 0;
-    font-size: 14px;
-    width: 100%;
-    padding: 10px;
-    display: block
+    color: #333;
+    display: flex;
+    align-items: center;
 }
 
-.float-right {
-    float: right
+body, html {
+    height: 100%;
 }
-.text-center {
-    text-align: center
+
+.container {
+    width: 100%;
+    max-width: 330px;
+    display: inline-block;
+    padding: 15px;
+    margin: auto;
 }
-.content{
-    margin-top: 30%;
-}
+
 a {
     color: #dc8100;
     text-decoration: none
 }
+
 a:hover,
 a:focus,
 a:active {
