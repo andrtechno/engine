@@ -139,37 +139,37 @@ class MaintenanceMode extends Component
      */
     public function init()
     {
-       // Yii::setAlias('@maintenance', $this->commandPath.'');
+        // Yii::setAlias('@maintenance', $this->commandPath.'');
         //if (!file_exists(Yii::getAlias('@maintenance'))) {
-            //FileHelper::createDirectory(Yii::getAlias('@maintenance'));
+        //FileHelper::createDirectory(Yii::getAlias('@maintenance'));
         //}
         if (Yii::$app instanceof \yii\console\Application) {
             Yii::$app->controllerMap['maintenance'] = $this->consoleController;
         } else {
             if ($this->getIsEnabled()) {
-               // $this->filtering();
+                $this->filtering();
             }
         }
     }
 
     /**
      * Checks if mode is on.
-     * @since 0.2.2
      * @param bool $onlyConsole
      * @return bool
+     * @since 0.2.2
      */
     public function getIsEnabled($onlyConsole = false)
     {
         //$exists = file_exists($this->getStatusFilePath());
         //return $onlyConsole ? $exists : $this->enabled || $exists;
         return (bool)Yii::$app->settings->get('app', 'maintenance');
-       // return (bool) $this->enabled;
+        // return (bool) $this->enabled;
     }
 
     /**
      * Return status file path.
-     * @since 0.2.5
      * @return bool|string
+     * @since 0.2.5
      */
     protected function getStatusFilePath()
     {
@@ -178,8 +178,8 @@ class MaintenanceMode extends Component
 
     /**
      * Turn off mode.
-     * @since 0.2.5
      * @return bool
+     * @since 0.2.5
      */
     public function disable()
     {
@@ -194,8 +194,8 @@ class MaintenanceMode extends Component
 
     /**
      * Turn on mode.
-     * @since 0.2.5
      * @return bool
+     * @since 0.2.5
      */
     public function enable()
     {
@@ -209,9 +209,9 @@ class MaintenanceMode extends Component
 
     /**
      * Check IP (mask supported).
-     * @since 0.2.6
      * @param $filter
      * @return bool
+     * @since 0.2.6
      */
     protected function checkIp($filter)
     {
@@ -221,8 +221,8 @@ class MaintenanceMode extends Component
 
     /**
      * Filtering by configuration.
-     * @since 0.2.2
      * @throws InvalidConfigException
+     * @since 0.2.2
      */
     protected function filtering()
     {
@@ -268,7 +268,7 @@ class MaintenanceMode extends Component
             if (is_array($this->urls)) {
 
                 // return in_array($app->getRequest()->getPathInfo(), $this->urls);
-               $this->disable = $this->disable || in_array($app->getRequest()->getPathInfo(), $this->urls);
+                $this->disable = $this->disable || in_array($app->getRequest()->getPathInfo(), $this->urls);
 
             } else {
                 throw new InvalidConfigException('Parameter "urls" should be an array.');
@@ -289,11 +289,11 @@ class MaintenanceMode extends Component
         if (!$this->disable) {
             if ($this->route === 'maintenance/index') {
                 $app->controllerMap['maintenance'] = [
-                    'class'=>'panix\engine\maintenance\controllers\MaintenanceController',
-                    'title'=>$this->title
+                    'class' => 'panix\engine\maintenance\controllers\MaintenanceController',
+                    'title' => $this->title
                 ];
             }
-            $app->catchAll = [$this->route,'title'=>'zzzz'];
+            $app->catchAll = [$this->route, 'title' => 'zzzz'];
         } else {
             $app->getResponse()->setStatusCode(self::STATUS_CODE_OK);
         }
