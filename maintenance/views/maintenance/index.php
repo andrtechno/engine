@@ -3,7 +3,9 @@
 use yii\helpers\Html;
 
 ?>
-<h1><?= Html::encode($title) ?></h1>
-<div>
-    <p><?= Html::encode($message) ?></p>
+<?php if ($title) { ?>
+    <h1><?= Html::encode($title) ?></h1>
+<?php } ?>
+<div class="">
+    <?= $message ?>
 </div>
