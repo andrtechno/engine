@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use panix\engine\maintenance\Asset;
 
-
 Asset::register($this);
 ?>
 <?php $this->beginPage(); ?>
@@ -16,24 +15,11 @@ Asset::register($this);
 </head>
 <body>
 <?php $this->beginBody(); ?>
-<section class="container">
-    <div class="row">
-        <div class="col-sm-6 offset-sm-3">
-            <div class="d-flex1 align-items-center1">
-                <div class="content">
-                    <?= $content; ?>
-                </div>
+<div class="container">
+    <?= $content; ?>
+</div>
 
-            </div>
-        </div>
-    </div>
 
-</section>
-<footer class="text-center">
-
-    <p><?= Yii::$app->powered() ?></p>
-
-</footer>
 <?php $this->endBody(); ?>
 </body>
 </html>
