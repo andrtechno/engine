@@ -147,6 +147,8 @@ class MaintenanceMode extends Component
             Yii::$app->controllerMap['maintenance'] = $this->consoleController;
         } else {
             if ($this->getIsEnabled()) {
+                $this->title = false;
+                $this->message = Yii::$app->settings->get('app', 'maintenance_text');
                 $this->filtering();
             }
         }
