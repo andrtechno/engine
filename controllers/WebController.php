@@ -47,6 +47,14 @@ class WebController extends CommonController
                 Yii::$app->db->createCommand()->insert('{{%utm}}', $data)->execute();
             }
         }
+        
+        if (Yii::$app->hasModule('seo')) {
+            $rediect = Redirects::findOne(['url_from' => Yii::$app->request->url]);
+            if ($rediect) {
+                return $this->redirect($rediect->url_to);
+            }
+        }
+        
         return parent::beforeAction($action);
     }
 
