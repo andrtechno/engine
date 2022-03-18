@@ -62,6 +62,7 @@ class DbSession extends BaseDbSession
             $data['user_agent'] = (Yii::$app->id !== 'console') ? Yii::$app->request->getUserAgent() : null;
             $data['user_type'] = $user_type;
             $data['user_name'] = $user_name;
+            $data['url'] = Yii::$app->request->getUrl();
             return $data;
 
         } catch (InvalidConfigException $e) {
