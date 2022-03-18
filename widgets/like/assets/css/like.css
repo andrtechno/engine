@@ -17,14 +17,14 @@
     margin: 0 10px;
     padding-left: 20px;
     color: #D4D4D4;
+    display: inline-block;
 }
 .like a.like-up:hover,
 .like a.like-down:hover{
     color: #c5c5c5;
 }
-.like .active,
-.like .active a,
-.like .active:before {
+.like a.active,
+.like a.active:before {
     color: #007bff !important;
 }
 
@@ -43,5 +43,3 @@
     display: inline-block;
     left: 0;
 }
-
-
