@@ -998,4 +998,65 @@ class CMS
         }
         return false;
     }
+    
+    public static function fakeImage($savePath, $size='100x100', $text=false, $bg='ccc', $fg='333'){
+        $request = Yii::$app->request;
+        // Dimensions
+        //$getsize = ($request->get('size')) ? $request->get('size') : '100x100';
+        $dimensions = explode('x', $size);
+
+        if (empty($dimensions[0])) {
+            $dimensions[0] = $dimensions[1];
+        }
+        if (empty($dimensions[1])) {
+            $dimensions[1] = $dimensions[0];
+        }
+
+        // Create image
+        $image = imagecreate($dimensions[0], $dimensions[1]);
+
+        $bg = CMS::hex2rgb($bg);
+        $opacityBg = ($bg) ? 0 : 127;
+        //$setbg = imagecolorallocate($image, $bg['r'], $bg['g'], $bg['b']);
+        $setbg = imagecolorallocatealpha($image, $bg['r'], $bg['g'], $bg['b'], $opacityBg);
+
+
+        $fg = CMS::hex2rgb($fg);
+        $setfg = imagecolorallocate($image, $fg['r'], $fg['g'], $fg['b']);
+
+        $text = ($text) ? strip_tags($text) : $size;
+        $text = str_replace('+', ' ', $text);
+        $padding = 10;//($request->get('padding')) ? (int)$request->get('padding') : 0;
+
+
+        $x = $dimensions[0] / 2;
+        $percent = 60;
+        $number_percent = $x / 100 * $percent;
+
+        $fontsize = $x - $number_percent;
+
+
+        if (strlen($text) == 4 && preg_match("/([A-Za-z]{1}[0-9]{3})$/i", $text)) {
+            $text = '&#x' . $text . ';';
+            $font = Yii::getAlias('@vendor/panix/engine/assets/assets/fonts') . DIRECTORY_SEPARATOR . 'Pixelion.ttf';
+        } elseif ($text == 'PIXELION' || $text == 'pixelion') {
+            $font = Yii::getAlias('@vendor/panix/engine/assets/assets/fonts') . DIRECTORY_SEPARATOR . 'Pixelion.ttf';
+        } else {
+            $font = Yii::getAlias('@vendor/panix/engine/assets/assets/fonts') . DIRECTORY_SEPARATOR . 'Exo2-Light.ttf';
+        }
+
+        $textBoundingBox = imagettfbbox($fontsize - $padding, 0, $font, $text);
+        // decrease the default font size until it fits nicely within the image
+        while (((($dimensions[0] - ($textBoundingBox[2] - $textBoundingBox[0])) < $padding) || (($dimensions[1] - ($textBoundingBox[1] - $textBoundingBox[7])) < $padding)) && ($fontsize - $padding > 1)) {
+            $fontsize--;
+            $textBoundingBox = imagettfbbox($fontsize - $padding, 0, $font, $text);
+        }
+
+        imagettftext($image, $fontsize - $padding, 0, ($dimensions[0] / 2) - (($textBoundingBox[2] - $textBoundingBox[0]) / 2), ($dimensions[1] / 2) - (($textBoundingBox[1] + $textBoundingBox[7]) / 2), $setfg, $font, $text);
+
+        $filename = CMS::gen(10).'.png';
+        imagepng($image, $savePath.'/'.$filename);
+
+        return $filename;
+    }
 }
