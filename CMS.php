@@ -816,7 +816,11 @@ class CMS
             return Yii::$app->formatter->{$fn}($timestamp);
 
         } else {
-            $timestamp = date('Y-m-d H:i:s', $timestamp);
+            if($time) {
+                $timestamp = date('Y-m-d H:i:s', $timestamp);
+            }else{
+                $timestamp = date('Y-m-d', $timestamp);
+            }
             $fn = ($time) ? 'datetimeFormat' : 'dateFormat';
             if (!$timeZone) {
                 $timeZone = self::timezone();
