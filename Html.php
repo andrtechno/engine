@@ -37,6 +37,9 @@ class Html extends \yii\helpers\Html
      */
     public static function telegram($text, $name = '', $options = [])
     {
+        if(strpos('@',$name) === false){
+            $name = '@'.$name;
+        }
         return parent::a($text, 'tg://resolve?domain=' . $name, $options);
     }
 
