@@ -31,6 +31,7 @@ class UploadFileBehavior extends Behavior
     public $options = [];
     private $oldUploadFiles = [];
     private $_files = [];
+    private $hash;
 
     public function attach($owner)
     {
@@ -118,13 +119,13 @@ class UploadFileBehavior extends Behavior
         $owner = $this->owner;
         //if ($owner->{$attribute}) {
 
-            return CMS::processImage($size, $owner->{$attribute}, $this->files[$attribute], $options);
-       // } else {
-       //     if (!$returnBool) {
-       //         return false;
-       //     }
+        return CMS::processImage($size, $owner->{$attribute}, $this->files[$attribute], $options);
+        // } else {
+        //     if (!$returnBool) {
+        //         return false;
+        //     }
         //    return CMS::placeholderUrl(['size' => $size]);
-     //   }
+        //   }
     }
 
 
@@ -141,7 +142,12 @@ class UploadFileBehavior extends Behavior
 
     private function checkExistFile($attr)
     {
-        if (file_exists($this->getFileAbsolutePath($attr))) {
+        $file = $this->getFileAbsolutePath($attr);
+        if (file_exists($file)) {
+            $exif = exif_read_data($file, 0, true);
+            if (isset($exif['FILE']['FileDateTime'])) {
+                $this->hash = $exif['FILE']['FileDateTime'];
+            }
             return true;
         }
         return false;
@@ -197,8 +203,9 @@ class UploadFileBehavior extends Behavior
                 echo Fancybox::widget(['target' => '.' . $targetClass]);
             }
 
-            return Html::a($linkValue . ' ' . $fileInfo['extension'], $this->getFileUrl($attribute), ['class' => 'btn btn-sm btn-outline-primary ' . $targetClass]) . $this->getRemoveUrl($attribute);
+            return Html::a($linkValue . ' ' . $fileInfo['extension'], $this->getFileUrl($attribute).'?hash='.$this->hash, ['class' => 'btn btn-sm btn-outline-primary ' . $targetClass]) . $this->getRemoveUrl($attribute);
         }
+        return null;
     }
 
 
@@ -212,7 +219,7 @@ class UploadFileBehavior extends Behavior
 
     public function getFilePath($attribute)
     {
-        return str_replace('@','/',$this->files[$attribute]). "/" . $this->owner->{$attribute};
+        return str_replace('@', '/', $this->files[$attribute]) . "/" . $this->owner->{$attribute};
     }
 
     public function getFileAbsolutePath($attribute)
