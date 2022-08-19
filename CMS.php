@@ -209,7 +209,12 @@ class CMS
             $options['watermark'] = false;
             $error = true;
         }
+        $hash = '';
 
+        $exif = exif_read_data($fullPath, 0, true);
+        if (isset($exif['FILE']['FileDateTime'])) {
+            $hash = $exif['FILE']['FileDateTime'];
+        }
         if (!file_exists($thumbPath) && file_exists($fullPath)) {
             $fileInfo = pathinfo($fullPath);
             if (!in_array($fileInfo['extension'], ['svg'])) {
@@ -244,9 +249,9 @@ class CMS
 
 
         if (!$size) {
-            return "/assets/{$dirName}/" . $filename;
+            return "/assets/{$dirName}/" . $filename."?r=".$hash;
         } else {
-            return "/assets/{$dirName}/{$size}/" . $filename;
+            return "/assets/{$dirName}/{$size}/" . $filename."?r=".$hash;
         }
 
     }
