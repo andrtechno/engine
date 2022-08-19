@@ -9,6 +9,7 @@ use Yii;
 use yii\base\Behavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
+use yii\helpers\BaseFileHelper;
 use yii\helpers\FileHelper;
 use yii\helpers\Inflector;
 use yii\helpers\Url;
@@ -134,7 +135,7 @@ class UploadFileBehavior extends Behavior
         $owner = $this->owner;
         if (isset($owner->{$attr})) {
             if ($this->checkExistFile($attr)) {
-                return ($absolute) ? $this->getFileAbsolutePath($attr) : $this->getFilePath($attr);
+                return ($absolute) ? $this->getFileAbsolutePath($attr) : $this->getFilePath($attr).'?hash='.$this->hash;
             }
         }
         return false;
@@ -203,7 +204,7 @@ class UploadFileBehavior extends Behavior
                 echo Fancybox::widget(['target' => '.' . $targetClass]);
             }
 
-            return Html::a($linkValue . ' ' . $fileInfo['extension'], $this->getFileUrl($attribute).'?hash='.$this->hash, ['class' => 'btn btn-sm btn-outline-primary ' . $targetClass]) . $this->getRemoveUrl($attribute);
+            return Html::a($linkValue . ' ' . $fileInfo['extension'], $this->getFileUrl($attribute), ['class' => 'btn btn-sm btn-outline-primary ' . $targetClass]) . $this->getRemoveUrl($attribute);
         }
         return null;
     }
@@ -295,6 +296,33 @@ class UploadFileBehavior extends Behavior
 
 
             $fileInfo = pathinfo($file->name);
+            $dirAsset =  basename($path);
+
+
+            $filesList = glob(Yii::getAlias("@webroot/assets/{$dirAsset}/{$old_image}"));
+
+if(isset($filesList[0])){
+                if (is_file($filesList[0])) {
+                    unlink($filesList[0]);
+                } elseif (is_dir($filesList[0])) {
+                    BaseFileHelper::removeDirectory($filesList[0]);
+                }
+}
+
+
+            $filesList = glob(Yii::getAlias("@webroot/assets/{$dirAsset}/*/{$old_image}"));
+
+            foreach ($filesList as $file1) {
+                if (is_file($file1)) {
+                    unlink($file1);
+                } elseif (is_dir($file1)) {
+                    BaseFileHelper::removeDirectory($file1);
+                }
+            }
+
+
+
+
 
 
             $newFileName = CMS::slug($fileInfo['filename']) . '.' . $file->extension;
