@@ -95,16 +95,22 @@ class CMS
     {
         if ($phone) {
             $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
-            $phoneNumber = $phoneUtil->parse($phone, 'UA');
-            $phone2 = $phoneUtil->format($phoneNumber, \libphonenumber\PhoneNumberFormat::NATIONAL);
-            if ($phoneUtil->getRegionCodeForNumber($phoneNumber) == 'UA') {
-                $pattern = "/^(\+?\d{2})(\d{3})(\d{3})(\d{2})(\d{2})$/";
-                $phone = preg_replace($pattern, '($2) $3-$4-$5', $phone);
-            }elseif($phoneUtil->getRegionCodeForNumber($phoneNumber) == 'RU'){
-                $pattern = "/^(\+?\d{1})(\d{3})(\d{3})(\d{2})(\d{2})$/";
-                $phone = preg_replace($pattern, '$1 ($2) $3-$4-$5', $phone);
-            } else {
-                $phone = $phone2;
+
+            try {
+                $phoneNumber = $phoneUtil->parse($phone, 'UA');
+
+                $phone2 = $phoneUtil->format($phoneNumber, \libphonenumber\PhoneNumberFormat::NATIONAL);
+                if ($phoneUtil->getRegionCodeForNumber($phoneNumber) == 'UA') {
+                    $pattern = "/^(\+?\d{2})(\d{3})(\d{3})(\d{2})(\d{2})$/";
+                    $phone = preg_replace($pattern, '($2) $3-$4-$5', $phone);
+                } elseif ($phoneUtil->getRegionCodeForNumber($phoneNumber) == 'RU') {
+                    $pattern = "/^(\+?\d{1})(\d{3})(\d{3})(\d{2})(\d{2})$/";
+                    $phone = preg_replace($pattern, '$1 ($2) $3-$4-$5', $phone);
+                } else {
+                    $phone = $phone2;
+                }
+            } catch (\libphonenumber\NumberParseException $exception) {
+               
             }
         }
         return $phone;
