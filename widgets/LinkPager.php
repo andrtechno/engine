@@ -39,12 +39,11 @@ class LinkPager extends BasePager
     public $pageType = 'link';
     public $firstPageLabel = true;
     public $lastPageLabel = true;
-
+    public $maxMobileButtonCount = 5;
+    
     public function init()
     {
-
-        $this->maxButtonCount = CMS::isMobile() ? 5 : $this->maxButtonCount;
-
+        $this->maxButtonCount = CMS::isMobile() ? $this->maxMobileButtonCount : $this->maxButtonCount;
         parent::init();
     }
 
