@@ -20,7 +20,7 @@ class DatetimePicker extends DatePicker
      * @var string
      */
     public $mode = 'datetime';
-    public $timeFormat = 'hh:HH:ss';
+    public $timeFormat = 'HH:mm:ss';
     public $dateFormat = 'yyyy-MM-dd';
 
     public $timezone = 'UTC';
