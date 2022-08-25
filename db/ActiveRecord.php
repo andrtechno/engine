@@ -265,6 +265,9 @@ class ActiveRecord extends \yii\db\ActiveRecord
             if (isset($columns['created_at']) && isset($columns['updated_at'])) {
                 $b['timestamp'] = [
                     'class' => TimestampBehavior::class,
+                    'attributes' => [
+                        ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
+                    ]
                 ];
             }
 
