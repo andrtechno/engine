@@ -9,7 +9,6 @@ use Yii;
 use yii\base\Behavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
-use yii\helpers\BaseFileHelper;
 use yii\helpers\FileHelper;
 use yii\helpers\Inflector;
 use yii\helpers\Url;
@@ -135,7 +134,7 @@ class UploadFileBehavior extends Behavior
         $owner = $this->owner;
         if (isset($owner->{$attr})) {
             if ($this->checkExistFile($attr)) {
-                return ($absolute) ? $this->getFileAbsolutePath($attr) : $this->getFilePath($attr).'?hash='.$this->hash;
+                return ($absolute) ? $this->getFileAbsolutePath($attr) : $this->getFilePath($attr);
             }
         }
         return false;
@@ -204,7 +203,7 @@ class UploadFileBehavior extends Behavior
                 echo Fancybox::widget(['target' => '.' . $targetClass]);
             }
 
-            return Html::a($linkValue . ' ' . $fileInfo['extension'], $this->getFileUrl($attribute), ['class' => 'btn btn-sm btn-outline-primary ' . $targetClass]) . $this->getRemoveUrl($attribute);
+            return Html::a($linkValue . ' ' . $fileInfo['extension'], $this->getFileUrl($attribute).'?hash='.$this->hash, ['class' => 'btn btn-sm btn-outline-primary ' . $targetClass]) . $this->getRemoveUrl($attribute);
         }
         return null;
     }
@@ -290,39 +289,26 @@ class UploadFileBehavior extends Behavior
         }
         /** @var $img \panix\engine\components\ImageHandler */
 
+        $assetPath = basename($path);
+
         if (isset($file)) {
             if ($old_image && file_exists($path . $old_image))
                 unlink($path . $old_image);
 
-
-            $fileInfo = pathinfo($file->name);
-            $dirAsset =  basename($path);
-
-
-            $filesList = glob(Yii::getAlias("@webroot/assets/{$dirAsset}/{$old_image}"));
-
-if(isset($filesList[0])){
-                if (is_file($filesList[0])) {
-                    unlink($filesList[0]);
-                } elseif (is_dir($filesList[0])) {
-                    BaseFileHelper::removeDirectory($filesList[0]);
+            $files = glob(Yii::getAlias("@app/web/assets/{$assetPath}/*/{$old_image}"));
+            foreach ($files as $fileItem) {
+                if (is_file($fileItem)) {
+                    unlink($fileItem);
                 }
-}
-
-
-            $filesList = glob(Yii::getAlias("@webroot/assets/{$dirAsset}/*/{$old_image}"));
-
-            foreach ($filesList as $file1) {
-                if (is_file($file1)) {
-                    unlink($file1);
-                } elseif (is_dir($file1)) {
-                    BaseFileHelper::removeDirectory($file1);
+            }
+            $files = glob(Yii::getAlias("@app/web/assets/${assetPath}/{$old_image}"));
+            foreach ($files as $fileItem) {
+                if (is_file($fileItem)) {
+                    unlink($fileItem);
                 }
             }
 
-
-
-
+            $fileInfo = pathinfo($file->name);
 
 
             $newFileName = CMS::slug($fileInfo['filename']) . '.' . $file->extension;
