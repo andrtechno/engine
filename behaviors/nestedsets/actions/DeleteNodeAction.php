@@ -14,23 +14,25 @@ class DeleteNodeAction extends Action
 {
     public $successMessage;
     public $disallowIds = [];
+
     /**
      * Move a node (model) below the parent and in between left and right
      *
      * @param int $id the primaryKey of the moved node
      * @return array
+     * @throws \yii\web\NotFoundHttpException
      */
-    public function run(int $id)
+    public function run($id)
     {
         if (!$this->successMessage)
             $this->successMessage = Yii::t('app/default', 'SUCCESS_RECORD_DELETE');
 
         Yii::$app->response->format = Response::FORMAT_JSON;
         $json = [];
-
         $json['success'] = false;
         if (Yii::$app->request->isAjax) {
             /** @var \panix\engine\behaviors\nestedsets\NestedSetsBehavior|\yii\db\ActiveRecord $model */
+
             $model = $this->findModel($id);
             //Delete if not root node
             if ($model) {
@@ -44,12 +46,23 @@ class DeleteNodeAction extends Action
                     $json['objects'][] = $id;
                     $json['success'] = true;
                     $json['message'] = $this->successMessage;
+                    $parent = $model->parent()->one();
+                    /** @var \panix\engine\behaviors\nestedsets\NestedSetsBehavior|\yii\db\ActiveRecord $parent */
+                    //Для кеша.
+                    if($parent){
+                        $parent->updated_at = time();
+                        $parent->saveNode(false);
+                    }
                     $model->deleteNode();
                 } else {
                     $json['message'] = 'Запрешено удаление данного объекта';
                 }
+            }else{
+                $json['message'] = 'not found.';
             }
-            return $json;
+        }else{
+            $json['message'] = 'access denied.';
         }
+        return $json;
     }
 }
