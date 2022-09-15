@@ -147,6 +147,12 @@ class Dispatcher extends \yii\log\Dispatcher
             'class' => 'panix\engine\log\FileTarget',
             'levels' => ['error'],
             'logFile' => $logPath . '/error.log',
+            'except' => [
+                'yii\web\HttpException:404',
+                'yii\web\HttpException:403',
+                'yii\web\HttpException:400',
+                'yii\i18n\PhpMessageSource::loadMessages'
+            ]
         ];
         $this->targets[] = [
             'class' => 'panix\engine\log\FileTarget',
