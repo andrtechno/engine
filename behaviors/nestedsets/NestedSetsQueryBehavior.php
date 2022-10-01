@@ -4,6 +4,7 @@ namespace panix\engine\behaviors\nestedsets;
 
 use yii\base\Behavior;
 use yii\caching\DbDependency;
+use yii\caching\TagDependency;
 use yii\helpers\Url;
 use Yii;
 
@@ -95,7 +96,7 @@ class NestedSetsQueryBehavior extends Behavior
             $data = array_values($this->prepareData2($root, $level, $wheres));
             return $this->makeData2($data, $key);
 
-        }, Yii::$app->db->queryCacheDuration, new DbDependency(['sql' => "SELECT MAX(updated_at) FROM {$tableName}"]));
+        }, Yii::$app->db->queryCacheDuration, new TagDependency(['tags' => ['categories']]));
 
     }
 
