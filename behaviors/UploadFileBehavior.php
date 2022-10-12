@@ -275,7 +275,7 @@ class UploadFileBehavior extends Behavior
         } else {
             $owner->{$attribute} = (string)$old_image;
         }
-        return $owner->{$attribute};
+        return (!empty($owner->{$attribute})) ? $owner->{$attribute} : NULL;
     }
 
 
@@ -331,7 +331,7 @@ class UploadFileBehavior extends Behavior
         } else {
             $owner->{$attribute} = (string)$old_image;
         }
-        return $owner->{$attribute};
+        return (!empty($owner->{$attribute})) ? $owner->{$attribute} : NULL;
     }
 
 }
