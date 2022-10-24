@@ -25,7 +25,6 @@ use yii\web\UploadedFile;
 class UploadFileBehavior extends Behavior
 {
 
-
     public $files = [];
     public $extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
     public $options = [];
@@ -33,10 +32,6 @@ class UploadFileBehavior extends Behavior
     private $_files = [];
     private $hash;
 
-    public function attach($owner)
-    {
-        parent::attach($owner);
-    }
 
     public function events()
     {
@@ -65,7 +60,6 @@ class UploadFileBehavior extends Behavior
 
     public function afterSave()
     {
-
         foreach ($this->files as $attribute => $dir) {
             $this->owner->{$attribute} = $this->uploadFile($attribute, $dir, (isset($this->oldUploadFiles[$attribute])) ? $this->oldUploadFiles[$attribute] : null);
         }
@@ -75,10 +69,7 @@ class UploadFileBehavior extends Behavior
     {
         /** @var \panix\engine\db\ActiveRecord $owner */
         $owner = $this->owner;
-        foreach ($this->files as $attribute => $dir) {
 
-
-        }
         if ($owner->{$this->attribute} instanceof UploadedFile) {
             $this->file = $this->owner->{$this->attribute};
             return;
@@ -143,11 +134,12 @@ class UploadFileBehavior extends Behavior
     private function checkExistFile($attr)
     {
         $file = $this->getFileAbsolutePath($attr);
+
         if (file_exists($file)) {
-            $exif = exif_read_data($file, 0, true);
-            if (isset($exif['FILE']['FileDateTime'])) {
-                $this->hash = $exif['FILE']['FileDateTime'];
-            }
+            //$exif = exif_read_data($file, 0, true);
+            //if (isset($exif['FILE']['FileDateTime'])) {
+            //    $this->hash = $exif['FILE']['FileDateTime'];
+            //}
             return true;
         }
         return false;
@@ -203,7 +195,7 @@ class UploadFileBehavior extends Behavior
                 echo Fancybox::widget(['target' => '.' . $targetClass]);
             }
 
-            return Html::a($linkValue . ' ' . $fileInfo['extension'], $this->getFileUrl($attribute).'?hash='.$this->hash, ['class' => 'btn btn-sm btn-outline-primary ' . $targetClass]) . $this->getRemoveUrl($attribute);
+            return Html::a($linkValue . ' ' . $fileInfo['extension'], $this->getFileUrl($attribute) . '?hash=' . $this->hash, ['class' => 'btn btn-sm btn-outline-primary ' . $targetClass]) . $this->getRemoveUrl($attribute);
         }
         return null;
     }
@@ -275,7 +267,7 @@ class UploadFileBehavior extends Behavior
         } else {
             $owner->{$attribute} = (string)$old_image;
         }
-        return (!empty($owner->{$attribute})) ? $owner->{$attribute} : NULL;
+        return $owner->{$attribute};
     }
 
 
@@ -283,6 +275,7 @@ class UploadFileBehavior extends Behavior
     {
         $owner = $this->owner;
         $file = UploadedFile::getInstance($owner, $attribute);
+
         $path = Yii::getAlias($dir) . DIRECTORY_SEPARATOR;
         if (!file_exists($path)) {
             FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
@@ -315,15 +308,20 @@ class UploadFileBehavior extends Behavior
             if (file_exists($path . $newFileName)) {
                 $newFileName = CMS::slug($fileInfo['filename']) . '-' . CMS::gen(10) . '.' . $file->extension;
             }
+
             if (in_array($file->extension, $this->extensions)) { //Загрузка для изображений
+
                 $img = Yii::$app->img->load($file->tempName);
 
                 if ($img->getHeight() > Yii::$app->params['maxUploadImageSize']['height'] || $img->getWidth() > Yii::$app->params['maxUploadImageSize']['width']) {
                     $img->resize(Yii::$app->params['maxUploadImageSize']['width'], Yii::$app->params['maxUploadImageSize']['height']);
                 }
-                if ($img->save($path . $newFileName)) {
-                    unlink($file->tempName);
-                }
+
+                $img->save($path . $newFileName);
+                //if ($img->save($path . $newFileName)) {
+                    //unlink($file->tempName);
+                //}
+
             } else {
                 $file->saveAs($path . $newFileName);
             }
