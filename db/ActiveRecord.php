@@ -263,12 +263,22 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 ];
             }
             if (isset($columns['created_at']) && isset($columns['updated_at'])) {
-                $b['timestamp'] = [
-                    'class' => TimestampBehavior::class,
-                    'attributes' => [
-                        ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
-                    ]
-                ];
+                if ($this->isNewRecord) {
+                    $b['timestamp'] = [
+                        'class' => TimestampBehavior::class,
+                        'attributes' => [
+                            ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
+                            ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'], //TODO могут быть проблемы при редактирование даты
+                        ]
+                    ];
+                } else {
+                    $b['timestamp'] = [
+                        'class' => TimestampBehavior::class,
+                        'attributes' => [
+                            ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
+                        ]
+                    ];
+                }
             }
 
 
