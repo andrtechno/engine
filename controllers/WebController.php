@@ -49,7 +49,8 @@ class WebController extends CommonController
         }
         
         if (Yii::$app->hasModule('seo')) {
-            $rediect = \panix\mod\seo\models\Redirects::findOne(['url_from' => Yii::$app->request->url]);
+            $a=urldecode(Yii::$app->request->url);
+            $rediect = \panix\mod\seo\models\Redirects::findOne(['url_from' => $a]);
             if ($rediect) {
                 return $this->redirect($rediect->url_to);
             }
