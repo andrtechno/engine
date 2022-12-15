@@ -19,28 +19,32 @@ common.switchInputPass = function (that, inputId) {
     }
     s.attr('type', inp ? 'password' : 'input');
 };
-common.notify = function (text, type) {
+common.notify = function (text, type, params = {}) {
     var t = (type === 'error') ? 'danger' : type;
+	if(!params.t)
+		params.type = t;
+	if(!params.allow_dismiss)
+		params.allow_dismiss = false;
+	
     if (common.isDashboard) {
-
-        this.notify_list[0] = $.notify({message: text}, {
-            type: t,
-            allow_dismiss: false,
-            placement: {
-                from: "bottom",
-                align: "left"
-            },
-            template: '<div data-notify="container" class="alert alert-{0}" role="alert"><button type="button" aria-hidden="true" class="close" data-notify="dismiss">&times;</button><span data-notify="icon"></span> <span data-notify="title">{1}</span> <span data-notify="message">{2}</span><div class="progress" data-notify="progressbar"><div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div></div><a href="{3}" target="{4}" data-notify="url"></a></div>'
-        });
+		
+		params.placement = {
+			from: "bottom",
+			align: "left"
+		};
+		params.template = '<div data-notify="container" class="alert alert-{0}" role="alert"><button type="button" aria-hidden="true" class="close" data-notify="dismiss">&times;</button><span data-notify="icon"></span> <span data-notify="title">{1}</span> <span data-notify="message">{2}</span><div class="progress" data-notify="progressbar"><div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div></div><a href="{3}" target="{4}" data-notify="url"></a></div>';
+        this.notify_list[0] = $.notify({message: text}, params);
     } else {
-        this.notify_list[0] = $.notify({message: text}, {
-            type: t,
-            delay:1,
-            timer:($(document).width() > 768)?700:500,
-            allow_dismiss: false,
-            template: '<div data-notify="container" class="alert alert-{0}" role="alert"><button type="button" aria-hidden="true" class="close" data-notify="dismiss">&times;</button><span data-notify="icon"></span> <span data-notify="title">{1}</span> <span data-notify="message">{2}</span><div class="progress" data-notify="progressbar"><div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div></div><a href="{3}" target="{4}" data-notify="url"></a></div>'
-        });
+		params.delay = 1;
+		if(!params.timer)
+			params.timer = ($(document).width() > 768)?700:500;
+	    params.template = '<div data-notify="container" class="alert alert-{0}" role="alert"><button type="button" aria-hidden="true" class="close" data-notify="dismiss">&times;</button><span data-notify="icon"></span> <span data-notify="title">{1}</span> <span data-notify="message">{2}</span><div class="progress" data-notify="progressbar"><div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div></div><a href="{3}" target="{4}" data-notify="url"></a></div>'
+				
+				
+        this.notify_list[0] = $.notify({message: text}, params);
     }
+
+	return this.notify_list[0];
 
 };
 common.url = function (url) {
