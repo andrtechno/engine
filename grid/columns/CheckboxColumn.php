@@ -106,6 +106,7 @@ class CheckboxColumn extends BaseCheckboxColumn
                     'class' => 'dropdown-item grid-action ',
                     'data-confirm-info' => Yii::t('app/default', 'DELETE_CONFIRM'),
                     //'data-method'=>'POST',
+                    'onClick' => 'checkSelected();',
                     'data-pjax' => 0
                 ]
             ]
