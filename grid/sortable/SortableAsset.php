@@ -12,7 +12,4 @@ class SortableAsset extends AssetBundle
     public $css = [
         'styles.css',
     ];
-    public $depends = [
-        'panix\engine\assets\CommonAsset',
-    ];
 }
