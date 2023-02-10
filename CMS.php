@@ -110,7 +110,7 @@ class CMS
                     $phone = $phone2;
                 }
             } catch (\libphonenumber\NumberParseException $exception) {
-               
+
             }
         }
         return $phone;
@@ -175,7 +175,7 @@ class CMS
         }
     }
 
-    public static function processImage($size = false, $filename, $uploadAlias, $options = [])
+    public static function processImage($size = false, $filename = 'file.jpg', $uploadAlias = '@uploads', $options = [])
     {
         $dirName = basename($uploadAlias);
         $thumbPath = Yii::getAlias("@app/web/assets/{$dirName}");
@@ -198,7 +198,7 @@ class CMS
         $sizes = explode('x', $size);
 
 
-        if(!is_file($fullPath)){
+        if (!is_file($fullPath)) {
             return false;
         }
 
@@ -253,11 +253,10 @@ class CMS
         }
 
 
-
         if (!$size) {
-            return "/assets/{$dirName}/" . $filename."?r=".$hash;
+            return "/assets/{$dirName}/" . $filename . "?r=" . $hash;
         } else {
-            return "/assets/{$dirName}/{$size}/" . $filename."?r=".$hash;
+            return "/assets/{$dirName}/{$size}/" . $filename . "?r=" . $hash;
         }
 
     }
@@ -827,9 +826,9 @@ class CMS
             return Yii::$app->formatter->{$fn}($timestamp);
 
         } else {
-            if($time) {
+            if ($time) {
                 $timestamp = date('Y-m-d H:i:s', $timestamp);
-            }else{
+            } else {
                 $timestamp = date('Y-m-d', $timestamp);
             }
             $fn = ($time) ? 'datetimeFormat' : 'dateFormat';
@@ -1013,8 +1012,9 @@ class CMS
         }
         return false;
     }
-    
-    public static function fakeImage($savePath, $size='100x100', $text=false, $bg='ccc', $fg='333'){
+
+    public static function fakeImage($savePath, $size = '100x100', $text = false, $bg = 'ccc', $fg = '333')
+    {
         $request = Yii::$app->request;
         // Dimensions
         //$getsize = ($request->get('size')) ? $request->get('size') : '100x100';
@@ -1069,8 +1069,8 @@ class CMS
 
         imagettftext($image, $fontsize - $padding, 0, ($dimensions[0] / 2) - (($textBoundingBox[2] - $textBoundingBox[0]) / 2), ($dimensions[1] / 2) - (($textBoundingBox[1] + $textBoundingBox[7]) / 2), $setfg, $font, $text);
 
-        $filename = CMS::gen(10).'.png';
-        imagepng($image, $savePath.'/'.$filename);
+        $filename = CMS::gen(10) . '.png';
+        imagepng($image, $savePath . '/' . $filename);
 
         return $filename;
     }
