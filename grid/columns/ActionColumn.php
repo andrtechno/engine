@@ -156,7 +156,7 @@ class ActionColumn extends DataColumn
                 });
 				return false;
             });
-            $(document).on('click','#columnsModal button',function(e){
+            $(document).on('click','#columnsModal .modal-footer button',function(e){
                 var form = $('#columnsModal form').serialize();
                 var ps = parseInt($('#pageSize').val());
                 var valid = true;
