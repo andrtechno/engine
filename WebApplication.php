@@ -60,7 +60,7 @@ class WebApplication extends Application
 
     public function init()
     {
-        $this->setEngineModules();
+        //$this->setEngineModules();
         foreach ($this->getModules() as $id => $module) {
             if (isset($module['class'])) {
                 $reflectionClass = new \ReflectionClass($module['class']);
@@ -71,14 +71,14 @@ class WebApplication extends Application
 
             }
         }
-        $modulesList = array_filter(glob(Yii::getAlias('@app/modules/*')), 'is_dir');
+        /*$modulesList = array_filter(glob(Yii::getAlias('@app/modules/*')), 'is_dir');
         foreach ($modulesList as $module) {
             $id = basename($module);
             $this->setAliases([
                 '@' . $id => realpath(Yii::getAlias("@app/modules/{$id}")),
             ]);
             $this->registerTranslations($id);
-        }
+        }*/
 
         parent::init();
     }
