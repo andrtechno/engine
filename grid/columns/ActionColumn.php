@@ -158,15 +158,30 @@ class ActionColumn extends DataColumn
             });
             $(document).on('click','#columnsModal button',function(e){
                 var form = $('#columnsModal form').serialize();
-                $.ajax({
-                    url:'" . $this->editColumnsUrl . "',
-                    type:'POST',
-                    data:form,
-                    success:function(){
-                        modalColumns.modal('hide');
-                        $.pjax.reload('#pjax-" . $this->grid->id . "', {timeout: false});
-                    }
-                });
+                var ps = parseInt($('#pageSize').val());
+                var valid = true;
+
+                if(!ps){
+                    valid=false;
+                    $('#pageSize').addClass('is-invalid');
+                    $('#pageSize-error').html('".Yii::t('yii','{attribute} must be an integer.',['attribute'=>''])."');
+                }
+                if($('#pageSize').val() === ''){
+                    valid=true;
+                }
+                if(valid){
+                    $('#pageSize').removeClass('is-invalid');
+                    $('#pageSize-error').html('');
+                    $.ajax({
+                        url:'" . $this->editColumnsUrl . "',
+                        type:'POST',
+                        data:form,
+                        success:function(){
+                            modalColumns.modal('hide');
+                            $.pjax.reload('#pjax-" . $this->grid->id . "', {timeout: false});
+                        }
+                    });
+                }
             });
         });
         ", View::POS_END, 'edit-columns_modal');
