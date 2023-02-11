@@ -44,12 +44,12 @@ class ActionColumn extends DataColumn
         // if (!$this->pjax) {
         //    $this->pjax = '#pjax-container';
         //}
-$gid = $this->grid->id;
+        $gid = $this->grid->id;
         if ($this->filter) {
             if (isset(($this->grid->dataProvider)->query) && $this->enableEditColumns) {
                 if (method_exists(($this->grid->dataProvider)->query->modelClass, 'getGridColumns')) {
 
-                    $items[] = [
+                    /*$items[] = [
                         'label' => Html::icon('table') . ' ' . Yii::t('app/admin', 'EDIT_GRID_COLUMNS'),
                         'url' => $this->editColumnsUrl,
                         'linkOptions' => [
@@ -60,8 +60,20 @@ $gid = $this->grid->id;
                             // 'data-model' => (isset($this->grid->dataProvider->query))?$this->grid->dataProvider->query->modelClass:'s',
                             // 'data-pjax-id' => 'pjax-' . strtolower(basename($this->grid->dataProvider->query->modelClass)),
                         ]
+                    ];*/
+                    $items[] = [
+                        'label' => Html::icon('table') . ' ' . Yii::t('app/admin', 'EDIT_GRID_COLUMNS'),
+                        'url' => $this->editColumnsUrl,
+                        'linkOptions' => [
+                            'data-target' => "#columnsModal",
+                            'data-toggle' => "modal",
+                            'class' => 'dropdown-item edit-columns',
+                            'data-pjax' => '0',
+                            'data-grid-id' => $this->grid->id,
+                            // 'data-model' => (isset($this->grid->dataProvider->query))?$this->grid->dataProvider->query->modelClass:'s',
+                            // 'data-pjax-id' => 'pjax-' . strtolower(basename($this->grid->dataProvider->query->modelClass)),
+                        ]
                     ];
-
                 }
             }
             $items[] = [
@@ -95,7 +107,7 @@ $gid = $this->grid->id;
 
 
         $view = $this->grid->getView();
-
+        echo $view->render('@vendor/panix/engine/grid/_modal', []);
 
         /*$view->registerJs("
                             $(document).on('click','.delete',function(e){
@@ -117,12 +129,15 @@ $gid = $this->grid->id;
         if (isset(($this->grid->dataProvider)->query)) {
             $classNamePath = '/' . implode('/', explode('\\', ($this->grid->dataProvider)->query->modelClass));
 
+
             $view->registerJs("
         $(function() {
-
+            var modalColumns = $('#columnsModal');
+            modalColumns.on('hidden.bs.modal', function (event) {
+                $('#columnsModal .modal-body').html('');
+            });
             $('.edit-columns').on('click',function(e){
                 e.preventDefault();
-
                 $.ajax({
                     type:'POST',
                     url:$(this).attr('href'),
@@ -130,49 +145,32 @@ $gid = $this->grid->id;
                         grid_id:$(this).data('grid-id'),
                         model:'" . $classNamePath . "',
                     },
+                    beforeSend:function(){
+                        modalColumns.modal('show');
+                        modalColumns.addClass('pjax-loading');
+                    },
                     success:function(data){
-                        
-                        $('#edit-columns_dialog').html(data);
-                        $('#edit-columns_dialog').dialog('open');
+                        $('#columnsModal .modal-body').html(data);
+                        modalColumns.removeClass('pjax-loading');
                     }
                 });
 				return false;
             });
-                    
+            $(document).on('click','#columnsModal button',function(e){
+                var form = $('#columnsModal form').serialize();
+                $.ajax({
+                    url:'" . $this->editColumnsUrl . "',
+                    type:'POST',
+                    data:form,
+                    success:function(){
+                        modalColumns.modal('hide');
+                        $.pjax.reload('#pjax-" . $this->grid->id . "', {timeout: false});
+                    }
+                });
+            });
         });
-        ", View::POS_END, 'edit-columns_dialog');
+        ", View::POS_END, 'edit-columns_modal');
 
-
-            echo \panix\engine\jui\Dialog::widget([
-                'id' => 'edit-columns_dialog',
-                'clientOptions' => [
-                    'modal' => true,
-                    'autoOpen' => false,
-                    'draggable' => false,
-                    'resizable' => false,
-                    'dialogClass' => 'edit-columns_dialog',
-                    'width' => '50%',
-                    'title' => Yii::t('app/admin', 'EDIT_GRID_COLUMNS'),
-                    'buttons' => [
-                        [
-                            'text' => "Ok",
-                            'class' => "ui-button",
-                            'click' => new JsExpression("function(){
-                                var form = $('#edit_grid_columns_form').serialize();
-                                $.ajax({
-                                    url:'" . $this->editColumnsUrl . "',
-                                    type:'POST',
-                                    data:form,
-                                    success:function(){
-                                        $('#edit-columns_dialog').dialog('close').remove()
-                                        $.pjax.reload('#" . $this->grid->id . "', {timeout: false});
-                                    }
-                                });
-                            }")
-                        ]
-                    ]
-                ]
-            ]);
         }
     }
 
