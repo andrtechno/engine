@@ -20,12 +20,39 @@ class WebApplication extends Application
 
     const version = '2.0.0-alpha';
     public $counters = [];
+    private $_findMenu = [];
 
     public function run()
     {
 
         $langManager = $this->languageManager;
         $this->language = (isset($langManager->default->code)) ? $langManager->default->code : $this->language;
+
+
+        $result = [];
+        $modules = $this->getModules();
+        foreach ($modules as $mid => $module) {
+            if (method_exists($module, 'getAdminMenu')) {
+                $result = ArrayHelper::merge($result, $module->getAdminMenu());
+            }
+        }
+
+        $resultFinish = [];
+        foreach ($result as $mid => $res) {
+            $resultFinish[$mid] = $res;
+            if (isset($res['items'])) {
+                foreach ($res['items'] as $k => $item) {
+                    if (isset($item['visible'])) {
+                        if (!$item['visible']) {
+                            unset($resultFinish[$mid]['items'][$k]);
+                        }
+                    }
+                }
+            }
+        }
+        $this->_findMenu = $resultFinish;
+
+
         return parent::run();
     }
 
@@ -43,6 +70,13 @@ class WebApplication extends Application
         }
 
         return $result;
+    }
+
+
+    public function getFindMenu()
+    {
+        return $this->_findMenu;
+
     }
 
     public static function powered()
@@ -128,7 +162,7 @@ class WebApplication extends Application
             'basePath' => $path,
             'fileMap' => $this->getTranslationsFileMap($id, $path)
         ];
-        $this->i18n->translations = ArrayHelper::merge($translations,$this->i18n->translations);
+        $this->i18n->translations = ArrayHelper::merge($translations, $this->i18n->translations);
     }
 
     /**
