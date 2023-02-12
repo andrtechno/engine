@@ -3,7 +3,8 @@
 namespace panix\engine\controllers;
 
 use Yii;
-use yii\web\Controller;
+use yii\helpers\Url;
+use yii\rest\Controller;
 
 /**
  * Class ApiController
@@ -49,12 +50,17 @@ class ApiController extends Controller
             $message = $exception->getMessage();
 
             return $this->asJson([
-                'success'=>false,
+                'success' => false,
                 'status' => $statusCode,
                 'name' => $name,
                 'message' => $message
             ]);
         }
+    }
+
+    public function actionIndex()
+    {
+        return $this->asJson(['success' => true]);
     }
 
 }

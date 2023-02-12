@@ -2,6 +2,7 @@
 
 namespace panix\engine;
 
+use panix\engine\controllers\AdminController;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Application;
@@ -36,6 +37,7 @@ class WebApplication extends Application
                 $result = ArrayHelper::merge($result, $module->getAdminMenu());
             }
         }
+
 
         $resultFinish = [];
         foreach ($result as $mid => $res) {
