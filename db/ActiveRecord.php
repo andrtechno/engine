@@ -272,12 +272,12 @@ class ActiveRecord extends \yii\db\ActiveRecord
                         ]
                     ];
                 } else {
-                    $b['timestamp'] = [
+                    /*$b['timestamp'] = [
                         'class' => TimestampBehavior::class,
                         'attributes' => [
                             ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
                         ]
-                    ];
+                    ];*/
                 }
             }
 
