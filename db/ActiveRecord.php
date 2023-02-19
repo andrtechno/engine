@@ -42,7 +42,6 @@ class ActiveRecord extends \yii\db\ActiveRecord
     const route = null;
     const MODULE_ID = null;
     public $translationClass;
-    private $_microtime;
     //  public $translationOptions;
     protected $_hash;
 
@@ -72,7 +71,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }
 
         foreach ($array as $column) {
-            if(isset($col[$column]))
+            if (isset($col[$column]))
                 $result[] = $col[$column];
         }
 
@@ -152,11 +151,6 @@ class ActiveRecord extends \yii\db\ActiveRecord
      */
     public function beforeSave($insert)
     {
-        $logMessage = "    > " . ($this->getIsNewRecord() ? 'insert' : 'update') . " into " . get_class($this) . " ...";
-        $this->_microtime = microtime(true);
-        if (Yii::$app instanceof ConsoleApplication) {
-          //  echo $logMessage;
-        }
         $columns = $this->tableSchema->columns;
         //if (parent::beforeSave($insert)) {
         //create
@@ -180,6 +174,16 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 }
             }*/
         }
+
+
+        /*//Для теста изменение дата добавления
+        if (isset($this->behaviors['timestamp'])) {
+            $createdAt = $this->behaviors['timestamp']->createdAtAttribute;
+            if (isset($this->{$createdAt})) {
+                $this->created_at = 1676711113;
+            }
+        }*/
+
         return parent::beforeSave($insert);
     }
 
@@ -189,8 +193,6 @@ class ActiveRecord extends \yii\db\ActiveRecord
      */
     public function afterSave($insert, $changedAttributes)
     {
-
-
         if (isset($this->behaviors['timestamp'])) {
             $updatedAt = $this->behaviors['timestamp']->updatedAtAttribute;
             if (isset($this->{$updatedAt})) {
@@ -199,18 +201,6 @@ class ActiveRecord extends \yii\db\ActiveRecord
         }
 
         parent::afterSave($insert, $changedAttributes);
-       // $logMessage = ' done (time: ' . sprintf('%.3f', microtime(true) - $this->_microtime) . "s)\n";
-        if (Yii::$app instanceof ConsoleApplication) {
-        //    echo ' done (time: ' . sprintf('%.3f', microtime(true) - $this->_microtime) . "s)\n";
-        }
-        if ($insert) {
-            //  Yii::$app->session->setFlash('success', Yii::t('app/default', 'SUCCESS_SAVE'));
-        } else {
-            //  Yii::$app->session->setFlash('success', Yii::t('app/default', 'SUCCESS_UPDATE'));
-        }
-
-
-        //Yii::debug($logMessage, __CLASS__);
     }
 
     /**
@@ -219,8 +209,6 @@ class ActiveRecord extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         $attrLabels = [];
-
-
         if (isset($this->behaviors['translate'])) {
             if (isset($this->behaviors['translate']->translationAttributes)) {
                 foreach ($this->behaviors['translate']->translationAttributes as $attr) {
@@ -263,22 +251,16 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 ];
             }
             if (isset($columns['created_at']) && isset($columns['updated_at'])) {
-                if ($this->isNewRecord) {
-                    $b['timestamp'] = [
-                        'class' => TimestampBehavior::class,
-                        'attributes' => [
-                            ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
-                            ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'], //TODO могут быть проблемы при редактирование даты
-                        ]
-                    ];
-                } else {
-                    /*$b['timestamp'] = [
-                        'class' => TimestampBehavior::class,
-                        'attributes' => [
-                            ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
-                        ]
-                    ];*/
+
+                $timestampAttributes[ActiveRecord::EVENT_BEFORE_UPDATE]='updated_at';
+                $timestampAttributes[ActiveRecord::EVENT_BEFORE_INSERT]=['created_at', 'updated_at'];
+                if($this->isNewRecord && $this->created_at){ //Если елемент новый и дата указана,то устанавливаем ее
+                    $timestampAttributes[ActiveRecord::EVENT_BEFORE_INSERT]=['updated_at'];
                 }
+                $b['timestamp'] = [
+                    'class' => TimestampBehavior::class,
+                    'attributes' => $timestampAttributes
+                ];
             }
 
 
@@ -468,7 +450,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 'pagination' => new Pagination([
                     'totalCount' => $pageCount,
                     'pageSize' => 1,
-                    'pageParam'=>'page_break',
+                    'pageParam' => 'page_break',
                     'defaultPageSize' => 1,
                 ]),
             ]);;
