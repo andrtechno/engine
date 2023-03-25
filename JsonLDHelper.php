@@ -38,16 +38,17 @@ class JsonLDHelper extends BaseObject
         $doc["http://schema.org/sku"] = $model->sku;
         $doc["http://schema.org/description"] = $model->full_description;
         $doc["http://schema.org/name"] = $model->name;
-        if ($model->manufacturer_id) {
-            if ($model->manufacturer) {
+        if ($model->brand_id) {
+            if ($model->brand) {
                 $doc["http://schema.org/brand"] = (object)[
                     "@type" => "Brand",
-                    "http://schema.org/name" => $model->manufacturer->name
+                    "http://schema.org/name" => $model->brand->name
                 ];
             }
         }
-        foreach ($model->getImages() as $image) {
-            $doc["http://schema.org/image"][] = Url::to($image->getUrlToOrigin(), true);
+        foreach ($model->images as $image) {
+            $original = $image->get(false, ['watermark' => false]);
+            $doc["http://schema.org/image"][] = Url::to($original, true);
         }
         $doc["http://schema.org/aggregateRating"] = (object)[
             "@type" => "AggregateRating",
