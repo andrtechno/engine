@@ -52,7 +52,7 @@ class ManagerLanguage extends Component
                 /** @var Languages $lang */
                 $this->_languages[$lang->code] = $lang;
 
-                if ($lang->is_default === 1) {
+                if ($lang->is_default) {
                     $this->_default = $lang->code;
                 }
             }
