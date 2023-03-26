@@ -109,7 +109,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
     public static function findModel($id, $message = null)
     {
 
-        if (($model = static::findOne($id)) !== null) {
+        if (($model = static::findOne((int)$id)) !== null) {
             //if (($model = static::find()->one((int)$id)) !== null) {
             return $model;
         } else {
