@@ -129,62 +129,63 @@ class ActionColumn extends DataColumn
         if (isset(($this->grid->dataProvider)->query)) {
             $classNamePath = '/' . implode('/', explode('\\', ($this->grid->dataProvider)->query->modelClass));
 
-
-            $view->registerJs("
-        $(function() {
-            var modalColumns = $('#columnsModal');
-            modalColumns.on('hidden.bs.modal', function (event) {
-                $('#columnsModal .modal-body').html('');
-            });
-            $('.edit-columns').on('click',function(e){
-                e.preventDefault();
-                $.ajax({
-                    type:'POST',
-                    url:$(this).attr('href'),
-                    data:{
-                        grid_id:$(this).data('grid-id'),
-                        model:'" . $classNamePath . "',
-                    },
-                    beforeSend:function(){
-                        modalColumns.modal('show');
-                        modalColumns.addClass('pjax-loading');
-                    },
-                    success:function(data){
-                        $('#columnsModal .modal-body').html(data);
-                        modalColumns.removeClass('pjax-loading');
+            if (!Yii::$app->request->isPjax) {
+                $view->registerJs("
+                var modalColumns = $('#columnsModal');
+                $(document).on('click','#columnsModal .modal-footer button',function(e){
+                    var form = $('#columnsModal form').serialize();
+                    var ps = parseInt($('#pageSize').val());
+                    var valid = true;
+    
+                    if(!ps){
+                        valid=false;
+                        $('#pageSize').addClass('is-invalid');
+                        $('#pageSize-error').html('" . Yii::t('yii', '{attribute} must be an integer.', ['attribute' => '']) . "');
                     }
-                });
-				return false;
-            });
-            $(document).on('click','#columnsModal .modal-footer button',function(e){
-                var form = $('#columnsModal form').serialize();
-                var ps = parseInt($('#pageSize').val());
-                var valid = true;
+                    if($('#pageSize').val() === ''){
+                        valid=true;
+                    }
+                    if(valid){
+                        $('#pageSize').removeClass('is-invalid');
+                        $('#pageSize-error').html('');
+                        $.ajax({
+                            url:'" . $this->editColumnsUrl . "',
+                            type:'POST',
+                            data:form,
+                            success:function(){
+                                modalColumns.modal('hide');
+                                $.pjax.reload('#pjax-" . $this->grid->id . "', {timeout: false});
+                            }
+                        });
+                    }
+                });", View::POS_END, 'edit-columns_pjax');
 
-                if(!ps){
-                    valid=false;
-                    $('#pageSize').addClass('is-invalid');
-                    $('#pageSize-error').html('".Yii::t('yii','{attribute} must be an integer.',['attribute'=>''])."');
-                }
-                if($('#pageSize').val() === ''){
-                    valid=true;
-                }
-                if(valid){
-                    $('#pageSize').removeClass('is-invalid');
-                    $('#pageSize-error').html('');
+
+            }
+            $view->registerJs("
+                modalColumns.on('hidden.bs.modal', function (event) {
+                    $('#columnsModal .modal-body').html('');
+                });
+                $('.edit-columns').on('click',function(e){
+                    e.preventDefault();
                     $.ajax({
-                        url:'" . $this->editColumnsUrl . "',
                         type:'POST',
-                        data:form,
-                        success:function(){
-                            modalColumns.modal('hide');
-                            $.pjax.reload('#pjax-" . $this->grid->id . "', {timeout: false});
+                        url:$(this).attr('href'),
+                        data:{
+                            grid_id:$(this).data('grid-id'),
+                            model:'" . $classNamePath . "',
+                        },
+                        beforeSend:function(){
+                            modalColumns.modal('show');
+                            modalColumns.addClass('pjax-loading');
+                        },
+                        success:function(data){
+                            $('#columnsModal .modal-body').html(data);
+                            modalColumns.removeClass('pjax-loading');
                         }
                     });
-                }
-            });
-        });
-        ", View::POS_END, 'edit-columns_modal');
+                    return false;
+                });", View::POS_END, 'edit-columns_modal');
 
         }
     }
