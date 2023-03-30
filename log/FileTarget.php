@@ -63,7 +63,11 @@ class FileTarget extends BaseFileTarget
 
     public function init()
     {
-
+        if (strpos($this->logFile, '@') === false) {
+            $date = new \DateTime(date('Y-m-d', time()), new \DateTimeZone('Europe/Kiev'));
+            $date = $date->format('Y-m-d');
+            $this->logFile = '@runtime/logs/' . $date . '/' . Yii::$app->id . '/' . $this->logFile;
+        }
         parent::init();
         if (Yii::$app->id != 'console') {
             if (Yii::$app->request->isPjax || Yii::$app->request->isPjax) {
