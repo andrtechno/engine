@@ -133,7 +133,6 @@ class ActionColumn extends DataColumn
                 $view->registerJs("
                 var modalColumns = $('#columnsModal');
                 $(document).on('click','#columnsModal .modal-footer button',function(e){
-                    var form = $('#columnsModal form').serialize();
                     var ps = parseInt($('#pageSize').val());
                     var valid = true;
     
@@ -149,9 +148,9 @@ class ActionColumn extends DataColumn
                         $('#pageSize').removeClass('is-invalid');
                         $('#pageSize-error').html('');
                         $.ajax({
-                            url:'" . $this->editColumnsUrl . "',
-                            type:'POST',
-                            data:form,
+                            url: '" . $this->editColumnsUrl . "',
+                            type: 'POST',
+                            data: modalColumns.find('form').serialize(),
                             success:function(){
                                 modalColumns.modal('hide');
                                 $.pjax.reload('#pjax-" . $this->grid->id . "', {timeout: false});
@@ -159,31 +158,35 @@ class ActionColumn extends DataColumn
                         });
                     }
                 });", View::POS_END, 'edit-columns_pjax');
-
-
             }
+
             $view->registerJs("
                 modalColumns.on('hidden.bs.modal', function (event) {
-                    $('#columnsModal .modal-body').html('');
+                    //$('#columnsModal .modal-body').html('');
                 });
                 $('.edit-columns').on('click',function(e){
                     e.preventDefault();
-                    $.ajax({
-                        type:'POST',
-                        url:$(this).attr('href'),
-                        data:{
-                            grid_id:$(this).data('grid-id'),
-                            model:'" . $classNamePath . "',
-                        },
-                        beforeSend:function(){
-                            modalColumns.modal('show');
-                            modalColumns.addClass('pjax-loading');
-                        },
-                        success:function(data){
-                            $('#columnsModal .modal-body').html(data);
-                            modalColumns.removeClass('pjax-loading');
-                        }
-                    });
+                    var isHtml = $.trim($('#columnsModal .modal-body').html());
+                    if(!isHtml){
+                        $.ajax({
+                            type:'POST',
+                            url:$(this).attr('href'),
+                            data:{
+                                grid_id:$(this).data('grid-id'),
+                                model:'" . $classNamePath . "',
+                            },
+                            beforeSend:function(){
+                                modalColumns.modal('show');
+                                modalColumns.addClass('pjax-loading');
+                            },
+                            success:function(data){
+                                $('#columnsModal .modal-body').html(data);
+                                modalColumns.removeClass('pjax-loading');
+                            }
+                        });
+                    }else{
+                        modalColumns.modal('show');
+                    }
                     return false;
                 });", View::POS_END, 'edit-columns_modal');
 
