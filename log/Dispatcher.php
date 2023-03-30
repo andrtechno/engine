@@ -20,16 +20,11 @@ class Dispatcher extends \yii\log\Dispatcher
     public function init()
     {
         $config = Yii::$app->settings->get('logs');
-        $date = new \DateTime(date('Y-m-d', time()), new \DateTimeZone('Europe/Kiev'));
-        $date = $date->format('Y-m-d');
-        $logPath = '@runtime/logs/' . $date . '/' . Yii::$app->id;
-
-
         $this->targets[] = [
             'class' => 'panix\engine\log\FileTarget',
             'levels' => ['error', 'warning'],
             'categories' => ['yii\db\*'],
-            'logFile' => $logPath . '/db_error.log',
+            'logFile' => 'db_error.log',
         ];
         if (isset($config->query_execute)) {
             $this->targets[] = [
@@ -40,7 +35,7 @@ class Dispatcher extends \yii\log\Dispatcher
                     'yii\db\Command::execute'
                 ],
                 'logVars' => [],
-                'logFile' => $logPath . '/db_execute.log',
+                'logFile' => 'db_execute.log',
 
                 'except' => [
                     'yii\db\Connection::open',
@@ -61,7 +56,7 @@ class Dispatcher extends \yii\log\Dispatcher
                     'yii\db\Command::query',
                 ],
                 'logVars' => [],
-                'logFile' => $logPath . '/db_query.log',
+                'logFile' => 'db_query.log',
 
                 'except' => [
                     'yii\db\Connection::open',
@@ -77,7 +72,7 @@ class Dispatcher extends \yii\log\Dispatcher
             'class' => 'panix\engine\log\FileTarget',
             'levels' => ['info'],
             'enabled' => YII_DEBUG,
-            'logFile' => $logPath . '/info.log',
+            'logFile' => 'info.log',
             //'logVars' => [],
             'except' => [
                 'yii\db\Command::query',
@@ -95,7 +90,7 @@ class Dispatcher extends \yii\log\Dispatcher
             'class' => 'panix\engine\log\FileTarget',
             'levels' => ['info'],
             'logVars' => [],
-            'logFile' => $logPath . '/mail.log',
+            'logFile' => 'mail.log',
             'categories' => [
                 'yii\mail\BaseMailer::send',
             ],
@@ -105,7 +100,7 @@ class Dispatcher extends \yii\log\Dispatcher
             'class' => 'panix\engine\log\FileTarget',
             'levels' => ['profile'],
             'enabled' => YII_DEBUG,
-            'logFile' => $logPath . '/profile.log',
+            'logFile' => 'profile.log',
             'except' => [
                 'yii\db\Command::query',
                 'yii\db\Command::execute',
@@ -117,7 +112,7 @@ class Dispatcher extends \yii\log\Dispatcher
             'class' => 'panix\engine\log\FileTarget',
             'levels' => ['info'],
             'enabled' => YII_DEBUG,
-            'logFile' => $logPath . '/httpclient.log',
+            'logFile' => 'httpclient.log',
             'categories' => [
                 'yii\httpclient\StreamTransport::send',
             ],
@@ -146,7 +141,7 @@ class Dispatcher extends \yii\log\Dispatcher
         $this->targets[] = [
             'class' => 'panix\engine\log\FileTarget',
             'levels' => ['error'],
-            'logFile' => $logPath . '/error.log',
+            'logFile' => 'error.log',
             'except' => [
                 'yii\web\HttpException:404',
                 'yii\web\HttpException:403',
@@ -157,11 +152,9 @@ class Dispatcher extends \yii\log\Dispatcher
         $this->targets[] = [
             'class' => 'panix\engine\log\FileTarget',
             'levels' => ['warning'],
-            'logFile' => $logPath . '/warning.log',
+            'logFile' => 'warning.log',
         ];
 
         parent::init();
-
-
     }
 }
