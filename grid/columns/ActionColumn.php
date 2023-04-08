@@ -218,7 +218,8 @@ class ActionColumn extends DataColumn
                                 }
 
                                 $switch_data = $model->switch ? 0 : 1;
-                                return Html::a(Html::icon($icon), Url::toRoute(['switch', 'id' => $model->primaryKey, 'value' => $switch_data]), [
+                                $url['value']=$switch_data;
+                                return Html::a(Html::icon($icon), Url::toRoute($url), [
                                     'title' => Yii::t('app/default', 'GRID_SWITCH'),
                                     'class' => 'd-flex align-items-center btn ' . $this->btnSize . ' ' . $class . ' switch', //linkTarget
                                     'data-pjax' => 0,
