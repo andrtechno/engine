@@ -15,7 +15,7 @@ class Mailer extends \yii\swiftmailer\Mailer
             if (strpos($config->mailer_transport_smtp_username, '@') !== false) {
                 $sender = $config->mailer_transport_smtp_username;
             } else {
-                $host = (Yii::$app instanceof ConsoleApplication) ? "noHost" : Yii::$app->request->getHostName();
+                $host = (Yii::$app instanceof ConsoleApplication) ? "noHost" : str_replace('www.', '', Yii::$app->request->getHostName());
                 $sender = 'no-reply@' . $host;
             }
             $this->messageConfig['from'] = [$sender => (!empty($config->mailer_sender_name)) ? $config->mailer_sender_name : $config->sitename];
