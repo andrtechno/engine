@@ -10,14 +10,11 @@ class LeafletAsset extends AssetBundle
     public $sourcePath = '@npm/leaflet/dist';
 
     public $js = [
-        'leaflet.js',
+        'Leaflet.js',
     ];
 
     public $css = [
         'leaflet.css',
     ];
 
-    public $depends = [
-       // 'panix\engine\assets\NumberFormatAsset',
-    ];
 }
