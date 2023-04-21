@@ -49,7 +49,7 @@ common.notify = function (text, type, params = {}) {
 };
 common.url = function (url) {
     if (common.language_default !== common.language) {
-        return common.language + '/' + url;
+        return '/' + common.language + url;
     }
     return url;
 };
