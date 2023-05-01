@@ -52,7 +52,7 @@ class MoveNodeAction extends Action
                 $node->moveAsFirst($target);
 
 
-            $node->rebuildFullPath();
+            $node->rebuildFullPath(false);
             $node->saveNode(false);
 
 
