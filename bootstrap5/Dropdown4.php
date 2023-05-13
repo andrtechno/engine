@@ -1,6 +1,6 @@
 <?php
 
-namespace panix\engine\bootstrap;
+namespace panix\engine\bootstrap5;
 
 use yii\base\InvalidConfigException;
 use panix\engine\Html;
@@ -21,7 +21,8 @@ class Dropdown4 extends \yii\bootstrap5\Dropdown {
     /**
      * @inherit doc
      */
-    protected function renderItems($items, $options = []) {
+    protected function renderItems(array $items, array $options = []): string
+    {
         $lines = [];
         foreach ($items as $i => $item) {
             if (isset($item['visible']) && !$item['visible']) {

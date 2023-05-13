@@ -7,7 +7,7 @@ use Closure;
 use yii\web\View;
 use yii\grid\CheckboxColumn as BaseCheckboxColumn;
 use panix\engine\Html;
-use panix\engine\bootstrap\ButtonDropdown;
+use panix\engine\bootstrap5\ButtonDropdown;
 
 /**
  * Class CheckboxColumn

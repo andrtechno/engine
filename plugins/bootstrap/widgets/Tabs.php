@@ -2,7 +2,7 @@
 namespace panix\engine\plugins\bootstrap\widgets;
 
 use panix\mod\plugins\helpers\ShortcodesHelper;
-use yii\bootstrap4\Tabs as BootstrapTabs;
+use yii\bootstrap5\Tabs as BootstrapTabs;
 use yii\helpers\ArrayHelper;
 
 /**

@@ -7,7 +7,7 @@ use panix\engine\db\ActiveRecord;
 use Yii;
 use Closure;
 use yii\helpers\Url;
-use panix\engine\bootstrap\ButtonDropdown;
+use panix\engine\bootstrap5\ButtonDropdown;
 use panix\engine\Html;
 use yii\web\JsExpression;
 use yii\grid\DataColumn;
@@ -90,7 +90,7 @@ class ActionColumn extends DataColumn
             $this->filter = ButtonDropdown::widget([
                 'label' => Html::icon('settings'),
                 'encodeLabel' => false,
-                'dropdownClass' => 'panix\engine\bootstrap\Dropdown4',
+                'dropdownClass' => 'panix\engine\bootstrap5\Dropdown4',
                 //'containerOptions' => ['class' => '', 'id' => 'grid-settings'],
                 'buttonOptions' => ['class' => 'btn-sm btn-secondary'],
                 'dropdown' => [

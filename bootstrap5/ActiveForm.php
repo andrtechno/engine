@@ -1,6 +1,6 @@
 <?php
 
-namespace panix\engine\bootstrap;
+namespace panix\engine\bootstrap5;
 
 use yii\base\InvalidCallException;
 use yii\helpers\ArrayHelper;

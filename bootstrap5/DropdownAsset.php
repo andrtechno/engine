@@ -1,6 +1,6 @@
 <?php
 
-namespace panix\engine\bootstrap;
+namespace panix\engine\bootstrap5;
 
 class DropdownAsset extends \panix\engine\web\AssetBundle {
 

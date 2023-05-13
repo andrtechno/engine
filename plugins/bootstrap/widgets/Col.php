@@ -2,7 +2,7 @@
 
 namespace panix\engine\plugins\bootstrap\widgets;
 
-use yii\bootstrap4\Html;
+use yii\bootstrap5\Html;
 
 /**
  * Class Col

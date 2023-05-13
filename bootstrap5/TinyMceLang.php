@@ -1,6 +1,6 @@
 <?php
 
-namespace panix\engine\bootstrap;
+namespace panix\engine\bootstrap5;
 
 use panix\engine\CMS;
 use Yii;

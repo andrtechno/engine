@@ -1,6 +1,6 @@
 <?php
 
-namespace panix\engine\bootstrap;
+namespace panix\engine\bootstrap5;
 
 use yii\base\InvalidConfigException;
 use panix\engine\Html;
