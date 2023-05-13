@@ -62,7 +62,7 @@ class ActionColumn extends DataColumn
                         ]
                     ];*/
                     $items[] = [
-                        'label' => Html::icon('table') . ' ' . Yii::t('app/admin', 'EDIT_GRID_COLUMNS'),
+                        'label' => Html::icon('fad fa-table') . ' ' . Yii::t('app/admin', 'EDIT_GRID_COLUMNS'),
                         'url' => $this->editColumnsUrl,
                         'linkOptions' => [
                             'data-target' => "#columnsModal",
@@ -77,7 +77,7 @@ class ActionColumn extends DataColumn
                 }
             }
             $items[] = [
-                'label' => Html::icon('refresh') . ' ' . Yii::t('app/default', 'REFRESH'),
+                'label' => Html::icon('fad fa-refresh') . ' ' . Yii::t('app/default', 'REFRESH'),
                 'url' => '#',
                 'linkOptions' => [
                     'class' => 'dropdown-item',
@@ -88,7 +88,7 @@ class ActionColumn extends DataColumn
             ];
 
             $this->filter = ButtonDropdown::widget([
-                'label' => Html::icon('settings'),
+                'label' => Html::icon('fad fa-cog'),
                 'encodeLabel' => false,
                 'dropdownClass' => 'panix\engine\bootstrap5\Dropdown4',
                 //'containerOptions' => ['class' => '', 'id' => 'grid-settings'],
@@ -210,10 +210,10 @@ class ActionColumn extends DataColumn
                         if (!in_array($model->primaryKey, $model->disallow_switch)) {
                             if (isset($model->switch)) {
                                 if ($model->switch) {
-                                    $icon = 'eye';
+                                    $icon = 'fad fa-eye';
                                     $class = 'btn-outline-success';
                                 } else {
-                                    $icon = 'eye-close';
+                                    $icon = 'fad fa-eye-slash';
                                     $class = 'btn-outline-secondary';
                                 }
 
@@ -249,14 +249,14 @@ class ActionColumn extends DataColumn
                     /** @var $model ActiveRecord */
                     if (isset($model->primaryKey) && isset($model->disallow_update)) {
                         if (!in_array($model->primaryKey, $model->disallow_update)) {
-                            return Html::a(Html::icon('edit'), $url, [
+                            return Html::a(Html::icon('fad fa-edit'), $url, [
                                 'title' => Yii::t('yii', 'Update'),
                                 'class' => 'd-flex align-items-center btn ' . $this->btnSize . ' btn-outline-secondary',
                                 'data-pjax' => 0,
                             ]);
                         }
                     } else {
-                        return Html::a(Html::icon('edit'), $url, [
+                        return Html::a(Html::icon('fad fa-edit'), $url, [
                             'title' => Yii::t('yii', 'Update'),
                             'class' => 'd-flex align-items-center btn ' . $this->btnSize . ' btn-outline-secondary',
                             'data-pjax' => 0,
@@ -319,7 +319,7 @@ class ActionColumn extends DataColumn
                                 });", View::POS_END, 'delete');
 
 
-                            return Html::a(Html::icon('delete'), $url, [
+                            return Html::a(Html::icon('icon-delete'), $url, [
                                 'title' => Yii::t('yii', 'Delete'),
                                 'aria-label' => Yii::t('yii', 'Delete'),
                                 'data-pjax' => '0',

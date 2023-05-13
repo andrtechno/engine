@@ -106,9 +106,9 @@ class Html extends \yii\helpers\Html
     public static function icon($icon, $options = [])
     {
         if (isset($options['class'])) {
-            $options['class'] .= ' ' . self::$iconPrefix . $icon;
+            $options['class'] .= ' ' . $icon;
         }
-        return parent::tag('i', '', array_merge(['class' => self::$iconPrefix . $icon], $options));
+        return parent::tag('i', '', array_merge(['class' => $icon], $options));
     }
 
     public static function aIconL($icon, $text, $url = null, $options = [])
