@@ -78,7 +78,11 @@ class TranslateBehavior extends Behavior
     public function getTranslation($language = null)
     {
         if ($language === null) {
-            $language = Yii::$app->languageManager->active->code;
+            if (Yii::$app instanceof \panix\engine\console\Application) {
+                $language = Yii::$app->language;
+            }else{
+                $language = Yii::$app->languageManager->active->code;
+            }
         }
         if (Yii::$app instanceof \panix\engine\console\Application) {
             $lang = Yii::$app->languageManager->getByCode('ru');
