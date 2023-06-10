@@ -40,11 +40,25 @@ class LinkPager extends BasePager
     public $firstPageLabel = true;
     public $lastPageLabel = true;
     public $maxMobileButtonCount = 5;
-    
+    public $showNext = false;
+    public $nextLabel = true;
+    public $nextLoadingLabel = true;
+
     public function init()
     {
         $this->maxButtonCount = CMS::isMobile() ? $this->maxMobileButtonCount : $this->maxButtonCount;
         parent::init();
+    }
+
+    public function run()
+    {
+        if ($this->registerLinkTags) {
+            $this->registerLinkTags();
+        }
+        if ($this->showNext)
+            echo $this->renderNextButton();
+
+        echo $this->renderPageButtons();
     }
 
     protected function renderPageButton($label, $page, $class, $disabled, $active)
@@ -52,7 +66,7 @@ class LinkPager extends BasePager
         $options = $this->linkContainerOptions;
         $linkWrapTag = ArrayHelper::remove($options, 'tag', 'li');
         Html::addCssClass($options, empty($class) ? $this->pageCssClass : $class);
-        if(!preg_match('/(next|prev|first|last)/', $class)){
+        if (!preg_match('/(next|prev|first|last)/', $class)) {
             $options['id'] = 'page-item-' . ($page + 1);
         }
         if ($active) {
@@ -76,5 +90,25 @@ class LinkPager extends BasePager
         }
     }
 
-
+    protected function renderNextButton()
+    {
+        $pageCount = $this->pagination->getPageCount();
+        if ($pageCount < 2 && $this->hideOnSinglePage) {
+            return '';
+        }
+        $currentPage = $this->pagination->getPage();
+        if (($page = $currentPage + 1) >= $pageCount - 1) {
+            $page = $pageCount - 1;
+        }
+        if ($currentPage >= $pageCount - 1) {
+            return '';
+        }
+        $this->view->registerJs("
+            $(document).on('click', '.ias-trigger',function (event) {
+                $(this).addClass('ias-spinner');
+                $(this).find('span').html('".Yii::t('default', 'LOADING')."');
+            });
+        ", $this->view::POS_END);
+        return Html::a('<span>'.Yii::t('default', 'LOAD_MORE').'</span>', $this->pagination->createUrl($page), ['class' => 'ias-trigger']);
+    }
 }
