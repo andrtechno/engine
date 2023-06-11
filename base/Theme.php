@@ -82,7 +82,7 @@ class Theme extends BaseTheme
 
             if (!$this->data) {
                 try {
-                    $settings = (new \yii\db\Query())
+                    /*$settings = (new \yii\db\Query())
                         ->from(static::tableName())
                         ->orderBy('theme')
                         ->all();
@@ -95,7 +95,7 @@ class Theme extends BaseTheme
 
                             $this->data[$row['theme']][$row['param']] = $row['value'];
                         }
-                    }
+                    }*/
 
                     Yii::$app->cache->set($this->cache_key, $this->data);
                 } catch (\yii\db\Exception $e) {
