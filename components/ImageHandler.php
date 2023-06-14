@@ -111,8 +111,6 @@ class ImageHandler extends Component
     private function loadImage($file)
     {
         $result = [];
-
-        imageinterlace($file, false);
         if ($imageInfo = @getimagesize($file)) {
             $result['width'] = $imageInfo[0];
             $result['height'] = $imageInfo[1];
