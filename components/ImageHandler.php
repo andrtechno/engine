@@ -112,7 +112,7 @@ class ImageHandler extends Component
     {
         $result = [];
 
-
+        imageinterlace($file, false);
         if ($imageInfo = @getimagesize($file)) {
             $result['width'] = $imageInfo[0];
             $result['height'] = $imageInfo[1];
