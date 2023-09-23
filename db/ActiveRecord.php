@@ -216,8 +216,10 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 }
             }
         }
-        foreach ($this->attributes as $attr => $val) {
-            $attrLabels[$attr] = static::t(strtoupper($attr));
+        if ($this->attributes) {
+            foreach ($this->attributes as $attr => $val) {
+                $attrLabels[$attr] = static::t(strtoupper($attr));
+            }
         }
 
         return $attrLabels;
