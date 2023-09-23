@@ -294,7 +294,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
         $prev = $db->cache(function ($db) use ($wheres) {
 
             $q = static::find();
-            $subQuery = (new \yii\db\Query())->select('MIN(`id`)')
+            $subQuery = (new \yii\db\Query())->select('MIN(id)')
                 ->from(static::tableName() . ' next')
                 ->where(['>', 'next.id', $this->getPrimaryKey()]);
 
@@ -320,7 +320,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
         $prev = $db->cache(function ($db) use ($wheres) {
 
             $q = static::find();
-            $subQuery = (new \yii\db\Query())->select('MAX(`id`)')
+            $subQuery = (new \yii\db\Query())->select('MAX(id)')
                 ->from(static::tableName() . ' prev')
                 ->where(['<', 'prev.id', $this->getPrimaryKey()]);
 
