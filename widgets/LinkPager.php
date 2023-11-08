@@ -66,7 +66,7 @@ class LinkPager extends BasePager
         $options = $this->linkContainerOptions;
         $linkWrapTag = ArrayHelper::remove($options, 'tag', 'li');
         Html::addCssClass($options, empty($class) ? $this->pageCssClass : $class);
-        if (!preg_match('/(next|prev|first|last)/', $class)) {
+        if (!preg_match('/(next|prev|first|last)/', ($class) ? $class : '')) {
             $options['id'] = 'page-item-' . ($page + 1);
         }
         if ($active) {
