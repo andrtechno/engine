@@ -2,6 +2,7 @@
 
 namespace panix\engine;
 
+use panix\mod\shop\models\Product;
 use Yii;
 use yii\base\BaseObject;
 use yii\helpers\Html;
@@ -19,17 +20,17 @@ class JsonLDHelper extends BaseObject
 {
 
 
-    public static function addProduct($model)
+    public static function addProduct(Product $model)
     {
         $reviewsQuery = $model->getReviews()->status(1);
         $reviewsCount = $reviewsQuery->roots()->count();
 
 
-        if ($model->availability == 1) { //Есть в наличии
+        if ($model->availability == Product::STATUS_IN_STOCK) { //Есть в наличии
             $availability = "https://schema.org/InStock";
-        } elseif ($model->availability == 3 || $model->availability == 4) { //Нет в наличии или Архив
+        } elseif ($model->availability == Product::STATUS_OUT_STOCK || $model->availability == Product::STATUS_ARCHIVE) { //Нет в наличии
             $availability = "https://schema.org/OutOfStock";
-        } elseif ($model->availability == 2) { //предзаказ
+        } elseif ($model->availability == Product::STATUS_PREORDER) { //предзаказ
             $availability = "https://schema.org/PreOrder";
         }
 
