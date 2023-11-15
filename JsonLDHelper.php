@@ -27,7 +27,7 @@ class JsonLDHelper extends BaseObject
 
         if ($model->availability == 1) { //Есть в наличии
             $availability = "https://schema.org/InStock";
-        } elseif ($model->availability == 3) { //Нет в наличии
+        } elseif ($model->availability == 3 || $model->availability == 4) { //Нет в наличии или Архив
             $availability = "https://schema.org/OutOfStock";
         } elseif ($model->availability == 2) { //предзаказ
             $availability = "https://schema.org/PreOrder";
