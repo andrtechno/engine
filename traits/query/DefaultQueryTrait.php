@@ -71,7 +71,7 @@ trait DefaultQueryTrait
      * @param int $state
      * @return $this
      */
-    public function published($state = 1)
+    public function published($state = true)
     {
         /** @var \yii\db\ActiveRecord $modelClass */
         $modelClass = $this->modelClass;
