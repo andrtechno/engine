@@ -20,11 +20,17 @@ class JsonLDHelper extends BaseObject
 {
 
 
-    public static function addProduct(Product $model)
+    public static function addProduct(Product $model, $fakeRating = false)
     {
-        $reviewsQuery = $model->getReviews()->status(1);
-        $reviewsCount = $reviewsQuery->roots()->count();
-
+        if (!$fakeRating) {
+            $reviewsQuery = $model->getReviews()->status(1);
+            $reviewsCount = $reviewsQuery->roots()->count();
+            $ratingScore = $model->ratingScore;
+        } else {
+            $range = range(4.5, 5, 0.1);
+            $reviewsCount = rand(50, 60);
+            $ratingScore = $range[rand(0, count($range))];
+        }
 
         if ($model->availability == Product::STATUS_IN_STOCK) { //Есть в наличии
             $availability = "https://schema.org/InStock";
@@ -53,7 +59,7 @@ class JsonLDHelper extends BaseObject
         }
         $doc["http://schema.org/aggregateRating"] = (object)[
             "@type" => "AggregateRating",
-            "http://schema.org/ratingValue" => $model->ratingScore,
+            "http://schema.org/ratingValue" => $ratingScore,
             "http://schema.org/reviewCount" => (int)$reviewsCount
         ];
 
