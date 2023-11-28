@@ -29,7 +29,7 @@ class JsonLDHelper extends BaseObject
         } else {
             $range = range(4.5, 5, 0.1);
             $reviewsCount = rand(50, 60);
-            $ratingScore = $range[rand(0, count($range))];
+            $ratingScore = $range[rand(0, count($range)-1)];
         }
 
         if ($model->availability == Product::STATUS_IN_STOCK) { //Есть в наличии
