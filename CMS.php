@@ -792,6 +792,7 @@ class CMS
                         $options['class'] = 'geo';
                         $options['data-ip'] = $ip;
                         $options['data-type'] = "ajax";
+                        $options['data-dragToClose'] = "false";
                         //$options['data-fancybox'] = 'data-fancybox';
                         $options['data-width'] = '300';
                         $options['data-src'] = Url::to(['/admin/app/ajax/geo', 'ip' => $ip]);
