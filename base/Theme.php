@@ -37,8 +37,8 @@ class Theme extends BaseTheme
 
         //method_exists for console use
         if (method_exists(Yii::$app->request, 'getUrl')) {
-            if (preg_match("/admin/", Yii::$app->request->getUrl())) {
-                //if (preg_match("/^\/\admin/", Yii::$app->request->getUrl())) {
+            //if (preg_match("/admin/", Yii::$app->request->getUrl())) { //OLd
+            if (preg_match("/^admin/", Yii::$app->request->getUrl())) { // fix bug, if slug 'mypage-admin' text
                 $this->name = 'dashboard';
             }
         }
