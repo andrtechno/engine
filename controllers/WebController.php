@@ -55,7 +55,24 @@ class WebController extends CommonController
                 return $this->redirect($rediect->url_to);
             }
         }
-        
+
+        //Если в ссылки есть аквтный язык то редиректим на без
+        if(Yii::$app->languageManager->default->code == Yii::$app->language){
+            $request = Yii::$app->request;
+            $pathInfo = $request->url;
+            $parts = explode('/', $request->url);
+           // print_r($parts);die;
+            if ($parts[1]==Yii::$app->languageManager->default->slug) {
+                unset($parts[1]);
+                $pathInfo = implode('/', $parts);
+
+                if (empty($pathInfo)) {
+                    $pathInfo = '/';
+                }
+
+                return $this->redirect($pathInfo);
+            }
+        }
         return parent::beforeAction($action);
     }
 
