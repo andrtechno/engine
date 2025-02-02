@@ -221,7 +221,7 @@ class CMS
         if (!file_exists($thumbPath) && file_exists($fullPath)) {
             $fileInfo = pathinfo($fullPath);
             if(!in_array($fileInfo['extension'], ['png','svg'])){
-                $exif = exif_read_data(FileHelper::normalizePath($fullPath), 0, true);
+                $exif = @exif_read_data(FileHelper::normalizePath($fullPath), 0, true);
                 if (isset($exif['FILE']['FileDateTime'])) {
                     $hash = $exif['FILE']['FileDateTime'];
                 }
